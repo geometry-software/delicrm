@@ -1,0 +1,116 @@
+{
+  "FORM": {
+    "ENTER_PLATE_NAME": "Introduzca el nombre del plato",
+    "RECIPE_DESCRIPTION": "Descripción de la receta",
+    "PLATE_TYPE": "Tipo de plato",
+    "PROTEIN_TYPE": "Tipo de proteina",
+    "PRICE": "Precio",
+    "UPDATE_SUCCESS": "¡La imagen se ha actualizado correctamente! Guarda la receta.",
+    "CHANGE_IMAGE": "Cambiar imagen",
+    "UPLOAD_IMAGE_TO_SERVER": "Subir imagen al servidor",
+    "UPLOADING_IMAGE": "Subiendo imagen"
+  },
+  "BUTTON": {
+    "ADD": "Agregar",
+    "SAVE": "Guardar",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar"
+  },
+  "MISC": {
+    "PLATE_TYPE": {
+      "MAIN": "Plato principal",
+      "STARTER": "Entrada (sopa o fruta)",
+      "DRINK": "Bebida (jugo o limonada)",
+      "SALAD": "Ensalada",
+      "RICE": "Arroz",
+      "GARNISH": "Guarnición",
+      "DESSERT": "Postre",
+      "BAR": "Bar",
+      "ALACARTE": "Ala carta"
+    },
+    "PROTEIN_TYPE": {
+      "MEAT": "Carne",
+      "CHICKEN": "Pollo",
+      "FISH": "Pescado",
+      "VEG": "Vegetariano"
+    },
+    "SEARCH_PLACEHOLDER": "Buscar.."
+  },
+  "DESCRIPTION_PLACEHOLDER": "Descripción de la receta",
+  "RECIPES": {
+    "NAVBAR": "Recetas",
+    "PAGE": {
+      "LIST": {
+        "TOOLBAR": "Lista con recetas",
+        "NAME": "Nombre",
+        "DESCRIPTION": "Decripcíon",
+        "TYPE": "Tipo",
+        "PROTEIN": "Tipo de proteina",
+        "PRICE": "Precio",
+        "IMAGE": "Imagen",
+        "TABLE": {
+          "SEARCH": "Buscar por nombre",
+          "NAME": "Nombre",
+          "TYPE": "Tipo",
+          "PRICE": "Precio"
+        }
+      },
+      "CREATE": {
+        "TOOLBAR": "Crear receta"
+      },
+      "EDIT": {
+        "TOOLBAR": "Editar receta"
+      },
+      "DETAIL": {
+        "TOOLBAR": "Detalle de la receta",
+        "DELETE_TITLE": "Eliminar la receta?"
+      }
+    }
+  },
+  "CLIENTS": {
+    "NAVBAR": "Clientes",
+    "PAGE": {
+      "LIST": {
+        "TOOLBAR": "Lista con clientes",
+        "TABLE": {
+          "SEARCH": "Buscar por nombre",
+          "NAME": "Nombre",
+          "ADDRESS": "Direción"
+        }
+      },
+      "CREATE": {
+        "TOOLBAR": "Crear cliente"
+      },
+      "EDIT": {
+        "TOOLBAR": "Editar cliente"
+      },
+      "DETAIL": {
+        "TOOLBAR": "Detalle de cliente",
+        "DELETE_TITLE": "Eliminar cliente?"
+      }
+    }
+  },
+  "EXPENSES": {
+    "NAVBAR": "Expenses",
+    "PAGE": {
+      "LIST": {
+        "TOOLBAR": "Expenses",
+        "TABLE": {
+          "SEARCH": "Search by name",
+          "WAITER": "Mesero",
+          "TIME": "Tiempo",
+          "VALUE": "Valor",
+          "DESCRIPTION": "Decripcíon"
+        }
+      },
+      "DIALOG": {
+        "TITLE": "Agregar gasto",
+        "FORM": {
+          "ENTER_PLATE_NAME": "Enter plate name",
+          "DESCRIPTION": "Descripción",
+          "VALUE": "Valor"
+        }
+      }
+    }
+  }
+}

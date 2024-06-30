@@ -1,0 +1,36 @@
+.upload-spinner ::ng-deep .mat-progress-spinner circle,
+.mat-spinner circle {
+  stroke: #57aaf7;
+}
+
+.file-wrapper {
+  padding-top: 20px;
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+}
+
+.file-wrapper input {
+  cursor: pointer;
+  font-size: 200px;
+  height: 100%;
+  filter: alpha(opacity=1);
+  -moz-opacity: 0.01;
+  opacity: 0.01;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.file-wrapper .button {
+  background: white;
+  color: orange;
+  border: 1px solid orange;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1em;
+  font-weight: 500;
+  padding: 6px 15px;
+  text-transform: uppercase;
+}

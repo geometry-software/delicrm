@@ -1,0 +1,13 @@
+<h3 cdkFocusInitial>{{ dialogData.title | translate }}</h3>
+<br />
+<h4 *ngIf="dialogData.subtitle">{{ dialogData.subtitle | translate }}</h4>
+
+<div class="flex justify-end">
+  <div class="flex space-between gap-2">
+    <button mat-stroked-button type="button" (click)="close()">
+      <span>No</span>
+    </button>
+    <app-button [title]="!isLoading ? 'Yes' : '...'" [disabled]="isLoading" actionType="back"
+      (click)="confirm()"></app-button>
+  </div>
+</div>

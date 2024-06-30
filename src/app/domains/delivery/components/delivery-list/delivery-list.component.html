@@ -1,0 +1,42 @@
+<mat-tab-group [@.disabled]="true" (selectedIndexChange)="preloadTabData($event)">
+  <mat-tab label="New">
+    <ng-container
+      *ngTemplateOutlet="(dataList$ | async) ? deliveryTable : null; context: { $implicit: (dataList$ | async) }"></ng-container>
+  </mat-tab>
+  <mat-tab label="Confirmed">
+    <ng-container
+      *ngTemplateOutlet="(dataList$ | async) ? deliveryTable : null; context: { $implicit: (dataList$ | async) }"></ng-container>
+  </mat-tab>
+  <mat-tab label="Canceled">
+    <ng-container
+      *ngTemplateOutlet="(dataList$ | async) ? deliveryTable : null; context: { $implicit: (dataList$ | async) }"></ng-container>
+  </mat-tab>
+</mat-tab-group>
+
+<ng-template #deliveryTable let-context>
+  <mat-table [dataSource]="context">
+    <ng-container matColumnDef="user">
+      <mat-header-cell *matHeaderCellDef> Client </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div class="table-link" (click)="showDetail(element)">
+          {{ element.category.delivery?.name }}
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="plates">
+      <mat-header-cell *matHeaderCellDef> PLates </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="plates">
+        <li *ngFor="let item of element.plates; let i = index">
+          {{ item.plate.name }}
+        </li>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+</ng-template>
+
+<app-pagination [paginationControl]="paginationControl" [sizeControl]="sizeControl"
+  [paginationPayload]="paginationPayload$ | async" [downloadState]="downloadState$ | async"></app-pagination>

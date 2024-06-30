@@ -1,0 +1,35 @@
+.section-card {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 25px;
+}
+
+.auth-desc {
+  margin-top: 10px;
+  color: #555;
+  text-align: justify;
+  font-size: 0.9em;
+}
+
+.code-item {
+  font-family: monospace;
+}
+
+.version {
+  font-size: 0.7em;
+  font-weight: 500;
+  color: #777;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.exit-button {
+  margin: 10px 0;
+  min-width: 100%;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: indianred !important;
+  border: 2px solid indianred !important;
+}

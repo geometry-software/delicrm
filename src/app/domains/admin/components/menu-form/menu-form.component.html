@@ -1,0 +1,102 @@
+<br />
+<mat-stepper [linear]="true" #stepper>
+  <mat-step [stepControl]="menuForm" label="Choose starters">
+    <form [formGroup]="menuForm" (ngSubmit)="chooseDrinks(menuForm, stepper)" *ngIf="isFormDataLoaded">
+      <h5>Starters</h5>
+
+      <div formArrayName="starter" *ngFor="let item of getStarters().controls; let i = index">
+        <ng-container [formGroupName]="i">
+          <mat-form-field>
+            <input type="text" matInput formControlName="item" [placeholder]="'Sopa ' + (i + 1)"
+              [matAutocomplete]="autoStarter" />
+            <mat-autocomplete #autoStarter="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let option of filteredStarterOptions[i] | async" [value]="option">
+                {{ option.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </ng-container>
+      </div>
+
+      <h5>Drinks</h5>
+
+      <div formArrayName="drink" *ngFor="let item of getDrinks().controls; let i = index">
+        <ng-container [formGroupName]="i">
+          <mat-form-field>
+            <input type="text" matInput formControlName="item" [placeholder]="'Juice ' + (i + 1)"
+              [matAutocomplete]="autoDrink" />
+            <mat-autocomplete #autoDrink="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let option of filteredDrinkOptions[i] | async" [value]="option">
+                {{ option.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </ng-container>
+      </div>
+
+      <h5>Side dished</h5>
+
+      <mat-form-field>
+        <input type="text" matInput formControlName="salad" placeholder="Salad" [matAutocomplete]="autoSalad" />
+        <mat-autocomplete #autoSalad="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let option of filteredSaladOptions | async" [value]="option">
+            {{ option.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input type="text" matInput formControlName="rice" placeholder="Rice" [matAutocomplete]="autoRice" />
+        <mat-autocomplete #autoRice="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let option of filteredRiceOptions | async" [value]="option">
+            {{ option.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input type="text" matInput formControlName="garnish" placeholder="Garnish" [matAutocomplete]="autoGarnish" />
+        <mat-autocomplete #autoGarnish="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let option of filteredGarnishOptions | async" [value]="option">
+            {{ option.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input type="text" matInput formControlName="dessert" placeholder="Dessert" [matAutocomplete]="autoDessert" />
+        <mat-autocomplete #autoDessert="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let option of filteredDessertOptions | async" [value]="option">
+            {{ option.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <div *ngIf="hasStartersValidationError" class="validation-error-message">Not all positions were chosen</div>
+      <app-button title="Add starters and drinks" actionType="save" type="submit" width="full"></app-button>
+    </form>
+  </mat-step>
+
+  <mat-step label="Add main dishes">
+    <form [formGroup]="plateForm" (ngSubmit)="choosePlates(stepper)">
+      <h5>Main dishes</h5>
+
+      <div class="flex items-center" *ngFor="let item of plateList; let i = index">
+        <mat-checkbox [checked]="item.isAdded" (change)="addPlate(item)">
+          <span class="main-dish">{{ item.name }}</span>
+        </mat-checkbox>
+      </div>
+
+      <div class="plates-result-amount">{{ chosenPlates.length }} plates</div>
+      <app-button title="Add main dishes" type="submit" width="full"></app-button>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="plateForm" label="Confirm">
+    <ng-container *ngIf="dailyMenu.main">
+      <app-formatted-daily-menu [dailyMenu]="dailyMenu"> </app-formatted-daily-menu>
+      <br />
+      <app-button [title]="!isLoading ? 'Update menu and open a service' : 'Loading ..'" [disabled]="isLoading"
+        actionType="save" (click)="savePlates()"></app-button>
+    </ng-container>
+  </mat-step>
+</mat-stepper>

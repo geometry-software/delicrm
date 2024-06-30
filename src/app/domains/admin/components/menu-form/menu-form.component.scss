@@ -1,0 +1,50 @@
+.mat-stepper-horizontal {
+  background: none;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+::ng-deep .mat-step-icon-selected {
+  background-color: #57aaf7 !important;
+}
+::ng-deep .mat-step-icon-state-edit {
+  background-color: #57aaf7 !important;
+}
+
+.empty-bar {
+  text-align: center;
+  font-size: 1em;
+  color: #666;
+  font-family: 'Verdana';
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-top: 20px;
+}
+
+.plates-result-amount {
+  padding: 10px 0 10px 15px;
+  margin-top: 20px;
+  border-top: 2px solid #ccc;
+  color: #555;
+  text-align: start;
+  font-size: 1.2em;
+  font-weight: 500;
+}
+
+:host {
+  h5 {
+    margin-top: 10px;
+    color: #999;
+    font-weight: 500;
+    font-size: 1.3em;
+    text-align: center;
+    text-transform: uppercase;
+    margin-top: 5px;
+  }
+}
+
+.main-dish {
+  color: #555;
+  font-size: 1.4em;
+  font-weight: 500;
+}

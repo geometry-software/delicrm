@@ -1,0 +1,87 @@
+{
+  "BUTTON": {
+    "ADD": "Add",
+    "SAVE": "Save",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "SAVING": "Saving ..",
+    "INFO": "Info"
+  },
+  "FORM": {
+    "ENTER_PLATE_NAME": "Enter plate name",
+    "RECIPE_DESCRIPTION": "Recipe description",
+    "PLATE_TYPE": "Plate type",
+    "PROTEIN_TYPE": "Protein type",
+    "PRICE": "Price",
+    "UPDATE_SUCCESS": "Image has been updated successfully! Save the recipe.",
+    "CHANGE_IMAGE": "Change image",
+    "UPLOAD_IMAGE_TO_SERVER": "Upload image to server",
+    "UPLOADING_IMAGE": "Uploading image"
+  },
+  "MISC": {
+    "PLATE_TYPE": {
+      "MAIN": "Main dish",
+      "ENTRANCE": "Starter (soup or fruit)",
+      "DRINK": "Drink (juice or lemonade)",
+      "SALAD": "Salad",
+      "RICE": "Rice",
+      "TOPPING": "Topping",
+      "DESSERT": "Dessert",
+      "ALACARTE": "A la carte"
+    },
+    "SEARCH_PLACEHOLDER": "Buscar.."
+  },
+  "DESCRIPTION_PLACEHOLDER": "Recipe description",
+  "RECIPES": {
+    "NAVBAR": "Recipes",
+    "PAGE": {
+      "LIST": {
+        "TOOLBAR": "Recipe list",
+        "NAME": "Name",
+        "DESCRIPTION": "Description",
+        "TYPE": "Type",
+        "PROTEIN": "Protein type",
+        "PRICE": "Price",
+        "IMAGE": "Image",
+        "TABLE": {
+          "SEARCH": "Search by name",
+          "NAME": "Name",
+          "TYPE": "Type",
+          "PRICE": "Price"
+        }
+      },
+      "CREATE": {
+        "TOOLBAR": "Create recipe"
+      },
+      "EDIT": {
+        "TOOLBAR": "Edit recipe"
+      },
+      "DETAIL": {
+        "TOOLBAR": "Recipe detail"
+      }
+    }
+  },
+
+  "EXPENSES": {
+    "NAVBAR": "Expenses",
+    "PAGE": {
+      "LIST": {
+        "TOOLBAR": "Expenses",
+        "TABLE": {
+          "SEARCH": "Search by name",
+          "WAITER": "Mesero",
+          "TIME": "Tiempo",
+          "VALUE": "Valor",
+          "DESCRIPTION": "Decripcíon"
+        }
+      },
+      "DIALOG": {
+        "TITLE": "Agregar gasto",
+        "FORM": {
+          "DESCRIPTION": "Descripción",
+          "VALUE": "Valor"
+        }
+      }
+    }
+  }
+}

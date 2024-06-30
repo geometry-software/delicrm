@@ -1,0 +1,53 @@
+<mat-tab-group [@.disabled]="true" (selectedIndexChange)="preloadTabData($event)">
+  <ng-container *ngIf="datasource as data">
+    <mat-tab label="Cooked">
+      <ng-container *ngTemplateOutlet="data ? orderTable : null; context: { $implicit: data }"></ng-container>
+    </mat-tab>
+    <mat-tab label="Delivered">
+      <ng-container *ngTemplateOutlet="data ? orderTable : null; context: { $implicit: data }"></ng-container>
+    </mat-tab>
+    <mat-tab label="Canceled">
+      <ng-container *ngTemplateOutlet="data ? orderTable : null; context: { $implicit: data }"></ng-container>
+    </mat-tab>
+  </ng-container>
+</mat-tab-group>
+
+<ng-template #orderTable let-context>
+  <mat-table [dataSource]="context">
+    <ng-container matColumnDef="client">
+      <mat-header-cell *matHeaderCellDef>Client</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <ng-container *ngIf="element?.category?.delivery">
+          <div class="table-link flex items-center" [routerLink]="['/orders', element.id]">
+            <mat-icon style="color: #57aaf7; padding-right: 10px">shopping_basket</mat-icon>
+            <div>{{ element?.category?.delivery?.name }}</div>
+          </div>
+        </ng-container>
+
+        <button *ngIf="element.isTable && element.table == 0" mat-button>
+          <mat-icon style="color: #fdb16f; padding-right: 10px">emoji_people</mat-icon>
+          <span class="table-item">Take away</span>
+        </button>
+        <button *ngIf="element.isTable && element.table !== 0" mat-button>
+          <mat-icon style="color: #fdb16f; padding-right: 10px">deck</mat-icon>
+          <span class="table-item">{{ element.table }}</span>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="waiter">
+      <mat-header-cell *matHeaderCellDef> Waiter </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.waiter?.name }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{ element.price?.total }} currency</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+</ng-template>

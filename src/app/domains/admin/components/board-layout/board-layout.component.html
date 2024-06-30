@@ -1,0 +1,25 @@
+<div class="sm:flex gap-1" *ngIf="currentRoute === imageRoute">
+  <div class="flex gap-2 justify-evenly">
+    <app-button [title]="buttonTitleUpdate" [actionType]="'back'" [icon]="'edit'" [url]="'form'"></app-button>
+    <app-button [title]="buttonTitleClean" [actionType]="'back'" [icon]="'cleaning_services'"></app-button>
+  </div>
+  <div class="divider"></div>
+  <div class="flex gap-2 justify-evenly">
+    <app-button [title]="buttonTitleDownload" [actionType]="'back'" [icon]="'image'" (click)="printMenu()"></app-button>
+    <app-button [title]="buttonTitleConf" [actionType]="'back'" [icon]="'settings'"></app-button>
+  </div>
+</div>
+
+<div class="sm:flex gap-1" *ngIf="currentRoute === formRoute">
+  <div class="flex gap-2 justify-evenly">
+    <app-button [title]="buttonTitleBack" [actionType]="'back'" [icon]="'arrow_back'" [url]="'/admin/board'"></app-button>
+    <app-button [title]="buttonTitleRebuild" [actionType]="'back'" [icon]="'refresh'"></app-button>
+  </div>
+  <div class="divider"></div>
+  <div class="flex gap-2 justify-evenly">
+    <app-button [title]="buttonTitleAdditional" [actionType]="'back'" [icon]="'local_drink'"></app-button>
+    <app-button [title]="buttonTitleMenu" [actionType]="'back'" [icon]="'restaurant'"></app-button>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

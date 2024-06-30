@@ -1,0 +1,94 @@
+<mat-toolbar>
+  <mat-toolbar-row [ngClass]="responsiveLayout.isDesktop ? 'mat-toolbar-desktop' : 'mat-toolbar-mobile'">
+    <button [ngStyle]="{ 'margin-left': responsiveLayout.matToolbarRowButtonMargin }" mat-icon-button
+      (click)="drawer.toggle()" onclick="this.blur()">
+      <mat-icon class="menu-icon" *ngIf="isAuthInitialized"> menu </mat-icon>
+      <mat-spinner [diameter]="20" *ngIf="!isAuthInitialized"></mat-spinner>
+    </button>
+    <span class="toolbar-title">{{ toolBarTitleSignal() | translate }}</span>
+    <span class="toolbar-spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon class="lang-icon">language</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="changeLanguage('pt')">
+        <span>portugués</span>
+
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="changeLanguage('es')">
+        <span>español</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="changeLanguage('en')">
+        <span>English</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-drawer-container>
+  <mat-drawer #drawer [mode]="responsiveLayout.matDrawerMode" [opened]="responsiveLayout.isDesktop"
+    class="mat-drawer-scrollbar">
+    <div class="menu-list-container" [ngStyle]="{ 'margin-top': responsiveLayout.menuListContainerMargin }">
+      <ng-container *ngIf="isAuthInitialized && hasAppAuth; else clientTemplate">
+        <ng-container *ngFor="let item of userMenuOptions">
+          <ng-container *ngIf="item.roles.includes(user.role)">
+            <div class="menu-list-item" [ngStyle]="{
+                'margin-right': responsiveLayout.isDesktop ? 0 : '20px'
+              }" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }" [routerLink]="item.link"
+              (click)="toggleDrawer()">
+              <div class="menu-list-item-icon">
+                <mat-icon>
+                  {{ item.icon }}
+                </mat-icon>
+              </div>
+              <div class="menu-list-item-text">
+                <div class="menu-list-item-title">
+                  {{ item.title | translate }}
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      <ng-template #clientTemplate>
+        <ng-container *ngFor="let item of clientMenuOptions">
+          <div class="menu-list-item menu-list-item-image-padding" [ngStyle]="{
+              'margin-right': responsiveLayout.isDesktop ? 0 : '10px'
+            }" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }" [routerLink]="item.link"
+            (click)="toggleDrawer()">
+            <div class="menu-list-item-image">
+              <img [src]="item.icon" width="80%" height="80%" />
+            </div>
+            <div class="menu-list-item-title">
+              {{ item.title }}
+            </div>
+          </div>
+        </ng-container>
+        <app-address></app-address>
+      </ng-template>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content
+    [ngClass]="responsiveLayout.isDesktop ? 'mat-drawer-content-desktop' : 'mat-drawer-content-mobile'">
+    <div class="router-outlet-container"
+      [ngClass]="responsiveLayout.isDesktop ? 'router-outlet-container-desktop' : 'router-outlet-container-mobile'">
+      <div [ngClass]="responsiveLayout.isDesktop ? 'router-outlet-inner-desktop' : 'router-outlet-inner-mobile'">
+        <router-outlet (activate)="onActivateRouter()"></router-outlet>
+      </div>
+    </div>
+    <div *ngIf="responsiveLayout.isDesktop"
+      style="height: calc(100vh - 20vh); width: 300px; margin-bottom: 100px; margin-right: 20px">
+      <div
+        style="background-color: #badffb; border-radius: 50px; height: 25vh; margin-bottom: 20px; padding: 20px; overflow: auto">
+        <h3>In delivery now</h3>
+        <h4>3</h4>
+        <h3>In cooking now</h3>
+        <h4>5</h4>
+        <!-- <button mat-flat-button color="primary">theme color</button> -->
+      </div>
+      <h2 style="border-bottom: 3px solid #555; width: fit-content">Ads</h2>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

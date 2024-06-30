@@ -1,0 +1,28 @@
+<div cdkFocusInitial></div>
+<div mat-dialog-content>
+  <h2 class="mb-[10px]">{{ data.name }}</h2>
+
+  <mat-form-field appearance="outline" style="width: 200px" *ngIf="data.status !== 'client'">
+    <mat-label>Role</mat-label>
+    <mat-select [formControl]="role">
+      <mat-option *ngFor="let item of roleList" [value]="item">
+        <span>{{ item }}</span>
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <h3>Email / Phone</h3>
+  <h4 class="ellipsis" *ngIf="data.email">{{ data.email }}</h4>
+  <h4 class="ellipsis" *ngIf="data.phone">{{ data.phone }}</h4>
+
+  <h3>Status</h3>
+  <h4>{{ data.status }}</h4>
+
+  <ng-container *ngIf="data.status !== 'client'">
+    <h3>Role</h3>
+    <h4>{{ data.role }}</h4>
+  </ng-container>
+
+  <h3>Registered</h3>
+  <h4>{{ data.timestamp | timestamp | date : 'medium' }}</h4>
+</div>

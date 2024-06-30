@@ -1,0 +1,11 @@
+<ng-container *ngIf="!loading; then enableLink; else disabledLink"></ng-container>
+<ng-template #enableLink>
+  <div class="table-link" (click)="redirect.next(item.id)">
+    {{ item.name }}
+  </div>
+</ng-template>
+<ng-template #disabledLink>
+  <div class="table-link-disabled">
+    {{ item.name }}
+  </div>
+</ng-template>

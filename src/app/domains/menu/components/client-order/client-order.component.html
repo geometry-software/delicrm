@@ -1,0 +1,41 @@
+<ng-container *ngIf="item">
+  <div class="name-title">
+    <div>Thanks for your order,</div>
+    <div>{{ item.category.delivery.name }}!</div>
+  </div>
+
+  <div class="text-center my-[30px]">
+    <img src="/assets/images/done.png" width="150px" height="150px" />
+  </div>
+
+  <div class="card">
+    <div *ngFor="let item of item?.plates; let i = index">
+      <div class="item-card" [@pulseOnEnter]>
+        <div class="flex items-center">
+          <img [src]="setProteinImage(item.plate.protein)" width="30px" height="30px" />
+          <div class="item__title">
+            {{ item.plate.name }}
+          </div>
+        </div>
+        <div class="item__price">{{ item.plate.price }} currency</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt-[20px]">
+    <h3>
+      <Address></Address>
+    </h3>
+    <h4>{{ item?.category.delivery.address }}</h4>
+    <h3>Phone</h3>
+    <h4>{{ item?.category.delivery?.phone }}</h4>
+    <h3>Delivery time</h3>
+    <h4 class="m-0">{{ item?.category.delivery?.time !== 'now' ? item?.category.delivery?.time : '30 minutos' }}</h4>
+  </div>
+
+  <div class="card mt-[20px]">
+    <h2>Total</h2>
+    <h3>{{ item?.price.total }} currency</h3>
+  </div>
+  <br />
+</ng-container>

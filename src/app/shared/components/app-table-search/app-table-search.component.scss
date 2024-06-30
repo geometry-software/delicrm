@@ -1,0 +1,80 @@
+button {
+  width: 150px !important;
+  height: 40px !important;
+  border-radius: 25px;
+  border: 3px solid #57aaf7;
+  color: #57aaf7 !important;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: 'Open Sans', sans-serif !important;
+}
+
+mat-icon {
+  transform: scale(0.9);
+}
+
+div {
+  text-transform: uppercase;
+  padding-left: 5px;
+}
+
+button:focus,
+button:active:focus,
+button.active:focus {
+  outline: none !important;
+}
+
+.back:hover {
+  background-color: white !important;
+  border: 3px solid #57aaf7;
+}
+
+.back:active {
+  background-color: transparent !important;
+  border: 3px solid #57aaf7 !important;
+}
+
+.save {
+  min-width: 100%;
+  background-color: #57aaf7 !important;
+  color: white !important;
+}
+
+.save:disabled {
+  min-width: 100%;
+  background-color: #ddd !important;
+  color: white !important;
+  border: 3px solid #ddd;
+}
+
+.save:disabled:hover {
+  background-color: #ddd !important;
+  color: white !important;
+}
+
+.save:hover {
+  background-color: white !important;
+  color: #57aaf7 !important;
+}
+
+.save:focus {
+  background-color: #57aaf7 !important;
+  color: white !important;
+}
+
+.edit {
+  min-width: 100%;
+  background-color: transparent !important;
+  color: #666 !important;
+  border: 3px solid #666;
+}
+
+.delete {
+  min-width: 100%;
+  background-color: transparent !important;
+  color: rgb(220, 66, 66) !important;
+  border: 3px solid rgb(220, 66, 66);
+}

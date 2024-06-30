@@ -1,0 +1,22 @@
+<div *ngIf="!isMenuPublished" class="no-menu">Menu is not published</div>
+
+<div style="display: flex; justify-content: center">
+  <div *ngIf="isMenuPublished" id="print" style="width: 400px">
+    <div class="menu__title-border">
+      <div class="menu__title">{{ menuTitle }}</div>
+      <div class="menu__subtitle">Daily Menu</div>
+      <div class="menu__day">{{ today }}</div>
+    </div>
+
+    <app-formatted-daily-menu [dailyMenu]="dailyMenu"></app-formatted-daily-menu>
+
+    <div class="contact__border">
+      <div class="contact__title">
+        Delivery:<span class="contact__subtitle contact__link">deli-crm.web.app</span>
+      </div>
+      <div class="contact__title">Address:<span class="contact__subtitle">Street 1, 2</span></div>
+      <div class="contact__title">WhatsApp:<span class="contact__subtitle">+1234567890</span></div>
+      <div class="contact__footer">We accept all cards, QR and cash</div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="section">Main plates</div>
+<div class="flex items-center justify-between" *ngFor="let item of dailyMenu.main; let i = index">
+  <div class="flex items-center">
+    <img [src]="setProteinImage(item.protein)" width="30px" height="30px" />
+    <div (click)="open(item, i)" class="item__title item__main-dish">
+      {{ item.name }}
+    </div>
+  </div>
+  <div class="flex items-center">
+    <div class="item__price">{{ !item?.isRemoved ? item.price : '86' }} currency</div>
+    <button mat-icon-button (click)="add(item)" *ngIf="isAddAvailable">
+      <mat-icon class="add-button">add</mat-icon>
+    </button>
+  </div>
+</div>
+<div class="section">Starters</div>
+<div *ngFor="let item of dailyMenu.extra.starter">
+  <div class="item__title">{{ item.item.name }}</div>
+  <div class="item__history">{{ item.item.history }}</div>
+</div>
+<div class="section">Drinks</div>
+<div *ngFor="let item of dailyMenu.extra.drink">
+  <div class="item__title">{{ item.item.name }}</div>
+  <div class="item__history">{{ item.item.history }}</div>
+</div>
+<div class="section">Side dishes</div>
+<div class="item__title">{{ dailyMenu.extra.rice.name }}</div>
+<div class="item__history">
+  {{ dailyMenu.extra.rice.histrory }}
+</div>
+<div class="item__title">{{ dailyMenu.extra.salad.name }}</div>
+<div class="item__history">
+  {{ dailyMenu.extra.salad.histrory }}
+</div>
+<div class="item__title">{{ dailyMenu.extra.garnish.name }}</div>
+<div class="item__history">
+  {{ dailyMenu.extra.garnish.histrory }}
+</div>
+<div class="section">Dessert</div>
+<div class="item__title">{{ dailyMenu.extra?.dessert.name }}</div>
+<div class="item__history">
+  {{ dailyMenu.extra?.dessert.histrory }}
+</div>

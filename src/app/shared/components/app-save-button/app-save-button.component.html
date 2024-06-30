@@ -1,0 +1,8 @@
+<div class="py-[10px]">
+  <app-button
+    [title]="loading ? 'BUTTON.SAVING' : 'BUTTON.SAVE'"
+    [disabled]="loading"
+    [type]="'save'"
+    (click)="submit.next(form)"
+  ></app-button>
+</div>

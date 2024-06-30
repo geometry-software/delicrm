@@ -1,0 +1,44 @@
+<div class="layout flex items-center justify-between">
+  <div class="flex items-center gap-2">
+    <mat-select [(ngModel)]="size" (ngModelChange)="changeSize($event)">
+      <mat-option *ngFor="let option of paginationPayload.options.sizeList" [value]="option">{{ option }}</mat-option>
+    </mat-select>
+    <ng-container *ngIf="!downloadState">
+      <div>
+        {{ paginationPayload.options.current }} / {{ paginationPayload.options.total }} {{ paginationPayload.options.title }}
+        <span style="color: #555; font-size: 0.8em" *ngIf="paginationPayload.responseTime">
+          ({{ paginationPayload.responseTime }} sec.)
+        </span>
+      </div>
+    </ng-container>
+  </div>
+  <div class="flex justify-between gap-2">
+    <button
+      mat-icon-button
+      [disabled]="
+        paginationControl.value.query === 'custom' ||
+        sizeControl.value.size === paginationPayload.options.current ||
+        downloadState
+      "
+      (click)="changePage('previous')"
+      onclick="this.blur()"
+    >
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <button mat-icon-button [disabled]="downloadState" (click)="changePage('first')" onclick="this.blur()">
+      <mat-icon>restart_alt</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      [disabled]="
+        paginationControl.value.query === 'custom'
+          ? true
+          : paginationPayload.options.current === paginationPayload.options.total || downloadState
+      "
+      (click)="changePage('next')"
+      onclick="this.blur()"
+    >
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+</div>

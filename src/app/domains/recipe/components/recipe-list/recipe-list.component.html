@@ -1,0 +1,47 @@
+<div class="table-loading-shade" *ngIf="downloadState$ | async"></div>
+
+<mat-table [dataSource]="dataList$ | async" matSort matSortActive="timestamp" (matSortChange)="orderControl.setValue($event)">
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      {{ 'RECIPES.PAGE.LIST.TABLE.NAME' | translate }}
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <div class="table-link" (click)="redirectToDetail(element.id)">
+        {{ element.name }}
+      </div>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="type">
+    <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="disableSort">
+      {{ 'RECIPES.PAGE.LIST.TABLE.TYPE' | translate }}
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ plateTypeTranslate[element.type] | translate }}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="price">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      {{ 'RECIPES.PAGE.LIST.TABLE.PRICE' | translate }}
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <span *ngIf="element.price"> {{ element.price || '-' }}</span>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
+</mat-table>
+<!-- </ng-container> -->
+
+<app-pagination
+  [paginationControl]="paginationControl"
+  [sizeControl]="sizeControl"
+  [paginationPayload]="paginationPayload$ | async"
+  [downloadState]="downloadState$ | async"
+></app-pagination>
+
+<!-- <ng-template #loadingTemplate>
+  <app-loader></app-loader>
+</ng-template> -->

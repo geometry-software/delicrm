@@ -1,0 +1,8 @@
+<app-layout-toolbar
+  [searchControl]="searchControl"
+  [backTitle]="backTitle"
+  [searchPlaceholder]="searchPlaceholder"
+  [id]="itemId$ | async"
+  [isLoading$]="layoutLoading$"
+></app-layout-toolbar>
+<router-outlet></router-outlet>

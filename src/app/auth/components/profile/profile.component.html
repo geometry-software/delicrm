@@ -1,0 +1,124 @@
+<div class="host-overflow">
+  <ng-container *ngIf="userData">
+    <div class="section-card">
+      <h2>User profile</h2>
+
+      <form [formGroup]="clientForm" (ngSubmit)="updateClientData(clientForm)">
+        <mat-form-field>
+          <mat-label> Name</mat-label>
+          <input matInput type="text" formControlName="name" />
+        </mat-form-field>
+
+        <app-button actionType="save" type="submit" [title]="!isLoaded ? ' Update' : 'Updating ..'" width="full">
+        </app-button>
+      </form>
+    </div>
+
+    <div class="section-card">
+      <h2>Cafe profile</h2>
+
+      <form [formGroup]="restaurantForm" (ngSubmit)="updateRestaurantData(restaurantForm)">
+        <mat-form-field>
+          <mat-label> Name </mat-label>
+          <input matInput type="text" formControlName="name" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label> Address </mat-label>
+          <input matInput type="text" formControlName="address" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label> Phone </mat-label>
+          <input matInput type="text" formControlName="phone" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label> Delivery price</mat-label>
+          <input matInput type="number" formControlName="delivery" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label> Discount </mat-label>
+          <input matInput type="number" formControlName="discount" />
+        </mat-form-field>
+
+        <app-button actionType="save" type="submit" [title]="!isLoaded ? ' Update' : 'Updating ..'" width="full">
+        </app-button>
+      </form>
+    </div>
+
+    <div class="section-card">
+      <h2>Auth</h2>
+
+      <h3>Provider</h3>
+      <h4 class="text-ellipsis">{{ userData.provider }}</h4>
+
+      <h3>Email</h3>
+      <h4 class="text-ellipsis">{{ userData.email }}</h4>
+
+      <h3>Info</h3>
+      <h4>
+        Information for log data is obtained from Firebase AngularFireAuth and maintained within the Firebase
+        AngularFirestoreCollection with READ and WRITE access for users confirmed by the application administrator or
+        other responsible person.
+      </h4>
+    </div>
+
+    <br />
+    <mat-card *ngIf="isClient">
+      <mat-tab-group>
+        <mat-tab label="Dirección">
+          <br />
+          <div class="item-title" style="margin-bottom: 5px">Edit delivery address</div>
+
+          <form [formGroup]="clientForm" (ngSubmit)="updateClientData(clientForm)">
+            <mat-form-field>
+              <input matInput type="text" placeholder="Name" formControlName="name" />
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput type="text" placeholder="Address" formControlName="address" />
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput type="number" placeholder="Phone" formControlName="phone" />
+            </mat-form-field>
+
+            <div style="text-align: right; min-width: 100%">
+              <button mat-raised-button type="submit" color="primary" [disabled]="!clientForm.valid"
+                style="font-size: 1em">
+                <span>Update</span>
+              </button>
+              <div style="color: seagreen; font-weight: 500" *ngIf="isLoaded">Updated successfully</div>
+            </div>
+          </form>
+        </mat-tab>
+        <mat-tab label="Historial">
+          <br />
+          <div class="item-title">Order history</div>
+
+          <mat-table [dataSource]="datasource" style="background-color: transparent">
+            <ng-container matColumnDef="date">
+              <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <a [routerLink]="['/orderdetail', element.id, 'client']">
+                  {{ element.timestamp.toDate() | date : 'MMMM d, y' }}
+                </a>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="price">
+              <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element.totalPrice | number }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+          </mat-table>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+  </ng-container>
+
+  <button mat-stroked-button (click)="logout()" class="exit-button">Exit app</button>
+  <div class="version">version updated {{ versionBuildDate }}</div>
+</div>

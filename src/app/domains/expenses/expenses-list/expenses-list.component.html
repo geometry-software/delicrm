@@ -1,0 +1,45 @@
+<div class="header-toolbar">
+  <app-button [title]="'BUTTON.ADD'" [icon]="'add'" actionType="back" (click)="addExpenses()"></app-button>
+  <input class="list-search-field" [placeholder]="'EXPENSES.PAGE.LIST.TABLE.SEARCH' | translate" />
+</div>
+
+<mat-table [dataSource]="dataSourceObs | async">
+  <ng-container matColumnDef="waiter">
+    <mat-header-cell *matHeaderCellDef>
+      {{ 'EXPENSES.PAGE.LIST.TABLE.WAITER' | translate }}
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.waiter?.name }}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="timestamp">
+    <mat-header-cell *matHeaderCellDef>
+      {{ 'EXPENSES.PAGE.LIST.TABLE.WAITER' | translate }}
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.timestamp.toDate() | date : 'MMMM d, h:mm a' }}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="value">
+    <mat-header-cell *matHeaderCellDef>
+      {{ 'EXPENSES.PAGE.LIST.TABLE.VALUE' | translate }}
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.value | number }}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="title">
+    <mat-header-cell *matHeaderCellDef>
+      {{ 'EXPENSES.PAGE.LIST.TABLE.DESCRIPTION' | translate }}
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.title }}
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="dataSourceColumn"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: dataSourceColumn"></mat-row>
+</mat-table>

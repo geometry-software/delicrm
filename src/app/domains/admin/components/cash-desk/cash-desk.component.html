@@ -1,0 +1,88 @@
+<mat-tab-group [@.disabled]="true" (selectedIndexChange)="preloadTabData($event)">
+  <mat-tab label="Orders">
+    <div fxLayout="column" fxLayoutAlign="space-around">
+      <div style="margin-top: 10px">
+        <div class="item-title">Cash</div>
+        <div class="item-desc">{{ sum }} currency</div>
+      </div>
+      <div style="margin-top: 10px">
+        <div class="item-title">Digital payment</div>
+        <div class="item-desc">{{ sum }} currency</div>
+      </div>
+      <div>
+        <div class="item-title" style="margin-top: 10px">Cooked plates</div>
+        <div class="item-desc">{{ amount | number }}</div>
+        <div class="item-title" style="margin-top: 10px">Canceled plates</div>
+        <div class="item-desc">{{ amount | number }}</div>
+      </div>
+    </div>
+
+    <mat-table [dataSource]="datasource">
+      <ng-container matColumnDef="waiter">
+        <mat-header-cell *matHeaderCellDef> Waiter </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button mat-button [routerLink]="['/orderdetail', element.id, 'employee']" style="color: #57aaf7">
+            {{ element.waiter.name }}
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="timestamp">
+        <mat-header-cell *matHeaderCellDef> Time </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.timestamp.toDate() | date : 'h:mm a' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{ element.totalPrice }} currency</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+  </mat-tab>
+
+  <mat-tab label="Histrory">
+    <mat-table [dataSource]="datasourceHistorial">
+      <ng-container matColumnDef="manager">
+        <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button mat-button (click)="redirect('menu', element.id)" style="color: #57aaf7">
+            {{ element.createdAt.toDate() | date : 'MMMM d, y' }}
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <mat-header-cell *matHeaderCellDef>Updated by</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.createdBy.name }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="plates">
+        <mat-header-cell *matHeaderCellDef>Plates</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.amountOfPlate }}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="datasourceHistorialColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: datasourceHistorialColumns"></mat-row>
+    </mat-table>
+
+    <mat-progress-bar style="margin-bottom: 5px" mode="indeterminate" *ngIf="isLoadingHistory"></mat-progress-bar>
+    <div fxLayout="row" fxLayoutAlign="space-between" class="pagination-margin">
+      <button mat-stroked-button (click)="previousPage()" [disabled]="!firstItem">
+        <span>Back</span>
+      </button>
+      <button mat-stroked-button (click)="updatePage()">
+        <span *ngIf="!isLoadingHistory">Update</span>
+        <span class="update-pagination" *ngIf="isLoadingHistory">Loading ..</span>
+      </button>
+      <button mat-stroked-button (click)="nextPage()">
+        <span>Forward</span>
+      </button>
+    </div>
+  </mat-tab>
+</mat-tab-group>

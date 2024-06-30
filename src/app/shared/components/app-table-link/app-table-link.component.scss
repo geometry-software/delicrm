@@ -1,0 +1,16 @@
+.table-link {
+  color: #57aaf7;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease-in-out;
+}
+
+.table-link:hover {
+  cursor: pointer;
+  border-bottom: 2px solid #f8af70cf;
+  transition: all 0.2s ease-in-out;
+}
+
+.table-link-disabled {
+  color: #57aaf7;
+  border-bottom: 2px solid transparent;
+}

@@ -1,0 +1,102 @@
+<div *ngIf="order" [@fadeInOnEnter]>
+  <div class="card">
+    <ng-container [ngSwitch]="order.category.type">
+      <h2 *ngSwitchCase="'delivery'">Delivery</h2>
+      <h2 *ngSwitchCase="'table'">Table {{ order.category.table }}</h2>
+      <h2 *ngSwitchCase="'takeaway'">Takeaway</h2>
+    </ng-container>
+    <div class="flex justify-between items-center">
+      <div class="progress">
+        <div [style.width]="order.progress" [style.background]="statusColor[order.status]">
+          <span class="material-symbols-outlined icon"> {{ statusIcon[order.status] }} </span>
+          {{ order.status }}
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <app-button *ngIf="order.status !== 'paid'" [title]="statusButtonTitle" icon="arrow_forward"
+          (click)="update()"></app-button>
+        <app-button *ngIf="order.status === 'paid'" [title]="printButtonTitle" icon="print"
+          (click)="print()"></app-button>
+      </div>
+    </div>
+    <ol>
+      <li *ngFor="let item of order.plates">
+        <div>{{ item.plate.name }}</div>
+        <div class="description">
+          Starter: <strong>{{ item.starter.name }}</strong>
+          <br />
+          Drink: <strong>{{ item.drink.name }}</strong>
+          <br />
+          <div *ngIf="item.salad.name == 'NA'">
+            <strong>- without salad</strong>
+          </div>
+          <div *ngIf="item.garnish?.name == 'NA'">
+            <strong>- without garnish</strong>
+          </div>
+          <div *ngIf="item.rice?.name == 'NA'">
+            <strong>- without rice</strong>
+          </div>
+          <div *ngIf="item.dessert?.name == 'NA'">
+            <strong>- without dessert</strong>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="card mt-[20px]">
+    <h2>Order details</h2>
+
+    <ng-container *ngIf="order.category.type === 'delivery' || order.category.type === 'takeaway'">
+      <h3>Name</h3>
+      <h4>{{ order.category.delivery.name }}</h4>
+    </ng-container>
+
+    <ng-container *ngIf="order.category.type === 'delivery'">
+
+      <h3>Address</h3>
+      <h4 class="table-link" (click)="copyAddress()">{{ order.category.delivery.address }}</h4>
+
+      <h3>Phone</h3>
+      <h4 class="table-link" (click)="copyPhone()">{{ order.category.delivery.phone }}</h4>
+
+      <h3>Payment</h3>
+      <h4>{{ order.category.delivery.payment }}</h4>
+
+      <ng-container *ngIf="order.category.delivery.change">
+        <h3>Change</h3>
+        <h4>{{ order.category.delivery.change }}</h4>
+      </ng-container>
+
+      <h3>Delivery time</h3>
+      <h4>{{ order.category.delivery.time === 'now' ? 'Now' : order.category.delivery.time }}</h4>
+    </ng-container>
+
+    <h3>Created at</h3>
+    <h4>{{ getTimestamp('requested') | timestamp | date : 'MMMM d, y, h:mm a' }}</h4>
+
+    <h3>Created by</h3>
+    <h4>{{ getUser('requested') }}</h4>
+
+    <ng-container *ngIf="isOrderClosed">
+      <h3>Closed at</h3>
+      <h4>{{ getTimestamp('requested') | timestamp | date : 'MMMM d, y, h:mm a' }}</h4>
+
+      <h3>Closed by</h3>
+      <h4 class="m-0">{{ getUser('requested') }}</h4>
+    </ng-container>
+  </div>
+
+  <div class="card mt-[20px]">
+    <h2>Summary</h2>
+
+    <ng-container *ngIf="order.comment">
+      <h3>Comment</h3>
+      <h4>{{ order.comment }}</h4>
+    </ng-container>
+
+    <h3>Total</h3>
+    <h4 class="m-0">{{ order.price.total }} currency</h4>
+  </div>
+</div>
+<br />

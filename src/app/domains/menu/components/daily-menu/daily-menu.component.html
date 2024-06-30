@@ -1,0 +1,55 @@
+<div class="host-overflow">
+  <ng-container *ngIf="hasEmptyMenu">
+    <div class="close-title" [@fadeInOnEnter]>Ahora el servicio está cerrado</div>
+    <div class="close-subtitle" [@fadeInOnEnter]>El menú estará disponible apartir de las 10 a.m.</div>
+  </ng-container>
+
+  <div [ngClass]="isDesktop ? 'toolbar-desktop' : 'toolbar-mobile'" *ngIf="isMenuUpdated">
+    <app-button (click)="save()" title="Continuar" width="full">
+      <span class="dish-amount" *ngIf="dishAmount">({{ dishAmount }})</span>
+    </app-button>
+  </div>
+
+  <div *ngIf="isMenuUpdated" [@fadeInOnEnter]>
+    <mat-chip-grid #plateList style="margin-top: 10px">
+      <mat-chip-row style="color: white; background-color: sandybrown" *ngFor="let item of chosenPlates"
+        removable="true" (removed)="removeItem(item)" [@rubberBandOnEnter]>
+        <span style="color: white">{{ item.name }}</span>
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip-row>
+      <input [matChipInputFor]="plateList" style="display: none" />
+    </mat-chip-grid>
+    <mat-chip-grid #alaCarteChipList style="margin-top: 10px">
+      <mat-chip-row style="color: white; background-color: #57aaf7" *ngFor="let item of chosenAlaCarteItems"
+        removable="true" (removed)="removeAlaCarteItem(item)" [@rubberBandOnEnter]>
+        <span style="color: white">{{ item.name }}</span>
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip-row>
+      <input [matChipInputFor]="alaCarteChipList" style="display: none" />
+    </mat-chip-grid>
+    <mat-tab-group [@.disabled]="true">
+      <mat-tab [label]="dailyMenuLabel">
+        <app-formatted-daily-menu [dailyMenu]="dailyMenu" [isAddAvailable]="true" (openDetail)="openDetail($event)"
+          (addItem)="addItem($event)">
+        </app-formatted-daily-menu>
+      </mat-tab>
+
+      <mat-tab [label]="alaCarteLabel">
+        <div class="flex items-center justify-between" *ngFor="let item of alaCarteList; let i = index">
+          <div class="flex items-center">
+            <div class="alacarte-item__title">
+              {{ item.name }}
+            </div>
+            <div class="item__history">{{ item.history }}</div>
+          </div>
+          <div class="flex items-center">
+            <div class="alacarte-item__price">{{ !item?.isRemoved ? item.price : '86' }} currency</div>
+            <button mat-icon-button (click)="addAlaCarteItem(item)">
+              <mat-icon class="add-button">add</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

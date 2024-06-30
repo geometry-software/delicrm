@@ -1,0 +1,220 @@
+<div class="checkout-container host-overflow" *ngIf="isTemplateReady" [@fadeInOnEnter]>
+  <div *ngIf="!this.plates?.length">
+    <div class="no-plates">To continue with starters and drinks, choose some dishes from the previous page.</div>
+  </div>
+
+  <div *ngIf="!this.user">
+    <div class="no-user">Please, sign up first</div>
+  </div>
+
+  <div class="mb-[10px]" *ngIf="!isGifLoaderShowing">
+    <app-button routerLink="/menu" title="Volver" width="full"></app-button>
+  </div>
+
+  <ng-container *ngIf="isGifLoaderShowing">
+    <div style="min-width: 100%; text-align: center">
+      <img src="/assets/images/cooking.gif" width="200px" height="200px" />
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="this.plates.length && this.user">
+    <ng-container *ngIf="!isGifLoaderShowing">
+      <div *ngFor="let item of plates; let i = index">
+        <div class="card mt-[10px]">
+          <h2>{{ i + 1 }}. {{ item?.name }}</h2>
+          <div class="title">Choose starter</div>
+
+          <mat-radio-group class="example-radio-group" (change)="chooseStarter($event.value, i)">
+            <mat-radio-button *ngFor="let plate of extra.starter" [value]="plate.item"
+              [disabled]="plate?.item?.isRemoved"
+              [style.text-decoration]="plate?.item?.isRemoved ? 'line-through' : 'none'">
+              <span>{{ plate?.item.name }}</span>
+            </mat-radio-button>
+            <mat-radio-button value="skip" (change)="chooseStarter($event.value, i)">
+              <span>wihout starter</span>
+            </mat-radio-button>
+          </mat-radio-group>
+
+          <div class="title">Choose drink</div>
+
+          <mat-radio-group class="example-radio-group" (change)="chooseDrink($event.value, i)">
+            <mat-radio-button *ngFor="let plate of extra.drink" [value]="plate.item" [disabled]="plate?.item?.isRemoved"
+              [style.text-decoration]="plate?.isRemoved ? 'line-through' : 'none'">
+              <span>{{ plate?.item.name }}</span>
+            </mat-radio-button>
+            <mat-radio-button value="skip" (change)="chooseDrink($event.value, i)">
+              <span>wi drink</span>
+            </mat-radio-button>
+          </mat-radio-group>
+
+          <div class="title" style="margin-bottom: 5px">Side dishes</div>
+
+          <mat-checkbox [checked]="extra?.garnish?.isRemoved !== true" (change)="chooseToppings(extra.garnish, i)"
+            [disabled]="extra?.garnish?.isRemoved">
+            <span [style.text-decoration]="extra?.garnish?.isRemoved ? 'line-through' : 'none'">
+              {{ extra?.garnish?.name }}
+            </span>
+          </mat-checkbox>
+          <br />
+          <mat-checkbox [checked]="extra?.rice?.isRemoved !== true" (change)="chooseToppings(extra.rice, i)"
+            [disabled]="extra?.rice?.isRemoved">
+            <span [style.text-decoration]="extra?.rice?.isRemoved ? 'line-through' : 'none'">
+              {{ extra?.rice?.name }}
+            </span>
+          </mat-checkbox>
+          <br />
+          <mat-checkbox [checked]="extra?.salad?.isRemoved !== true" (change)="chooseToppings(extra.salad, i)"
+            [disabled]="extra?.salad?.isRemoved">
+            <span [style.text-decoration]="extra?.salad?.isRemoved ? 'line-through' : 'none'">
+              {{ extra?.salad?.name }}
+            </span>
+          </mat-checkbox>
+          <br />
+          <mat-checkbox [checked]="extra?.dessert?.isRemoved !== true" (change)="chooseToppings(extra.dessert, i)"
+            [disabled]="extra?.dessert?.isRemoved">
+            <span [style.text-decoration]="extra?.dessert?.isRemoved ? 'line-through' : 'none'">
+              {{ extra?.dessert?.name }}
+            </span>
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="confirmOrder()" autocomplete="off">
+        <div class="card mt-[20px]">
+          <h2>Order details</h2>
+          <mat-radio-group *ngIf="isServiceUser" class="radio-group-example" (change)="chooseOrderType($event.value)">
+            <mat-radio-button value="table" checked="true"> Table </mat-radio-button>
+            <mat-radio-button value="delivery"> Delivery </mat-radio-button>
+            <mat-radio-button value="takeaway"> Take away </mat-radio-button>
+          </mat-radio-group>
+
+          <ng-container [ngSwitch]="orderType">
+            <ng-container *ngSwitchCase="'table'">
+              <mat-form-field>
+                <mat-select placeholder="Table number" formControlName="type" formControlName="table">
+                  <mat-option *ngFor="let item of tablesAmount" [value]="item">
+                    <span>{{ item }}</span>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-container>
+            <ng-container *ngSwitchCase="'takeaway'">
+              <mat-form-field [hideRequiredMarker]="true">
+                <mat-label>Name</mat-label>
+                <input matInput type="text" formControlName="name" />
+              </mat-form-field>
+            </ng-container>
+            <ng-container *ngSwitchCase="'delivery'">
+              <mat-checkbox *ngIf="isServiceUser" [(ngModel)]="isOldClient" [ngModelOptions]="{ standalone: true }">
+                Is old client?
+              </mat-checkbox>
+              <mat-form-field *ngIf="isOldClient" appearance="outline" style="margin-top: 10px">
+                <mat-label>Find client by name</mat-label>
+                <input type="text" matInput [formControl]="clientFormControl" [matAutocomplete]="auto" />
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                  (optionSelected)="addClientData($event.option.value)">
+                  <mat-option *ngFor="let option of filteredClients | async" [value]="option">
+                    {{ option.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+              <div class="title">Delivery details</div>
+
+              <mat-form-field>
+                <input matInput type="text" placeholder="Nombre" formControlName="name" />
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput type="text" placeholder="Dirección" formControlName="address" />
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput type="text" placeholder="Celular" formControlName="phone" />
+              </mat-form-field>
+
+              <div class="title">Payment type</div>
+              <mat-radio-group class="example-radio-group" formControlName="payment"
+                (change)="chooseCash($event.value)">
+                <mat-radio-button value="cash"> Cash </mat-radio-button>
+                <mat-radio-button value="card"> Card </mat-radio-button>
+              </mat-radio-group>
+
+              <div *ngIf="isCash">
+                <div class="title">Bill nomination</div>
+                <mat-radio-group class="example-radio-group" formControlName="change">
+                  <mat-radio-button [checked]="'Exact value'" *ngFor="let item of changeTypes">
+                    <span>{{ item }}</span>
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <div class="title">Delivery hour</div>
+              <mat-radio-group class="example-radio-group" [value]="deliveryTime">
+                <mat-radio-button value="now" (change)="updateTime($event.value)">
+                  <span>Now</span>
+                </mat-radio-button>
+                <mat-radio-button value="delayed" (change)="updateTime($event.value)">
+                  <span>Choose a time</span>
+                  <ng-container *ngIf="deliveryTime === 'delayed'">
+                    <input class="delivery-time" [ngxTimepicker]="picker" />
+                    <ngx-material-timepicker #picker (timeSet)="setDeliveryTime($event)"></ngx-material-timepicker>
+                  </ng-container>
+                </mat-radio-button>
+              </mat-radio-group>
+            </ng-container>
+          </ng-container>
+
+          <mat-form-field>
+            <mat-label>Comments</mat-label>
+            <input matInput type="text" [(ngModel)]="comment" [ngModelOptions]="{ standalone: true }" />
+          </mat-form-field>
+        </div>
+
+        <div class="card mt-[20px]" *ngIf="order.alacarte?.length">
+          <h2>A la carte</h2>
+          <ol>
+            <li *ngFor="let item of order.alacarte">
+              {{ item.name }}
+            </li>
+          </ol>
+        </div>
+
+        <div class="card mt-[20px]">
+          <div class="title" style="margin-top: 5px; color: lightcoral" *ngIf="hasDelivery">Delivery:</div>
+          <div class="title" style="font-weight: 700; color: lightcoral" *ngIf="hasDelivery">
+            {{ deliveryAmount * platesAmount }} mil pesos
+          </div>
+
+          <div class="title" style="margin-top: 5px; color: mediumseagreen" *ngIf="hasDiscount">Discount:</div>
+          <div class="title" style="color: mediumseagreen" *ngIf="hasDiscount">
+            - {{ discountAmount * platesAmount }} currency
+          </div>
+
+          <h2>Total</h2>
+          <h3>{{ total }} currency</h3>
+
+          <div *ngIf="hasClientDataError" class="validation-error-message" [@fadeInUpOnEnter]>
+            Verify customer data again
+          </div>
+          <div *ngIf="hasPaymentTypeError" class="validation-error-message" [@fadeInUpOnEnter]>Payment method missing
+          </div>
+          <div *ngIf="hasStarterError" class="validation-error-message" [@fadeInUpOnEnter]>Starters need to be added
+          </div>
+          <div *ngIf="hasDrinkError" class="validation-error-message" [@fadeInUpOnEnter]>Drinks need to be added</div>
+          <div *ngIf="hasTableNumberError" class="validation-error-message" [@fadeInUpOnEnter]>Table number is missing
+          </div>
+          <div *ngIf="hasTakeAwayError" class="validation-error-message" [@fadeInUpOnEnter]>Client name need to be added
+          </div>
+
+          <div style="text-align: center; min-width: 100%; margin-top: 20px">
+            <app-button actionType="save" type="submit" [title]="!isUploading ? 'Request order' : 'Requesting ..'"
+              width="full">
+            </app-button>
+          </div>
+        </div>
+      </form>
+      <br />
+    </ng-container>
+  </ng-container>
+</div>

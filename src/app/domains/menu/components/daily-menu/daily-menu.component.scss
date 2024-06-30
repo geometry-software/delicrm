@@ -1,0 +1,108 @@
+.toolbar-mobile {
+  left: 0px;
+  right: 10px;
+  background-color: #f1f1f1;
+  z-index: 2;
+  position: fixed;
+  bottom: 0px;
+  padding: 5px;
+}
+
+.toolbar-desktop {
+  background-color: #f1f1f1;
+  z-index: 2;
+  bottom: 20px;
+}
+
+.index-title {
+  font-size: 1.4em;
+  font-family: 'Caveat', cursive;
+  padding-top: 10px;
+  text-align: justify;
+  color: #444;
+  font-weight: 500;
+}
+
+.add-button {
+  color: #57aaf7;
+  font-weight: 500;
+}
+
+.notification-order {
+  border-radius: 3rem;
+  color: indianred;
+  padding: 0 10px;
+  font-weight: 500;
+  border-radius: 0;
+}
+
+::ng-deep .mat-mdc-standard-chip .mdc-evolution-chip__text-label {
+  color: white !important;
+}
+::ng-deep .mat-mdc-standard-chip.mdc-evolution-chip--with-trailing-action .mdc-evolution-chip__icon--trailing {
+  color: white !important;
+}
+
+mat-cell:first-child,
+mat-footer-cell:first-child {
+  padding-left: 0px !important;
+}
+
+mat-header-cell:first-child {
+  padding-left: 20px !important;
+}
+
+mat-row.mat-row.ng-star-inserted {
+  border: 0;
+  min-height: 100%;
+}
+
+.close-title {
+  text-align: center;
+  font-size: 1.2em;
+  color: #555;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-top: 10px;
+  border: 1px solid #999;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.close-subtitle {
+  text-align: center;
+  font-size: 1em;
+  color: #57aaf7;
+  font-weight: 500;
+  margin-top: 20px;
+  padding: 5px;
+}
+
+.dish-amount {
+  color: #57aaf7;
+  font-weight: 600;
+}
+
+.alacarte-item {
+  &__main-dish {
+    padding-left: 10px;
+    cursor: pointer;
+  }
+  &__title {
+    color: #555;
+    font-size: 1.4em;
+    font-weight: 500;
+  }
+  &__price {
+    color: #555;
+    font-size: 1.2em;
+    font-weight: 500;
+  }
+  &__history {
+    color: #888;
+  }
+}
+
+.add-button {
+  color: #57aaf7;
+}

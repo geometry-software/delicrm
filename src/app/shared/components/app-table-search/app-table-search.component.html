@@ -1,0 +1,13 @@
+<div class="header-toolbar">
+  <app-button
+    [title]="'BUTTON.ADD'"
+    [icon]="'add'"
+    [type]="'back'"
+    [url]="getUrl()"
+  ></app-button>
+  <input
+    class="list-search-field"
+    [formControl]="formControl"
+    [placeholder]="placeholder | translate"
+  />
+</div>

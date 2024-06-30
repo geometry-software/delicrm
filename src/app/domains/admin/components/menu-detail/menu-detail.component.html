@@ -1,0 +1,140 @@
+<div class="toolbar-padding">
+  <button mat-stroked-button (click)="redirect('all-orders', 'Payments')" style="min-width: 100%; color: #57aaf7">
+    <mat-icon>arrow_back</mat-icon>
+    <span style="padding-left: 10px">Payments</span>
+  </button>
+  <!--
+  <button mat-stroked-button (click)="edit()" style="margin-top: 10px; min-width: 48%; color: #555">
+    <mat-icon>clear</mat-icon>
+    <span style="padding-left: 10px;">Editar</span>
+  </button>
+-->
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
+
+<div *ngIf="isLoaded">
+  <mat-card style="margin-top: 5px">
+    <div class="title-desc">Main dishes</div>
+
+    <div class="list-item" *ngFor="let item of plateArray">
+      <div class="row">
+        <div class="col-1">
+          <div style="position: relative; margin: 3px 0">
+            <div class="menu-detail-badge" *ngIf="!item.isRemoved">
+              {{ item.plato.amount }}
+            </div>
+            <div class="menu-detail-badge" style="background-color: #555" *ngIf="item.isRemoved">
+              {{ item.plato.amount }}
+            </div>
+          </div>
+        </div>
+        <div class="col-11" style="text-align: start; justify-content: flex-start; margin: 3px 0">
+          <div>{{ item.plato.name }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="title-desc">Starters</div>
+    <ul>
+      <li>
+        <div class="list-item">{{ starterArray[0].name }}</div>
+      </li>
+      <li>
+        <div class="list-item">{{ starterArray[1].name }}</div>
+      </li>
+      <li>
+        <div class="list-item">{{ starterArray[2]?.name }}</div>
+      </li>
+    </ul>
+
+    <div class="title-desc">Side dishes</div>
+    <ul>
+      <li>
+        <div class="list-item">{{ toppingsList[0].name }}</div>
+      </li>
+      <li>
+        <div class="list-item">{{ toppingsList[1].name }}</div>
+      </li>
+      <li>
+        <div class="list-item">{{ toppingsList[2].name }}</div>
+      </li>
+    </ul>
+
+    <div class="title-desc">Drinks</div>
+    <ul>
+      <li>
+        <div class="list-item">{{ drinkArray[0].name }}</div>
+      </li>
+      <li>
+        <div class="list-item">{{ drinkArray[1].name }}</div>
+      </li>
+    </ul>
+
+    <div class="title-desc">Dessert</div>
+    <ul>
+      <li>
+        <div class="list-item">{{ toppingsList[3].name }}</div>
+      </li>
+    </ul>
+  </mat-card>
+
+  <div class="item-title" style="margin-top: 10px">Open</div>
+  <div class="item-desc">
+    {{ item.createdAt.toDate() | date : 'MMMM d, y, h:mm a' }}
+  </div>
+
+  <div class="item-title" style="margin-top: 10px">Closed</div>
+  <div class="item-desc">
+    {{ item.closedAt.toDate() | date : 'MMMM d, y, h:mm a' }}
+  </div>
+
+  <div class="item-title" style="margin-top: 10px">Updated by</div>
+  <div class="item-desc">{{ item?.createdBy.name }}</div>
+
+  <div style="margin-top: 10px">
+    <div class="item-title">Cash in cash box</div>
+    <div class="item-desc">{{ item?.amountOfCash }} currency</div>
+  </div>
+
+  <div style="margin-top: 10px">
+    <div class="item-title">Digital cash</div>
+    <div class="item-desc"></div>
+  </div>
+
+  <div>
+    <div class="item-title" style="margin-top: 10px">Cash amount</div>
+    <div class="item-desc">{{ item?.amountOfCash }}</div>
+    <div class="item-title" style="margin-top: 10px">Cooked plates</div>
+    <div class="item-desc">{{ item?.amountOfPlate }}</div>
+    <div class="item-title" style="margin-top: 10px">Canceled plates</div>
+    <div class="item-desc">{{ item?.amountOfOrders }}</div>
+  </div>
+
+  <div class="item-title" style="margin-top: 10px">History</div>
+
+  <mat-table [dataSource]="datasource">
+    <ng-container matColumnDef="waiter">
+      <mat-header-cell *matHeaderCellDef> Waiter </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-button (click)="redirectToOrder('orderdetail', element.id, 'Order detail')" style="color: #57aaf7">
+          {{ element.waiter.name }}
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="timestamp">
+      <mat-header-cell *matHeaderCellDef> Time </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.timestamp.toDate() | date : 'h:mm a' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{ element.totalPrice }} currency</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+</div>

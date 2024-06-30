@@ -1,0 +1,30 @@
+<div cdkFocusInitial></div>
+<div mat-dialog-content>
+  <div style="font-size: 2em; color: #555; text-align: center; margin-bottom: 10px">
+    {{ plate?.name }}
+  </div>
+  <div class="flex justify-center">
+    <img [src]="plate.imgURL ?? setProteinImage(plate.protein)" width="200px" height="200px"
+      style="border-radius: 8px" />
+  </div>
+
+  <div class="title-desc">{{ plate?.history }}</div>
+  <div class="title-desc"><b>Incluye: </b> {{ plateDetail }}</div>
+
+  <br />
+  <div class="hr"></div>
+  <div style="font-size: 1.2em; color: #555; text-align: end">{{ plate?.price }} currency</div>
+  <br />
+
+  <app-button *ngIf="!plate?.isRemoved" (click)="addPlate()" title="Agregar plato" width="full"
+    background="white"></app-button>
+  <span *ngIf="plate?.isRemoved"
+    style="font-size: 1.1em; font-weight: 500; color: #444; padding-left: 10px; text-transform: uppercase">
+    86
+  </span>
+
+  <button mat-flat-button (click)="removeFromMenu()" *ngIf="hasDeleteAuth"
+    style="background-color: #444; color: white; text-transform: uppercase; font-size: 0.9em; margin-top: 25px">
+    86
+  </button>
+</div>

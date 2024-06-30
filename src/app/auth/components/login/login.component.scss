@@ -1,0 +1,49 @@
+.login-title {
+  font-size: 1.5em;
+  padding-bottom: 20px;
+  font-weight: 500;
+}
+
+.login-button {
+  width: 100%;
+}
+
+.action-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.social-button {
+  min-width: 100%;
+  font-size: 1.2em !important;
+  font-weight: 500;
+  height: 50px;
+  color: #555;
+  border: 2px solid #777;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.request-error-message {
+  color: #666;
+  border: 1px solid indianred;
+  border-radius: 5px;
+  margin: 10px 0;
+  padding: 10px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.auth-desc {
+  margin-top: 10px;
+  padding: 0 10px;
+  color: #666;
+  text-align: justify;
+  font-size: 0.8em;
+}

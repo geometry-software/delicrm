@@ -1,0 +1,54 @@
+<div cdkFocusInitial></div>
+<div mat-dialog-content>
+  <h2>{{ data?.category?.delivery?.name }}</h2>
+  <div class="detail">
+    <mat-icon class="icon">call</mat-icon>
+    <div class="pl-[10px]">
+      {{ data?.category?.delivery?.phone }}
+    </div>
+  </div>
+  <div class="detail">
+    <mat-icon class="icon">home</mat-icon>
+    <div class="pl-[10px]">
+      {{ data?.category?.delivery?.address }}
+    </div>
+  </div>
+  <div class="detail">
+    <mat-icon class="icon">account_balance_wallet</mat-icon>
+    <div class="pl-[10px]" *ngIf="data?.category?.delivery.payment == 'cash'">Cash</div>
+    <div class="pl-[10px]" *ngIf="data?.category?.delivery.payment == 'card'">Card</div>
+  </div>
+
+  <div class="hr"></div>
+  <li *ngFor="let item of data?.plates">
+    <span>{{ item.plate.name }}</span>
+  </li>
+
+  <ng-container *ngIf="isRejectedOrder">
+    <div class="validation-error-message" style="margin-top: 15px; text-transform: uppercase">Rejected</div>
+    <h4>{{ data.comment }}</h4>
+  </ng-container>
+
+  <ng-container *ngIf="!isDeleteOrder">
+    <div class="flex justify-between items-center gap-2">
+      <button mat-stroked-button type="button" (click)="showConfirmaion()">Cancel</button>
+      <app-button title="Confirmar" actionType="back" (click)="confirm()"></app-button>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isDeleteOrder">
+    <div style="margin-top: 30px">
+      <h2>Do you want to remove the order?</h2>
+      <form class="flex justify-end">
+        <div class="flex justify-between items-center gap-2">
+          <button type="submit" mat-flat-button (click)="cancel()">
+            <span style="font-size: 1.5em; color: indianred; padding-left: 10px">Yes</span>
+          </button>
+          <button type="button" mat-stroked-button (click)="hideConfirmaion()">
+            <span style="font-size: 1.5em; color: seagreen">No</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-container>
+</div>
