@@ -5,17 +5,12 @@ import { OrderService } from '../../../orders/services/order.service'
 import { saveAs } from 'file-saver'
 import * as moment from 'moment'
 import { AdminService } from '../../services/admin.service'
-import { SignalService } from 'src/app/shared/services/signal.service'
-import { AppConfirmationDialogComponent } from 'src/app/shared/components/app-confirmation-dialog/app-confirmation-dialog.component'
-import { PlateDetailComponent } from 'src/app/domains/menu/components/plate-detail/plate-detail.component'
 import { Observable, filter, tap } from 'rxjs'
 import domtoimage from 'dom-to-image'
 import { Store } from '@ngrx/store'
 import { printMenu } from '../../store/admin.selectors'
 import { AdminActions as ItemActions } from '../../store/admin.actions'
-import { RecipeProtein } from '../../utils/admin.model'
-import { Order } from 'src/app/domains/menu/utils/waiter.model'
-
+import { Order } from '../../../menu/utils/waiter.model'
 @Component({
   selector: 'app-image-menu',
   templateUrl: './image-menu.component.html',
@@ -43,14 +38,14 @@ export class ImageMenuComponent implements OnInit {
 
   domtoimage = domtoimage
 
-  readonly printMenu$: Observable<boolean> = this.store$.select(printMenu)
+  readonly printedMenu: Observable<boolean> = this.store.select(printMenu)
 
   ordersAmountList = new Array()
   ordersOpen: any = {} as any
   enableCloseDay: boolean
   isUpdating: boolean
 
-  constructor(private orderService: OrderService, private adminService: AdminService, private store$: Store) { }
+  constructor(private orderService: OrderService, private adminService: AdminService, private store: Store) { }
 
   ngOnInit() {
     this.initServerData()
@@ -62,11 +57,11 @@ export class ImageMenuComponent implements OnInit {
     this.orderService.getPaidOrders().subscribe((res) => {
       this.ordersAmountList = res
     })
-    this.printMenu$
+    this.printedMenu
       .pipe(
         tap((value) => {
           if (value) {
-            this.printMenu()
+            this.print()
           }
         })
       )
@@ -83,12 +78,12 @@ export class ImageMenuComponent implements OnInit {
       })
   }
 
-  printMenu() {
+  print() {
     this.isLoading = true
     let name = 'Menu ' + this.today
     this.domtoimage.toBlob(document.getElementById('print')).then((blob) => {
       saveAs(blob, name)
-      this.store$.dispatch(ItemActions.printMenu({ print: false }))
+      this.store.dispatch(ItemActions.printMenu({ print: false }))
     })
   }
 

@@ -6,13 +6,12 @@ import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { OrderService } from '../../services/order.service'
 import { fadeInLeftOnEnterAnimation, fadeInOnEnterAnimation } from 'angular-animations'
-import { SignalService } from 'src/app/shared/services/signal.service'
-import { AuthRole, AuthUser } from 'src/app/auth/utils/auth.model'
 import { STATUS_COLOR, STATUS_ICON } from '../../utils/waiter.constants'
 import { PrintService } from '../../../../shared/services/print.service'
-import { AuthService } from 'src/app/auth/services/auth.service'
 import { tap } from 'rxjs'
-import { Order, OrderStatus, OrderStatusValue, ProgressStatus } from 'src/app/domains/menu/utils/waiter.model'
+import { Order, OrderStatus, OrderStatusValue, ProgressStatus } from '../../../menu/utils/waiter.model'
+import { AppUser } from '../../../users/utils/user.model'
+import { UserService } from '../../../users/services/user.service'
 
 @Component({
   selector: 'app-order-detail',
@@ -35,7 +34,7 @@ export class OrderDetailComponent implements OnInit {
   printButtonTitle: string = 'Print'
   statusColor = STATUS_COLOR
   statusIcon = STATUS_ICON
-  user: AuthUser
+  user: AppUser
 
   constructor(
     private orderService: OrderService,
@@ -43,8 +42,8 @@ export class OrderDetailComponent implements OnInit {
     private printService: PrintService,
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
-    private authService: AuthService
-  ) {}
+    private userService: UserService
+  ) { }
 
   ngOnInit() {
     this.initAuth()
@@ -99,22 +98,22 @@ export class OrderDetailComponent implements OnInit {
   }
 
   initAuth() {
-    this.authService
-      .getAppAuth()
-      .pipe(
-        tap((value) => {
-          this.user = value
-          this.cdr.markForCheck()
-        })
-      )
-      .subscribe()
+    // this.userService
+    //   .getAppAuth()
+    //   .pipe(
+    //     tap((value) => {
+    //       this.user = value
+    //       this.cdr.markForCheck()
+    //     })
+    //   )
+    //   .subscribe()
   }
 
   getTimestamp(status: OrderStatusValue): Date {
     return this.order.statusHistory.find((el) => el.status === status).timestamp
   }
 
-  getUser(status: OrderStatusValue): string {
-    return this.order.statusHistory.find((el) => el.status === status).user.name
+  getUser(status: OrderStatusValue) {
+    // return this.order.statusHistory.find((el) => el.status === status).user.name
   }
 }

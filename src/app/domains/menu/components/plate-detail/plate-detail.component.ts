@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
-import { Recipe, RecipeProtein } from 'src/app/domains/recipe/utils/recipe.model'
+import { Recipe, RecipeProtein } from '../../../recipe/utils/recipe.model'
 
 @Component({
   selector: 'app-plate-detail',

@@ -1,13 +1,13 @@
 import { Component, ViewChild, OnInit, Signal, ChangeDetectorRef } from '@angular/core'
 import { MatDrawer } from '@angular/material/sidenav'
-import { Observable, tap } from 'rxjs'
-import { userMenuOptions, clientMenuOptions } from '../../utils/menu-options'
+import { concat, map, Observable, of, switchMap, tap } from 'rxjs'
+import { userMenuOptions, getAuthMenuOptions } from '../../models/menu-options'
 import { TranslateService } from '@ngx-translate/core'
-import { SignalService } from 'src/app/shared/services/signal.service'
-import { MenuOption, ResponsiveLayout } from '../../utils/navbar.model'
-import { AuthUser } from 'src/app/auth/utils/auth.model'
+import { MenuOption, ResponsiveLayout } from '../../models/navbar.model'
+import { UserService } from '../../../domains/users/services/user.service'
+import { SignalService } from '../../../shared/services/signal.service'
 import { AuthService } from '../../../auth/services/auth.service'
-import { isMobileScreen } from '../../utils/screen-orientation'
+import { AuthUser } from '../../../auth/models/auth.model'
 
 @Component({
   selector: 'app-navbar',
@@ -27,16 +27,25 @@ export class NavbarComponent implements OnInit {
 
   isMobileShown: boolean
 
-  readonly clientMenuOptions = clientMenuOptions
   readonly toolBarTitleSignal: Signal<string> = this.signalService.getToolbarTitle
-  readonly appAuth$: Observable<AuthUser>
+
+  authMenuOptions = concat(
+    of(true),
+    this.authService.fireAuthUser.pipe(
+      map(value => !Boolean(value))))
+    .pipe(
+      map(value => value === true ? true : Boolean(value)),
+      tap(v => console.log(v)),
+      map(value => getAuthMenuOptions(value)),
+      tap(v => console.log(v))
+    )
 
   constructor(
     private authService: AuthService,
     private signalService: SignalService,
     private translate: TranslateService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initUserData()
@@ -44,6 +53,8 @@ export class NavbarComponent implements OnInit {
     this.checkClient()
     this.updateScreenSize()
     this.initTranslate()
+
+    // this.authService.loginAnonymously()
   }
 
   initTranslate() {
@@ -54,28 +65,28 @@ export class NavbarComponent implements OnInit {
   }
 
   initUserData(): void {
-    this.authService
-      .getAppAuth()
-      .pipe(
-        tap((value) => {
-          this.isAuthInitialized = true
-          if (value.uid) {
-            if (value.status === 'employee') {
-              this.hasAppAuth = true
-              this.user = value
-              this.userMenuOptions = userMenuOptions
-            } else if (value.status === 'client') {
-              this.user = value
-            }
-          }
-        })
-      )
-      .subscribe()
+    // this.userService
+    //   .getAppAuth()
+    //   .pipe(
+    //     tap((value) => {
+    //       this.isAuthInitialized = true
+    //       if (value.uid) {
+    //         if (value.status === 'employee') {
+    //           this.hasAppAuth = true
+    //           this.user = value
+    //           this.userMenuOptions = userMenuOptions
+    //         } else if (value.status === 'client') {
+    //           this.user = value
+    //         }
+    //       }
+    //     })
+    //   )
+    //   .subscribe()
   }
 
-  checkDelivery(): void {}
+  checkDelivery(): void { }
 
-  checkClient(): void {}
+  checkClient(): void { }
 
   toggleDrawer() {
     if (!this.responsiveLayout.isDesktop) this.drawer.toggle()
@@ -87,7 +98,7 @@ export class NavbarComponent implements OnInit {
 
   updateScreenSize() {
     const widthCheck = window.screen.width < 760
-    const isMobile = isMobileScreen
+    const isMobile = !!typeof screen.orientation
     if (!widthCheck) {
       this.responsiveLayout.isDesktop = true
       this.responsiveLayout.matDrawerMode = 'side'

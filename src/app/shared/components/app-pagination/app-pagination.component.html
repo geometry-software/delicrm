@@ -5,7 +5,8 @@
     </mat-select>
     <ng-container *ngIf="!downloadState">
       <div>
-        {{ paginationPayload.options.current }} / {{ paginationPayload.options.total }} {{ paginationPayload.options.title }}
+        {{ paginationPayload.options.current }} / {{ paginationPayload.options.total }} {{
+        paginationPayload.options.title }}
         <span style="color: #555; font-size: 0.8em" *ngIf="paginationPayload.responseTime">
           ({{ paginationPayload.responseTime }} sec.)
         </span>
@@ -13,31 +14,21 @@
     </ng-container>
   </div>
   <div class="flex justify-between gap-2">
-    <button
-      mat-icon-button
-      [disabled]="
+    <button mat-icon-button [disabled]="
         paginationControl.value.query === 'custom' ||
         sizeControl.value.size === paginationPayload.options.current ||
         downloadState
-      "
-      (click)="changePage('previous')"
-      onclick="this.blur()"
-    >
+      " (click)="changePage('previous')" onclick="this.blur()">
       <mat-icon>chevron_left</mat-icon>
     </button>
     <button mat-icon-button [disabled]="downloadState" (click)="changePage('first')" onclick="this.blur()">
       <mat-icon>restart_alt</mat-icon>
     </button>
-    <button
-      mat-icon-button
-      [disabled]="
+    <button mat-icon-button [disabled]="
         paginationControl.value.query === 'custom'
           ? true
           : paginationPayload.options.current === paginationPayload.options.total || downloadState
-      "
-      (click)="changePage('next')"
-      onclick="this.blur()"
-    >
+      " (click)="changePage('next')" onclick="this.blur()">
       <mat-icon>chevron_right</mat-icon>
     </button>
   </div>

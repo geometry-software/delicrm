@@ -7,10 +7,10 @@ const paginationTitle: string = RecipeConstants.paginationTitle
 const paginationSize: Array<number> = RecipeConstants.paginationSize
 
 export const getState = createFeatureSelector<State>(storeFeatureKey)
-export const getItems = createSelector(getState, (state) => state.items?.data)
-export const getItemsPageAmount = createSelector(getState, (state) => state.items?.data?.length)
+export const getItems = createSelector(getState, (state) => state.items.data)
+export const getItemsPageAmount = createSelector(getState, (state) => state.items.data.length)
 export const getResetRequestToTheFirstPage = createSelector(getState, (state) => state.resetRequest)
-export const getItem = createSelector(getState, (state) => state.item?.data)
+export const getItem = createSelector(getState, (state) => state.item.data)
 export const getItemId = createSelector(getState, (state) => state.itemId)
 export const getPaginationItem = createSelector(getItems, (state) => ({
   first: state?.length ? [...state][0] : null,

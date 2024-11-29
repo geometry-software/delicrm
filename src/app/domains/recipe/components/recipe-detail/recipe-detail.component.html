@@ -1,4 +1,4 @@
-<ng-container *ngIf="item$ | async as data">
+<ng-container *ngIf="item | async as data">
   <div class="content-toolbar-padding">
     <h3>{{ 'RECIPES.PAGE.LIST.NAME' | translate }}</h3>
     <h4>{{ data.name }}</h4>

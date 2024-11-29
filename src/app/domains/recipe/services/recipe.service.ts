@@ -1,61 +1,64 @@
 import { Injectable, inject } from '@angular/core'
-import { Observable, delay } from 'rxjs'
-import { RepositoryService } from 'src/app/shared/repository/repository.service'
-import { OrderRequest, RepositoryEntityService, RepositoryResponseEntity } from 'src/app/shared/repository/repository.model'
+import { EMPTY, Observable, delay } from 'rxjs'
 import { RecipeConstants } from '../utils/recipe.constants'
+import { Recipe, RecipeStatus } from '../utils/recipe.model'
+import { IRepositoryService, OrderRequest } from '../../../shared/repository/repository.model'
+import { RepositoryService } from '../../../shared/repository/repository.service'
 
 @Injectable()
-export class RecipeEntityService implements RepositoryEntityService {
+export class RecipeEntityService {
+
   readonly collection = RecipeConstants.collectionName
   readonly collectionLog = RecipeConstants.collectionName + '_log'
-  readonly repositoryService: RepositoryService = inject(RepositoryService)
+  readonly repositoryService: RepositoryService<Recipe, RecipeStatus> = inject(RepositoryService)
 
-  getAll<T>(): Observable<T[]> {
-    return this.repositoryService.getAllDocuments<T>(this.collection)
+  getAll() {
+    return this.repositoryService.getAllDocuments(this.collection)
   }
 
-  getById<T>(id: string): Observable<T> {
+  getById(id: string) {
     return this.repositoryService.getDocumentById(this.collection, id)
   }
 
-  getTotalByStatus<S>(status: S): Observable<number> {
-    return this.repositoryService.getCollectionSizeByStatus<S>(this.collection, status)
+  getTotalByStatus(status: RecipeStatus) {
+    return this.repositoryService.getCollectionSizeByStatus(this.collection, status)
   }
 
-  getFirstPage<T, S>(order: OrderRequest, size: number, status: S): Observable<T[]> {
-    return this.repositoryService.getFirstPage<T, S>(this.collection, order, size, 'status', status)
+  getFirstPage(order: OrderRequest, size: number, status: RecipeStatus) {
+    return this.repositoryService.getFirstPage(this.collection, order, size, 'status', status)
   }
 
-  getNextPage<T, S, V>(order: OrderRequest, size: number, status: S, value: V): Observable<T[]> {
-    return this.repositoryService.getNextPage<T, S, V>(this.collection, order, size, 'status', status, value)
+  getNextPage<V>(order: OrderRequest, size: number, status: RecipeStatus, value: V) {
+    return this.repositoryService.getNextPage<RecipeStatus, V>(this.collection, order, size, 'status', status, value)
   }
 
-  getPreviousPage<T, S, V>(order: OrderRequest, size: number, status: S, value: V): Observable<T[]> {
-    return this.repositoryService.getPreviousPage<T, S, V>(this.collection, order, size, 'status', status, value)
+  getPreviousPage<V>(order: OrderRequest, size: number, status: RecipeStatus, value: V) {
+    return this.repositoryService.getPreviousPage<RecipeStatus, V>(this.collection, order, size, 'status', status, value)
   }
 
-  getAllByQuery<T>(property: string, value: string): Observable<T[]> {
-    return this.repositoryService.getAllDocumentsByIncludesQuery<T>(this.collection, property, value)
+  getAllByQuery(property: string, value: string) {
+    return this.repositoryService.getAllDocumentsByIncludesQuery(this.collection, property, value)
   }
 
-  create<T>(item: T): Observable<RepositoryResponseEntity> {
-    const document = {
+  create(item: Recipe) {
+    const document: Recipe = {
       ...item,
       status: 'active',
       timestamp: new Date(),
     }
-    return this.repositoryService.createDocument<T>(this.collection, document)
+    return this.repositoryService.createDocument(this.collection, document)
   }
 
-  update<T>(item: T, id: string): Observable<void> {
+  update(item: Recipe, id: string) {
     return this.repositoryService.updateDocument(this.collection, item, id)
   }
 
-  delete(id: string): Observable<void> {
+  delete(id: string) {
     return this.repositoryService.deleteDocument(this.collection, id)
   }
 
-  updateStatus<T>(id: string, status: T): Observable<void> {
+  updateStatus(id: string, status: any) {
     return this.repositoryService.updateDocument(this.collection, { status: status }, id)
   }
+
 }

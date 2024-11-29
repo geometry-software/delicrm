@@ -1,0 +1,66 @@
+<ng-container *ngIf="!(isAdminUser | async); else adminLogin">
+  <h2> User login </h2>
+  <div class="action-bar">
+    <button class="social-button" (click)="loginUser()">
+      <img src="./../../../../assets/auth/google.png" width="40px" height="40px" />
+      <span> Sign in with Google </span>
+    </button>
+  </div>
+  <br>
+</ng-container>
+
+<ng-template #adminLogin>
+  <h2> Admin login </h2>
+  <mat-accordion>
+    <mat-expansion-panel class="expansion-panel-radius">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h3> Use form to proceed </h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <form [formGroup]="adminForm" (ngSubmit)="loginAdmin()">
+
+        <mat-form-field [hideRequiredMarker]="true">
+          <mat-label> Email </mat-label>
+          <input matInput [formControlName]="adminFormProps.email" />
+          <mat-error *ngIf="showFieldErrors(adminForm, adminFormProps.email) as error">
+            {{ error }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field [hideRequiredMarker]="true">
+          <mat-label> Password </mat-label>
+          <input matInput [formControlName]="adminFormProps.password" />
+          <mat-error *ngIf="showFieldErrors(adminForm, adminFormProps.password) as error">
+            {{ error }}
+          </mat-error>
+        </mat-form-field>
+
+        <br>
+        <button mat-stroked-button class="login-button" type="submit">Register</button>
+
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <ng-container *ngIf="userDisplayName && hasFirebasAuth">
+    <h4>Hey, {{ userDisplayName }}!</h4>
+    <h5>Account will be reviewed</h5>
+    <p style="margin: 10px 0">Contact in cafe since 10am or call us</p>
+    <button mat-stroked-button class="login-button" routerLink="/auth/profile">See profile</button>
+  </ng-container>
+
+  <ng-container *ngIf="false">
+    <h4>Hey, {{ userDisplayName }}!</h4>
+    <button mat-stroked-button class="login-button" routerLink="/menu">Go to delivery</button>
+    <button mat-stroked-button class="employee-button" routerLink="/auth/profile">See profile</button>
+  </ng-container>
+
+  <ng-container *ngIf="false">
+    <h3 class="register-title">Thanks for the registration. Try the app</h3>
+    <br />
+    <button mat-stroked-button class="login-button" routerLink="/service/menu">Continue</button>
+  </ng-container>
+
+</ng-template>

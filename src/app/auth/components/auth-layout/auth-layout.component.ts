@@ -1,10 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
-import { FormControl } from '@angular/forms'
-import { Observable, debounceTime, tap } from 'rxjs'
-import { Store, select } from '@ngrx/store'
-import { getItemId, getLayoutLoading } from '../../store/auth.selectors'
-import { AuthConstants } from '../../utils/auth.constants'
-import { AuthActions as ItemActions } from '../../store/auth.actions'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
+import { AuthService } from '../../services/auth.service'
+import { AdminUserLoadingStatus } from '../../models/auth-user-loading-status'
 
 @Component({
   selector: 'app-auth-layout',
@@ -12,38 +8,11 @@ import { AuthActions as ItemActions } from '../../store/auth.actions'
   styleUrls: ['./auth-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AuthLayoutComponent implements OnInit {
-  // DI
-  readonly store$: Store = inject(Store)
+export class AuthLayoutComponent {
 
-  // Selectors
-  itemId$: Observable<string> = this.store$.pipe(select(getItemId))
-  layoutLoading$: Observable<boolean> = this.store$.pipe(select(getLayoutLoading))
+  constructor(private authService: AuthService) { }
 
-  // Other properties
-  readonly searchControl = new FormControl()
-  readonly backTitle = AuthConstants.paginationTitle
-  readonly searchPlaceholder = AuthConstants.searchPlaceholder
-  readonly defaultSearchKey = AuthConstants.defaultSearchKey
-  readonly defaultFirstPageRequest = AuthConstants.defaultFirstPageRequest
+  AdminUserLoadingStatus = AdminUserLoadingStatus
+  adminSignUpStatus = this.authService.adminSignUpStatus
 
-  ngOnInit(): void {
-    this.searchControl.valueChanges
-      .pipe(
-        debounceTime(500),
-        tap((value) =>
-          value
-            ? this.store$.dispatch(
-                ItemActions.getItemsBySearchQuery({
-                  request: {
-                    key: this.defaultSearchKey,
-                    value,
-                  },
-                })
-              )
-            : this.store$.dispatch(ItemActions.getItems({ request: this.defaultFirstPageRequest }))
-        )
-      )
-      .subscribe()
-  }
 }

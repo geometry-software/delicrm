@@ -171,7 +171,7 @@ mat-drawer-container {
 
 .router-outlet-inner-desktop {
   margin: 30px;
-  overflow: hidden;
+  overflow: auto;
   height: calc(100vh - 140px);
   padding-right: 5px;
 }

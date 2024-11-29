@@ -15,17 +15,19 @@ export interface RepositoryResponseEntity {
   id: string
 }
 
-export interface RepositoryEntityService {
-  getAll<T>(): Observable<T[]>
-  getById<T>(id: string): Observable<T>
-  getTotalByStatus<S>(status: S): Observable<number>
-  getFirstPage<T, S>(order: OrderRequest, size: number, status: S): Observable<T[]>
-  getNextPage<T, S, V>(order: OrderRequest, size: number, status: S, value: V): Observable<T[]>
-  getPreviousPage<T, S, V>(order: OrderRequest, size: number, status: S, value: V): Observable<T[]>
-  getAllByQuery<T>(property: string, value: string): Observable<T[]>
-  create<T>(item: T): Observable<RepositoryResponseEntity>
-  update<T>(item: T, id: string): Observable<void>
-  updateStatus<T>(id: string, status: T): Observable<void>
+export interface IRepositoryService<T = any, S = RepositoryEntityStatus> {
+  create(item: T): Observable<RepositoryResponseEntity>
+  set(item: T, id: string): Observable<void>
+  getAll(): Observable<T[]>
+  getById(id: string): Observable<T>
+  getTotalByStatus(status: S): Observable<number>
+  getFirstPage(order: OrderRequest, size: number, status: S): Observable<T[]>
+  getNextPage<V>(order: OrderRequest, size: number, status: S, value: V): Observable<T[]>
+  getPreviousPage<V>(order: OrderRequest, size: number, status: S, value: V): Observable<T[]>
+  getAllByQuery(property: string, value: string): Observable<T[]>
+  update(item: T, id: string): Observable<void>
+  updateStatus(status: S, id: string): Observable<void>
+  delete?(id: string): Observable<void>
 }
 
 export interface RepositoryResponseList<T> {

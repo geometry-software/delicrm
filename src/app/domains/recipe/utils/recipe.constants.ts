@@ -1,6 +1,6 @@
-import { PaginationRequest } from 'src/app/shared/model/pagination.model'
+import { PaginationRequest } from '../../../shared/model/pagination.model'
+import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from '../../../shared/repository/repository.model'
 import { Recipe, RecipeStatus } from './recipe.model'
-import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from 'src/app/shared/repository/repository.model'
 import { Sort } from '@angular/material/sort'
 
 export abstract class RecipeConstants {

@@ -4,10 +4,9 @@ import { MatDialog } from '@angular/material/dialog'
 import { CheckoutService } from '../../services/checkout.service'
 import { fadeInOnEnterAnimation, rubberBandOnEnterAnimation } from 'angular-animations'
 import { PlateDetailComponent } from '../plate-detail/plate-detail.component'
-import { SignalService } from 'src/app/shared/services/signal.service'
-import { Recipe, RecipeProtein } from 'src/app/domains/recipe/utils/recipe.model'
 import { Order } from '../../utils/waiter.model'
 import { MenuService } from '../../services/menu.service'
+import { Recipe, RecipeProtein } from '../../../recipe/utils/recipe.model'
 
 @Component({
   selector: 'app-daily-menu',

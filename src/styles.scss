@@ -14,7 +14,7 @@ body {
 }
 
 .host-overflow {
-  overflow-y: scroll;
+  overflow-y: auto;
   height: 100%;
   padding-right: 5px;
 }
@@ -24,13 +24,16 @@ body {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #fdb16f;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #ffc897;
   cursor: pointer !important;
@@ -39,13 +42,16 @@ body {
 .mat-drawer-scrollbar ::-webkit-scrollbar {
   width: 5px;
 }
+
 .mat-drawer-scrollbar ::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
+
 .mat-drawer-scrollbar ::-webkit-scrollbar-thumb {
   background: #bbb !important;
   border-radius: 4px;
 }
+
 .mat-drawer-scrollbar ::-webkit-scrollbar-thumb:hover {
   background: peachpuff !important;
 }
@@ -295,23 +301,16 @@ p {
   stroke: sandybrown !important;
 }
 
-.mdc-checkbox .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background {
+.mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background {
   background-color: sandybrown !important;
   border-color: sandybrown !important;
 }
 
-.mat-mdc-radio-button
-  .mdc-radio:not(:disabled)
-  .mdc-radio__native-control:enabled
-  + .mdc-radio__background
-  .mdc-radio__outer-circle {
+.mat-mdc-radio-button .mdc-radio:not(:disabled) .mdc-radio__native-control:enabled+.mdc-radio__background .mdc-radio__outer-circle {
   border-color: sandybrown !important;
 }
-.mat-mdc-radio-button
-  .mdc-radio:not(:disabled)
-  .mdc-radio__native-control:enabled
-  + .mdc-radio__background
-  .mdc-radio__inner-circle {
+
+.mat-mdc-radio-button .mdc-radio:not(:disabled) .mdc-radio__native-control:enabled+.mdc-radio__background .mdc-radio__inner-circle {
   border-color: sandybrown !important;
 }
 

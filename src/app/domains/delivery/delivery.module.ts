@@ -11,10 +11,6 @@ import { DeliveryDetailComponent } from './components/delivery-detail/delivery-d
 import { DeliveryService } from './services/delivery.service'
 import { StoreModule } from '@ngrx/store'
 import { EffectsModule } from '@ngrx/effects'
-import { DeliveryConstants } from './utils/delivery.constants'
-import { reducer } from './store/delivery.reducer'
-import { DeliveryEffects } from './store/delivery.effects'
-import { DeliveryEntityService } from './services/recipe.service'
 
 @NgModule({
   declarations: [DeliveryDetailComponent, DeliveryListComponent],
@@ -26,9 +22,7 @@ import { DeliveryEntityService } from './services/recipe.service'
     FormsModule,
     DeliveryRoutingModule,
     TranslateModule,
-    StoreModule.forFeature(DeliveryConstants.storeFeatureKey, reducer),
-    EffectsModule.forFeature([DeliveryEffects]),
   ],
-  providers: [DeliveryService, DeliveryEntityService],
+  providers: [DeliveryService],
 })
-export class DeliveryModule {}
+export class DeliveryModule { }

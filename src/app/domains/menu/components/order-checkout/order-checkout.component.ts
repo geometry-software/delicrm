@@ -11,12 +11,11 @@ import {
   fadeInUpOnEnterAnimation,
   fadeInOnEnterAnimation,
 } from 'angular-animations'
-import { SignalService } from 'src/app/shared/services/signal.service'
-import { Recipe } from 'src/app/domains/recipe/utils/recipe.model'
 import { CheckoutOrder, DeliveryTime, Order, OrderDelivery, OrderType } from '../../utils/waiter.model'
-import { AuthService } from 'src/app/auth/services/auth.service'
-import { AuthUser } from 'src/app/auth/utils/auth.model'
 import { MenuService } from '../../services/menu.service'
+import { Recipe } from '../../../recipe/utils/recipe.model'
+import { AppUser } from '../../../users/utils/user.model'
+import { UserService } from '../../../users/services/user.service'
 
 @Component({
   selector: 'app-order-checkout',
@@ -82,7 +81,7 @@ export class OrderCheckoutComponent implements OnInit {
   deliveryAmount: number = 0
 
   orderType: OrderType = 'table'
-  user: AuthUser
+  user: AppUser
   orderId: string
 
   tablePayment: FormControl = new FormControl(null, Validators.required)
@@ -102,7 +101,7 @@ export class OrderCheckoutComponent implements OnInit {
   constructor(
     private checkoutService: CheckoutService,
     private menuService: MenuService,
-    private authService: AuthService,
+    private userService: UserService,
     private navRouter: Router,
     private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef
@@ -118,14 +117,14 @@ export class OrderCheckoutComponent implements OnInit {
   }
 
   initUser() {
-    this.authService.getAppAuth().subscribe((value) => {
-      this.initUserType(value)
-      if (this.isClientUser) {
-        this.initClientUser()
-      }
-      this.isTemplateReady = true
-      this.cdr.markForCheck()
-    })
+    // this.userService.getAppAuth().subscribe((value) => {
+    //   this.initUserType(value)
+    //   if (this.isClientUser) {
+    //     this.initClientUser()
+    //   }
+    //   this.isTemplateReady = true
+    //   this.cdr.markForCheck()
+    // })
   }
 
   initClientUser() {
@@ -168,7 +167,7 @@ export class OrderCheckoutComponent implements OnInit {
       //     this.prepareOrder()
       //   })
       // })
-      // this.authService.getAllClients().subscribe((value) => console.log(value))
+      // this.userService.getAllClients().subscribe((value) => console.log(value))
     }
   }
 
@@ -286,10 +285,10 @@ export class OrderCheckoutComponent implements OnInit {
     // this.order.timestamp = new Date()
   }
 
-  initUserType(user: AuthUser): void {
+  initUserType(user: AppUser): void {
     this.user = user
-    this.isServiceUser = this.user.role === 'admin' || this.user.role === 'delivery' || this.user.role === 'waiter'
-    this.isClientUser = this.user.role === 'client'
+    // this.isServiceUser = this.user.role === 'admin' || this.user.role === 'delivery' || this.user.role === 'waiter'
+    // this.isClientUser = this.user.role === 'client'
   }
 
   confirmOrder() {
@@ -447,7 +446,7 @@ export class OrderCheckoutComponent implements OnInit {
   }
 
   initClients() {
-    this.authService.getAllClients().subscribe((res) => {
+    this.userService.getAllClients().subscribe((res) => {
       this.clientList = res
       this.filteredClients = this.clientFormControl.valueChanges.pipe(
         startWith(''),

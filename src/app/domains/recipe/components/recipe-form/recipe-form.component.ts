@@ -3,24 +3,21 @@ import {
   ChangeDetectorRef,
   Component,
   OnInit,
-} from '@angular/core';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { AngularFireStorageReference } from '@angular/fire/compat/storage';
+} from '@angular/core'
+import { FormGroup, Validators, FormBuilder } from '@angular/forms'
+import { ActivatedRoute } from '@angular/router'
+import { AngularFireStorageReference } from '@angular/fire/compat/storage'
 import {
   PLATE_PROTEIN_TRANSLATE,
   PLATE_TYPE_TRANSLATE,
-} from '../../utils/recipe.constants';
-import { FileStorageService } from 'src/app/shared/services/file-storage.service';
-import { Recipe, RecipeCourse } from '../../utils/recipe.model';
-import { Store } from '@ngrx/store';
-import { getItem, getItemLoadingState } from '../../store/recipe.selectors';
-import { RecipeActions as ItemActions } from '../../store/recipe.actions';
-import { Observable, tap } from 'rxjs';
-import { getErrorMessage } from 'src/app/shared/utils/get-error-message';
-import { markInvalidFields } from 'src/app/shared/utils/mark-invalid-fields';
-import { SharedConstants } from 'src/app/shared/utils/shared.constants';
-import { SignalService } from 'src/app/shared/services/signal.service';
+} from '../../utils/recipe.constants'
+import { Recipe, RecipeCourse } from '../../utils/recipe.model'
+import { Store } from '@ngrx/store'
+import { getItem, getItemLoadingState } from '../../store/recipe.selectors'
+import { RecipeActions as ItemActions } from '../../store/recipe.actions'
+import { Observable, tap } from 'rxjs'
+import { FileStorageService } from '../../../../shared/services/file-storage.service'
+import { SignalService } from '../../../../shared/services/signal.service'
 
 @Component({
   selector: 'app-recipe-form',
@@ -29,35 +26,32 @@ import { SignalService } from 'src/app/shared/services/signal.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeFormComponent implements OnInit {
-  // Selectors
-  readonly loadingState$: Observable<boolean> =
-    this.store$.select(getItemLoadingState);
-  readonly getItem$: Observable<Recipe> = this.store$.select(getItem);
-
-  form: FormGroup;
-  recipeTosave: Recipe;
-  isEditForm: boolean;
-  itemId: string;
-  hasPrice: boolean;
-  hasProtein: boolean;
-  imgURL: string;
-  fileName: string;
-  fileImg: AngularFireStorageReference;
-  uploadProgress: number;
-  showUploadButton: boolean;
-  isUploadingImg: boolean;
-  isUploadedImg: boolean;
-
-  plateTypeTranslate = PLATE_TYPE_TRANSLATE;
-  plateProteinTranslate = PLATE_PROTEIN_TRANSLATE;
 
   constructor(
-    private store$: Store,
+    private store: Store,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private fileStorageService: FileStorageService,
     private signalService: SignalService
-  ) {}
+  ) { }
+
+  loadingState: Observable<boolean | undefined> = this.store.select(getItemLoadingState)
+  getItem: Observable<Recipe | undefined> = this.store.select(getItem)
+  form!: FormGroup
+  recipeTosave: Recipe | undefined
+  isEditForm: boolean | undefined
+  itemId: string | undefined
+  hasPrice: boolean | undefined
+  hasProtein: boolean | undefined
+  imgURL: string | undefined
+  fileName: string | undefined
+  fileImg: AngularFireStorageReference | undefined
+  uploadProgress: number | undefined
+  showUploadButton: boolean | undefined
+  isUploadingImg: boolean | undefined
+  isUploadedImg: boolean | undefined
+  plateTypeTranslate = PLATE_TYPE_TRANSLATE
+  plateProteinTranslate = PLATE_PROTEIN_TRANSLATE
 
   ngOnInit() {
     this.initForm();
@@ -76,8 +70,8 @@ export class RecipeFormComponent implements OnInit {
     if (this.route.snapshot.routeConfig.path.includes('edit')) {
       this.itemId = this.route.snapshot.params['id'];
       this.isEditForm = true;
-      this.store$.dispatch(ItemActions.getItem({ id: this.itemId }));
-      this.store$
+      this.store.dispatch(ItemActions.getItem({ id: this.itemId }));
+      this.store
         .select(getItem)
         .pipe(
           tap((value) => {
@@ -127,14 +121,15 @@ export class RecipeFormComponent implements OnInit {
   submit(form) {
     if (form.valid) {
       !this.isEditForm
-        ? this.store$.dispatch(ItemActions.createItem({ item: form.value }))
-        : this.store$.dispatch(
-            ItemActions.updateItem({ item: form.value, id: this.itemId })
-          );
-    } else markInvalidFields(form);
+        ? this.store.dispatch(ItemActions.createItem({ item: form.value }))
+        : this.store.dispatch(
+          ItemActions.updateItem({ item: form.value, id: this.itemId })
+        );
+    }
+    // else highlightInvalidFields(form);
   }
 
-  getErrorMessage = getErrorMessage;
+  getErrorMessage = {} as any;
 
   updateImg(event) {
     this.fileName = event.target.files[0].name;

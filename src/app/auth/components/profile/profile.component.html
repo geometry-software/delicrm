@@ -1,4 +1,15 @@
 <div class="host-overflow">
+
+  <ng-container *ngIf="(authUser | async)?.providerId === 'firebase'">
+    admin
+    <ng-container *ngIf="authUserHasVerifiedEmail | async; else confirmedEmail">
+      email confirmed
+    </ng-container>
+    <ng-template #confirmedEmail>
+      please confirm email
+    </ng-template>
+  </ng-container>
+
   <ng-container *ngIf="userData">
     <div class="section-card">
       <h2>User profile</h2>
@@ -9,8 +20,7 @@
           <input matInput type="text" formControlName="name" />
         </mat-form-field>
 
-        <app-button actionType="save" type="submit" [title]="!isLoaded ? ' Update' : 'Updating ..'" width="full">
-        </app-button>
+        <app-button actionType="save" type="submit" [title]="!isLoaded ? ' Update' : 'Updating ..'" width="full" />
       </form>
     </div>
 
@@ -121,4 +131,5 @@
 
   <button mat-stroked-button (click)="logout()" class="exit-button">Exit app</button>
   <div class="version">version updated {{ versionBuildDate }}</div>
+
 </div>

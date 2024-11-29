@@ -15,7 +15,7 @@ export class AppTableSearchComponent {
   @Input()
   formControl: FormControl
 
-  constructor() {}
+  constructor() { }
 
-  getUrl = (): string => `${'/' + this.url + '/create'}`
+  getUrl = (): string => `{'/' + this.url + '/create'}`
 }

@@ -12,7 +12,7 @@ export class AppLayoutToolbarComponent {
   readonly layoutTypeSignal: Signal<string> = inject(SignalService).getLayoutType
 
   @Input()
-  isLoading$: Observable<boolean>
+  isLoading: Observable<boolean>
   @Input()
   url: string
   @Input()
@@ -30,7 +30,7 @@ export class AppLayoutToolbarComponent {
   @Output()
   deleteItem = new EventEmitter()
 
-  getCreateUrl = (): string => `${'/' + this.url + '/create'}`
+  getCreateUrl = (): string => `{'/' + this.url + '/create'}`
   getEditUrl = (): string => this.url + '/' + this.id + '/edit/'
   getPlaceUrl = (): string => this.url + '/' + this.placeUrl
   getPlaceEditUrl = (): string => this.url + '/' + this.placeUrl + '/' + this.id + '/edit/'

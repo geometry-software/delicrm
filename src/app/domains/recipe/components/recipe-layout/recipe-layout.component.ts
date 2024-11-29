@@ -14,11 +14,11 @@ import { RecipeActions as ItemActions } from '../../store/recipe.actions'
 })
 export class RecipeLayoutComponent implements OnInit {
   // DI
-  readonly store$: Store = inject(Store)
+  readonly store: Store = inject(Store)
 
   // Selectors
-  itemId$: Observable<string> = this.store$.pipe(select(getItemId))
-  layoutLoading$: Observable<boolean> = this.store$.pipe(select(getLayoutLoading))
+  itemId: Observable<string> = this.store.pipe(select(getItemId))
+  layoutLoading: Observable<boolean> = this.store.pipe(select(getLayoutLoading))
   // .pipe(tap((value) => console.log(value)))
 
   // Other properties
@@ -36,21 +36,21 @@ export class RecipeLayoutComponent implements OnInit {
         debounceTime(500),
         tap((value) =>
           value
-            ? this.store$.dispatch(
-                ItemActions.getItemsBySearchQuery({
-                  request: {
-                    key: this.defaultSearchKey,
-                    value,
-                  },
-                })
-              )
-            : this.store$.dispatch(ItemActions.getItems({ request: this.defaultFirstPageRequest }))
+            ? this.store.dispatch(
+              ItemActions.getItemsBySearchQuery({
+                request: {
+                  key: this.defaultSearchKey,
+                  value,
+                },
+              })
+            )
+            : this.store.dispatch(ItemActions.getItems({ request: this.defaultFirstPageRequest }))
         )
       )
       .subscribe()
   }
 
   deleteItem(id: string) {
-    this.store$.dispatch(ItemActions.deleteItem({ id }))
+    this.store.dispatch(ItemActions.deleteItem({ id }))
   }
 }

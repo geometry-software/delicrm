@@ -1,5 +1,5 @@
 <div class="pt-[10px]">
-  <ng-container *ngIf="getItem$ | async as data">
+  <ng-container *ngIf="getItem | async as data">
     <div class="fixed-height-form">
       <form [formGroup]="form">
         <mat-form-field [hideRequiredMarker]="true">
@@ -46,8 +46,8 @@
             </mat-label>
             <input style="text-align: right" matInput type="number" formControlName="price" />
             <span matTextSuffix>.00</span>
-            <mat-error *ngIf="form.controls['price'].invalid && form.controls['price'].touched"
-              >{{ getErrorMessage(form.controls['name']) }}
+            <mat-error *ngIf="form.controls['price'].invalid && form.controls['price'].touched">{{
+              getErrorMessage(form.controls['name']) }}
             </mat-error>
           </mat-form-field>
         </ng-container>
@@ -82,7 +82,7 @@
         </span>
       </form>
 
-      <app-save-button [form]="form" [loading]="loadingState$ | async" (submit)="submit($event)"></app-save-button>
+      <app-save-button [form]="form" [loading]="loadingState | async" (submit)="submit($event)"></app-save-button>
     </div>
   </ng-container>
   <!-- 

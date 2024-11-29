@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
-import { RecipeProtein } from 'src/app/domains/recipe/utils/recipe.model'
+import { RecipeProtein } from '../../../domains/recipe/utils/recipe.model'
 
 @Component({
   selector: 'app-formatted-daily-menu',

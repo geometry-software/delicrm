@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { Router, Scroll } from '@angular/router'
 import { AdminService } from '../../services/admin.service'
-import { SignalService } from 'src/app/shared/services/signal.service'
-import { AppConfirmationDialogComponent } from 'src/app/shared/components/app-confirmation-dialog/app-confirmation-dialog.component'
 import { distinctUntilChanged, filter, tap } from 'rxjs'
 import { Store } from '@ngrx/store'
 import { AdminActions as ItemActions } from '../../store/admin.actions'
+import { SignalService } from '../../../../shared/services/signal.service'
+import { AppConfirmationDialogComponent } from '../../../../shared/components/app-confirmation-dialog/app-confirmation-dialog.component'
 
 @Component({
   selector: 'app-board-layout',
@@ -33,7 +33,7 @@ export class BoardLayoutComponent implements OnInit {
     private router: Router,
     private signalService: SignalService,
     private adminService: AdminService,
-    private store$: Store
+    private store: Store
   ) { }
 
   ngOnInit() {
@@ -51,7 +51,7 @@ export class BoardLayoutComponent implements OnInit {
   }
 
   printMenu() {
-    this.store$.dispatch(ItemActions.printMenu({ print: true }))
+    this.store.dispatch(ItemActions.printMenu({ print: true }))
   }
 
   clearMenu() {

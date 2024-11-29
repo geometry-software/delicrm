@@ -1,7 +1,7 @@
-import { PaginationRequest } from 'src/app/shared/model/pagination.model'
-import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from 'src/app/shared/repository/repository.model'
 import { Sort } from '@angular/material/sort'
 import { Recipe, RecipeStatus } from '../../recipe/utils/recipe.model'
+import { PaginationRequest } from '../../../shared/model/pagination.model'
+import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from '../../../shared/repository/repository.model'
 
 export abstract class AdminConstants {
   static readonly storeFeatureKey = 'ADMIN'

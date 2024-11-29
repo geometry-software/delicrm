@@ -1,8 +1,8 @@
 import { createReducer, on } from '@ngrx/store'
 import { Recipe } from '../utils/recipe.model'
 import { RecipeActions as ItemActions } from './recipe.actions'
-import { RepositoryRequesEntity, RepositoryResponseList } from 'src/app/shared/repository/repository.model'
-import { formatPaginationData } from 'src/app/shared/repository/repository.utils'
+import { RepositoryRequesEntity, RepositoryResponseList } from '../../../shared/repository/repository.model'
+import { formatPaginationData } from '../../../shared/repository/repository.utils'
 
 export interface State {
   item: RepositoryRequesEntity<Recipe>

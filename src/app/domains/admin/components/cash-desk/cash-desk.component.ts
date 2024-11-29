@@ -3,9 +3,9 @@ import { MatTableDataSource } from '@angular/material/table'
 import { OrderService } from '../../../orders/services/order.service'
 import { MatDialog } from '@angular/material/dialog'
 import { Router } from '@angular/router'
-import { SignalService } from 'src/app/shared/services/signal.service'
-import { AppConfirmationDialogComponent } from 'src/app/shared/components/app-confirmation-dialog/app-confirmation-dialog.component'
 import { AdminService } from '../../services/admin.service'
+import { SignalService } from '../../../../shared/services/signal.service'
+import { AppConfirmationDialogComponent } from '../../../../shared/components/app-confirmation-dialog/app-confirmation-dialog.component'
 
 @Component({
   selector: 'app-cash-desk',

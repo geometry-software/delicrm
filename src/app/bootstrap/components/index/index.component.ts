@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import * as moment from 'moment'
-import { SignalService } from 'src/app/shared/services/signal.service'
 
 @Component({
   selector: 'app-index',
@@ -19,7 +18,7 @@ export class IndexComponent implements OnInit {
 
   description = 'description'
 
-  constructor(private router: Router, private signalService: SignalService) { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
     this.carousel()

@@ -1,35 +1,34 @@
 <div class="layout">
   <ng-container *ngIf="layoutTypeSignal() !== 'empty'">
     <div class="py-[4px] h-[5px] w-full">
-      <mat-progress-bar mode="indeterminate" *ngIf="isLoading$ | async"></mat-progress-bar>
+      <mat-progress-bar mode="indeterminate" *ngIf="isLoading | async"></mat-progress-bar>
     </div>
   </ng-container>
   <div class="header-toolbar" *ngIf="layoutTypeSignal() as type">
     <ng-container [ngSwitch]="type">
       <ng-container *ngSwitchCase="'form'">
-        <app-button [title]="backToListButton" actionType="back" [icon]="'arrow_back'" [url]="getPlaceUrl()"></app-button>
-        <app-button
-          *ngIf="id"
-          [title]="'BUTTON.INFO'"
-          actionType="back"
-          [icon]="'folder'"
-          [url]="url + '/place/' + id"
-        ></app-button>
+        <app-button [title]="backToListButton" actionType="back" [icon]="'arrow_back'"
+          [url]="getPlaceUrl()"></app-button>
+        <app-button *ngIf="id" [title]="'BUTTON.INFO'" actionType="back" [icon]="'folder'"
+          [url]="url + '/place/' + id"></app-button>
       </ng-container>
       <ng-container *ngSwitchCase="'list'">
-        <app-button *ngIf="url" [title]="'BUTTON.ADD'" [icon]="'add'" actionType="back" [url]="getCreateUrl()"></app-button>
+        <app-button *ngIf="url" [title]="'BUTTON.ADD'" [icon]="'add'" actionType="back"
+          [url]="getCreateUrl()"></app-button>
         <input class="list-search-field" [formControl]="searchControl" [placeholder]="searchPlaceholder | translate" />
       </ng-container>
       <ng-container *ngSwitchCase="'detail'">
         <ng-container *ngIf="!placeUrl; else placeUrlTemplate">
           <app-button [title]="backTitle" actionType="back" [icon]="'arrow_back'" [url]="url"></app-button>
           <app-button [title]="'BUTTON.EDIT'" [icon]="'edit'" [type]="'edit'" [url]="getEditUrl()"></app-button>
-          <app-button [title]="'BUTTON.DELETE'" [icon]="'clear'" [type]="'delete'" (click)="deleteItem.next(id)"></app-button>
+          <app-button [title]="'BUTTON.DELETE'" [icon]="'clear'" [type]="'delete'"
+            (click)="deleteItem.next(id)"></app-button>
         </ng-container>
         <ng-template #placeUrlTemplate>
           <app-button [title]="backTitle" actionType="back" [icon]="'arrow_back'" [url]="getPlaceUrl()"></app-button>
           <app-button [title]="'BUTTON.EDIT'" [icon]="'edit'" [type]="'edit'" [url]="getPlaceEditUrl()"></app-button>
-          <app-button [title]="'BUTTON.DELETE'" [icon]="'clear'" [type]="'delete'" (click)="deleteItem.next(id)"></app-button>
+          <app-button [title]="'BUTTON.DELETE'" [icon]="'clear'" [type]="'delete'"
+            (click)="deleteItem.next(id)"></app-button>
         </ng-template>
       </ng-container>
     </ng-container>

@@ -8,11 +8,11 @@ import { PLATE_TYPE_TRANSLATE, RecipeConstants } from '../../utils/recipe.consta
 import { RecipeActions as ItemActions } from '../../store/recipe.actions'
 import { getItems, getItemsLoadingState, getPaginationResponse } from '../../store/recipe.selectors'
 import { FormControl } from '@angular/forms'
-import { PaginationRequest, PaginationResponse } from 'src/app/shared/model/pagination.model'
-import { SizeRequest } from 'src/app/shared/repository/repository.model'
-import { SharedConstants } from 'src/app/shared/utils/shared.constants'
+import { PaginationRequest, PaginationResponse } from '../../../../shared/model/pagination.model'
+import { SharedConstants } from '../../../../shared/utils/shared.constants'
+import { SignalService } from '../../../../shared/services/signal.service'
 import { combineListControls } from '../../utils/combine-list-controls'
-import { SignalService } from 'src/app/shared/services/signal.service'
+import { SizeRequest } from '../../../../shared/repository/repository.model'
 
 @Component({
   selector: 'app-recipe-list',
@@ -22,9 +22,9 @@ import { SignalService } from 'src/app/shared/services/signal.service'
 })
 export class RecipeListComponent implements OnInit {
   // Selectors
-  readonly dataList$: Observable<Recipe[]> = this.store$.select(getItems)
-  readonly downloadState$: Observable<boolean> = this.store$.select(getItemsLoadingState).pipe(shareReplay(1))
-  readonly paginationPayload$: Observable<PaginationResponse<Recipe>> = this.store$.select(getPaginationResponse)
+  readonly dataList: Observable<Recipe[]> = this.store.select(getItems)
+  readonly downloadState: Observable<boolean> = this.store.select(getItemsLoadingState).pipe(shareReplay(1))
+  readonly paginationPayload: Observable<PaginationResponse<Recipe>> = this.store.select(getPaginationResponse)
 
   // Other properties
   readonly plateTypeTranslate = PLATE_TYPE_TRANSLATE
@@ -47,11 +47,11 @@ export class RecipeListComponent implements OnInit {
   orderControl: FormControl<Sort> = new FormControl(this.defaultOrderControlValue)
 
   constructor(
-    private store$: Store,
+    private store: Store,
     private route: ActivatedRoute,
     private router: Router,
     private signalService: SignalService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initData()
@@ -59,10 +59,10 @@ export class RecipeListComponent implements OnInit {
   }
 
   initData() {
-    combineListControls(this.paginationControl, this.sizeControl, this.orderControl, this.store$)
+    combineListControls(this.paginationControl, this.sizeControl, this.orderControl, this.store)
       .pipe(
         tap(([pagination, size, order]) =>
-          this.store$.dispatch(
+          this.store.dispatch(
             ItemActions.getItems({
               request: {
                 pagination: pagination,
@@ -83,6 +83,6 @@ export class RecipeListComponent implements OnInit {
   }
 
   redirectToDetail(id: string) {
-    this.router.navigate([`/${this.moduleUrl}` + `/${id}`])
+    this.router.navigate([`/{this.moduleUrl}` + `/{id}`])
   }
 }

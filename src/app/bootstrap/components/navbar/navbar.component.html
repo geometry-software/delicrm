@@ -33,7 +33,7 @@
     <div class="menu-list-container" [ngStyle]="{ 'margin-top': responsiveLayout.menuListContainerMargin }">
       <ng-container *ngIf="isAuthInitialized && hasAppAuth; else clientTemplate">
         <ng-container *ngFor="let item of userMenuOptions">
-          <ng-container *ngIf="item.roles.includes(user.role)">
+          <!-- <ng-container *ngIf="item.roles.includes(user.status)">
             <div class="menu-list-item" [ngStyle]="{
                 'margin-right': responsiveLayout.isDesktop ? 0 : '20px'
               }" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }" [routerLink]="item.link"
@@ -49,12 +49,12 @@
                 </div>
               </div>
             </div>
-          </ng-container>
+          </ng-container> -->
         </ng-container>
       </ng-container>
       <ng-template #clientTemplate>
-        <ng-container *ngFor="let item of clientMenuOptions">
-          <div class="menu-list-item menu-list-item-image-padding" [ngStyle]="{
+        <ng-container *ngFor="let item of (authMenuOptions | async)">
+          <div *ngIf="!item.hidden" class="menu-list-item menu-list-item-image-padding" [ngStyle]="{
               'margin-right': responsiveLayout.isDesktop ? 0 : '10px'
             }" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }" [routerLink]="item.link"
             (click)="toggleDrawer()">

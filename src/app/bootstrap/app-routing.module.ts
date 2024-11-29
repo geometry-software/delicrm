@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { NavbarComponent } from './components/navbar/navbar.component'
 import { IndexComponent } from './components/index/index.component'
-import { AuthGuard } from '../auth/services/guard.service'
+import { UserGuard } from '../domains/users/services/user.guard'
 
 export const routes: Routes = [
   {
@@ -13,6 +13,10 @@ export const routes: Routes = [
       {
         path: 'auth',
         loadChildren: () => import('../auth/auth.module').then((m) => m.AuthModule),
+      },
+      {
+        path: 'users',
+        loadChildren: () => import('../domains/users/users.module').then((m) => m.UserModule),
       },
       {
         path: 'admin',
@@ -43,13 +47,13 @@ export const routes: Routes = [
         path: 'expenses',
         loadChildren: () => import('../domains/expenses/expenses.module').then((m) => m.ExpensesModule),
         canActivate: [],
-      },
-    ],
-  },
+      }
+    ]
+  }
 ]
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

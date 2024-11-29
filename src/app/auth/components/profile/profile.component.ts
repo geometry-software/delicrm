@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
-import { AuthActions as ItemActions } from '../../store/auth.actions'
 import { FormGroup, Validators, FormBuilder } from '@angular/forms'
 import { MatTableDataSource } from '@angular/material/table'
 import { Store } from '@ngrx/store'
+import { map, shareReplay, tap } from 'rxjs'
 import { AuthService } from '../../services/auth.service'
-import { tap } from 'rxjs'
+import { AuthConstants } from '../../models/auth.constants'
 
 @Component({
   selector: 'app-profile',
@@ -13,6 +13,21 @@ import { tap } from 'rxjs'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileComponent implements OnInit {
+
+  private readonly adminProviderId = AuthConstants.adminProviderId
+
+  constructor(
+    private store: Store,
+    private cdr: ChangeDetectorRef,
+    private formBuilder: FormBuilder,
+    private authService: AuthService
+  ) { }
+
+  readonly authUser = this.authService.fireAuthUser
+  readonly authUserHasVerifiedEmail = this.authUser.pipe(
+    map(value => value.emailVerified && value.providerId === this.adminProviderId)
+  )
+
   userData
   userId: string
 
@@ -28,14 +43,9 @@ export class ProfileComponent implements OnInit {
   restaurantForm: FormGroup
 
   isLoaded: boolean
-  versionBuildDate: string = '30 of June 2024'
+  versionBuildDate: string = 'on the 29th of November 2024'
 
-  constructor(
-    private store$: Store,
-    private cdr: ChangeDetectorRef,
-    private formBuilder: FormBuilder,
-    private authService: AuthService
-  ) { }
+
 
   ngOnInit() {
     this.initForm()
@@ -43,32 +53,33 @@ export class ProfileComponent implements OnInit {
   }
 
   getUserData() {
-    this.authService
-      .getAppAuth()
-      .pipe(
-        tap((value) => {
-          console.log(value)
-          if (value) {
-            this.userData = value
-            this.userId = value.uid
-            this.clientForm.patchValue(value)
-          }
 
-          this.cdr.markForCheck()
-        })
-      )
-      .subscribe()
+    // this.userService
+    //   .getAppAuth()
+    //   .pipe(
+    //     tap((value) => {
+    //       console.log(value)
+    //       if (value) {
+    //         this.userData = value
+    //         this.userId = value.uid
+    //         this.clientForm.patchValue(value)
+    //       }
 
-    this.authService
-      .getRestaurant()
-      .pipe(
-        tap((value) => {
-          console.log(value)
-          this.restaurantForm.patchValue(value)
-          this.cdr.markForCheck()
-        })
-      )
-      .subscribe()
+    //       this.cdr.markForCheck()
+    //     })
+    //   )
+    //   .subscribe()
+
+    // this.userService
+    //   .getRestaurant()
+    //   .pipe(
+    //     tap((value) => {
+    //       console.log(value)
+    //       this.restaurantForm.patchValue(value)
+    //       this.cdr.markForCheck()
+    //     })
+    //   )
+    //   .subscribe()
   }
 
   initForm() {
@@ -96,10 +107,10 @@ export class ProfileComponent implements OnInit {
   }
 
   updateRestaurantData(form) {
-    this.authService.updateRestaurant(form.value)
+    // this.userService.updateRestaurant(form.value)
   }
 
   logout() {
-    this.store$.dispatch(ItemActions.logOut())
+    // this.store.dispatch(ItemActions.logOut())
   }
 }

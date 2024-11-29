@@ -1,13 +1,7 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
 import { Recipe, RecipeStatus } from '../utils/recipe.model'
-import {
-  FilterRequest,
-  RepositoryEntityAction,
-  RepositoryRequest,
-  RepositoryRequestQuery,
-  RepositoryResponseEntity,
-} from 'src/app/shared/repository/repository.model'
 import { RecipeConstants } from '../utils/recipe.constants'
+import { FilterRequest, RepositoryEntityAction, RepositoryRequest, RepositoryRequestQuery } from '../../../shared/repository/repository.model';
 
 export const RecipeActions = createActionGroup({
   source: RecipeConstants.storeFeatureKey,

@@ -5,8 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { ExpensesFormComponent } from '../expenses-form/expenses-form.component'
 import { Observable, filter, tap } from 'rxjs'
 import { CdkTableDataSourceInput } from '@angular/cdk/table'
-import { SignalService } from 'src/app/shared/services/signal.service'
 import { ExpensesService } from '../services/expenses.service'
+import { SignalService } from '../../../shared/services/signal.service'
 
 @Component({
   selector: 'app-expenses-list',

@@ -3,20 +3,16 @@ import { Router } from '@angular/router'
 import { MatDialog } from '@angular/material/dialog'
 import { MatTableDataSource } from '@angular/material/table'
 import { DeliveryService } from '../../services/delivery.service'
-import { SignalService } from 'src/app/shared/services/signal.service'
-import { DeliveryDetailComponent } from '../delivery-detail/delivery-detail.component'
-import { Order, OrderStatusValue } from 'src/app/domains/menu/utils/waiter.model'
 import { Observable, combineLatest, of, shareReplay, switchMap, tap } from 'rxjs'
-import { AuthService } from 'src/app/auth/services/auth.service'
-import { AuthUser } from 'src/app/auth/utils/auth.model'
+
 import { FormControl } from '@angular/forms'
-import { PaginationRequest, PaginationResponse } from 'src/app/shared/model/pagination.model'
-import { SizeRequest } from 'src/app/shared/repository/repository.model'
+
 import { Sort } from '@angular/material/sort'
 import { Store } from '@ngrx/store'
-import { getItems, getItemsLoadingState, getPaginationResponse } from '../../store/delivery.selectors'
-import { combineListControls } from '../../utils/combine-list-controls'
-import { DeliveryActions as ItemActions } from '../../store/delivery.actions'
+import { Order, OrderStatusValue } from '../../../menu/utils/waiter.model'
+import { AuthService } from '../../../../auth/services/auth.service'
+import { AppUser } from '../../../users/utils/user.model'
+import { DeliveryDetailComponent } from '../delivery-detail/delivery-detail.component'
 
 @Component({
   selector: 'app-delivery-list',
@@ -24,14 +20,14 @@ import { DeliveryActions as ItemActions } from '../../store/delivery.actions'
   styleUrls: ['./delivery-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeliveryListComponent implements OnInit {
-  datasource$
+export class DeliveryListComponent {
+  datasource
   displayedColumns = ['user', 'plates']
 
   orders = new Array()
   delivery: Order = {}
   deliveryId
-  user: AuthUser
+  user: AppUser
 
   // PAGE_ITEMS_SIZE = 20
   // firstItem
@@ -50,51 +46,42 @@ export class DeliveryListComponent implements OnInit {
     direction: 'desc',
   }
 
-  readonly dataList$: Observable<Order[]> = this.store$.select(getItems).pipe(shareReplay(1))
-  readonly downloadState$: Observable<boolean> = this.store$.select(getItemsLoadingState).pipe(shareReplay(1))
-  readonly paginationPayload$: Observable<PaginationResponse<Order>> = this.store$.select(getPaginationResponse)
-
-  // Controls
-  paginationControl: FormControl<PaginationRequest<Order>> = new FormControl(this.defaultPaginationControlValue)
-  sizeControl: FormControl<SizeRequest> = new FormControl(this.defaultSizeControlValue)
-  orderControl: FormControl<Sort> = new FormControl(this.defaultOrderControlValue)
-
   constructor(
-    private store$: Store,
+    private store: Store,
     private dialog: MatDialog,
     private router: Router,
     private deliveryService: DeliveryService,
     private cdr: ChangeDetectorRef,
     private authService: AuthService
-  ) {}
+  ) { }
 
-  ngOnInit() {
-    combineListControls(this.paginationControl, this.sizeControl, this.store$)
-      .pipe(
-        tap(([pagination, size]) =>
-          this.store$.dispatch(
-            ItemActions.getItems({
-              request: {
-                pagination: pagination,
-                size: size,
-                status: 'requested',
-                order: {
-                  key: 'timestamp',
-                  value: 'desc',
-                },
-              },
-            })
-          )
-        )
-      )
-      .subscribe()
-    this.initUser()
-  }
+  // ngOnInit() {
+  //   combineListControls(this.paginationControl, this.sizeControl, this.store)
+  //     .pipe(
+  //       tap(([pagination, size]) =>
+  //         this.store.dispatch(
+  //           ItemActions.getItems({
+  //             request: {
+  //               pagination: pagination,
+  //               size: size,
+  //               status: 'requested',
+  //               order: {
+  //                 key: 'timestamp',
+  //                 value: 'desc',
+  //               },
+  //             },
+  //           })
+  //         )
+  //       )
+  //     )
+  //     .subscribe()
+  //   this.initUser()
+  // }
 
   initUser() {
-    this.authService.getAppAuth().subscribe((value) => {
-      this.user = value
-    })
+    // this.authService.getAppAuth().subscribe((value) => {
+    //   this.user = value
+    // })
   }
 
   preloadTabData(ev) {
@@ -114,7 +101,7 @@ export class DeliveryListComponent implements OnInit {
   }
 
   initDelivery(status: OrderStatusValue) {
-    this.datasource$ = combineLatest([]).pipe(
+    this.datasource = combineLatest([]).pipe(
       switchMap(() =>
         this.deliveryService.getNewDeliveries(status).pipe(
           // tap((value) => console.log(value)),

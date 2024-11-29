@@ -1,0 +1,1 @@
+export const getCurrentUnixTime = new Date().getTime() / 1000

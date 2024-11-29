@@ -1,8 +1,11 @@
-<app-layout-toolbar
-  [searchControl]="searchControl"
-  [backTitle]="backTitle"
-  [searchPlaceholder]="searchPlaceholder"
-  [id]="itemId$ | async"
-  [isLoading$]="layoutLoading$"
-></app-layout-toolbar>
-<router-outlet></router-outlet>
+<ng-container [ngSwitch]="adminSignUpStatus | async">
+  <ng-container *ngSwitchCase="AdminUserLoadingStatus.NotActivated">
+    <div class="loading"> Auth loading .. </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="AdminUserLoadingStatus.Void">
+    <app-admin-sign-up />
+  </ng-container>
+  <ng-container *ngSwitchCase="AdminUserLoadingStatus.Activated">
+    <app-user-login />
+  </ng-container>
+</ng-container>

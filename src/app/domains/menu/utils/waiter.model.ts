@@ -1,5 +1,5 @@
-import { AuthUser } from 'src/app/auth/utils/auth.model'
 import { Recipe } from '../../recipe/utils/recipe.model'
+import { AppUser } from '../../users/utils/user.model'
 
 export class Order {
   id?: string
@@ -18,7 +18,7 @@ export class Order {
 }
 
 export class OrderStatus {
-  user?: AuthUser
+  user?: AppUser
   status?: OrderStatusValue
   timestamp?: Date
 }

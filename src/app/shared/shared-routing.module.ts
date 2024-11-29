@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { AppInfoComponent } from '../auth/components/app-info/app-info.component'
+import { AppInfoComponent } from './components/app-info/app-info.component'
 
 export const ROUTES: Routes = [{ path: 'app-info', component: AppInfoComponent, canActivate: [] }]
 
@@ -8,4 +8,4 @@ export const ROUTES: Routes = [{ path: 'app-info', component: AppInfoComponent, 
   imports: [RouterModule.forRoot(ROUTES)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

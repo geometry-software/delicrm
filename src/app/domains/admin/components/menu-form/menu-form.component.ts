@@ -4,11 +4,11 @@ import { MatTableDataSource } from '@angular/material/table'
 import { fadeInUpOnEnterAnimation, fadeInDownOnEnterAnimation, fadeOutDownOnLeaveAnimation } from 'angular-animations'
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms'
 import { AdminService } from '../../services/admin.service'
-import { SignalService } from 'src/app/shared/services/signal.service'
-import { RecipeEntityService } from 'src/app/domains/recipe/services/recipe.service'
-import { Recipe } from 'src/app/domains/recipe/utils/recipe.model'
 import { MatStepper } from '@angular/material/stepper'
 import { Observable, map, startWith } from 'rxjs'
+import { Recipe } from '../../../recipe/utils/recipe.model'
+import { SignalService } from '../../../../shared/services/signal.service'
+import { RecipeEntityService } from '../../../recipe/services/recipe.service'
 
 @Component({
   selector: 'app-menu-form',
@@ -122,7 +122,7 @@ export class MenuFormComponent implements OnInit {
   }
 
   updateServerDataMenu() {
-    this.recipeEntityService.getAll<Recipe>().subscribe((recipes) => {
+    this.recipeEntityService.getAll().subscribe((recipes) => {
       this.recipeList = recipes
       this.starterList = recipes.filter((value) => value.type == 'starter')
       this.drinkList = recipes.filter((value) => value.type == 'drink')

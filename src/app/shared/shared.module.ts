@@ -35,7 +35,7 @@ import { AppFormattedDailyMenuComponent } from './components/app-formatted-daily
     AppTableLinkComponent,
     AppSaveButtonComponent,
     AppTableLoaderComponent,
-    AppFormattedDailyMenuComponent,
+    AppFormattedDailyMenuComponent
   ],
   exports: [
     MaterialModule,
@@ -53,7 +53,7 @@ import { AppFormattedDailyMenuComponent } from './components/app-formatted-daily
     AppSaveButtonComponent,
     AppTableLoaderComponent,
     NgxMaterialTimepickerModule,
-    AppFormattedDailyMenuComponent,
+    AppFormattedDailyMenuComponent
   ],
   imports: [
     MaterialModule,
@@ -65,4 +65,4 @@ import { AppFormattedDailyMenuComponent } from './components/app-formatted-daily
     NgxMaterialTimepickerModule,
   ],
 })
-export class SharedModule {}
+export class SharedModule { }

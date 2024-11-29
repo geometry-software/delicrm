@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { MatTableDataSource } from '@angular/material/table'
 import { AdminService } from '../../services/admin.service'
-import { SignalService } from 'src/app/shared/services/signal.service'
+import { SignalService } from '../../../../shared/services/signal.service'
 
 @Component({
   selector: 'app-menu-detail',

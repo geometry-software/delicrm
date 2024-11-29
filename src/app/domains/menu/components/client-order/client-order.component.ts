@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { pulseOnEnterAnimation } from 'angular-animations'
-import { RecipeProtein } from 'src/app/domains/recipe/utils/recipe.model'
+
 import { CheckoutService } from '../../services/checkout.service'
 import { Order } from '../../utils/waiter.model'
+import { RecipeProtein } from '../../../recipe/utils/recipe.model'
 
 @Component({
   selector: 'app-client-order',
@@ -17,7 +18,7 @@ export class ClientOrderComponent implements OnInit {
 
   setProteinImage = (protein: RecipeProtein) => '/assets/images/' + protein + '.png'
 
-  constructor(private router: ActivatedRoute, private checkoutService: CheckoutService, private cdr: ChangeDetectorRef) {}
+  constructor(private router: ActivatedRoute, private checkoutService: CheckoutService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     const id = this.router.snapshot.params['id']
