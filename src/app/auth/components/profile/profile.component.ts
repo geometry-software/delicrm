@@ -5,6 +5,8 @@ import { Store } from '@ngrx/store'
 import { map, shareReplay, tap } from 'rxjs'
 import { AuthService } from '../../services/auth.service'
 import { AuthConstants } from '../../models/auth.constants'
+import { MatDialog } from '@angular/material/dialog'
+import { RestaurantFormComponent } from '../../../domains/admin/components/restaurant-form/restaurant-form.component'
 
 @Component({
   selector: 'app-profile',
@@ -14,19 +16,13 @@ import { AuthConstants } from '../../models/auth.constants'
 })
 export class ProfileComponent implements OnInit {
 
-  private readonly adminProviderId = AuthConstants.adminProviderId
-
   constructor(
     private store: Store,
     private cdr: ChangeDetectorRef,
     private formBuilder: FormBuilder,
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
 
-  readonly authUser = this.authService.fireAuthUser
-  readonly authUserHasVerifiedEmail = this.authUser.pipe(
-    map(value => value.emailVerified && value.providerId === this.adminProviderId)
-  )
+  ) { }
 
   userData
   userId: string
@@ -40,12 +36,10 @@ export class ProfileComponent implements OnInit {
   displayedColumns = ['date', 'price']
 
   clientForm: FormGroup
-  restaurantForm: FormGroup
+
 
   isLoaded: boolean
   versionBuildDate: string = 'on the 29th of November 2024'
-
-
 
   ngOnInit() {
     this.initForm()
@@ -87,13 +81,6 @@ export class ProfileComponent implements OnInit {
       name: [null, [Validators.required]],
       address: [null, [Validators.required]],
       phone: [null, [Validators.required]],
-    })
-    this.restaurantForm = this.formBuilder.group({
-      name: [null, [Validators.required]],
-      address: [null, [Validators.required]],
-      phone: [null, [Validators.required]],
-      delivery: [0, [Validators.required]],
-      discount: [0, [Validators.required]],
     })
   }
 

@@ -1,4 +1,5 @@
 import { getCurrentUnixTime } from "../../shared/utils/format-unix-time";
+import { AuthConstants } from "./auth.constants";
 import { AuthUser } from "./auth.model";
 
 export const mapAuthAdmin = (user, name): AuthUser => ({
@@ -8,7 +9,17 @@ export const mapAuthAdmin = (user, name): AuthUser => ({
     authId: user.uid,
     providerId: 'firebase',
     status: 'requested',
-    avatar: ''
+    avatar: AuthConstants.adminAvatarPath
+})
+
+export const updateAuthAdmin = (): AuthUser => ({
+    displayName: null,
+    email: null,
+    createdAt: null,
+    authId: null,
+    providerId: null,
+    status: null,
+    avatar: null
 })
 
 export const mapAuthUser = (user): AuthUser => ({

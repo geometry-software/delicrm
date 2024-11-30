@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { GoogleAuthProvider, FacebookAuthProvider, OAuthProvider } from 'firebase/auth'
 import firebase from 'firebase/compat/app'
-import { BehaviorSubject, EMPTY, Observable, concat, filter, forkJoin, from, map, of, shareReplay, switchMap, tap } from 'rxjs'
+import { BehaviorSubject, EMPTY, Observable, concat, filter, first, forkJoin, from, map, of, shareReplay, switchMap, tap } from 'rxjs'
 import { UserConstants } from '../utils/user.constants'
-import { AuthStatus, AuthStatusTotalResponse, AppUser, Restaurant, UserRole } from '../utils/user.model'
+import { AuthStatus, AuthStatusTotalResponse, AppUser, UserRole } from '../utils/user.model'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { adminForm } from '../models/admin-form'
 import { AdminUserLoadingStatus } from '../models/auth-user-loading-status'
@@ -23,7 +23,6 @@ export class UserService {
   private readonly restaurantCollectionId = 'restaurant'
   private readonly collection = UserConstants.collectionName
   private readonly authCollection = AuthConstants.collectionName
-  private readonly restaurantCollectionName = UserConstants.restaurantCollectionName
   private readonly appAuth = new BehaviorSubject<AppUser>(null)
   private readonly adminProviderId = AuthConstants.adminProviderId
 
@@ -31,15 +30,11 @@ export class UserService {
     private repositoryService: RepositoryService<AppUser, AuthStatus>
   ) { }
 
-  create(role: UserRole) {
-    return this.repositoryService.getDocumentById<AuthUser>(this.authCollection, this.adminProviderId).pipe(
-      switchMap(user => {
-        const item: AppUser = mapAppUser(user, role)
-        return this.repositoryService.setDocument(this.collection, item, user.authId).pipe(
-          map(() => item.auth.authId)
-        )
-      })
-    )
+  create(id: string, role: UserRole) {
+    return this.repositoryService.getDocumentById<AuthUser>(this.authCollection, id).pipe(
+      first(),
+      switchMap(user => this.repositoryService.setDocument(this.collection, mapAppUser(user, role), user.authId).pipe(
+        map(() => user.authId))))
   }
 
   getAll() {
@@ -104,10 +99,6 @@ export class UserService {
     return EMPTY
   }
 
-  getRestaurant(): Observable<Restaurant> {
-    // return this.repositoryService.getDocumentById(this.restaurantCollectionName, this.restaurantCollectionId)
-    return EMPTY
-  }
 
   getAllClients() {
     return this.repositoryService.getAllDocumentsByStatus(this.collection, 'client')

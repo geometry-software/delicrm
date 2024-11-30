@@ -2,7 +2,7 @@
   <h2> User login </h2>
   <div class="action-bar">
     <button class="social-button" (click)="loginUser()">
-      <img src="./../../../../assets/auth/google.png" width="40px" height="40px" />
+      <img [src]="googleIconPath" width="40px" height="40px" />
       <span> Sign in with Google </span>
     </button>
   </div>
@@ -10,7 +10,7 @@
 </ng-container>
 
 <ng-template #adminLogin>
-  <h2> Admin login </h2>
+
   <mat-accordion>
     <mat-expansion-panel class="expansion-panel-radius">
       <mat-expansion-panel-header>
@@ -64,3 +64,30 @@
   </ng-container>
 
 </ng-template>
+
+<ng-container *ngIf="(authUser | async)?.providerId === 'firebase'">
+  admin
+  <ng-container
+    *ngIf="(adminEmailWasVerified | async ) && registerRestaurantMessage | async as message; else confirmedEmail">
+    email confirmed
+    <br>
+    <p>{{ message }}</p>
+    <br>
+    <button mat-stroked-button type="button" (click)="registerRestaurant()">Register</button>
+    <br>
+    <ng-container [ngSwitch]="restaurantRegisterStatus | async">
+      <ng-container *ngSwitchCase="RestaurantLoadingStatus.Registering">
+        <div style="color: sandybrown;">Registering</div>
+      </ng-container>
+      <ng-container *ngSwitchCase="RestaurantLoadingStatus.RegisterSuccess">
+        <div style="color: teal;"> Registered Successfully</div>
+      </ng-container>
+      <ng-container *ngSwitchCase="RestaurantLoadingStatus.RegisterFailed">
+        <div style="color: tomato;">Error: {{ message }}</div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+  <ng-template #confirmedEmail>
+    please confirm email
+  </ng-template>
+</ng-container>

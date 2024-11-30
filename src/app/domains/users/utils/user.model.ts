@@ -9,14 +9,6 @@ export interface AppUser {
   createdAt?: number
 }
 
-export interface Restaurant {
-  name?: string
-  address?: string
-  phone?: string
-  deliveryPrice?: number
-  discountPrice?: number
-}
-
 export interface AuthStatusTotalResponse {
   requested: number
   client: number

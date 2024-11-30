@@ -131,6 +131,14 @@ mat-form-field {
   padding-right: 5px;
 }
 
+.buttons-grid {
+  padding-top: 10px;
+  min-width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 /* TABLE */
 
 mat-table {
@@ -209,14 +217,11 @@ h2 {
   margin-bottom: 10px;
 }
 
-h3 {
-  font-size: 1.2em;
-}
-
 h4 {
-  font-size: 1.2em;
-  font-weight: 600;
-  margin-bottom: 20px;
+  font-size: 1.1em;
+  color: #666;
+  font-weight: 400;
+  margin-bottom: 30px;
 }
 
 p {

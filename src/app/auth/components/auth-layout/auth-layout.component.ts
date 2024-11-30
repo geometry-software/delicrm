@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core'
 import { AuthService } from '../../services/auth.service'
-import { AdminUserLoadingStatus } from '../../models/auth-user-loading-status'
+import { AdminUserLoadingStatus } from '../../models/loading-status'
 
 @Component({
   selector: 'app-auth-layout',

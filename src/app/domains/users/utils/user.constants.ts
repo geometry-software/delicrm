@@ -5,8 +5,7 @@ import { Sort } from '@angular/material/sort'
 
 export abstract class UserConstants {
   static readonly storeFeatureKey = 'AUTH'
-  static readonly collectionName = 'Auth'
-  static readonly restaurantCollectionName = 'Restaurant'
+  static readonly collectionName = 'User'
   static readonly defaultCreateStatus = 'active'
   static readonly defaultTableSort = 'timestamp'
   static readonly defaultSearchKey = 'name'

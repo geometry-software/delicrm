@@ -15,15 +15,15 @@ export const appendId = <T>(documents): T =>
 export const responseTransform = <T>(
   notificationService: NotificationService = null
 ): UnaryFunction<Observable<T>, Observable<T>> => pipe(auditTime(500))
-// take(1)
-// timeout({
-//   each: REQUEST_TIME_LIMIT_VALUE,
-//   with: () => {
-//     // notificationService.notifyConnectionWarning()
-//     return throwError(() => REQUEST_TIME_LIMIT_ERROR_CODE)
-//   },
-// }),
-// retry({ count: 2 })
+take(1)
+timeout({
+  each: REQUEST_TIME_LIMIT_VALUE,
+  with: () => {
+    // notificationService.notifyConnectionWarning()
+    return throwError(() => REQUEST_TIME_LIMIT_ERROR_CODE)
+  },
+}),
+  retry({ count: 2 })
 
 export const formatPaginationData = (query: RepositoryRequestQuery, state, responseLength, total, size) => {
   let current, responseTotal

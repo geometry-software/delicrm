@@ -1,15 +1,5 @@
 <div class="host-overflow">
 
-  <ng-container *ngIf="(authUser | async)?.providerId === 'firebase'">
-    admin
-    <ng-container *ngIf="authUserHasVerifiedEmail | async; else confirmedEmail">
-      email confirmed
-    </ng-container>
-    <ng-template #confirmedEmail>
-      please confirm email
-    </ng-template>
-  </ng-container>
-
   <ng-container *ngIf="userData">
     <div class="section-card">
       <h2>User profile</h2>
@@ -21,36 +11,6 @@
         </mat-form-field>
 
         <app-button actionType="save" type="submit" [title]="!isLoaded ? ' Update' : 'Updating ..'" width="full" />
-      </form>
-    </div>
-
-    <div class="section-card">
-      <h2>Cafe profile</h2>
-
-      <form [formGroup]="restaurantForm" (ngSubmit)="updateRestaurantData(restaurantForm)">
-        <mat-form-field>
-          <mat-label> Name </mat-label>
-          <input matInput type="text" formControlName="name" />
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label> Address </mat-label>
-          <input matInput type="text" formControlName="address" />
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label> Phone </mat-label>
-          <input matInput type="text" formControlName="phone" />
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label> Delivery price</mat-label>
-          <input matInput type="number" formControlName="delivery" />
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label> Discount </mat-label>
-          <input matInput type="number" formControlName="discount" />
-        </mat-form-field>
-
-        <app-button actionType="save" type="submit" [title]="!isLoaded ? ' Update' : 'Updating ..'" width="full">
-        </app-button>
       </form>
     </div>
 
@@ -78,27 +38,7 @@
           <br />
           <div class="item-title" style="margin-bottom: 5px">Edit delivery address</div>
 
-          <form [formGroup]="clientForm" (ngSubmit)="updateClientData(clientForm)">
-            <mat-form-field>
-              <input matInput type="text" placeholder="Name" formControlName="name" />
-            </mat-form-field>
 
-            <mat-form-field>
-              <input matInput type="text" placeholder="Address" formControlName="address" />
-            </mat-form-field>
-
-            <mat-form-field>
-              <input matInput type="number" placeholder="Phone" formControlName="phone" />
-            </mat-form-field>
-
-            <div style="text-align: right; min-width: 100%">
-              <button mat-raised-button type="submit" color="primary" [disabled]="!clientForm.valid"
-                style="font-size: 1em">
-                <span>Update</span>
-              </button>
-              <div style="color: seagreen; font-weight: 500" *ngIf="isLoaded">Updated successfully</div>
-            </div>
-          </form>
         </mat-tab>
         <mat-tab label="Historial">
           <br />

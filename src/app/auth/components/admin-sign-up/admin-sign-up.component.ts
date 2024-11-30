@@ -29,7 +29,7 @@ export class AdminSignUpComponent {
       this.authService.signUpAdmin(this.form.value)
         .pipe(
           takeUntilDestroyed(this.destroyRef),
-          tap(() => this.router.navigate(['/auth/profile'])))
+          tap(() => this.router.navigate(['/auth/login'])))
         .subscribe()
     }
   }

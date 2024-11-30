@@ -1,0 +1,66 @@
+<h2>Register restaurant</h2>
+<h4>Fill the form to proceed the registeration</h4>
+
+<form [formGroup]="form">
+
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label> Name </mat-label>
+    <input matInput [formControlName]="formProps.name" />
+    <mat-error *ngIf="showFieldErrors(form, formProps.name) as error">
+      {{ error }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label> Description </mat-label>
+    <textarea matInput [formControlName]="formProps.description"></textarea>
+    <mat-error *ngIf="showFieldErrors(form, formProps.description) as error">
+      {{ error }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label> Address </mat-label>
+    <input matInput [formControlName]="formProps.address" />
+    <mat-error *ngIf="showFieldErrors(form, formProps.address) as error">
+      {{ error }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label> Phone </mat-label>
+    <input matInput [formControlName]="formProps.phone" />
+    <mat-error *ngIf="showFieldErrors(form, formProps.phone) as error">
+      {{ error }}
+    </mat-error>
+  </mat-form-field>
+
+  <div class="amont-configurations">
+
+    <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> Delivery amount </mat-label>
+      <input matInput [formControlName]="formProps.delivery" type="number" />
+      <mat-error *ngIf="showFieldErrors(form, formProps.delivery) as error">
+        {{ error }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> Discount amount </mat-label>
+      <input matInput [formControlName]="formProps.discount" type="number" />
+      <mat-error *ngIf="showFieldErrors(form, formProps.name) as error">
+        {{ error }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="buttons-grid">
+    <button mat-button type="button" color="primary" (click)="close()">
+      Cancel
+    </button>
+    <button mat-raised-button type="submit" (click)="confirm()">
+      Register
+    </button>
+  </div>
+
+</form>

@@ -5,6 +5,7 @@ import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from '../../..
 export abstract class AdminConstants {
   static readonly storeFeatureKey = 'ADMIN'
   static readonly collectionName = 'Recipes'
+  static readonly restaurantCollectionName = 'Restaurant'
   static readonly defaultCreateStatus = 'active'
   static readonly defaultTableSort = 'timestamp'
   static readonly defaultSearchKey = 'name'
