@@ -1,8 +1,9 @@
 import { createReducer, on } from '@ngrx/store'
 import { AuthActions as ItemActions } from './user.actions'
-import { AuthStatus, AuthStatusTotalResponse, AppUser } from '../utils/user.model'
+import { AuthStatusTotalResponse, AppUser } from '../utils/user.model'
 import { RepositoryRequesEntity, RepositoryResponseList } from '../../../shared/repository/repository.model'
 import { formatPaginationData } from '../../../shared/repository/repository.utils'
+import { AuthStatus } from '../../../auth/models/auth.model'
 
 export interface State {
   item: RepositoryRequesEntity<AppUser>

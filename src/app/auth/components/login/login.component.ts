@@ -25,10 +25,11 @@ export class LoginComponent {
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private matDialog: MatDialog,
-  ) { }
+  ) {
+    this.q.subscribe(v => console.log(v))
+  }
 
   private readonly adminProviderId = AuthConstants.adminProviderId
-
   readonly googleIconPath = AuthConstants.googleIconPath
   readonly adminForm = adminFormGroup
   readonly adminFormProps = AdminFormProps
@@ -43,7 +44,6 @@ export class LoginComponent {
   registerRestaurantMessage: Observable<string> = of('Register Restaurant')
   RestaurantLoadingStatus = RestaurantLoadingStatus
 
-
   loginUser() {
     this.authService.loginGoogle()
   }
@@ -53,6 +53,7 @@ export class LoginComponent {
   }
 
   restaurantRegisterStatus = new BehaviorSubject(RestaurantLoadingStatus.NotRegistered)
+  q = this.restaurantRegisterStatus.asObservable()
 
   registerRestaurant() {
     this.registerRestaurantMessage = this.matDialog.open(RestaurantFormComponent, {
@@ -60,10 +61,12 @@ export class LoginComponent {
       height: '80%',
     }).afterClosed().pipe(
       filter(Boolean),
-      tap(() => this.restaurantRegisterStatus.next(RestaurantLoadingStatus.Registering)),
+      tap(v => console.log(v)),
+      tap(() => this.updateRestaurantRegisterStatus(RestaurantLoadingStatus.Registering)),
       switchMap(value => this.authService.addAppUser('admin', 'admin').pipe(
         switchMap(() => this.restaurantService.create(value).pipe(
-          tap(() => this.restaurantRegisterStatus.next(RestaurantLoadingStatus.RegisterSuccess)),
+          tap(v => console.log(v)),
+          tap(() => this.updateRestaurantRegisterStatus(RestaurantLoadingStatus.RegisterSuccess)),
           catchError(error => this.handleRegisterRestaurantError(error)))),
         catchError(error => this.handleRegisterRestaurantError(error)))))
   }
@@ -71,6 +74,11 @@ export class LoginComponent {
   private handleRegisterRestaurantError(error) {
     this.restaurantRegisterStatus.next(RestaurantLoadingStatus.RegisterFailed)
     return of(error)
+  }
+
+  private updateRestaurantRegisterStatus(status: RestaurantLoadingStatus) {
+    this.restaurantRegisterStatus.next(status)
+    this.cdr.markForCheck()
   }
 
 }

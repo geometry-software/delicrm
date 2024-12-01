@@ -179,10 +179,13 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
    * Creates a record in a Firestore collection
    * @param collection name of the collection
    * @param item object that will be added
-   * @returns A `DocumentReference` refers to a document location
+   * @returns `id: string' refers to a document location
    */
-  createDocument = (collection: string, item: T): Observable<DocumentReference> =>
-    from(this.angularFirestore.collection(collection).add(item)).pipe(responseTransform())
+  createDocument = (collection: string, item: T): Observable<string> =>
+    from(this.angularFirestore.collection(collection).add(item)).pipe(
+      responseTransform(),
+      map(doc => doc.id)
+    )
 
   /**
    * Updates a document in a Firestore collection
@@ -202,7 +205,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
    * @returns :void
    */
   setDocument = (collection: string, item: T, id: string): Observable<void> =>
-    from(this.angularFirestore.collection(collection).doc(id).set(item)).pipe(responseTransform())
+    from(this.angularFirestore.collection(collection).doc(id).set(item, { merge: true })).pipe(responseTransform())
 
   /**
    * Deletes a document in a Firestore collection

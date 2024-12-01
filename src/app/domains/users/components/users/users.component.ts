@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router'
 import { MatTabChangeEvent } from '@angular/material/tabs'
 import { Observable, shareReplay, tap, filter } from 'rxjs'
 import { Store } from '@ngrx/store'
-import { AuthStatus, AppUser } from '../../utils/user.model'
+import { AppUser } from '../../utils/user.model'
 import { AuthActions as ItemActions } from '../../store/user.actions'
 import { getIsStatusUpdated, getItemsData, getItemsLoadingState, getListLabels } from '../../store/user.selectors'
 import { UserConstants } from '../../utils/user.constants'
@@ -15,6 +15,7 @@ import { UserDetailComponent } from '../user-detail/user-detail.component'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { PaginationRequest } from '../../../../shared/model/pagination.model'
 import { SizeRequest } from '../../../../shared/repository/repository.model'
+import { AuthStatus } from '../../../../auth/models/auth.model'
 
 @Component({
   selector: 'app-users',
@@ -112,12 +113,12 @@ export class UsersComponent implements OnInit {
       case 'requested':
         this.selectedTabIndex = 0
         break
-      case 'client':
-        this.selectedTabIndex = 1
-        break
-      case 'employee':
-        this.selectedTabIndex = 2
-        break
+      // case 'client':
+      //   this.selectedTabIndex = 1
+      //   break
+      // case 'employee':
+      //   this.selectedTabIndex = 2
+      //   break
       case 'blocked':
         this.selectedTabIndex = 3
         break

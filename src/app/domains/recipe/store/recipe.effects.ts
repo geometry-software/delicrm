@@ -30,10 +30,10 @@ export class RecipeEffects {
       ofType(ItemActions.createItem),
       switchMap(({ item }) =>
         this.entityService.create(item).pipe(
-          map((response) => {
+          map(id => {
             // TODO: add notification through service
             // this.notificationService.notifyCreateSuccess('message)
-            this.router.navigate([this.moduleUrl, response.id])
+            this.router.navigate([this.moduleUrl, id])
             return ItemActions.createItemSuccess()
           }),
           catchError((error) => of(ItemActions.notifyError({ error, errorType: 'create' })))

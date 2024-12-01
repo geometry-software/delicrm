@@ -1,6 +1,7 @@
+import { AuthStatus } from '../../../auth/models/auth.model'
 import { PaginationRequest } from '../../../shared/model/pagination.model'
 import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from '../../../shared/repository/repository.model'
-import { AuthStatus, AppUser } from './user.model'
+import { AppUser } from './user.model'
 import { Sort } from '@angular/material/sort'
 
 export abstract class UserConstants {

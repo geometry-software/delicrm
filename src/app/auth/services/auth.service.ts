@@ -7,7 +7,7 @@ import { AuthConstants } from '../models/auth.constants'
 import { RepositoryService } from '../../shared/repository/repository.service'
 import { Router } from '@angular/router'
 import { AuthUser } from '../models/auth.model'
-import { mapAuthAdmin, mapAuthUser } from '../models/auth-user.mapper'
+import { mapAuthAdmin, mapAuthUser, setRestaurantAuth } from '../models/auth-user.mapper'
 import { UserService } from '../../domains/users/services/user.service'
 import { AppUser, UserRole } from '../../domains/users/utils/user.model'
 
@@ -24,7 +24,7 @@ export class AuthService {
   ) { }
 
   private readonly collection = AuthConstants.collectionName
-  private readonly authAdminCollectionId = AuthConstants.authAdminCollectionId
+  private readonly authCollectionId = AuthConstants.authCollectionId
   private readonly adminProviderId = AuthConstants.adminProviderId
   private isAdmin = (fireAuthUser) => fireAuthUser.providerId === this.adminProviderId
   private isEmailVerified = (fireAuthUser) => fireAuthUser.emailVerified
@@ -46,7 +46,7 @@ export class AuthService {
     return from(this.angularFireAuth.signInWithPopup(new GoogleAuthProvider())
       .then(user => {
         console.log(user)
-        this.createAuthRequest(user)
+        return this.repositoryService.setDocument(this.collection, mapAuthUser(user), user.user.uid)
       }))
   }
 
@@ -62,7 +62,11 @@ export class AuthService {
   signUpAdmin(admin) {
     return from(this.angularFireAuth.createUserWithEmailAndPassword(admin.email, admin.password)
       .then(response => response.user.sendEmailVerification().then(() => response.user))).pipe(
-        switchMap(user => this.repositoryService.setDocument(this.collection, mapAuthAdmin(user, admin.name), this.authAdminCollectionId)))
+        switchMap(user => this.repositoryService.setDocument(
+          this.collection,
+          mapAuthAdmin(user, admin.name),
+          this.authCollectionId)
+        ))
   }
 
   recoverAdminPassword(email: string) {
@@ -78,15 +82,12 @@ export class AuthService {
     return this.fireAuthUser.pipe(
       filter(this.isEmailVerified),
       switchMap(() => this.userService.create(id, role).pipe(
-        switchMap(() => this.repositoryService.setDocument(this.collection, { createdAt: new Date }, 'auth').pipe(
-          switchMap(() => this.repositoryService.deleteDocument(this.collection, id))))
+        switchMap(({ auth }) => this.repositoryService.setDocument(
+          this.collection,
+          setRestaurantAuth(auth.email),
+          this.authCollectionId)
+        ))
       ))
-    )
-  }
-
-  private createAuthRequest(user) {
-    const item = mapAuthUser(user)
-    this.repositoryService.setDocument(this.collection, item, item.authId)
   }
 
 }

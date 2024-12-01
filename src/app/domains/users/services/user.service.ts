@@ -4,13 +4,13 @@ import { GoogleAuthProvider, FacebookAuthProvider, OAuthProvider } from 'firebas
 import firebase from 'firebase/compat/app'
 import { BehaviorSubject, EMPTY, Observable, concat, filter, first, forkJoin, from, map, of, shareReplay, switchMap, tap } from 'rxjs'
 import { UserConstants } from '../utils/user.constants'
-import { AuthStatus, AuthStatusTotalResponse, AppUser, UserRole } from '../utils/user.model'
+import { AuthStatusTotalResponse, AppUser, UserRole } from '../utils/user.model'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { adminForm } from '../models/admin-form'
 import { AdminUserLoadingStatus } from '../models/auth-user-loading-status'
 import { IRepositoryService, OrderRequest, RepositoryResponseEntity } from '../../../shared/repository/repository.model'
 import { RepositoryService } from '../../../shared/repository/repository.service'
-import { AuthUser } from '../../../auth/models/auth.model'
+import { AuthStatus, AuthUser } from '../../../auth/models/auth.model'
 import { AuthConstants } from '../../../auth/models/auth.constants'
 import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
 import { mapAppUser } from '../utils/app-user.mapper'
@@ -32,9 +32,12 @@ export class UserService {
 
   create(id: string, role: UserRole) {
     return this.repositoryService.getDocumentById<AuthUser>(this.authCollection, id).pipe(
+      tap(v => console.log(v)),
       first(),
+      map(user => ({ ...user, status: 'confirmed' as AuthStatus })),
+      tap(v => console.log(v)),
       switchMap(user => this.repositoryService.setDocument(this.collection, mapAppUser(user, role), user.authId).pipe(
-        map(() => user.authId))))
+        map(() => ({ id: user.authId, auth: user })))))
   }
 
   getAll() {
@@ -50,19 +53,20 @@ export class UserService {
   }
 
   getTotalLabels() {
-    return forkJoin([
-      this.getTotalByStatus('requested'),
-      this.getTotalByStatus('client'),
-      this.getTotalByStatus('employee'),
-      this.getTotalByStatus('blocked'),
-    ]).pipe(
-      map(([requested, client, employee, blocked]) => ({
-        requested: requested,
-        client: client,
-        employee: employee,
-        blocked: blocked,
-      }))
-    )
+    // return forkJoin([
+    //   this.getTotalByStatus('requested'),
+    //   this.getTotalByStatus('client'),
+    //   this.getTotalByStatus('employee'),
+    //   this.getTotalByStatus('blocked'),
+    // ]).pipe(
+    //   map(([requested, client, employee, blocked]) => ({
+    //     requested: requested,
+    //     client: client,
+    //     employee: employee,
+    //     blocked: blocked,
+    //   }))
+    // )
+    return EMPTY
   }
 
   getFirstPage(order: OrderRequest, size: number, status: AuthStatus) {

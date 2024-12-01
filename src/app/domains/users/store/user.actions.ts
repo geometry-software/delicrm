@@ -1,8 +1,9 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
-import { AuthStatus, AuthStatusTotalResponse, AppUser } from '../utils/user.model'
+import { AuthStatusTotalResponse, AppUser } from '../utils/user.model'
 import firebase from 'firebase/compat/app'
 import { UserConstants } from '../utils/user.constants'
 import { FilterRequest, RepositoryEntityAction, RepositoryRequest, RepositoryRequestQuery, RepositoryResponseEntity } from '../../../shared/repository/repository.model'
+import { AuthStatus } from '../../../auth/models/auth.model'
 
 export const AuthActions = createActionGroup({
   source: UserConstants.storeFeatureKey,

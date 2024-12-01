@@ -16,5 +16,4 @@ export interface AuthStatusTotalResponse {
   blocked: number
 }
 
-export type AuthStatus = 'requested' | 'client' | 'employee' | 'blocked'
 export type UserRole = 'waiter' | 'delivery' | 'admin' | 'client'

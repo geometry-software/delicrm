@@ -16,5 +16,5 @@ export interface AuthStatusTotalResponse {
   blocked: number
 }
 
-export type AuthStatus = 'requested' | 'blocked'
+export type AuthStatus = 'requested' | 'blocked' | 'confirmed'
 export type AuthProvider = 'google' | 'firebase' | 'anonymous'

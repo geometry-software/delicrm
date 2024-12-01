@@ -70,9 +70,6 @@
   <ng-container
     *ngIf="(adminEmailWasVerified | async ) && registerRestaurantMessage | async as message; else confirmedEmail">
     email confirmed
-    <br>
-    <p>{{ message }}</p>
-    <br>
     <button mat-stroked-button type="button" (click)="registerRestaurant()">Register</button>
     <br>
     <ng-container [ngSwitch]="restaurantRegisterStatus | async">

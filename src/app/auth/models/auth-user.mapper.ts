@@ -1,3 +1,4 @@
+import { deleteField } from "firebase/firestore";
 import { getCurrentUnixTime } from "../../shared/utils/format-unix-time";
 import { AuthConstants } from "./auth.constants";
 import { AuthUser } from "./auth.model";
@@ -12,14 +13,14 @@ export const mapAuthAdmin = (user, name): AuthUser => ({
     avatar: AuthConstants.adminAvatarPath
 })
 
-export const updateAuthAdmin = (): AuthUser => ({
-    displayName: null,
-    email: null,
-    createdAt: null,
-    authId: null,
-    providerId: null,
-    status: null,
-    avatar: null
+export const setRestaurantAuth = (email: string) => ({
+    email,
+    createdAt: new Date(),
+    displayName: deleteField(),
+    authId: deleteField(),
+    providerId: deleteField(),
+    status: deleteField(),
+    avatar: deleteField(),
 })
 
 export const mapAuthUser = (user): AuthUser => ({

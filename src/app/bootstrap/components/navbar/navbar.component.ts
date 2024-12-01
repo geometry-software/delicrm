@@ -35,9 +35,9 @@ export class NavbarComponent implements OnInit {
       map(value => !Boolean(value))))
     .pipe(
       map(value => value === true ? true : Boolean(value)),
-      tap(v => console.log(v)),
+      // tap(v => console.log(v)),
       map(value => getAuthMenuOptions(value)),
-      tap(v => console.log(v))
+      // tap(v => console.log(v))
     )
 
   constructor(
