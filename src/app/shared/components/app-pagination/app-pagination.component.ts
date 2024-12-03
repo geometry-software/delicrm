@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core'
 import { FormControl } from '@angular/forms'
-import { PaginationRequest, PaginationResponse } from '../../model/pagination.model'
+import { PaginationRequest, PaginationResponse } from '../../models/pagination.model'
 import { RepositoryRequestQuery, SizeRequest } from '../../repository/repository.model'
 
 @Component({

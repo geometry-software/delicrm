@@ -1,11 +1,15 @@
 import { Sort } from '@angular/material/sort'
-import { PaginationRequest } from '../../../shared/model/pagination.model'
+import { PaginationRequest } from '../../../shared/models/pagination.model'
 import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from '../../../shared/repository/repository.model'
 
 export abstract class AdminConstants {
   static readonly storeFeatureKey = 'ADMIN'
   static readonly collectionName = 'Recipes'
   static readonly restaurantCollectionName = 'Restaurant'
+  static readonly restaurantFormComponentConfig = {
+    width: '80%',
+    height: '80%',
+  }
   static readonly defaultCreateStatus = 'active'
   static readonly defaultTableSort = 'timestamp'
   static readonly defaultSearchKey = 'name'

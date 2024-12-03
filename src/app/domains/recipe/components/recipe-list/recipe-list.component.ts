@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core'
 import { MatSort, Sort } from '@angular/material/sort'
-import { Observable, shareReplay, tap } from 'rxjs'
+import { EMPTY, Observable, shareReplay, tap } from 'rxjs'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Store } from '@ngrx/store'
 import { Recipe } from '../../utils/recipe.model'
@@ -8,7 +8,7 @@ import { PLATE_TYPE_TRANSLATE, RecipeConstants } from '../../utils/recipe.consta
 import { RecipeActions as ItemActions } from '../../store/recipe.actions'
 import { getItems, getItemsLoadingState, getPaginationResponse } from '../../store/recipe.selectors'
 import { FormControl } from '@angular/forms'
-import { PaginationRequest, PaginationResponse } from '../../../../shared/model/pagination.model'
+import { PaginationRequest, PaginationResponse } from '../../../../shared/models/pagination.model'
 import { SharedConstants } from '../../../../shared/utils/shared.constants'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { combineListControls } from '../../utils/combine-list-controls'
@@ -23,7 +23,8 @@ import { SizeRequest } from '../../../../shared/repository/repository.model'
 export class RecipeListComponent implements OnInit {
   // Selectors
   readonly dataList: Observable<Recipe[]> = this.store.select(getItems)
-  readonly downloadState: Observable<boolean> = this.store.select(getItemsLoadingState).pipe(shareReplay(1))
+  // readonly downloadState: Observable<boolean> = this.store.select(getItemsLoadingState).pipe(shareReplay(1))
+  readonly downloadState = EMPTY
   readonly paginationPayload: Observable<PaginationResponse<Recipe>> = this.store.select(getPaginationResponse)
 
   // Other properties

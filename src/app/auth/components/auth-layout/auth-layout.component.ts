@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core'
 import { AuthService } from '../../services/auth.service'
-import { AdminUserLoadingStatus } from '../../models/loading-status'
+import { AdminSignUpLoadingStatus } from '../../models/loading-status'
 
 @Component({
   selector: 'app-auth-layout',
@@ -12,7 +12,7 @@ export class AuthLayoutComponent {
 
   constructor(private authService: AuthService) { }
 
-  AdminUserLoadingStatus = AdminUserLoadingStatus
+  AdminUserLoadingStatus = AdminSignUpLoadingStatus
   adminSignUpStatus = this.authService.adminSignUpStatus
 
 }

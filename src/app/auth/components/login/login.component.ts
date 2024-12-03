@@ -1,7 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
-import { AngularFireAuth } from '@angular/fire/compat/auth'
-import { catchError, concatMap, defaultIfEmpty, filter, map, switchMap, tap } from 'rxjs/operators'
-import { Store } from '@ngrx/store'
+import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core'
+import { catchError, filter, switchMap, tap } from 'rxjs/operators'
 import { AuthService } from '../../services/auth.service'
 import { adminFormGroup, AdminFormProps } from '../../models/admin.form'
 import { showFieldErrors } from '../../../shared/utils/form-error-handling'
@@ -9,8 +7,11 @@ import { AuthConstants } from '../../models/auth.constants'
 import { RestaurantFormComponent } from '../../../domains/admin/components/restaurant-form/restaurant-form.component'
 import { MatDialog } from '@angular/material/dialog'
 import { RestaurantService } from '../../../domains/admin/services/restaurant.service'
-import { BehaviorSubject, Observable, of } from 'rxjs'
+import { BehaviorSubject, of } from 'rxjs'
 import { RestaurantLoadingStatus } from '../../models/loading-status'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { AdminConstants } from '../../../domains/admin/utils/admin.constants'
+import { UserService } from '../../../domains/users/services/user.service'
 
 @Component({
   selector: 'app-login',
@@ -22,63 +23,57 @@ export class LoginComponent {
 
   constructor(
     private restaurantService: RestaurantService,
-    private cdr: ChangeDetectorRef,
     private authService: AuthService,
+    private userService: UserService,
     private matDialog: MatDialog,
-  ) {
-    this.q.subscribe(v => console.log(v))
-  }
+    private destroyRef: DestroyRef
+  ) { }
 
-  private readonly adminProviderId = AuthConstants.adminProviderId
   readonly googleIconPath = AuthConstants.googleIconPath
+  readonly adminCollectionId = AuthConstants.adminCollectionId
+  readonly restaurantFormComponentConfig = AdminConstants.restaurantFormComponentConfig
   readonly adminForm = adminFormGroup
   readonly adminFormProps = AdminFormProps
   readonly isAdminUser = this.authService.isAdminUser
   readonly authUser = this.authService.fireAuthUser
   readonly adminEmailWasVerified = this.authService.isAdminEmailVerified
+  readonly RestaurantLoadingStatus = RestaurantLoadingStatus
+  readonly restaurantRegisterStatus = new BehaviorSubject(RestaurantLoadingStatus.NotRegistered)
 
-  showFieldErrors = showFieldErrors
   userDisplayName
   hasFirebasAuth
+  registerRestaurantErrorMessage: string
 
-  registerRestaurantMessage: Observable<string> = of('Register Restaurant')
-  RestaurantLoadingStatus = RestaurantLoadingStatus
+  showFieldErrors = showFieldErrors
 
   loginUser() {
     this.authService.loginGoogle()
   }
 
   loginAdmin() {
-
+    this.authService.loginAdmin(
+      this.adminForm.value[AdminFormProps.email],
+      this.adminForm.value[AdminFormProps.password]
+    )
   }
 
-  restaurantRegisterStatus = new BehaviorSubject(RestaurantLoadingStatus.NotRegistered)
-  q = this.restaurantRegisterStatus.asObservable()
-
   registerRestaurant() {
-    this.registerRestaurantMessage = this.matDialog.open(RestaurantFormComponent, {
-      width: '80%',
-      height: '80%',
-    }).afterClosed().pipe(
-      filter(Boolean),
-      tap(v => console.log(v)),
-      tap(() => this.updateRestaurantRegisterStatus(RestaurantLoadingStatus.Registering)),
-      switchMap(value => this.authService.addAppUser('admin', 'admin').pipe(
-        switchMap(() => this.restaurantService.create(value).pipe(
-          tap(v => console.log(v)),
-          tap(() => this.updateRestaurantRegisterStatus(RestaurantLoadingStatus.RegisterSuccess)),
+    this.matDialog.open(RestaurantFormComponent, this.restaurantFormComponentConfig)
+      .afterClosed().pipe(
+        filter(Boolean),
+        tap(() => this.restaurantRegisterStatus.next(RestaurantLoadingStatus.Registering)),
+        switchMap(value => this.userService.createAdminUser(this.adminCollectionId, this.adminCollectionId).pipe(
+          switchMap(() => this.restaurantService.create(value).pipe(
+            tap(() => this.restaurantRegisterStatus.next(RestaurantLoadingStatus.RegisterSuccess)),
+            catchError(error => this.handleRegisterRestaurantError(error)))),
           catchError(error => this.handleRegisterRestaurantError(error)))),
-        catchError(error => this.handleRegisterRestaurantError(error)))))
+        takeUntilDestroyed(this.destroyRef))
+      .subscribe(error => this.registerRestaurantErrorMessage = error)
   }
 
   private handleRegisterRestaurantError(error) {
     this.restaurantRegisterStatus.next(RestaurantLoadingStatus.RegisterFailed)
     return of(error)
-  }
-
-  private updateRestaurantRegisterStatus(status: RestaurantLoadingStatus) {
-    this.restaurantRegisterStatus.next(status)
-    this.cdr.markForCheck()
   }
 
 }

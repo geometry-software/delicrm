@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store'
-import { State } from './user.reducer'
 import { UserConstants } from '../utils/user.constants'
+import { State } from './user.state'
 
 const storeFeatureKey: string = UserConstants.storeFeatureKey
 const paginationTitle: string = UserConstants.paginationTitle
@@ -8,7 +8,6 @@ const paginationSize: Array<number> = UserConstants.paginationSize
 
 const labelRequested: string = UserConstants.labelRequested
 const labelClient: string = UserConstants.labelClient
-const labelEmployee: string = UserConstants.labelEmployee
 const labelBlocked: string = UserConstants.labelBlocked
 
 export const getState = createFeatureSelector<State>(storeFeatureKey)
@@ -26,10 +25,9 @@ export const getPaginationItem = createSelector(getItems, (state) => ({
   first: state?.length ? [...state][0] : null,
   last: state?.length ? [...state].pop() : null,
 }))
-export const getItemLoadingState = createSelector(getState, (state) => state.item.loading)
+export const getItemsLoadingStatus = createSelector(getState, (state) => state.itemsLoadingStatus)
 export const getItemLoadedState = createSelector(getState, (state) => state.item.data)
-export const getItemsLoadingState = createSelector(getState, (state) => state.items.loading)
-export const getLayoutLoading = createSelector(getItemLoadingState, getItemsLoadingState, (item, items) => item || items)
+export const getLayoutLoading = createSelector(getItemsLoadingStatus, getItemsLoadingStatus, (item, items) => item || items)
 export const getTotal = createSelector(getState, (state) => state.items.total)
 export const getCurrent = createSelector(getState, (state) => state.items?.current)
 export const getListResponseType = createSelector(getState, (state) => state.listResponseType)
@@ -48,8 +46,7 @@ export const getPaginationResponse = createSelector(getPaginationItem, getCurren
 export const getListLabelAmount = createSelector(getState, (state) => state.listLabelAmount)
 export const getListLabels = createSelector(getListLabelAmount, (state) => ({
   requested: labelRequested + ' (' + state.requested + ')',
-  client: labelClient + ' (' + state.client + ')',
-  employee: labelEmployee + ' (' + state.employee + ')',
+  confirmed: labelClient + ' (' + state.confirmed + ')',
   blocked: labelBlocked + ' (' + state.blocked + ')',
 }))
 export const getIsStatusUpdated = createSelector(getState, (state) => state.isStatusUpdated)

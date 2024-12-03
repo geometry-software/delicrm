@@ -1,15 +1,13 @@
-import { Injectable, OnInit } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/compat/auth'
-import { GoogleAuthProvider, User } from 'firebase/auth'
-import { combineLatest, concat, EMPTY, filter, first, from, map, of, shareReplay, switchMap, tap } from 'rxjs'
-import { AdminUserLoadingStatus } from '../models/loading-status'
+import { GoogleAuthProvider } from 'firebase/auth'
+import { concat, from, map, of, shareReplay, switchMap } from 'rxjs'
+import { AdminSignUpLoadingStatus } from '../models/loading-status'
 import { AuthConstants } from '../models/auth.constants'
 import { RepositoryService } from '../../shared/repository/repository.service'
 import { Router } from '@angular/router'
-import { AuthUser } from '../models/auth.model'
-import { mapAuthAdmin, mapAuthUser, setRestaurantAuth } from '../models/auth-user.mapper'
-import { UserService } from '../../domains/users/services/user.service'
-import { AppUser, UserRole } from '../../domains/users/utils/user.model'
+import { AuthStatus, AuthUser } from '../models/auth.model'
+import { mapAuthAdmin, mapAuthUser } from '../models/auth-user.mapper'
 
 @Injectable({
   providedIn: 'root',
@@ -17,29 +15,26 @@ import { AppUser, UserRole } from '../../domains/users/utils/user.model'
 export class AuthService {
 
   constructor(
-    private repositoryService: RepositoryService,
-    private userService: UserService,
+    private repositoryService: RepositoryService<AuthUser, AuthStatus>,
     private angularFireAuth: AngularFireAuth,
     private router: Router
   ) { }
 
+  private readonly isAdmin = (fireAuthUser) => fireAuthUser?.providerId === this.adminProviderId
   private readonly collection = AuthConstants.collectionName
   private readonly authCollectionId = AuthConstants.authCollectionId
   private readonly adminProviderId = AuthConstants.adminProviderId
-  private isAdmin = (fireAuthUser) => fireAuthUser.providerId === this.adminProviderId
-  private isEmailVerified = (fireAuthUser) => fireAuthUser.emailVerified
-
   readonly fireAuthUser = this.angularFireAuth.user.pipe(shareReplay(1))
   readonly isAdminEmailVerified = this.fireAuthUser.pipe(
-    map(value => this.isEmailVerified(value) && this.isAdmin(value))
+    map(value => value?.emailVerified && this.isAdmin(value))
   )
   readonly isAdminUser = this.fireAuthUser.pipe(
     map(this.isAdmin)
   )
   readonly adminSignUpStatus = concat(
-    of(AdminUserLoadingStatus.NotActivated),
+    of(AdminSignUpLoadingStatus.NotActivated),
     this.repositoryService.getCollectionSize(this.collection).pipe(
-      map(value => value ? AdminUserLoadingStatus.Activated : AdminUserLoadingStatus.Void))
+      map(value => value ? AdminSignUpLoadingStatus.Activated : AdminSignUpLoadingStatus.Void))
   )
 
   loginGoogle() {
@@ -65,8 +60,18 @@ export class AuthService {
         switchMap(user => this.repositoryService.setDocument(
           this.collection,
           mapAuthAdmin(user, admin.name),
-          this.authCollectionId)
-        ))
+          this.authCollectionId
+        )))
+  }
+
+  getUser(id: string) {
+    return this.repositoryService.getDocumentById(this.collection, id)
+  }
+
+  sendEmailVerification() {
+    return this.fireAuthUser.pipe(
+      switchMap(user => user.sendEmailVerification())
+    )
   }
 
   recoverAdminPassword(email: string) {
@@ -76,18 +81,6 @@ export class AuthService {
   logout() {
     return from(this.angularFireAuth.signOut()
       .then(() => this.router.navigate(['/auth/login'])))
-  }
-
-  addAppUser(id: string, role: UserRole) {
-    return this.fireAuthUser.pipe(
-      filter(this.isEmailVerified),
-      switchMap(() => this.userService.create(id, role).pipe(
-        switchMap(({ auth }) => this.repositoryService.setDocument(
-          this.collection,
-          setRestaurantAuth(auth.email),
-          this.authCollectionId)
-        ))
-      ))
   }
 
 }

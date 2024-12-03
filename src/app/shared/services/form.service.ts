@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { Validators, FormBuilder, FormControl, ValidatorFn, FormGroup } from '@angular/forms'
 import { Observable, combineLatest, map, of, switchMap } from 'rxjs'
-import { CustomFormControl, FormLayout } from '../model/form.model'
+import { CustomFormControl, FormLayout } from '../models/form.model'
 
 @Injectable({ providedIn: 'root' })
 export class FormService {

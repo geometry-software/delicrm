@@ -1,4 +1,9 @@
-.amont-configurations {
+:host {
+  overflow: auto;
+  display: block;
+}
+
+.amount-configurations {
   display: flex;
   gap: 20px;
 }

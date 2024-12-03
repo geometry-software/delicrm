@@ -1,12 +1,12 @@
 import { AuthStatus } from '../../../auth/models/auth.model'
-import { PaginationRequest } from '../../../shared/model/pagination.model'
+import { PaginationRequest } from '../../../shared/models/pagination.model'
 import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from '../../../shared/repository/repository.model'
 import { AppUser } from './user.model'
 import { Sort } from '@angular/material/sort'
 
 export abstract class UserConstants {
-  static readonly storeFeatureKey = 'AUTH'
-  static readonly collectionName = 'User'
+  static readonly storeFeatureKey = 'USERS'
+  static readonly collectionName = 'Users'
   static readonly defaultCreateStatus = 'active'
   static readonly defaultTableSort = 'timestamp'
   static readonly defaultSearchKey = 'name'
@@ -36,7 +36,7 @@ export abstract class UserConstants {
   static readonly defaultSizeControlValue: SizeRequest = {
     size: 4,
   }
-  static readonly defaultOrderControlValue: Sort = { active: 'timestamp', direction: 'desc' }
+  static readonly defaultOrderControlValue: Sort = { active: 'createdAt', direction: 'desc' }
   static readonly defaultRequestStatus: AuthStatus = 'requested'
   static readonly defaultFirstPageRequest: RepositoryRequest<AppUser, AuthStatus> = {
     pagination: this.defaultPaginationControlValue,

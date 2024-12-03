@@ -68,19 +68,20 @@
 <ng-container *ngIf="(authUser | async)?.providerId === 'firebase'">
   admin
   <ng-container
-    *ngIf="(adminEmailWasVerified | async ) && registerRestaurantMessage | async as message; else confirmedEmail">
+    *ngIf="(adminEmailWasVerified | async ) && (restaurantRegisterStatus | async) as status; else confirmedEmail">
     email confirmed
+    <br>
     <button mat-stroked-button type="button" (click)="registerRestaurant()">Register</button>
     <br>
-    <ng-container [ngSwitch]="restaurantRegisterStatus | async">
+    <ng-container [ngSwitch]="status">
       <ng-container *ngSwitchCase="RestaurantLoadingStatus.Registering">
-        <div style="color: sandybrown;">Registering</div>
+        <div class="text-loading"> Registering .. </div>
       </ng-container>
       <ng-container *ngSwitchCase="RestaurantLoadingStatus.RegisterSuccess">
         <div style="color: teal;"> Registered Successfully</div>
       </ng-container>
       <ng-container *ngSwitchCase="RestaurantLoadingStatus.RegisterFailed">
-        <div style="color: tomato;">Error: {{ message }}</div>
+        <div style="color: tomato;">Error: <br> {{ registerRestaurantErrorMessage }}</div>
       </ng-container>
     </ng-container>
   </ng-container>

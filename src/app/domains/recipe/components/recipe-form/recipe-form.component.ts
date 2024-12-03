@@ -15,7 +15,7 @@ import { Recipe, RecipeCourse } from '../../utils/recipe.model'
 import { Store } from '@ngrx/store'
 import { getItem, getItemLoadingState } from '../../store/recipe.selectors'
 import { RecipeActions as ItemActions } from '../../store/recipe.actions'
-import { Observable, tap } from 'rxjs'
+import { Observable, of, tap } from 'rxjs'
 import { FileStorageService } from '../../../../shared/services/file-storage.service'
 import { SignalService } from '../../../../shared/services/signal.service'
 
@@ -35,7 +35,8 @@ export class RecipeFormComponent implements OnInit {
     private signalService: SignalService
   ) { }
 
-  loadingState: Observable<boolean | undefined> = this.store.select(getItemLoadingState)
+  // loadingState: Observable<boolean | undefined> = this.store.select(getItemLoadingState)
+  loadingState = of(null)
   getItem: Observable<Recipe | undefined> = this.store.select(getItem)
   form!: FormGroup
   recipeTosave: Recipe | undefined

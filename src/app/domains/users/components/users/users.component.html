@@ -1,19 +1,19 @@
 <div class="py-[4px] h-[5px] w-full">
-  <mat-progress-bar mode="indeterminate" *ngIf="downloadState | async"></mat-progress-bar>
+  <mat-progress-bar mode="indeterminate" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></mat-progress-bar>
 </div>
 
 <div class="relative">
-  <div class="table-loading-shade" *ngIf="downloadState | async"></div>
+  <div class="table-loading-shade" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></div>
 
   <mat-tab-group [@.disabled]="true" (selectedTabChange)="changeUserList($event)" [(selectedIndex)]="selectedTabIndex">
-    <ng-container *ngIf="userList | async as data">
+    <ng-container *ngIf="(userList | async) as data">
       <mat-tab [label]="(listLabels | async)?.requested">
-        <ng-container *ngTemplateOutlet="data ? userTable : null; context: { implicit: data }"></ng-container>
+        <div *ngFor="let item of data.data">
+          {{ item.name }}
+        </div>
+        <!-- <ng-container *ngTemplateOutlet="data ? userTable : null; context: { implicit: data }"></ng-container> -->
       </mat-tab>
-      <mat-tab [label]="(listLabels | async)?.client">
-        <ng-container *ngTemplateOutlet="data ? userTable : null; context: { implicit: data }"></ng-container>
-      </mat-tab>
-      <mat-tab [label]="(listLabels | async)?.employee">
+      <mat-tab [label]="(listLabels | async)?.confirmed">
         <ng-container *ngTemplateOutlet="data ? userTable : null; context: { implicit: data }"></ng-container>
       </mat-tab>
       <mat-tab [label]="(listLabels | async)?.blocked">
@@ -24,7 +24,12 @@
 </div>
 
 <ng-template #userTable let-context>
-  <mat-table [dataSource]="context.data">
+  <mat-table [dataSource]="context?.data">
+
+    <!-- <div *ngFor="let item of context">
+      {{ item.name }}
+    </div> -->
+
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
       <mat-cell *matCellDef="let element">

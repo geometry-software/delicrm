@@ -6,7 +6,7 @@ import { PLATE_PROTEIN_TRANSLATE, PLATE_TYPE_TRANSLATE } from '../../utils/recip
 import { getItem, getItemLoadingState } from '../../store/recipe.selectors'
 import { RecipeActions as ItemActions } from '../../store/recipe.actions'
 import { Recipe } from '../../utils/recipe.model'
-import { Observable } from 'rxjs'
+import { Observable, of } from 'rxjs'
 import { SignalService } from '../../../../shared/services/signal.service'
 
 @Component({
@@ -17,7 +17,8 @@ import { SignalService } from '../../../../shared/services/signal.service'
 })
 export class RecipeDetailComponent implements OnInit {
   itemId: string
-  loadingState: Observable<boolean> = this.store.select(getItemLoadingState)
+  // loadingState: Observable<boolean> = this.store.select(getItemLoadingState)
+  loadingState = of(null)
   item: Observable<Recipe> = this.store.select(getItem)
   datasource = new MatTableDataSource()
   displayedColumns = ['timestamp']

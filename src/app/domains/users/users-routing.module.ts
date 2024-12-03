@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { UsersComponent } from './components/users/users.component'
-import { AuthLayoutComponent } from './components/auth-layout/auth-layout.component'
+import { UsersLayoutComponent } from './components/users-layout/users-layout.component'
 import { AppInfoComponent } from '../../shared/components/app-info/app-info.component'
 
 const routes: Routes = [
   {
     path: '',
-    component: AuthLayoutComponent,
+    component: UsersLayoutComponent,
     children: [
       // {
       //   path: 'profile',
@@ -15,9 +15,9 @@ const routes: Routes = [
       //   data: { title: 'Login', type: 'empty' },
       // },
       {
-        path: 'users',
+        path: '',
         component: UsersComponent,
-        data: { title: 'Login', type: 'empty' },
+        // data: { title: 'Login', type: 'empty' },
       },
       {
         path: 'info',

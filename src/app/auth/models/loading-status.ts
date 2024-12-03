@@ -1,4 +1,4 @@
-export enum AdminUserLoadingStatus {
+export enum AdminSignUpLoadingStatus {
   NotActivated = 'NotActivated',
   Void = 'Void',
   Activated = 'Activated'

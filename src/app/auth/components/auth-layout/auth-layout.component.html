@@ -1,6 +1,6 @@
 <ng-container [ngSwitch]="adminSignUpStatus | async">
   <ng-container *ngSwitchCase="AdminUserLoadingStatus.NotActivated">
-    <div class="loading"> loading .. </div>
+    <div class="text-loading"> loading .. </div>
   </ng-container>
   <ng-container *ngSwitchCase="AdminUserLoadingStatus.Void">
     <app-admin-sign-up />

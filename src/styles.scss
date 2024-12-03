@@ -251,6 +251,29 @@ p {
   border: 3px solid #ccc;
 }
 
+.text-loading {
+  text-align: center;
+  padding-top: 20px;
+  font-size: 2em;
+  text-transform: uppercase;
+
+  background: linear-gradient(to right, #5972a2 20%, rgb(101, 88, 187) 40%, rgb(74, 7, 182) 60%, #b519d8 80%);
+  background-size: 200% auto;
+
+  color: #000;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: shine 1s linear infinite;
+
+  @keyframes shine {
+    to {
+      background-position: 200% center;
+    }
+  }
+}
+
 /* NOTIFICATION */
 
 .validation-error-message {

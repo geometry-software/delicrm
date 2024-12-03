@@ -1,53 +1,16 @@
 import { createReducer, on } from '@ngrx/store'
 import { AuthActions as ItemActions } from './user.actions'
-import { AuthStatusTotalResponse, AppUser } from '../utils/user.model'
-import { RepositoryRequesEntity, RepositoryResponseList } from '../../../shared/repository/repository.model'
 import { formatPaginationData } from '../../../shared/repository/repository.utils'
-import { AuthStatus } from '../../../auth/models/auth.model'
-
-export interface State {
-  item: RepositoryRequesEntity<AppUser>
-  itemId: string
-  items: RepositoryResponseList<AppUser>
-  listResponseType: any
-  resetRequest: boolean
-  requestStatus: AuthStatus
-  listLabelAmount: AuthStatusTotalResponse
-  isStatusUpdated: boolean
-}
-
-const initialState: State = {
-  item: {
-    loading: false,
-  },
-  itemId: null,
-  items: {
-    data: null,
-    loading: false,
-    total: null,
-    current: null,
-    size: null,
-    error: null,
-  },
-  listResponseType: null,
-  resetRequest: null,
-  listLabelAmount: {
-    requested: 0,
-    client: 0,
-    employee: 0,
-    blocked: 0,
-  },
-  isStatusUpdated: null,
-  requestStatus: null,
-}
+import { State, initialState } from './user.state'
+import { LoadingStatus } from '../../../shared/models/loading-status'
 
 export const reducer = createReducer<State>(
   initialState,
   on(ItemActions.getItems, (state) => ({
     ...state,
+    itemsLoadingStatus: LoadingStatus.Loading,
     items: {
       data: null,
-      loading: true,
       total: state.items?.total,
       current: state.items?.data?.length,
       size: state.items?.size,
@@ -57,7 +20,6 @@ export const reducer = createReducer<State>(
   on(ItemActions.getItemsBySearchQuery, (state) => ({
     ...state,
     items: {
-      loading: true,
       data: state.items?.data,
       total: state.items?.total,
       current: state.items?.data?.length,
@@ -69,13 +31,13 @@ export const reducer = createReducer<State>(
     const { responseTotal, current } = formatPaginationData(query, state, items.length, total, size ?? state.items?.size)
     return {
       ...state,
+      itemsLoadingStatus: LoadingStatus.LoadingSuccess,
       listResponseType: query,
       items: {
         data: items,
         total: responseTotal,
         current: current,
         size: size ?? state.items.size,
-        loading: false,
         error: null,
       },
       listLabelAmount,
@@ -83,37 +45,37 @@ export const reducer = createReducer<State>(
       itemId: null,
     }
   }),
-  on(ItemActions.getUsersTotalAmount, (state) => ({
-    ...state,
-    items: {
-      data: null,
-      loading: true,
-      total: state.items?.total,
-      current: state.items?.data?.length,
-      size: state.items?.size,
-      error: null,
-    },
-  })),
-  on(ItemActions.updateUserStatus, (state) => ({
-    ...state,
-    isStatusUpdated: false,
-  })),
-  on(ItemActions.updateUserStatusSuccess, (state) => ({
-    ...state,
-    isStatusUpdated: true,
-  })),
-  on(ItemActions.getUsersTotalAmountSuccess, (state, { response }) => ({
-    ...state,
-    items: {
-      loading: false,
-      data: state.items?.data,
-      total: state.items?.total,
-      current: state.items?.data?.length,
-      size: state.items?.size,
-      error: null,
-    },
-    listLabelAmount: response,
-  })),
+  // on(ItemActions.getUsersTotalAmount, (state) => ({
+  //   ...state,
+  //   items: {
+  //     data: null,
+  //     loading: true,
+  //     total: state.items?.total,
+  //     current: state.items?.data?.length,
+  //     size: state.items?.size,
+  //     error: null,
+  //   },
+  // })),
+  // on(ItemActions.updateUserStatus, (state) => ({
+  //   ...state,
+  //   isStatusUpdated: false,
+  // })),
+  // on(ItemActions.updateUserStatusSuccess, (state) => ({
+  //   ...state,
+  //   isStatusUpdated: true,
+  // })),
+  // on(ItemActions.getUsersTotalAmountSuccess, (state, { response }) => ({
+  //   ...state,
+  //   items: {
+  //     loading: false,
+  //     data: state.items?.data,
+  //     total: state.items?.total,
+  //     current: state.items?.data?.length,
+  //     size: state.items?.size,
+  //     error: null,
+  //   },
+  //   listLabelAmount: response,
+  // })),
   on(ItemActions.getItem, (state, { id }) => ({
     ...state,
     itemId: id,

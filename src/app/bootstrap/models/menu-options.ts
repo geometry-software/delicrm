@@ -57,7 +57,7 @@ export const userMenuOptions: Array<MenuOption> = [
   },
 ]
 
-export const getAuthMenuOptions = (profileHidden): Array<MenuOption> => [
+export const authMenuOptions: Array<MenuOption> = [
   {
     title: 'Menu',
     icon: '/assets/images/menu.png',
@@ -72,7 +72,6 @@ export const getAuthMenuOptions = (profileHidden): Array<MenuOption> => [
     title: 'Profile',
     icon: '/assets/images/account.png',
     link: 'auth/profile',
-    hidden: profileHidden
   },
   // {
   //   title: 'Web App',

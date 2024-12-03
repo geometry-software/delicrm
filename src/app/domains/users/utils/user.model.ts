@@ -1,4 +1,4 @@
-import { AuthUser } from '../../../auth/models/auth.model'
+import { AuthStatus, AuthUser } from '../../../auth/models/auth.model'
 import { UserConstants } from './user.constants'
 
 export interface AppUser {
@@ -6,14 +6,24 @@ export interface AppUser {
   name: string
   role: UserRole
   locale?: string
-  createdAt?: number
+  createdAt?: number,
+  status: AuthStatus
+}
+
+export enum UserLoadingStatus {
+  NotLoaded = 'NotLoaded',
+  Loading = 'Loading',
+  LoadingFailed = 'LoadingFailed',
+  LoadingSuccess = 'LoadingSuccess'
 }
 
 export interface AuthStatusTotalResponse {
   requested: number
-  client: number
-  employee: number
+  confirmed: number
   blocked: number
 }
 
+export type UserLanguage = 'en' | 'es' | 'pt'
+
 export type UserRole = 'waiter' | 'delivery' | 'admin' | 'client'
+export type User = 'waiter' | 'delivery' | 'admin' | 'client'

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 import { FormControl } from '@angular/forms'
 import { RecipeConstants } from '../../utils/recipe.constants'
-import { Observable, debounceTime, tap } from 'rxjs'
+import { EMPTY, Observable, debounceTime, of, tap } from 'rxjs'
 import { Store, select } from '@ngrx/store'
 import { getItemId, getLayoutLoading } from '../../store/recipe.selectors'
 import { RecipeActions as ItemActions } from '../../store/recipe.actions'
@@ -18,7 +18,8 @@ export class RecipeLayoutComponent implements OnInit {
 
   // Selectors
   itemId: Observable<string> = this.store.pipe(select(getItemId))
-  layoutLoading: Observable<boolean> = this.store.pipe(select(getLayoutLoading))
+  // layoutLoading: Observable<boolean> = this.store.pipe(select(getLayoutLoading))
+  layoutLoading = of(null)
   // .pipe(tap((value) => console.log(value)))
 
   // Other properties

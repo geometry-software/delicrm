@@ -1,4 +1,4 @@
-import { Observable, UnaryFunction, auditTime, debounceTime, pipe, retry, take, throttleTime, throwError, timeout } from 'rxjs'
+import { Observable, UnaryFunction, auditTime, debounceTime, first, pipe, retry, take, throttleTime, throwError, timeout } from 'rxjs'
 import { NotificationService } from '../services/notification.service'
 import { RepositoryRequestQuery } from './repository.model'
 import * as moment from 'moment'
@@ -14,18 +14,18 @@ export const appendId = <T>(documents): T =>
 
 export const responseTransform = <T>(
   notificationService: NotificationService = null
-): UnaryFunction<Observable<T>, Observable<T>> => pipe(auditTime(500))
-take(1)
-timeout({
-  each: REQUEST_TIME_LIMIT_VALUE,
-  with: () => {
-    // notificationService.notifyConnectionWarning()
-    return throwError(() => REQUEST_TIME_LIMIT_ERROR_CODE)
-  },
-}),
-  retry({ count: 2 })
+): UnaryFunction<Observable<T>, Observable<T>> => pipe(
+  first(),
+  timeout({
+    each: REQUEST_TIME_LIMIT_VALUE,
+    with: () => {
+      // notificationService.notifyConnectionWarning()
+      return throwError(() => REQUEST_TIME_LIMIT_ERROR_CODE)
+    },
+  }),
+  retry({ count: 2 }))
 
-export const formatPaginationData = (query: RepositoryRequestQuery, state, responseLength, total, size) => {
+export const formatPaginationData = (query: RepositoryRequestQuery, items, responseLength, total, size) => {
   let current, responseTotal
   switch (query) {
     case 'first':
@@ -33,12 +33,12 @@ export const formatPaginationData = (query: RepositoryRequestQuery, state, respo
       current = responseLength
       break
     case 'next':
-      responseTotal = state.items.total
-      current = state.items.current + responseLength
+      responseTotal = items.total
+      current = items.current + responseLength
       break
     case 'previous':
-      responseTotal = state.items.total
-      current = state.items.current - size
+      responseTotal = items.total
+      current = items.current - size
       break
     case 'custom':
       responseTotal = total

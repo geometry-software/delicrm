@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, Signal, inject } from '@angular
 import { FormControl } from '@angular/forms'
 import { SignalService } from '../../services/signal.service'
 import { Observable } from 'rxjs'
+import { LoadingStatus } from '../../models/loading-status'
 
 @Component({
   selector: 'app-layout-toolbar',
@@ -10,9 +11,10 @@ import { Observable } from 'rxjs'
 })
 export class AppLayoutToolbarComponent {
   readonly layoutTypeSignal: Signal<string> = inject(SignalService).getLayoutType
+  readonly LoadingStatus = LoadingStatus
 
   @Input()
-  isLoading: Observable<boolean>
+  loadingStatus: Observable<LoadingStatus>
   @Input()
   url: string
   @Input()

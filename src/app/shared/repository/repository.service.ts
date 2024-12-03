@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core'
-import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore'
+import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { map } from 'rxjs/operators'
 import { Observable, from } from 'rxjs'
 import { getCountFromServer, collection, query, where } from 'firebase/firestore'
 import { appendId, responseTransform } from './repository.utils'
-import { OrderRequest, RepositoryEntityStatus } from './repository.model'
+import { OrderRequest, RepositoryEntityStatus, RepositoryResponseEntity } from './repository.model'
 
 @Injectable({
   providedIn: 'root',
@@ -40,7 +40,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
    * @param id id of the document
    * @returns Observable with a single document by id
    */
-  getDocumentById = <T = any>(collection: string, id: string): Observable<T> =>
+  getDocumentById = (collection: string, id: string): Observable<T> =>
     this.angularFirestore.collection(collection).doc<T>(id).valueChanges().pipe(responseTransform())
 
   /**
@@ -179,7 +179,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
    * Creates a record in a Firestore collection
    * @param collection name of the collection
    * @param item object that will be added
-   * @returns `id: string' refers to a document location
+   * @returns Observable with document id refers to a document location
    */
   createDocument = (collection: string, item: T): Observable<string> =>
     from(this.angularFirestore.collection(collection).add(item)).pipe(
@@ -192,7 +192,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
    * @param collection name of the collection
    * @param item whole object or selected properies which will update an existing document
    * @param id id of the requested document
-   * @returns :void
+   * @returns void Observable
    */
   updateDocument = (collection: string, item: T, id: string): Observable<void> =>
     from(this.angularFirestore.collection(collection).doc(id).update(item)).pipe(responseTransform())
@@ -202,17 +202,20 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
    * @param collection name of the collection
    * @param item whole object or selected properies which will update an existing document
    * @param id id of the requested document
-   * @returns :void
+   * @returns void Observable
    */
-  setDocument = (collection: string, item: T, id: string): Observable<void> =>
-    from(this.angularFirestore.collection(collection).doc(id).set(item, { merge: true })).pipe(responseTransform())
+  setDocument = <T>(collection: string, item: T, id: string): Observable<RepositoryResponseEntity<T>> =>
+    from(this.angularFirestore.collection(collection).doc(id).set(item, { merge: true })).pipe(
+      responseTransform(),
+      map(() => ({ id, item }))
+    )
 
   /**
    * Deletes a document in a Firestore collection
    * @param collection name of the collection
    * @param item whole object or selected properies which will update an existing document
    * @param id id of the requested document
-   * @returns :void
+   * @returns void Observable
    */
   deleteDocument = (collection: string, id: string): Observable<void> =>
     from(this.angularFirestore.collection(collection).doc(id).delete()).pipe(responseTransform())

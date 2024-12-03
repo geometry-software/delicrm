@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Actions, createEffect, ofType } from '@ngrx/effects'
+import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects'
 import {
   catchError,
   combineLatest,
@@ -16,7 +16,7 @@ import {
 } from 'rxjs'
 import { AuthActions as ItemActions } from './user.actions'
 import { Router } from '@angular/router'
-import { Store } from '@ngrx/store'
+import { Action, Store } from '@ngrx/store'
 import { getItemsPageAmount, getResetRequestToTheFirstPage } from './user.selectors'
 import { UserService } from '../services/user.service'
 import { UserConstants } from '../utils/user.constants'
@@ -26,7 +26,7 @@ import { ConfirmationService } from '../../../shared/services/confirmation.servi
 import { formatRequest } from '../../../shared/utils/format-request'
 
 @Injectable()
-export class AuthEffects {
+export class UserEffects implements OnInitEffects {
   constructor(
     private router: Router,
     private actions: Actions,
@@ -34,6 +34,10 @@ export class AuthEffects {
     private userService: UserService,
     private confirmationService: ConfirmationService
   ) { }
+
+  ngrxOnInitEffects(): Action {
+    return ItemActions.getItems({ request: this.defaultFirstPageRequest });
+  }
 
   readonly moduleUrl = UserConstants.moduleUrl
   readonly confirmationTitleStart = UserConstants.confirmationTitleStart
@@ -83,12 +87,12 @@ export class AuthEffects {
   //   )
   // )
 
-  updateUserStatusSuccess = createEffect(() =>
-    this.actions.pipe(
-      ofType(ItemActions.updateUserStatusSuccess),
-      mergeMap(() => of(ItemActions.getUsersTotalAmount(), ItemActions.getItems({ request: this.defaultFirstPageRequest })))
-    )
-  )
+  // updateUserStatusSuccess = createEffect(() =>
+  //   this.actions.pipe(
+  //     ofType(ItemActions.updateUserStatusSuccess),
+  //     mergeMap(() => of(ItemActions.getUsersTotalAmount(), ItemActions.getItems({ request: this.defaultFirstPageRequest })))
+  //   )
+  // )
 
   updateItem = createEffect(() =>
     this.actions.pipe(
@@ -125,11 +129,18 @@ export class AuthEffects {
       withLatestFrom(this.store.select(getResetRequestToTheFirstPage), this.store.select(getItemsPageAmount)),
       switchMap(([{ request }, resetRequest, pageAmount]) => {
         const { size, item, query, order, status } = formatRequest(request, resetRequest)
+        console.log(formatRequest(request, resetRequest));
+
         switch (query) {
           case 'first':
             return combineLatest([
               this.userService.getTotalLabels(),
-              this.userService.getFirstPage(order, size, status),
+              this.userService.getFirstPage(order, size, status).pipe(
+                tap(value => {
+                  console.warn('user getItems Effects');
+                  console.log(value);
+                })
+              ),
             ]).pipe(
               map(([listLabelAmount, items]) =>
                 ItemActions.getItemsSuccess({

@@ -1,4 +1,4 @@
-import { PaginationRequest } from '../../../shared/model/pagination.model'
+import { PaginationRequest } from '../../../shared/models/pagination.model'
 import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from '../../../shared/repository/repository.model'
 import { Recipe, RecipeStatus } from './recipe.model'
 import { Sort } from '@angular/material/sort'

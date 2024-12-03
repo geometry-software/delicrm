@@ -1,43 +1,93 @@
 import { Injectable } from '@angular/core'
-import { AngularFireAuth } from '@angular/fire/compat/auth'
-import { GoogleAuthProvider, FacebookAuthProvider, OAuthProvider } from 'firebase/auth'
-import firebase from 'firebase/compat/app'
-import { BehaviorSubject, EMPTY, Observable, concat, filter, first, forkJoin, from, map, of, shareReplay, switchMap, tap } from 'rxjs'
+import { EMPTY, Observable, combineLatest, concat, delay, filter, from, map, of, shareReplay, switchMap, tap } from 'rxjs'
 import { UserConstants } from '../utils/user.constants'
-import { AuthStatusTotalResponse, AppUser, UserRole } from '../utils/user.model'
-import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { adminForm } from '../models/admin-form'
-import { AdminUserLoadingStatus } from '../models/auth-user-loading-status'
-import { IRepositoryService, OrderRequest, RepositoryResponseEntity } from '../../../shared/repository/repository.model'
+import { AppUser, UserLoadingStatus, UserRole } from '../utils/user.model'
+import { OrderRequest } from '../../../shared/repository/repository.model'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { AuthStatus, AuthUser } from '../../../auth/models/auth.model'
+import { mapAppUser } from '../utils/app-user.mapper'
+import { AuthService } from '../../../auth/services/auth.service'
+import { setRestaurantAuth } from '../../../auth/models/auth-user.mapper'
 import { AuthConstants } from '../../../auth/models/auth.constants'
 import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
-import { mapAppUser } from '../utils/app-user.mapper'
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
 
-  private readonly restaurantCollectionId = 'restaurant'
+  constructor(
+    private repositoryService: RepositoryService<AppUser, AuthStatus>,
+    private authService: AuthService,
+  ) {
+    // this.createDumpUsers()
+  }
+
+  createDumpUsers() {
+    const arr: AppUser[] = []
+    const userAmount = 9
+    for (let index = 0; index < userAmount; index++) {
+      arr.push({
+        auth: {
+          authId: `${index + 1}`,
+          avatar: '',
+          createdAt: getCurrentUnixTime,
+          email: 'mail@mail.com',
+          displayName: 'User',
+          providerId: 'google',
+          status: 'requested',
+          locale: 'pt'
+        },
+        name: `User ${index + 1}`,
+        role: 'waiter',
+        createdAt: getCurrentUnixTime,
+        locale: 'pt',
+        status: 'requested',
+      })
+    }
+    from(arr).subscribe(user => {
+      const item = user as any
+      console.log(item);
+      this.repositoryService.createDocument(this.collection, item)
+    })
+
+  }
+
   private readonly collection = UserConstants.collectionName
   private readonly authCollection = AuthConstants.collectionName
-  private readonly appAuth = new BehaviorSubject<AppUser>(null)
-  private readonly adminProviderId = AuthConstants.adminProviderId
+  private readonly authCollectionId = AuthConstants.authCollectionId
 
-  constructor(
-    private repositoryService: RepositoryService<AppUser, AuthStatus>
-  ) { }
+  readonly appUser = this.authService.fireAuthUser.pipe(
+    switchMap(fireAuthUser => fireAuthUser?.uid
+      ? this.repositoryService.getDocumentById(this.collection, fireAuthUser.uid)
+      : of(null)),
+    shareReplay(1)
+  )
 
-  create(id: string, role: UserRole) {
-    return this.repositoryService.getDocumentById<AuthUser>(this.authCollection, id).pipe(
-      tap(v => console.log(v)),
-      first(),
-      map(user => ({ ...user, status: 'confirmed' as AuthStatus })),
-      tap(v => console.log(v)),
-      switchMap(user => this.repositoryService.setDocument(this.collection, mapAppUser(user, role), user.authId).pipe(
-        map(() => ({ id: user.authId, auth: user })))))
+  readonly isUserLoading = concat(
+    of(true),
+    this.appUser.pipe(map(() => false))
+  )
+
+  createAdminUser(id: string, role: UserRole) {
+    return this.authService.fireAuthUser.pipe(
+      filter(user => user?.emailVerified),
+      switchMap(() => this.authService.getUser(id).pipe(
+        map(user => ({ ...user, status: 'confirmed' as AuthStatus })),
+        switchMap(user => this.repositoryService.setDocument(
+          this.collection,
+          mapAppUser(user, role),
+          user.authId
+        ).pipe(switchMap(() => this.repositoryService.setDocument(
+          this.authCollection,
+          setRestaurantAuth(user.email),
+          this.authCollectionId
+        )))))))
+  }
+
+  create(user: AuthUser, role: UserRole) {
+    return this.repositoryService.setDocument(this.collection, mapAppUser(user, role), user.authId).pipe(
+      map(() => ({ id: user.authId, auth: user })))
   }
 
   getAll() {
@@ -49,27 +99,32 @@ export class UserService {
   }
 
   getTotalByStatus(status: AuthStatus) {
+    console.log(status);
+
     return this.repositoryService.getCollectionSizeByStatus<AuthStatus>(this.collection, status)
   }
 
   getTotalLabels() {
-    // return forkJoin([
-    //   this.getTotalByStatus('requested'),
-    //   this.getTotalByStatus('client'),
-    //   this.getTotalByStatus('employee'),
-    //   this.getTotalByStatus('blocked'),
-    // ]).pipe(
-    //   map(([requested, client, employee, blocked]) => ({
-    //     requested: requested,
-    //     client: client,
-    //     employee: employee,
-    //     blocked: blocked,
-    //   }))
-    // )
-    return EMPTY
+    return combineLatest([
+      this.getTotalByStatus('requested'),
+      this.getTotalByStatus('confirmed'),
+      this.getTotalByStatus('blocked')
+    ]).pipe(
+      map(([requested, confirmed, blocked]) => ({
+        requested, confirmed, blocked
+      })),
+      tap(value => {
+        console.warn('user getTotalLabels');
+        console.log(value);
+      })
+    )
   }
 
   getFirstPage(order: OrderRequest, size: number, status: AuthStatus) {
+    console.warn('users: getFirstPage Service');
+    console.log(order);
+    console.log(size);
+    console.log(status);
     return this.repositoryService.getFirstPage<AuthStatus>(this.collection, order, size, 'status', status)
   }
 

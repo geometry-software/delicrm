@@ -1,26 +1,23 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 import { FormControl } from '@angular/forms'
-import { Observable, debounceTime, tap } from 'rxjs'
+import { EMPTY, Observable, debounceTime, tap } from 'rxjs'
 import { Store, select } from '@ngrx/store'
 import { getItemId, getLayoutLoading } from '../../store/user.selectors'
 import { UserConstants } from '../../utils/user.constants'
 import { AuthActions as ItemActions } from '../../store/user.actions'
 
 @Component({
-  selector: 'app-auth-layout',
-  templateUrl: './auth-layout.component.html',
-  styleUrls: ['./auth-layout.component.scss'],
+  selector: 'app-users-layout',
+  templateUrl: './users-layout.component.html',
+  styleUrls: ['./users-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AuthLayoutComponent implements OnInit {
-  // DI
-  readonly store: Store = inject(Store)
+export class UsersLayoutComponent implements OnInit {
 
-  // Selectors
-  itemId: Observable<string> = this.store.pipe(select(getItemId))
-  layoutLoading: Observable<boolean> = this.store.pipe(select(getLayoutLoading))
+  constructor(private store: Store) { }
 
-  // Other properties
+  readonly itemId = this.store.pipe(select(getItemId))
+  readonly layoutLoading = EMPTY
   readonly searchControl = new FormControl()
   readonly backTitle = UserConstants.paginationTitle
   readonly searchPlaceholder = UserConstants.searchPlaceholder
@@ -39,8 +36,7 @@ export class AuthLayoutComponent implements OnInit {
                   key: this.defaultSearchKey,
                   value,
                 },
-              })
-            )
+              }))
             : this.store.dispatch(ItemActions.getItems({ request: this.defaultFirstPageRequest }))
         )
       )

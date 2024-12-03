@@ -1,13 +1,11 @@
 import { Component, ViewChild, OnInit, Signal, ChangeDetectorRef } from '@angular/core'
 import { MatDrawer } from '@angular/material/sidenav'
-import { concat, map, Observable, of, switchMap, tap } from 'rxjs'
-import { userMenuOptions, getAuthMenuOptions } from '../../models/menu-options'
+import { userMenuOptions, authMenuOptions } from '../../models/menu-options'
 import { TranslateService } from '@ngx-translate/core'
-import { MenuOption, ResponsiveLayout } from '../../models/navbar.model'
+import { ResponsiveLayout } from '../../models/navbar.model'
 import { UserService } from '../../../domains/users/services/user.service'
 import { SignalService } from '../../../shared/services/signal.service'
-import { AuthService } from '../../../auth/services/auth.service'
-import { AuthUser } from '../../../auth/models/auth.model'
+import { UserLanguage } from '../../../domains/users/utils/user.model'
 
 @Component({
   selector: 'app-navbar',
@@ -15,46 +13,33 @@ import { AuthUser } from '../../../auth/models/auth.model'
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-  @ViewChild('drawer') drawer: MatDrawer
-  responsiveLayout: ResponsiveLayout = {}
-
-  isAuthInitialized: boolean
-  hasAppAuth: boolean
-  user: AuthUser
-
-  hasNewDelivery: boolean
-  userMenuOptions: Array<MenuOption> = userMenuOptions
-
-  isMobileShown: boolean
-
-  readonly toolBarTitleSignal: Signal<string> = this.signalService.getToolbarTitle
-
-  authMenuOptions = concat(
-    of(true),
-    this.authService.fireAuthUser.pipe(
-      map(value => !Boolean(value))))
-    .pipe(
-      map(value => value === true ? true : Boolean(value)),
-      // tap(v => console.log(v)),
-      map(value => getAuthMenuOptions(value)),
-      // tap(v => console.log(v))
-    )
 
   constructor(
-    private authService: AuthService,
+    private userService: UserService,
     private signalService: SignalService,
     private translate: TranslateService,
     private cdr: ChangeDetectorRef
   ) { }
 
+  readonly authMenuOptions = authMenuOptions
+  readonly userMenuOptions = userMenuOptions
+  readonly appUser = this.userService.appUser
+  readonly isUserLoading = this.userService.isUserLoading
+
+  @ViewChild('drawer') drawer: MatDrawer
+  responsiveLayout: ResponsiveLayout = {}
+
+  hasAppAuth: boolean
+  hasNewDelivery: boolean
+  isMobileShown: boolean
+
+  readonly toolBarTitleSignal: Signal<string> = this.signalService.getToolbarTitle
+
   ngOnInit(): void {
-    this.initUserData()
     this.checkDelivery()
     this.checkClient()
     this.updateScreenSize()
     this.initTranslate()
-
-    // this.authService.loginAnonymously()
   }
 
   initTranslate() {
@@ -62,26 +47,6 @@ export class NavbarComponent implements OnInit {
     this.translate.setDefaultLang('es')
     const lang = this.translate.getBrowserLang()
     this.translate.use(lang.match(/es|en/) ? lang : 'es')
-  }
-
-  initUserData(): void {
-    // this.userService
-    //   .getAppAuth()
-    //   .pipe(
-    //     tap((value) => {
-    //       this.isAuthInitialized = true
-    //       if (value.uid) {
-    //         if (value.status === 'employee') {
-    //           this.hasAppAuth = true
-    //           this.user = value
-    //           this.userMenuOptions = userMenuOptions
-    //         } else if (value.status === 'client') {
-    //           this.user = value
-    //         }
-    //       }
-    //     })
-    //   )
-    //   .subscribe()
   }
 
   checkDelivery(): void { }
@@ -112,7 +77,7 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-  changeLanguage(lang) {
+  changeLanguage(lang: UserLanguage) {
     this.translate.use(lang)
     this.cdr.markForCheck()
   }

@@ -1,7 +1,8 @@
 <div class="layout">
   <ng-container *ngIf="layoutTypeSignal() !== 'empty'">
     <div class="py-[4px] h-[5px] w-full">
-      <mat-progress-bar mode="indeterminate" *ngIf="isLoading | async"></mat-progress-bar>
+      <mat-progress-bar mode="indeterminate"
+        *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></mat-progress-bar>
     </div>
   </ng-container>
   <div class="header-toolbar" *ngIf="layoutTypeSignal() as type">

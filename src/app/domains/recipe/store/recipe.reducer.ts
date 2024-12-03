@@ -14,13 +14,11 @@ export interface State {
 
 const initialState: State = {
   item: {
-    loading: false,
-    data: {},
+    data: null,
   },
   itemId: null,
   items: {
     data: null,
-    loading: false,
     total: null,
     current: null,
     size: null,

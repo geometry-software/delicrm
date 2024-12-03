@@ -30,8 +30,9 @@ export class RestaurantFormComponent implements OnInit {
   }
 
   confirm() {
-    if (this.form.valid)
+    if (this.form.valid) {
       this.dialogRef.close(this.form.value)
+    }
   }
 
   close() {
