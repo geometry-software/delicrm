@@ -22,5 +22,5 @@ export class ConfirmationService {
         },
       })
       .afterClosed()
-      .pipe(filter((value) => !!value))
+      .pipe(filter(value => !!value))
 }

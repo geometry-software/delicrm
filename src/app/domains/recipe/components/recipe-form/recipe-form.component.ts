@@ -75,14 +75,14 @@ export class RecipeFormComponent implements OnInit {
       this.store
         .select(getItem)
         .pipe(
-          tap((value) => {
+          tap(value => {
             this.form.patchValue(value, { onlySelf: true });
             if (value?.price) this.hasPrice = true;
           })
         )
         .subscribe();
       // TODO: history of orders for exact recipe
-      // this.dao.getDocument(this.itemId).subscribe((value) => {
+      // this.dao.getDocument(this.itemId).subscribe(value => {
       //   this.form.patchValue(value, { onlySelf: true })
       //   if (value?.price) this.hasPrice = true
       // })

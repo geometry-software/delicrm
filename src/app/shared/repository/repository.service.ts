@@ -194,7 +194,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
    * @param id id of the requested document
    * @returns void Observable
    */
-  updateDocument = (collection: string, item: T, id: string): Observable<void> =>
+  updateDocument = (collection: string, item: Partial<T>, id: string): Observable<void> =>
     from(this.angularFirestore.collection(collection).doc(id).update(item)).pipe(responseTransform())
 
   /**

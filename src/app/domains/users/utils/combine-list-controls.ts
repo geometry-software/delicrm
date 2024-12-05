@@ -2,7 +2,7 @@ import { FormControl } from '@angular/forms'
 import { Sort } from '@angular/material/sort'
 import { Store } from '@ngrx/store'
 import { combineLatest, map, skip, startWith, tap } from 'rxjs'
-import { AuthActions as ItemActions } from '../store/user.actions'
+import { UserActions as ItemActions } from '../store/user.actions'
 
 export const combineListControls = (pagination: FormControl, order: FormControl, status: FormControl, store: Store) =>
   combineLatest([

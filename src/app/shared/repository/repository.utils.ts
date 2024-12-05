@@ -7,7 +7,7 @@ const REQUEST_TIME_LIMIT_VALUE = 5000
 const REQUEST_TIME_LIMIT_ERROR_CODE = 'REQUEST_TIME_LIMIT_ERROR'
 
 export const appendId = <T>(documents): T =>
-  documents.map((value) => ({
+  documents.map(value => ({
     ...value.payload.doc.data(),
     id: value.payload.doc.id,
   }))

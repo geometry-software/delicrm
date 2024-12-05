@@ -7,7 +7,7 @@ const paginationTitle: string = UserConstants.paginationTitle
 const paginationSize: Array<number> = UserConstants.paginationSize
 
 const labelRequested: string = UserConstants.labelRequested
-const labelClient: string = UserConstants.labelClient
+const labelConfirmed: string = UserConstants.labelConfirmed
 const labelBlocked: string = UserConstants.labelBlocked
 
 export const getState = createFeatureSelector<State>(storeFeatureKey)
@@ -19,7 +19,12 @@ export const getItemsData = createSelector(getItems, getRequestStatus, (items, s
 }))
 export const getItemsPageAmount = createSelector(getState, (state) => state.items?.data?.length)
 export const getResetRequestToTheFirstPage = createSelector(getState, (state) => state.resetRequest)
-export const getItem = createSelector(getState, (state) => state.item?.data)
+// export const getItem = createSelector(getState, (state) => state.item?.data)
+export const getItem = (id: string) => createSelector(getItems, (items) => items.find(el => {
+  const user = el as any
+  return user.id === id
+  // el.auth.authId === id
+}))
 export const getItemId = createSelector(getState, (state) => state.itemId)
 export const getPaginationItem = createSelector(getItems, (state) => ({
   first: state?.length ? [...state][0] : null,
@@ -46,7 +51,7 @@ export const getPaginationResponse = createSelector(getPaginationItem, getCurren
 export const getListLabelAmount = createSelector(getState, (state) => state.listLabelAmount)
 export const getListLabels = createSelector(getListLabelAmount, (state) => ({
   requested: labelRequested + ' (' + state.requested + ')',
-  confirmed: labelClient + ' (' + state.confirmed + ')',
+  confirmed: labelConfirmed + ' (' + state.confirmed + ')',
   blocked: labelBlocked + ' (' + state.blocked + ')',
 }))
-export const getIsStatusUpdated = createSelector(getState, (state) => state.isStatusUpdated)
+export const isStatusUpdated = createSelector(getState, (state) => state.isStatusUpdated)

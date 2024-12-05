@@ -18,11 +18,11 @@ export class ClientOrderComponent implements OnInit {
 
   setProteinImage = (protein: RecipeProtein) => '/assets/images/' + protein + '.png'
 
-  constructor(private router: ActivatedRoute, private checkoutService: CheckoutService, private cdr: ChangeDetectorRef) { }
+  constructor(private route: ActivatedRoute, private checkoutService: CheckoutService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    const id = this.router.snapshot.params['id']
-    this.checkoutService.getDeliveryById(id).subscribe((value) => {
+    const id = this.route.snapshot.params['id']
+    this.checkoutService.getDeliveryById(id).subscribe(value => {
       this.item = value
       this.cdr.markForCheck()
     })

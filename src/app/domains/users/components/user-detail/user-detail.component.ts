@@ -3,7 +3,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
 import { AppUser } from '../../utils/user.model'
 import { UserConstants } from '../../utils/user.constants'
 import { FormControl } from '@angular/forms'
-import { tap } from 'rxjs'
+import { map, Observable, switchMap, tap } from 'rxjs'
+import { Store } from '@ngrx/store'
+import { UserActions as ItemActions } from '../../store/user.actions'
+import { getItem } from '../../store/user.selectors'
+import { ActivatedRoute } from '@angular/router'
+import { AuthUser } from '../../../../auth/models/auth.model'
 
 @Component({
   selector: 'app-user-detail',
@@ -11,13 +16,16 @@ import { tap } from 'rxjs'
   styleUrls: ['./user-detail.component.scss'],
 })
 export class UserDetailComponent implements OnInit {
-  readonly roleList = UserConstants.roleList
-  role = new FormControl()
 
-  constructor(public dialogRef: MatDialogRef<UserDetailComponent>, @Inject(MAT_DIALOG_DATA) public data: AppUser) { }
+  constructor(private store: Store, private route: ActivatedRoute,) { }
+
+  user = this.route.params.pipe(
+    map(value => value['id']),
+    switchMap(id => this.store.select(getItem(id)))
+  )
 
   ngOnInit() {
-    // this.role.setValue(this.data.role)
-    this.role.valueChanges.pipe(tap((value) => console.log(value))).subscribe()
+    // this.user = 
   }
+
 }

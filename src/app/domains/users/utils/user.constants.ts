@@ -13,8 +13,8 @@ export abstract class UserConstants {
   static readonly paginationTitle = 'recipes'
   static readonly paginationSize = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   static readonly moduleUrl = '/recipes'
-  static readonly labelClient = 'Client'
-  static readonly statusList = ['requested', 'client', 'employee', 'blocked']
+  static readonly labelConfirmed = 'Confirmed'
+  static readonly statusList = ['requested', 'confirmed', 'blocked']
   static readonly roleList = ['waiter', 'delivery', 'admin']
   static readonly labelActive = 'Active'
   static readonly statusListCustomer = ['employee', 'blocked']

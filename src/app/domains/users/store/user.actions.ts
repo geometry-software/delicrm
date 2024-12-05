@@ -1,17 +1,19 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
-import { AuthStatusTotalResponse, AppUser } from '../utils/user.model'
+import { UserStatusTotalResponse, AppUser } from '../utils/user.model'
 import { UserConstants } from '../utils/user.constants'
 import { FilterRequest, RepositoryEntityAction, RepositoryRequest, RepositoryRequestQuery } from '../../../shared/repository/repository.model'
 import { AuthStatus } from '../../../auth/models/auth.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 
-export const AuthActions = createActionGroup({
+export const UserActions = createActionGroup({
   source: UserConstants.storeFeatureKey,
   events: {
     'Get Items': props<{ request: RepositoryRequest<AppUser, AuthStatus> }>(),
     'Set Items Loading Status': props<{ status: LoadingStatus }>(),
-    'Create Item Form Init': emptyProps(),
     'Create Item': props<{ item: AppUser }>(),
+    'Update User Status': props<{ id: string, status: AuthStatus }>(),
+    'Update User Status Failed': emptyProps(),
+    'Update User Status Success': emptyProps(),
     'Create Item Success': props<{ response: any; total: number }>(),
     'Update Item': props<{ item: AppUser; id: string }>(),
     'Update Item Success': emptyProps(),
@@ -23,7 +25,7 @@ export const AuthActions = createActionGroup({
       query: RepositoryRequestQuery
       total?: number
       size?: number
-      listLabelAmount?: AuthStatusTotalResponse
+      listLabelAmount?: UserStatusTotalResponse
     }>(),
     'Notify Error': props<{ error: Error; errorType: RepositoryEntityAction }>(),
     'Reset Request To The First Page': emptyProps(),

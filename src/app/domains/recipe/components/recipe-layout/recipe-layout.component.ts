@@ -20,7 +20,7 @@ export class RecipeLayoutComponent implements OnInit {
   itemId: Observable<string> = this.store.pipe(select(getItemId))
   // layoutLoading: Observable<boolean> = this.store.pipe(select(getLayoutLoading))
   layoutLoading = of(null)
-  // .pipe(tap((value) => console.log(value)))
+  // .pipe(tap(value => console.log(value)))
 
   // Other properties
   readonly searchControl = new FormControl()
@@ -35,7 +35,7 @@ export class RecipeLayoutComponent implements OnInit {
     this.searchControl.valueChanges
       .pipe(
         debounceTime(500),
-        tap((value) =>
+        tap(value =>
           value
             ? this.store.dispatch(
               ItemActions.getItemsBySearchQuery({

@@ -3,26 +3,20 @@ import { RouterModule, Routes } from '@angular/router'
 import { UsersComponent } from './components/users/users.component'
 import { UsersLayoutComponent } from './components/users-layout/users-layout.component'
 import { AppInfoComponent } from '../../shared/components/app-info/app-info.component'
+import { UserDetailComponent } from './components/user-detail/user-detail.component'
 
 const routes: Routes = [
   {
     path: '',
     component: UsersLayoutComponent,
     children: [
-      // {
-      //   path: 'profile',
-      //   component: ProfileComponent,
-      //   data: { title: 'Login', type: 'empty' },
-      // },
       {
         path: '',
-        component: UsersComponent,
-        // data: { title: 'Login', type: 'empty' },
+        component: UsersComponent
       },
       {
-        path: 'info',
-        component: AppInfoComponent,
-        data: { title: 'Login', type: 'empty' },
+        path: ':id',
+        component: UserDetailComponent
       }
     ]
   }
@@ -31,4 +25,4 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forChild(routes)],
 })
-export class AuthRoutingModule { }
+export class UsersRoutingModule { }

@@ -13,7 +13,7 @@ export class FormService {
     this.transformJsonToObject(url).pipe(
       switchMap((json) =>
         combineLatest([of(this.createControls(json)), of(json)]).pipe(
-          map((value) => ({
+          map(value => ({
             formGroup: value[0],
             formControls: value[1],
           }))

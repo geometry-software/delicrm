@@ -1,0 +1,10 @@
+<app-title title="User status" subtitle="Choose user status."></app-title>
+
+<mat-radio-group class="radio-group" [(ngModel)]="currentStatus">
+  @for (status of statusList; track status) {
+  <mat-radio-button class="example-radio-button" [value]="status">{{status}}</mat-radio-button>
+  }
+</mat-radio-group>
+
+<app-button title="Close" actionType="save" (submit)="close()"></app-button>
+<app-button title="Update" actionType="save" (submit)="confirm()"></app-button>

@@ -79,7 +79,7 @@ export class DeliveryListComponent {
   // }
 
   initUser() {
-    // this.authService.getAppAuth().subscribe((value) => {
+    // this.authService.getAppAuth().subscribe(value => {
     //   this.user = value
     // })
   }
@@ -104,7 +104,7 @@ export class DeliveryListComponent {
     this.datasource = combineLatest([]).pipe(
       switchMap(() =>
         this.deliveryService.getNewDeliveries(status).pipe(
-          // tap((value) => console.log(value)),
+          // tap(value => console.log(value)),
           shareReplay(1)
         )
       )
@@ -150,7 +150,7 @@ export class DeliveryListComponent {
       maxHeight: 'auto',
       data,
     })
-    dialogRef.afterClosed().subscribe((value) => {
+    dialogRef.afterClosed().subscribe(value => {
       if (value === 'confirm') {
         this.confirm()
       } else if (value === 'delete') {
@@ -171,7 +171,7 @@ export class DeliveryListComponent {
     delete this.delivery.id
     this.deliveryService
       .createOrder(this.delivery)
-      .then((value) =>
+      .then(value =>
         this.deliveryService.confirmDelivery(this.deliveryId, value.id).then(() => this.router.navigate(['/orders', value.id]))
       )
   }

@@ -4,7 +4,7 @@ import { EMPTY, Observable, debounceTime, tap } from 'rxjs'
 import { Store, select } from '@ngrx/store'
 import { getItemId, getLayoutLoading } from '../../store/user.selectors'
 import { UserConstants } from '../../utils/user.constants'
-import { AuthActions as ItemActions } from '../../store/user.actions'
+import { UserActions as ItemActions } from '../../store/user.actions'
 
 @Component({
   selector: 'app-users-layout',
@@ -28,16 +28,15 @@ export class UsersLayoutComponent implements OnInit {
     this.searchControl.valueChanges
       .pipe(
         debounceTime(500),
-        tap((value) =>
-          value
-            ? this.store.dispatch(
-              ItemActions.getItemsBySearchQuery({
-                request: {
-                  key: this.defaultSearchKey,
-                  value,
-                },
-              }))
-            : this.store.dispatch(ItemActions.getItems({ request: this.defaultFirstPageRequest }))
+        tap(value => value
+          ? this.store.dispatch(
+            ItemActions.getItemsBySearchQuery({
+              request: {
+                key: this.defaultSearchKey,
+                value,
+              },
+            }))
+          : this.store.dispatch(ItemActions.getItems({ request: this.defaultFirstPageRequest }))
         )
       )
       .subscribe()

@@ -149,8 +149,7 @@ export class UserService {
   }
 
   updateStatus(status: AuthStatus, id: string) {
-    // return this.repositoryService.updateDocument(this.collection, { status: status }, id)
-    return EMPTY
+    return this.repositoryService.updateDocument(this.collection, { status }, id)
   }
 
   updateRestaurant<T>(item: T): Observable<void> {

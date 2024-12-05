@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store'
-import { AuthActions as ItemActions } from './user.actions'
+import { UserActions as ItemActions } from './user.actions'
 import { formatPaginationData } from '../../../shared/repository/repository.utils'
 import { State, initialState } from './user.state'
 import { LoadingStatus } from '../../../shared/models/loading-status'
@@ -10,7 +10,7 @@ export const reducer = createReducer<State>(
     ...state,
     itemsLoadingStatus: LoadingStatus.Loading,
     items: {
-      data: null,
+      data: state.items?.data,
       total: state.items?.total,
       current: state.items?.data?.length,
       size: state.items?.size,

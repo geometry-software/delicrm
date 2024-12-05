@@ -124,14 +124,14 @@ export class MenuFormComponent implements OnInit {
   updateServerDataMenu() {
     this.recipeEntityService.getAll().subscribe((recipes) => {
       this.recipeList = recipes
-      this.starterList = recipes.filter((value) => value.type == 'starter')
-      this.drinkList = recipes.filter((value) => value.type == 'drink')
-      this.saladList = recipes.filter((value) => value.type == 'salad')
-      this.riceList = recipes.filter((value) => value.type == 'rice')
-      this.garnishList = recipes.filter((value) => value.type == 'garnish')
-      this.dessertList = recipes.filter((value) => value.type == 'dessert')
-      this.barList = recipes.filter((value) => value.type == 'alacarte')
-      this.plateList = recipes.filter((value) => value.type == 'main')
+      this.starterList = recipes.filter(value => value.type == 'starter')
+      this.drinkList = recipes.filter(value => value.type == 'drink')
+      this.saladList = recipes.filter(value => value.type == 'salad')
+      this.riceList = recipes.filter(value => value.type == 'rice')
+      this.garnishList = recipes.filter(value => value.type == 'garnish')
+      this.dessertList = recipes.filter(value => value.type == 'dessert')
+      this.barList = recipes.filter(value => value.type == 'alacarte')
+      this.plateList = recipes.filter(value => value.type == 'main')
       this.initAutocomplete()
       this.isFormDataLoaded = true
     })
@@ -144,7 +144,7 @@ export class MenuFormComponent implements OnInit {
         .get('item')
         .valueChanges.pipe(
           startWith<string | Recipe>(''),
-          map((value) => (typeof value === 'string' ? value : value.name)),
+          map(value => (typeof value === 'string' ? value : value.name)),
           map((name) =>
             name
               ? this.starterList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
@@ -158,7 +158,7 @@ export class MenuFormComponent implements OnInit {
         .get('item')
         .valueChanges.pipe(
           startWith<string | Recipe>(''),
-          map((value) => (typeof value === 'string' ? value : value.name)),
+          map(value => (typeof value === 'string' ? value : value.name)),
           map((name) =>
             name
               ? this.drinkList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
@@ -168,21 +168,21 @@ export class MenuFormComponent implements OnInit {
     }
     this.filteredSaladOptions = this.menuForm.get('salad').valueChanges.pipe(
       startWith(''),
-      map((value) => (typeof value === 'string' ? value : value.name)),
+      map(value => (typeof value === 'string' ? value : value.name)),
       map((name) =>
         name ? this.saladList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase())) : this.saladList.slice()
       )
     )
     this.filteredRiceOptions = this.menuForm.get('rice').valueChanges.pipe(
       startWith(''),
-      map((value) => (typeof value === 'string' ? value : value.name)),
+      map(value => (typeof value === 'string' ? value : value.name)),
       map((name) =>
         name ? this.riceList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase())) : this.riceList.slice()
       )
     )
     this.filteredGarnishOptions = this.menuForm.get('garnish').valueChanges.pipe(
       startWith(''),
-      map((value) => (typeof value === 'string' ? value : value.name)),
+      map(value => (typeof value === 'string' ? value : value.name)),
       map((name) =>
         name
           ? this.garnishList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
@@ -191,7 +191,7 @@ export class MenuFormComponent implements OnInit {
     )
     this.filteredDessertOptions = this.menuForm.get('dessert').valueChanges.pipe(
       startWith(''),
-      map((value) => (typeof value === 'string' ? value : value.name)),
+      map(value => (typeof value === 'string' ? value : value.name)),
       map((name) =>
         name
           ? this.dessertList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
@@ -205,7 +205,7 @@ export class MenuFormComponent implements OnInit {
   }
 
   updateServerDataBar() {
-    // this.daoBar.getAll().subscribe((value) => {
+    // this.daoBar.getAll().subscribe(value => {
     //   if (value.length == 0) this.hasBarItems = false
     //   else {
     //     this.barSource = new MatTableDataSource(value)

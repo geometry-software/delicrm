@@ -12,6 +12,7 @@ import { RestaurantLoadingStatus } from '../../models/loading-status'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AdminConstants } from '../../../domains/admin/utils/admin.constants'
 import { UserService } from '../../../domains/users/services/user.service'
+import { SharedConstants } from '../../../shared/utils/shared.constants'
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,7 @@ export class LoginComponent {
 
   readonly googleIconPath = AuthConstants.googleIconPath
   readonly adminCollectionId = AuthConstants.adminCollectionId
-  readonly restaurantFormComponentConfig = AdminConstants.restaurantFormComponentConfig
+  readonly restaurantFormComponentConfig = SharedConstants.formComponentConfig
   readonly adminForm = adminFormGroup
   readonly adminFormProps = AdminFormProps
   readonly isAdminUser = this.authService.isAdminUser

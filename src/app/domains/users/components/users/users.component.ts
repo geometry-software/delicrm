@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { MatTabChangeEvent } from '@angular/material/tabs'
 import { Observable, shareReplay, tap, filter, of, map, combineLatest } from 'rxjs'
 import { Store } from '@ngrx/store'
 import { AppUser } from '../../utils/user.model'
-import { AuthActions as ItemActions } from '../../store/user.actions'
-import { getIsStatusUpdated, getItemsData, getItemsLoadingStatus, getListLabels, getRequestStatus } from '../../store/user.selectors'
+import { UserActions } from '../../store/user.actions'
+import { isStatusUpdated, getItemsData, getItemsLoadingStatus, getListLabels, getRequestStatus } from '../../store/user.selectors'
 import { UserConstants } from '../../utils/user.constants'
 import { FormControl } from '@angular/forms'
 import { Sort } from '@angular/material/sort'
@@ -17,6 +17,9 @@ import { PaginationRequest } from '../../../../shared/models/pagination.model'
 import { SizeRequest } from '../../../../shared/repository/repository.model'
 import { AuthStatus } from '../../../../auth/models/auth.model'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
+import { SharedConstants } from '../../../../shared/utils/shared.constants'
+import { UserStatusComponent } from '../user-status/users-status.component'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
 @Component({
   selector: 'app-users',
@@ -28,131 +31,90 @@ export class UsersComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private signalService: SignalService,
-    private route: ActivatedRoute,
+    private destroyRef: DestroyRef,
     private dialog: MatDialog
   ) { }
 
   readonly LoadingStatus = LoadingStatus
-  // Selectors
-  readonly userList: Observable<{
-    data: Array<AppUser>
-    status: AuthStatus
-  }> =
-    combineLatest([
-      this.store.select(getItemsData),
-      this.store.select(getRequestStatus).pipe(
-        // tap(v => console.log(v)),
-      )
-    ]).pipe(
-      // tap(v => console.log(v)),
-      tap(() => (this.statusList = UserConstants.statusList)),
-      tap(([, status]) => (this.statusList = this.statusList.filter((el) => el !== status))),
-      shareReplay(1),
-      map(([data, status]) => {
-        console.log(data.data);
-        const s = 'requested' as AuthStatus
-        return {
-          data: data.data,
-          status: s
-        }
-      }),
-      tap(v => console.log(v))
-
-    )
-
-  readonly listLabels = this.store.select(getListLabels)
-  readonly loadingStatus = this.store.select(getItemsLoadingStatus)
-
-  // Constants
   readonly defaultFirstPageRequest = UserConstants.defaultFirstPageRequest
   readonly defaultOrderControl = UserConstants.defaultOrderControlValue
   readonly tableColumns = UserConstants.tableColumns
+  readonly userStatusFormComponentConfig = SharedConstants.formComponentConfig
 
-  // Tab
+  readonly userList = combineLatest([
+    this.store.select(getItemsData),
+    this.store.select(getRequestStatus)
+  ]).pipe(
+    tap(() => (this.statusList = UserConstants.statusList)),
+    tap(([, status]) => (this.statusList = this.statusList.filter((el) => el !== status))),
+    shareReplay(1),
+    map(([data,]) => data.data)
+  )
+  readonly listLabels = this.store.select(getListLabels)
+  readonly loadingStatus = this.store.select(getItemsLoadingStatus)
+
   statusList = UserConstants.statusList
   updatedStatus: AuthStatus
   selectedTabIndex: number
 
-  // Controls
-  readonly paginationControl: FormControl<PaginationRequest<AppUser>> = new FormControl(this.defaultFirstPageRequest.pagination)
-  readonly sizeControl: FormControl<SizeRequest> = new FormControl(this.defaultFirstPageRequest.size)
-  readonly orderControl: FormControl<Sort> = new FormControl(this.defaultOrderControl)
-  readonly statusControl: FormControl<AuthStatus> = new FormControl('requested')
-
   ngOnInit() {
-    this.setSignals()
-    this.store
-      .select(getIsStatusUpdated)
-      .pipe(
-        filter(Boolean),
-        tap(() => this.switchTabAfterUpdate())
-      )
-      .subscribe()
+    this.onSwitchTabAfterUpdate()
   }
 
-  // initData() {
-  //   combineListControls(this.paginationControl, this.orderControl, this.statusControl, this.store)
-  //     .pipe(
-  //       tap(([pagination, order, status]) =>
-  //         this.store.dispatch(
-  //           ItemActions.getItems({
-  //             request: {
-  //               order,
-  //               pagination,
-  //               size: {
-  //                 size: 10,
-  //               },
-  //               status: status,
-  //             },
-  //           })
-  //         )
-  //       )
-  //     )
-  //     .subscribe()
+  // setSignals() {
+  //   this.signalService.setToolbarTitle(this.route.snapshot.data['title'])
+  //   this.signalService.setLayoutType(this.route.snapshot.data['type'])
   // }
-
-  setSignals() {
-    this.signalService.setToolbarTitle(this.route.snapshot.data['title'])
-    this.signalService.setLayoutType(this.route.snapshot.data['type'])
-  }
-
-  update(status: string, item: AppUser) {
-    this.updatedStatus = status as AuthStatus
-    // this.store.dispatch(ItemActions.updateUserStatus({ item, status: this.updatedStatus }))
-  }
 
   changeUserList(event: MatTabChangeEvent) {
     let labelAmount = event.tab.textLabel.split('(').pop().slice(0, -1)
-    const request = event.tab.textLabel.slice(0, -labelAmount.length - 3).toLowerCase() as unknown as AuthStatus
-    this.statusControl.setValue(request)
+    const status = event.tab.textLabel.slice(0, -labelAmount.length - 3).toLowerCase() as unknown as AuthStatus
+    this.store.dispatch(UserActions.getItems({
+      request: {
+        pagination: this.defaultFirstPageRequest.pagination,
+        size: this.defaultFirstPageRequest.size,
+        status,
+        order: this.defaultFirstPageRequest.order
+      }
+    }))
   }
 
-  switchTabAfterUpdate() {
-    switch (this.updatedStatus) {
-      case 'requested':
-        this.selectedTabIndex = 0
-        break
-      // case 'client':
-      //   this.selectedTabIndex = 1
-      //   break
-      // case 'employee':
-      //   this.selectedTabIndex = 2
-      //   break
-      case 'blocked':
-        this.selectedTabIndex = 3
-        break
-    }
+  onSwitchTabAfterUpdate() {
+    this.store
+      .select(isStatusUpdated)
+      .pipe(
+        filter(Boolean),
+        tap(() => {
+          switch (this.updatedStatus) {
+            case 'requested':
+              this.selectedTabIndex = 0
+              break
+            case 'confirmed':
+              this.selectedTabIndex = 1
+              break
+            case 'blocked':
+              this.selectedTabIndex = 2
+              break
+          }
+        }),
+        takeUntilDestroyed(this.destroyRef))
+      .subscribe()
   }
 
-  openDetail(user) {
-    const dialog = this.dialog.open(UserDetailComponent, {
-      width: '300px',
+  openUserDetail(id: string) {
+
+  }
+
+  openStatusForm(data) {
+    this.dialog.open(UserStatusComponent, {
+      width: 'auto',
       height: 'auto',
-      data: user,
-    })
-    dialog.afterClosed().subscribe((value) => {
-      console.log(value)
-    })
+      autoFocus: false,
+      data
+    }).afterClosed().pipe(
+      filter(Boolean),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(status => this.store.dispatch(UserActions.updateUserStatus({ status, id: data.id })))
   }
+
 }

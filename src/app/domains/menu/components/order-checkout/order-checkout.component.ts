@@ -117,7 +117,7 @@ export class OrderCheckoutComponent implements OnInit {
   }
 
   initUser() {
-    // this.userService.getAppAuth().subscribe((value) => {
+    // this.userService.getAppAuth().subscribe(value => {
     //   this.initUserType(value)
     //   if (this.isClientUser) {
     //     this.initClientUser()
@@ -167,7 +167,7 @@ export class OrderCheckoutComponent implements OnInit {
       //     this.prepareOrder()
       //   })
       // })
-      // this.userService.getAllClients().subscribe((value) => console.log(value))
+      // this.userService.getAllClients().subscribe(value => console.log(value))
     }
   }
 
@@ -318,7 +318,7 @@ export class OrderCheckoutComponent implements OnInit {
     // })
     // this.checkoutService
     //   .createDelivery(this.order)
-    //   .then((value) => {
+    //   .then(value => {
     //     this.isGifLoaderShowing = true
     //     this.cdr.detectChanges()
     //     setTimeout(() => {
@@ -329,7 +329,7 @@ export class OrderCheckoutComponent implements OnInit {
     //       this.navRouter.navigate(['/menu/client-order', value.id])
     //     }, 4000)
     //   })
-    //   .catch((error) => this.handleDocumentCreateError(error))
+    //   .catch(error => this.handleDocumentCreateError(error))
   }
 
   private confirmTableOrder() {
@@ -343,8 +343,8 @@ export class OrderCheckoutComponent implements OnInit {
     console.log(this.order)
     this.checkoutService
       .createTableOrder(this.order)
-      .then((value) => this.navRouter.navigate(['/orders', value.id]))
-      .catch((error) => this.handleDocumentCreateError(error))
+      .then(value => this.navRouter.navigate(['/orders', value.id]))
+      .catch(error => this.handleDocumentCreateError(error))
   }
 
   updateMenuHistoryAmount() {
@@ -450,7 +450,7 @@ export class OrderCheckoutComponent implements OnInit {
       this.clientList = res
       this.filteredClients = this.clientFormControl.valueChanges.pipe(
         startWith(''),
-        map((value) => (typeof value === 'string' ? value : value.name)),
+        map(value => (typeof value === 'string' ? value : value.name)),
         map((name) => (name ? this.filterAutocompleteName(name) : this.clientList.slice()))
       )
     })

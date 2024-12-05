@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store'
-import { AuthActions as ItemActions } from './user.actions'
-import { AuthStatusTotalResponse, AppUser } from '../utils/user.model'
+import { UserActions as ItemActions } from './user.actions'
+import { UserStatusTotalResponse, AppUser } from '../utils/user.model'
 import { RepositoryRequesEntity, RepositoryResponseList } from '../../../shared/repository/repository.model'
 import { formatPaginationData } from '../../../shared/repository/repository.utils'
 import { AuthStatus } from '../../../auth/models/auth.model'
@@ -14,17 +14,17 @@ export interface State {
   listResponseType: any
   resetRequest: boolean
   requestStatus: AuthStatus
-  listLabelAmount: AuthStatusTotalResponse
+  listLabelAmount: UserStatusTotalResponse
   isStatusUpdated: boolean
 }
 
 export const initialState: State = {
   itemId: null,
   items: {
-    data: null,
-    total: null,
-    current: null,
-    size: null,
+    data: [],
+    total: 0,
+    current: 0,
+    size: 0,
     error: null,
   },
   itemsLoadingStatus: LoadingStatus.NotLoaded,

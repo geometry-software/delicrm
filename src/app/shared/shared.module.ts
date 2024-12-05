@@ -19,6 +19,8 @@ import { AppSaveButtonComponent } from './components/app-save-button/app-save-bu
 import { AppTableLoaderComponent } from './components/app-table-loader/app-table-loader.component'
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker'
 import { AppFormattedDailyMenuComponent } from './components/app-formatted-daily-menu/app-formatted-daily-menu.component'
+import { AppInfoComponent } from './components/app-info/app-info.component'
+import { AppTitleComponent } from './components/app-title/app-title.component'
 
 @NgModule({
   declarations: [
@@ -35,16 +37,22 @@ import { AppFormattedDailyMenuComponent } from './components/app-formatted-daily
     AppTableLinkComponent,
     AppSaveButtonComponent,
     AppTableLoaderComponent,
+    AppInfoComponent,
+    AppTitleComponent,
     AppFormattedDailyMenuComponent
   ],
   exports: [
     MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
     MouseOnHoverDirective,
     TimestampPipe,
     AppButtonComponent,
     AppTableSearchComponent,
     AppConfirmationDialogComponent,
     AppLoaderComponent,
+    AppInfoComponent,
+    AppTitleComponent,
     AppNotFoundComponent,
     AppAddressComponent,
     AppLayoutToolbarComponent,

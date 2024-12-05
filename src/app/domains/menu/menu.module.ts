@@ -14,8 +14,22 @@ import { CheckoutService } from './services/checkout.service'
 import { MenuService } from './services/menu.service'
 
 @NgModule({
-  declarations: [MenuLayoutComponent, PlateDetailComponent, DailyMenuComponent, OrderCheckoutComponent, ClientOrderComponent],
-  imports: [RouterModule, CommonModule, SharedModule, ReactiveFormsModule, FormsModule, WaiterRoutingModule, TranslateModule],
+  declarations: [
+    MenuLayoutComponent,
+    PlateDetailComponent,
+    DailyMenuComponent,
+    OrderCheckoutComponent,
+    ClientOrderComponent
+  ],
+  imports: [
+    RouterModule,
+    CommonModule,
+    SharedModule,
+    // ReactiveFormsModule, 
+    // FormsModule, 
+    WaiterRoutingModule,
+    TranslateModule
+  ],
   providers: [MenuService, CheckoutService],
 })
-export class WaiterModule {}
+export class WaiterModule { }

@@ -48,7 +48,7 @@ export class OrderDetailComponent implements OnInit {
   ngOnInit() {
     this.initAuth()
     this.orderId = this.router.snapshot.params['id']
-    this.orderService.getDocument(this.orderId).subscribe((value) => {
+    this.orderService.getDocument(this.orderId).subscribe(value => {
       console.log(value)
       this.order = value
       this.cdr.markForCheck()
@@ -71,7 +71,7 @@ export class OrderDetailComponent implements OnInit {
   }
 
   print() {
-    this.printService.connect().then((value) => this.printService.print(value, this.order.price.total))
+    this.printService.connect().then(value => this.printService.print(value, this.order.price.total))
   }
 
   update() {
@@ -101,7 +101,7 @@ export class OrderDetailComponent implements OnInit {
     // this.userService
     //   .getAppAuth()
     //   .pipe(
-    //     tap((value) => {
+    //     tap(value => {
     //       this.user = value
     //       this.cdr.markForCheck()
     //     })

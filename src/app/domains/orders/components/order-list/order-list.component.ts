@@ -43,21 +43,21 @@ export class OrderListComponent implements OnInit {
   }
 
   initCookingOrders() {
-    this.orderService.getCookingOrders().subscribe((value) => {
+    this.orderService.getCookingOrders().subscribe(value => {
       this.datasource = value
       this.cdr.markForCheck()
     })
   }
 
   initDeliveryOrders() {
-    this.orderService.getDeliveryOrders().subscribe((value) => {
+    this.orderService.getDeliveryOrders().subscribe(value => {
       this.datasource = value
       this.cdr.markForCheck()
     })
   }
 
   initPaidOrders() {
-    this.orderService.getPaidOrders().subscribe((value) => {
+    this.orderService.getPaidOrders().subscribe(value => {
       this.datasource = value
       this.cdr.markForCheck()
     })

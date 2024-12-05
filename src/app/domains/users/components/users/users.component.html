@@ -7,44 +7,35 @@
 
   <mat-tab-group [@.disabled]="true" (selectedTabChange)="changeUserList($event)" [(selectedIndex)]="selectedTabIndex">
     <ng-container *ngIf="(userList | async) as data">
-      <mat-tab [label]="(listLabels | async)?.requested">
-        <div *ngFor="let item of data.data">
-          {{ item.name }}
-        </div>
-        <!-- <ng-container *ngTemplateOutlet="data ? userTable : null; context: { implicit: data }"></ng-container> -->
+      <mat-tab [label]="(listLabels | async).requested">
+        <ng-container *ngTemplateOutlet="userTable; context: { data  }"></ng-container>
       </mat-tab>
-      <mat-tab [label]="(listLabels | async)?.confirmed">
-        <ng-container *ngTemplateOutlet="data ? userTable : null; context: { implicit: data }"></ng-container>
+      <mat-tab [label]="(listLabels | async).confirmed">
+        <ng-container *ngTemplateOutlet="userTable; context: { data  }"></ng-container>
       </mat-tab>
-      <mat-tab [label]="(listLabels | async)?.blocked">
-        <ng-container *ngTemplateOutlet="data ? userTable : null; context: { implicit: data }"></ng-container>
+      <mat-tab [label]="(listLabels | async).blocked">
+        <ng-container *ngTemplateOutlet="userTable; context: { data  }"></ng-container>
       </mat-tab>
     </ng-container>
   </mat-tab-group>
 </div>
 
-<ng-template #userTable let-context>
-  <mat-table [dataSource]="context?.data">
-
-    <!-- <div *ngFor="let item of context">
-      {{ item.name }}
-    </div> -->
-
+<ng-template #userTable let-data="data">
+  <mat-table [dataSource]="data">
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <div class="table-link" (click)="openDetail(element)">
+        <div class="table-link" [routerLink]="['/users', element.id]">
           {{ element.name }}
         </div>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef>Email / Phone</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
       <mat-cell *matCellDef="let element">
         <span class="text-ellipsis">
-          <span *ngIf="element.email">{{ element.email }}</span>
-          <span *ngIf="element.phoneNumber">{{ element.phoneNumber }}</span>
+          {{ element.auth.email }}
         </span>
       </mat-cell>
     </ng-container>
@@ -52,16 +43,9 @@
     <ng-container matColumnDef="status">
       <mat-header-cell *matHeaderCellDef class="flex justify-center"> Status </mat-header-cell>
       <mat-cell *matCellDef="let element" class="flex justify-center">
-        <ng-container *ngIf="element as data">
-          <button mat-icon-button [matMenuTriggerFor]="menu">
-            <mat-icon>arrow_drop_down</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu">
-            <button *ngFor="let status of statusList" mat-menu-item (click)="update(status, element)">
-              {{ status }}
-            </button>
-          </mat-menu>
-        </ng-container>
+        <button mat-icon-button (click)="openStatusForm(element)">
+          <mat-icon>badge</mat-icon>
+        </button>
       </mat-cell>
     </ng-container>
 

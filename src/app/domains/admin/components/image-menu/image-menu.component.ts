@@ -59,7 +59,7 @@ export class ImageMenuComponent implements OnInit {
     })
     this.printedMenu
       .pipe(
-        tap((value) => {
+        tap(value => {
           if (value) {
             this.print()
           }

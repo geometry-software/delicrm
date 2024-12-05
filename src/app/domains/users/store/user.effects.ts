@@ -6,7 +6,6 @@ import {
   concatMap,
   forkJoin,
   map,
-  mergeMap,
   of,
   switchMap,
   take,
@@ -14,7 +13,7 @@ import {
   withLatestFrom,
   zip,
 } from 'rxjs'
-import { AuthActions as ItemActions } from './user.actions'
+import { UserActions as ItemActions } from './user.actions'
 import { Router } from '@angular/router'
 import { Action, Store } from '@ngrx/store'
 import { getItemsPageAmount, getResetRequestToTheFirstPage } from './user.selectors'
@@ -24,6 +23,8 @@ import { AppUser } from '../utils/user.model'
 import { formatAuthUser } from '../utils/format-auth-user'
 import { ConfirmationService } from '../../../shared/services/confirmation.service'
 import { formatRequest } from '../../../shared/utils/format-request'
+import { UserActions } from '../store/user.actions'
+import { LoadingStatus } from '../../../shared/models/loading-status'
 
 @Injectable()
 export class UserEffects implements OnInitEffects {
@@ -45,59 +46,29 @@ export class UserEffects implements OnInitEffects {
   readonly defaultCreateStatus = UserConstants.defaultCreateStatus
   readonly defaultFirstPageRequest = UserConstants.defaultFirstPageRequest
 
-  // verifyAuthUser = createEffect(() =>
-  //   this.actions.pipe(
-  //     ofType(ItemActions.verifyAuthUser),
-  //     mergeMap(({ additionalUserInfo, uid }) => {
-  //       console.log(uid)
+  updateUserStatus = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.updateUserStatus),
+      tap(() => this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.Loading }))),
+      switchMap(({ id, status }) => this.userService.updateStatus(status, id).pipe(
+        map(() => ItemActions.updateUserStatusSuccess()),
+        catchError(error => of(
+          ItemActions.notifyError({ error, errorType: 'edit' }),
+          UserActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed })
+        )))))
+  )
 
-  //       const item = formatAuthUser(additionalUserInfo.profile, uid, additionalUserInfo.providerId)
-  //       if (additionalUserInfo.isNewUser) {
-  //         return this.userService.create(item, uid).pipe(
-  //           map(() => ItemActions.createUserSuccess({ item })),
-  //           catchError((error) => of(ItemActions.notifyError({ error, errorType: 'create' })))
-  //         )
-  //       } else {
-  //         console.log('has auth')
-  //         return of()
-  //         // return this.userService.update<AuthUser>({ status: 'requested' }, uid).pipe(
-  //         //   map(() => {
-  //         //     return ItemActions.updateUserSuccess({ item })
-  //         //   }),
-  //         //   catchError((error) => of(ItemActions.notifyError({ error, errorType: 'create' })))
-  //         // )
-  //       }
-  //     })
-  //   )
-  // )
-
-  // updateUserStatus = createEffect(() =>
-  //   this.actions.pipe(
-  //     ofType(ItemActions.updateUserStatus),
-  //     mergeMap(({ item, status }) =>
-  //       this.confirmationService.defaultConfirm(this.confirmationTitleStart + status + this.confirmationTitleEnd, item.name).pipe(
-  //         mergeMap(() =>
-  //           this.userService.updateStatus(status, item.uid).pipe(
-  //             map(() => ItemActions.updateUserStatusSuccess()),
-  //             catchError((error) => of(ItemActions.notifyError({ error, errorType: 'edit' })))
-  //           )
-  //         )
-  //       )
-  //     )
-  //   )
-  // )
-
-  // updateUserStatusSuccess = createEffect(() =>
-  //   this.actions.pipe(
-  //     ofType(ItemActions.updateUserStatusSuccess),
-  //     mergeMap(() => of(ItemActions.getUsersTotalAmount(), ItemActions.getItems({ request: this.defaultFirstPageRequest })))
-  //   )
-  // )
+  updateUserStatusSuccess = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.updateUserStatusSuccess),
+      switchMap(() => of(ItemActions.getItems({ request: this.defaultFirstPageRequest }))))
+    // switchMap(() => of(ItemActions.getUsersTotalAmount(), ItemActions.getItems({ request: this.defaultFirstPageRequest }))))
+  )
 
   updateItem = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.updateItem),
-      mergeMap(({ item, id }) =>
+      switchMap(({ item, id }) =>
         this.userService.update(item, id).pipe(
           map(() => {
             // TODO: add notification through service
@@ -105,7 +76,7 @@ export class UserEffects implements OnInitEffects {
             this.router.navigate([this.moduleUrl, id])
             return ItemActions.updateItemSuccess()
           }),
-          catchError((error) => of(ItemActions.notifyError({ error, errorType: 'edit' })))
+          catchError(error => of(ItemActions.notifyError({ error, errorType: 'edit' })))
         )
       )
     )
@@ -114,10 +85,10 @@ export class UserEffects implements OnInitEffects {
   getItem = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.getItem),
-      mergeMap(({ id }) =>
+      switchMap(({ id }) =>
         this.userService.getById(id).pipe(
           map((item) => ItemActions.getItemSuccess({ item })),
-          catchError((error) => of(ItemActions.notifyError({ error, errorType: 'create' })))
+          catchError(error => of(ItemActions.notifyError({ error, errorType: 'create' })))
         )
       )
     )
@@ -129,7 +100,7 @@ export class UserEffects implements OnInitEffects {
       withLatestFrom(this.store.select(getResetRequestToTheFirstPage), this.store.select(getItemsPageAmount)),
       switchMap(([{ request }, resetRequest, pageAmount]) => {
         const { size, item, query, order, status } = formatRequest(request, resetRequest)
-        console.log(formatRequest(request, resetRequest));
+        // console.log(formatRequest(request, resetRequest));
 
         switch (query) {
           case 'first':
@@ -150,7 +121,7 @@ export class UserEffects implements OnInitEffects {
                   listLabelAmount,
                 })
               ),
-              catchError((error) => of(ItemActions.notifyError({ error, errorType: 'edit' })))
+              catchError(error => of(ItemActions.notifyError({ error, errorType: 'edit' })))
             )
           case 'next':
             return this.userService
@@ -163,7 +134,7 @@ export class UserEffects implements OnInitEffects {
                     size: pageAmount,
                   })
                 ),
-                catchError((error) => of(ItemActions.notifyError({ error, errorType: 'list' })))
+                catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
               )
           case 'previous':
             return this.userService
@@ -176,7 +147,7 @@ export class UserEffects implements OnInitEffects {
                     size: pageAmount,
                   })
                 ),
-                catchError((error) => of(ItemActions.notifyError({ error, errorType: 'list' })))
+                catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
               )
           default:
             return of(ItemActions.getItemsSuccess({ items: null, query: 'custom' }))
@@ -188,7 +159,7 @@ export class UserEffects implements OnInitEffects {
   getItemsBySearchQuery = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.getItemsBySearchQuery),
-      mergeMap(({ request }) =>
+      switchMap(({ request }) =>
         this.userService.getAllByQuery(request.key, request.value).pipe(
           map((items) =>
             ItemActions.getItemsSuccess({
@@ -197,19 +168,19 @@ export class UserEffects implements OnInitEffects {
               total: items.length,
             })
           ),
-          catchError((error) => of(ItemActions.notifyError({ error, errorType: 'list' })))
+          catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
         )
       )
     )
   )
 
-  notifyError = createEffect(
-    () =>
-      this.actions.pipe(
-        ofType(ItemActions.notifyError),
-        tap(({ error }) => console.error(error))
-        // mergeMap(() => of(this.notificationService.notifyError()))
-      ),
+  notifyError = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.notifyError),
+      tap(({ error }) => console.error(error))
+      // switchMap(() => of(this.notificationService.notifyError()))
+    ),
     { dispatch: false }
   )
+
 }

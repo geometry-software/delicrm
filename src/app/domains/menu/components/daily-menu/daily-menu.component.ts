@@ -116,7 +116,7 @@ export class DailyMenuComponent implements OnInit {
         plate: item,
       },
     })
-    dialog.afterClosed().subscribe((value) => {
+    dialog.afterClosed().subscribe(value => {
       if (value == 'add') {
         this.addItem(item)
         this.cdr.markForCheck()
@@ -138,7 +138,7 @@ export class DailyMenuComponent implements OnInit {
           plate: item,
         },
       })
-      dialog.afterClosed().subscribe((value) => {
+      dialog.afterClosed().subscribe(value => {
         if (value == 'remove') {
           switch (item.type) {
             case 'Starters (fruit or soup)':

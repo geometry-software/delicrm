@@ -36,7 +36,7 @@ export class RecipeEffects {
             this.router.navigate([this.moduleUrl, id])
             return ItemActions.createItemSuccess()
           }),
-          catchError((error) => of(ItemActions.notifyError({ error, errorType: 'create' })))
+          catchError(error => of(ItemActions.notifyError({ error, errorType: 'create' })))
         )
       )
     )
@@ -53,7 +53,7 @@ export class RecipeEffects {
             this.router.navigate([this.moduleUrl, id])
             return ItemActions.updateItemSuccess()
           }),
-          catchError((error) => of(ItemActions.notifyError({ error, errorType: 'edit' })))
+          catchError(error => of(ItemActions.notifyError({ error, errorType: 'edit' })))
         )
       )
     )
@@ -67,7 +67,7 @@ export class RecipeEffects {
           mergeMap(() =>
             this.entityService.delete(id).pipe(
               map(() => ItemActions.deleteItemSuccess()),
-              catchError((error) => of(ItemActions.notifyError({ error, errorType: 'edit' })))
+              catchError(error => of(ItemActions.notifyError({ error, errorType: 'edit' })))
             )
           )
         )
@@ -90,7 +90,7 @@ export class RecipeEffects {
       mergeMap(({ id }) =>
         this.entityService.getById(id).pipe(
           map((item) => ItemActions.getItemSuccess({ item })),
-          catchError((error) => of(ItemActions.notifyError({ error, errorType: 'create' })))
+          catchError(error => of(ItemActions.notifyError({ error, errorType: 'create' })))
         )
       )
     )
@@ -110,7 +110,7 @@ export class RecipeEffects {
                   .getTotalByStatus(status)
                   .pipe(map((total) => ItemActions.getItemsSuccess({ items, query: 'all', total })))
               ),
-              catchError((error) => of(ItemActions.notifyError({ error, errorType: 'list' })))
+              catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
             )
           case 'first':
             return this.entityService.getFirstPage(order, size, status).pipe(
@@ -119,21 +119,21 @@ export class RecipeEffects {
                   .getTotalByStatus(status)
                   .pipe(map((total) => ItemActions.getItemsSuccess({ items, query: 'first', total })))
               ),
-              catchError((error) => of(ItemActions.notifyError({ error, errorType: 'list' })))
+              catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
             )
           case 'next':
             return this.entityService
               .getNextPage<typeof order.key>(order, size, status, item[order.key])
               .pipe(
                 map((items) => ItemActions.getItemsSuccess({ items, query: 'next', size: pageAmount })),
-                catchError((error) => of(ItemActions.notifyError({ error, errorType: 'list' })))
+                catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
               )
           case 'previous':
             return this.entityService
               .getPreviousPage<typeof order.key>(order, size, status, item[order.key])
               .pipe(
                 map((items) => ItemActions.getItemsSuccess({ items, query: 'previous', size: pageAmount })),
-                catchError((error) => of(ItemActions.notifyError({ error, errorType: 'list' })))
+                catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
               )
           case 'custom':
             return of(ItemActions.getItemsSuccess({ items: null, query: 'custom' }))
@@ -148,7 +148,7 @@ export class RecipeEffects {
       mergeMap(({ request }) =>
         this.entityService.getAllByQuery(request.key, request.value).pipe(
           map((items) => ItemActions.getItemsSuccess({ items, query: 'custom', total: items.length })),
-          catchError((error) => of(ItemActions.notifyError({ error, errorType: 'list' })))
+          catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
         )
       )
     )

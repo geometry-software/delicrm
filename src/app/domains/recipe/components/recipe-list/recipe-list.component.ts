@@ -84,6 +84,6 @@ export class RecipeListComponent implements OnInit {
   }
 
   redirectToDetail(id: string) {
-    this.router.navigate([`/{this.moduleUrl}` + `/{id}`])
+    this.router.navigate([`/${this.moduleUrl}` + `/${id}`])
   }
 }

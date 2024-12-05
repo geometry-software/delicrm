@@ -44,8 +44,8 @@ export class ExpensesListComponent implements OnInit {
       })
       .afterClosed()
       .pipe(
-        filter((value) => !!value),
-        tap((value) => this.expensesService.createDocument(value))
+        filter(value => !!value),
+        tap(value => this.expensesService.createDocument(value))
       )
       .subscribe()
   }
