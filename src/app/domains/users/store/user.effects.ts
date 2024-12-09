@@ -19,8 +19,7 @@ import { Action, Store } from '@ngrx/store'
 import { getItemsPageAmount, getResetRequestToTheFirstPage } from './user.selectors'
 import { UserService } from '../services/user.service'
 import { UserConstants } from '../utils/user.constants'
-import { AppUser } from '../utils/user.model'
-import { formatAuthUser } from '../utils/format-auth-user'
+import { User } from '../utils/user.model'
 import { ConfirmationService } from '../../../shared/services/confirmation.service'
 import { formatRequest } from '../../../shared/utils/format-request'
 import { UserActions } from '../store/user.actions'
@@ -28,6 +27,7 @@ import { LoadingStatus } from '../../../shared/models/loading-status'
 
 @Injectable()
 export class UserEffects implements OnInitEffects {
+
   constructor(
     private router: Router,
     private actions: Actions,
@@ -35,10 +35,6 @@ export class UserEffects implements OnInitEffects {
     private userService: UserService,
     private confirmationService: ConfirmationService
   ) { }
-
-  ngrxOnInitEffects(): Action {
-    return ItemActions.getItems({ request: this.defaultFirstPageRequest });
-  }
 
   readonly moduleUrl = UserConstants.moduleUrl
   readonly confirmationTitleStart = UserConstants.confirmationTitleStart
@@ -179,8 +175,11 @@ export class UserEffects implements OnInitEffects {
       ofType(ItemActions.notifyError),
       tap(({ error }) => console.error(error))
       // switchMap(() => of(this.notificationService.notifyError()))
-    ),
-    { dispatch: false }
+    ), { dispatch: false }
   )
+
+  ngrxOnInitEffects(): Action {
+    return ItemActions.getItems({ request: this.defaultFirstPageRequest });
+  }
 
 }

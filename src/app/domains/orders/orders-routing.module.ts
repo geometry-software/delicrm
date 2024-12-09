@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router'
 import { OrderListComponent } from './components/order-list/order-list.component'
 import { OrderDetailComponent } from './components/order-detail/order-detail.component'
 
-const ROUTES: Routes = [
+const routes: Routes = [
   {
     path: '',
     component: OrderListComponent,
@@ -15,6 +15,6 @@ const ROUTES: Routes = [
 ]
 
 @NgModule({
-  imports: [RouterModule.forChild(ROUTES)],
+  imports: [RouterModule.forChild(routes)],
 })
-export class WaiterRoutingModule {}
+export class WaiterRoutingModule { }

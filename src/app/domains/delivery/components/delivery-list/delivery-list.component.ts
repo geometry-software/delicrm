@@ -4,14 +4,10 @@ import { MatDialog } from '@angular/material/dialog'
 import { MatTableDataSource } from '@angular/material/table'
 import { DeliveryService } from '../../services/delivery.service'
 import { Observable, combineLatest, of, shareReplay, switchMap, tap } from 'rxjs'
-
-import { FormControl } from '@angular/forms'
-
-import { Sort } from '@angular/material/sort'
 import { Store } from '@ngrx/store'
-import { Order, OrderStatusValue } from '../../../menu/utils/waiter.model'
+import { Order, OrderStatusValue } from '../../../menu/utils/menu.model'
 import { AuthService } from '../../../../auth/services/auth.service'
-import { AppUser } from '../../../users/utils/user.model'
+import { User } from '../../../users/utils/user.model'
 import { DeliveryDetailComponent } from '../delivery-detail/delivery-detail.component'
 
 @Component({
@@ -21,13 +17,23 @@ import { DeliveryDetailComponent } from '../delivery-detail/delivery-detail.comp
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeliveryListComponent {
+
+  constructor(
+    private store: Store,
+    private dialog: MatDialog,
+    private router: Router,
+    private deliveryService: DeliveryService,
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
+  ) { }
+
   datasource
   displayedColumns = ['user', 'plates']
 
   orders = new Array()
   delivery: Order = {}
   deliveryId
-  user: AppUser
+  user: User
 
   // PAGE_ITEMS_SIZE = 20
   // firstItem
@@ -45,15 +51,6 @@ export class DeliveryListComponent {
     active: 'timestamp',
     direction: 'desc',
   }
-
-  constructor(
-    private store: Store,
-    private dialog: MatDialog,
-    private router: Router,
-    private deliveryService: DeliveryService,
-    private cdr: ChangeDetectorRef,
-    private authService: AuthService
-  ) { }
 
   // ngOnInit() {
   //   combineListControls(this.paginationControl, this.sizeControl, this.store)
@@ -169,15 +166,17 @@ export class DeliveryListComponent {
       timestamp: new Date(),
     })
     delete this.delivery.id
-    this.deliveryService
-      .createOrder(this.delivery)
-      .then(value =>
-        this.deliveryService.confirmDelivery(this.deliveryId, value.id).then(() => this.router.navigate(['/orders', value.id]))
-      )
+    // this.deliveryService
+    //   .createOrder(this.delivery)
+    //   .then(value =>
+    //     this.deliveryService.confirmDelivery(this.deliveryId, value.id).then(() => this.router.navigate(['/orders', value.id]))
+    //   )
   }
 
   reject(): void {
-    this.deliveryService.rejectDelivery(this.deliveryId, 'cause of').then(() => this.preloadTabData(2))
+    this.deliveryService.rejectDelivery(this.deliveryId, 'cause of').pipe(
+      tap(() => this.preloadTabData(2))
+    )
   }
 
   // showOrder(id) {

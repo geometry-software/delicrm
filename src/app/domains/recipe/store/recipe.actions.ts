@@ -1,6 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
-import { Recipe, RecipeStatus } from '../utils/recipe.model'
-import { RecipeConstants } from '../utils/recipe.constants'
+import { Recipe, RecipeStatus } from '../models/recipe.model'
+import { RecipeConstants } from '../models/recipe.constants'
 import { FilterRequest, RepositoryEntityAction, RepositoryRequest, RepositoryRequestQuery } from '../../../shared/repository/repository.model';
 
 export const RecipeActions = createActionGroup({

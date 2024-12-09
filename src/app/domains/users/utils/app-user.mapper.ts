@@ -1,8 +1,8 @@
-import { AuthUser } from "../../../auth/models/auth.model"
+import { Auth } from "../../../auth/models/auth.model"
 import { getCurrentUnixTime } from "../../../shared/utils/format-unix-time"
-import { AppUser, UserRole } from "./user.model"
+import { User, UserRole } from "./user.model"
 
-export const mapAppUser = (auth: AuthUser, role: UserRole): AppUser => ({
+export const mapAppUser = (auth: Auth, role: UserRole): User => ({
     auth,
     role,
     name: auth.displayName,

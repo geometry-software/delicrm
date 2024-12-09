@@ -172,7 +172,7 @@
         </div>
 
         <div class="card mt-[20px]" *ngIf="order.alacarte?.length">
-          <h2>A la carte</h2>
+          <h2> {{ alaCarteLabel }} </h2>
           <ol>
             <li *ngFor="let item of order.alacarte">
               {{ item.name }}

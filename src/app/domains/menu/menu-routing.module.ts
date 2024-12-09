@@ -5,7 +5,7 @@ import { OrderCheckoutComponent } from './components/order-checkout/order-checko
 import { MenuLayoutComponent } from './components/menu-layout/menu-layout.component'
 import { ClientOrderComponent } from './components/client-order/client-order.component'
 
-const ROUTES: Routes = [
+const routes: Routes = [
   {
     path: '',
     component: MenuLayoutComponent,
@@ -27,6 +27,6 @@ const ROUTES: Routes = [
 ]
 
 @NgModule({
-  imports: [RouterModule.forChild(ROUTES)],
+  imports: [RouterModule.forChild(routes)],
 })
-export class WaiterRoutingModule {}
+export class WaiterRoutingModule { }

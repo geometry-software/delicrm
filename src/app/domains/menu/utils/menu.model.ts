@@ -1,5 +1,5 @@
-import { Recipe } from '../../recipe/utils/recipe.model'
-import { AppUser } from '../../users/utils/user.model'
+import { Recipe } from '../../recipe/models/recipe.model'
+import { User } from '../../users/utils/user.model'
 
 export class Order {
   id?: string
@@ -18,7 +18,7 @@ export class Order {
 }
 
 export class OrderStatus {
-  user?: AppUser
+  user?: User
   status?: OrderStatusValue
   timestamp?: Date
 }

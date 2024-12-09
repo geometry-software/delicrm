@@ -10,7 +10,7 @@ import { TranslateModule } from '@ngx-translate/core'
 import { SharedModule } from '../../shared/shared.module'
 import { RecipeLayoutComponent } from './components/recipe-layout/recipe-layout.component'
 import { StoreModule } from '@ngrx/store'
-import { RecipeConstants } from './utils/recipe.constants'
+import { RecipeConstants } from './models/recipe.constants'
 import { reducer } from './store/recipe.reducer'
 import { RecipeEntityService } from './services/recipe.service'
 import { EffectsModule } from '@ngrx/effects'
@@ -30,4 +30,4 @@ import { RecipeEffects } from './store/recipe.effects'
   ],
   providers: [RecipeEntityService],
 })
-export class RecipeModule {}
+export class RecipeModule { }

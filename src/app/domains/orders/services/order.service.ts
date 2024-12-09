@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/compat/firestore'
 import { map } from 'rxjs/operators'
-import { Order } from '../../menu/utils/waiter.model'
+import { Order } from '../../menu/utils/menu.model'
 
 @Injectable()
 export class OrderService {

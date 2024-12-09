@@ -44,6 +44,12 @@ export const userMenuOptions: Array<MenuOption> = [
     roles: ['admin', 'waiter'],
   },
   {
+    title: 'Clients',
+    icon: 'face',
+    link: 'clients',
+    roles: ['admin', 'waiter'],
+  },
+  {
     title: 'Users',
     icon: 'people',
     link: 'users',

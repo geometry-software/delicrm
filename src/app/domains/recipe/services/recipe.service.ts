@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core'
 import { EMPTY, Observable, delay } from 'rxjs'
-import { RecipeConstants } from '../utils/recipe.constants'
-import { Recipe, RecipeStatus } from '../utils/recipe.model'
+import { RecipeConstants } from '../models/recipe.constants'
+import { Recipe, RecipeStatus } from '../models/recipe.model'
 import { OrderRequest } from '../../../shared/repository/repository.model'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 

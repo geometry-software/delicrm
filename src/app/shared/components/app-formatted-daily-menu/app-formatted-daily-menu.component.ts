@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
-import { RecipeProtein } from '../../../domains/recipe/utils/recipe.model'
+import { RecipeProtein } from '../../../domains/recipe/models/recipe.model'
+import { setProteinImage } from '../../utils/protein-image'
 
 @Component({
   selector: 'app-formatted-daily-menu',
@@ -20,7 +21,7 @@ export class AppFormattedDailyMenuComponent {
   @Output()
   addItem = new EventEmitter()
 
-  setProteinImage = (protein: RecipeProtein) => '/assets/images/' + protein + '.png'
+  setProteinImage = setProteinImage
 
   open(item, index) {
     this.openDetail.next({ item: item, index: index })
@@ -29,4 +30,5 @@ export class AppFormattedDailyMenuComponent {
   add(item) {
     this.addItem.next(item)
   }
+
 }

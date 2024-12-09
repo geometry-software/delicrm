@@ -1,7 +1,7 @@
 import { AuthStatus } from '../../../auth/models/auth.model'
 import { PaginationRequest } from '../../../shared/models/pagination.model'
 import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from '../../../shared/repository/repository.model'
-import { AppUser } from './user.model'
+import { User } from './user.model'
 import { Sort } from '@angular/material/sort'
 
 export abstract class UserConstants {
@@ -29,7 +29,7 @@ export abstract class UserConstants {
   static readonly confirmationTitleStart = 'Move a user to '
   static readonly confirmationTitleEnd = '?'
   static readonly backToListButton = 'RECIPES.NAVBAR'
-  static readonly defaultPaginationControlValue: PaginationRequest<AppUser> = {
+  static readonly defaultPaginationControlValue: PaginationRequest<User> = {
     query: 'first',
     item: null,
   }
@@ -38,7 +38,7 @@ export abstract class UserConstants {
   }
   static readonly defaultOrderControlValue: Sort = { active: 'createdAt', direction: 'desc' }
   static readonly defaultRequestStatus: AuthStatus = 'requested'
-  static readonly defaultFirstPageRequest: RepositoryRequest<AppUser, AuthStatus> = {
+  static readonly defaultFirstPageRequest: RepositoryRequest<User, AuthStatus> = {
     pagination: this.defaultPaginationControlValue,
     order: {
       key: this.defaultOrderControlValue.active,

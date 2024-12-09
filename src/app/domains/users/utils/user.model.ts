@@ -1,12 +1,12 @@
-import { AuthStatus, AuthUser } from '../../../auth/models/auth.model'
+import { AuthStatus, Auth } from '../../../auth/models/auth.model'
 import { UserConstants } from './user.constants'
 
-export interface AppUser {
-  auth: AuthUser
+export interface User {
+  auth: Auth
   name: string
   role: UserRole
-  locale?: string
-  createdAt?: number,
+  locale: string
+  createdAt: number
   status: AuthStatus
 }
 
@@ -26,4 +26,3 @@ export interface UserStatusTotalResponse {
 export type UserLanguage = 'en' | 'es' | 'pt'
 
 export type UserRole = 'waiter' | 'delivery' | 'admin' | 'client'
-export type User = 'waiter' | 'delivery' | 'admin' | 'client'

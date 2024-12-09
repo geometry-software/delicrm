@@ -3,8 +3,9 @@ import { ActivatedRoute } from '@angular/router'
 import { pulseOnEnterAnimation } from 'angular-animations'
 
 import { CheckoutService } from '../../services/checkout.service'
-import { Order } from '../../utils/waiter.model'
-import { RecipeProtein } from '../../../recipe/utils/recipe.model'
+import { Order } from '../../utils/menu.model'
+import { RecipeProtein } from '../../../recipe/models/recipe.model'
+import { setProteinImage } from '../../../../shared/utils/protein-image'
 
 @Component({
   selector: 'app-client-order',
@@ -16,7 +17,7 @@ import { RecipeProtein } from '../../../recipe/utils/recipe.model'
 export class ClientOrderComponent implements OnInit {
   item: Order
 
-  setProteinImage = (protein: RecipeProtein) => '/assets/images/' + protein + '.png'
+  setProteinImage = setProteinImage
 
   constructor(private route: ActivatedRoute, private checkoutService: CheckoutService, private cdr: ChangeDetectorRef) { }
 

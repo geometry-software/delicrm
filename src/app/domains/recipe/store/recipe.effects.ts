@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core'
-import { Actions, createEffect, ofType } from '@ngrx/effects'
+import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects'
 import { catchError, map, mergeMap, of, switchMap, tap, withLatestFrom } from 'rxjs'
 import { RecipeActions as ItemActions } from './recipe.actions'
 import { RecipeEntityService } from '../services/recipe.service'
-import { Recipe } from '../utils/recipe.model'
+import { Recipe } from '../models/recipe.model'
 import { Router } from '@angular/router'
-import { RecipeConstants } from '../utils/recipe.constants'
+import { RecipeConstants } from '../models/recipe.constants'
 import { formatRequest } from '../../../shared/utils/format-request'
-import { Store } from '@ngrx/store'
+import { Action, Store } from '@ngrx/store'
 import { getItemsPageAmount, getResetRequestToTheFirstPage } from './recipe.selectors'
 import { ConfirmationService } from '../../../shared/services/confirmation.service'
 
 @Injectable()
-export class RecipeEffects {
+export class RecipeEffects implements OnInitEffects {
+
   constructor(
     private router: Router,
     private actions: Actions,
@@ -24,6 +25,7 @@ export class RecipeEffects {
   readonly moduleUrl = RecipeConstants.moduleUrl
   readonly deleteTitle = RecipeConstants.deleteTitle
   readonly defaultCreateStatus = RecipeConstants.defaultCreateStatus
+  readonly defaultFirstPageRequest = RecipeConstants.defaultFirstPageRequest
 
   createItem = createEffect(() =>
     this.actions.pipe(
@@ -154,13 +156,17 @@ export class RecipeEffects {
     )
   )
 
-  notifyError = createEffect(
-    () =>
-      this.actions.pipe(
-        ofType(ItemActions.notifyError),
-        tap(({ error }) => console.error(error))
-        // mergeMap(() => of(this.notificationService.notifyError()))
-      ),
+  notifyError = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.notifyError),
+      tap(({ error }) => console.error(error))
+      // mergeMap(() => of(this.notificationService.notifyError()))
+    ),
     { dispatch: false }
   )
+
+
+  ngrxOnInitEffects(): Action {
+    return ItemActions.getItems({ request: this.defaultFirstPageRequest });
+  }
 }

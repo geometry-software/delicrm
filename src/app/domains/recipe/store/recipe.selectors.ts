@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store'
-import { State } from './recipe.reducer'
-import { RecipeConstants } from '../utils/recipe.constants'
+import { RecipeConstants } from '../models/recipe.constants'
+import { State } from './recipe.state'
 
 const storeFeatureKey: string = RecipeConstants.storeFeatureKey
 const paginationTitle: string = RecipeConstants.paginationTitle
@@ -17,8 +17,8 @@ export const getPaginationItem = createSelector(getItems, (state) => ({
   last: state?.length ? [...state].pop() : null,
 }))
 export const getItemLoadingState = createSelector(getState, (state) => state.item)
-export const getItemsLoadingState = createSelector(getState, (state) => state)
-export const getLayoutLoading = createSelector(getItemLoadingState, getItemsLoadingState, (item, items) => item || items)
+export const getLoadingStatus = createSelector(getState, (state) => state.loadingStatus)
+// export const getLayoutLoading = createSelector(getItemLoadingState, getItemsLoadingState, (item, items) => item || items)
 export const getTotal = createSelector(getState, (state) => state.items.total)
 export const getCurrent = createSelector(getState, (state) => state.items?.current)
 export const getListResponseType = createSelector(getState, (state) => state.listResponseType)

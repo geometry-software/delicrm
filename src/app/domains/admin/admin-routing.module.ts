@@ -6,7 +6,7 @@ import { CashDeskComponent } from './components/cash-desk/cash-desk.component'
 import { BoardLayoutComponent } from './components/board-layout/board-layout.component'
 import { ImageMenuComponent } from './components/image-menu/image-menu.component'
 
-const ROUTES: Routes = [
+const routes: Routes = [
   {
     path: 'board',
     component: BoardLayoutComponent,
@@ -37,6 +37,6 @@ const ROUTES: Routes = [
 ]
 
 @NgModule({
-  imports: [RouterModule.forChild(ROUTES)],
+  imports: [RouterModule.forChild(routes)],
 })
-export class AdminRoutingModule {}
+export class AdminRoutingModule { }

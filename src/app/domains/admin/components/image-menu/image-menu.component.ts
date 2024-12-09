@@ -10,7 +10,7 @@ import domtoimage from 'dom-to-image'
 import { Store } from '@ngrx/store'
 import { printMenu } from '../../store/admin.selectors'
 import { AdminActions as ItemActions } from '../../store/admin.actions'
-import { Order } from '../../../menu/utils/waiter.model'
+import { Order } from '../../../menu/utils/menu.model'
 @Component({
   selector: 'app-image-menu',
   templateUrl: './image-menu.component.html',

@@ -11,11 +11,12 @@ import {
   fadeInUpOnEnterAnimation,
   fadeInOnEnterAnimation,
 } from 'angular-animations'
-import { CheckoutOrder, DeliveryTime, Order, OrderDelivery, OrderType } from '../../utils/waiter.model'
+import { CheckoutOrder, DeliveryTime, Order, OrderDelivery, OrderType } from '../../utils/menu.model'
 import { MenuService } from '../../services/menu.service'
-import { Recipe } from '../../../recipe/utils/recipe.model'
-import { AppUser } from '../../../users/utils/user.model'
+import { Recipe } from '../../../recipe/models/recipe.model'
+import { User } from '../../../users/utils/user.model'
 import { UserService } from '../../../users/services/user.service'
+import { MenuConstants } from '../../utils/menu.constants'
 
 @Component({
   selector: 'app-order-checkout',
@@ -31,6 +32,20 @@ import { UserService } from '../../../users/services/user.service'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderCheckoutComponent implements OnInit {
+
+  constructor(
+    private checkoutService: CheckoutService,
+    private menuService: MenuService,
+    private userService: UserService,
+    private navRouter: Router,
+    private formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef
+  ) { }
+
+  readonly appUser = this.userService.appUser
+  readonly dailyMenuLabel = MenuConstants.dailyMenuLabel
+  readonly alaCarteLabel = MenuConstants.alaCarteLabel
+
   plates: Array<any> = new Array()
   extra: any
   total: number = 0
@@ -81,7 +96,7 @@ export class OrderCheckoutComponent implements OnInit {
   deliveryAmount: number = 0
 
   orderType: OrderType = 'table'
-  user: AppUser
+  user: User
   orderId: string
 
   tablePayment: FormControl = new FormControl(null, Validators.required)
@@ -97,15 +112,6 @@ export class OrderCheckoutComponent implements OnInit {
   isServiceUser: boolean
   isClientUser: boolean
   isTemplateReady: boolean
-
-  constructor(
-    private checkoutService: CheckoutService,
-    private menuService: MenuService,
-    private userService: UserService,
-    private navRouter: Router,
-    private formBuilder: FormBuilder,
-    private cdr: ChangeDetectorRef
-  ) { }
 
   ngOnInit() {
     this.initOrderDetails()
@@ -285,7 +291,7 @@ export class OrderCheckoutComponent implements OnInit {
     // this.order.timestamp = new Date()
   }
 
-  initUserType(user: AppUser): void {
+  initUserType(user: User): void {
     this.user = user
     // this.isServiceUser = this.user.role === 'admin' || this.user.role === 'delivery' || this.user.role === 'waiter'
     // this.isClientUser = this.user.role === 'client'

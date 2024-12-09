@@ -1,4 +1,7 @@
 <mat-toolbar>
+  <div class="progress-bar">
+    <mat-progress-bar mode="indeterminate" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></mat-progress-bar>
+  </div>
   <mat-toolbar-row [ngClass]="responsiveLayout.isDesktop ? 'mat-toolbar-desktop' : 'mat-toolbar-mobile'">
     <button [ngStyle]="{ 'margin-left': responsiveLayout.matToolbarRowButtonMargin }" mat-icon-button
       (click)="drawer.toggle()" onclick="this.blur()">
@@ -9,7 +12,7 @@
         <mat-icon class="menu-icon"> menu </mat-icon>
       </ng-template>
     </button>
-    <span class="toolbar-title">{{ toolBarTitleSignal() | translate }}</span>
+    <span class="toolbar-title text-ellipsis">{{ toolBarTitleSignal() | translate }}</span>
     <span class="toolbar-spacer"></span>
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon class="lang-icon">language</mat-icon>

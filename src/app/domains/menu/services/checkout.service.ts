@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore'
-import { Order } from '../utils/waiter.model'
+import { Order } from '../utils/menu.model'
 import { map } from 'rxjs'
 
 @Injectable()
@@ -8,7 +8,7 @@ export class CheckoutService {
   fsCollectionNameOrders = 'Orders'
   fsCollectionNameDelivery = 'Delivery'
 
-  constructor(private afs: AngularFirestore) {}
+  constructor(private afs: AngularFirestore) { }
 
   createDelivery(data) {
     return this.afs.collection(this.fsCollectionNameDelivery).add(data)

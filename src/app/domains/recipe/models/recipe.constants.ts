@@ -25,7 +25,7 @@ export abstract class RecipeConstants {
     size: 10,
   }
   static readonly defaultOrderControlValue: Sort = {
-    active: 'timestamp',
+    active: 'createdAt',
     direction: 'desc',
   }
   static readonly defaultRequestStatus = 'active'

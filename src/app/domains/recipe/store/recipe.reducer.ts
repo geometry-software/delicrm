@@ -1,32 +1,9 @@
 import { createReducer, on } from '@ngrx/store'
-import { Recipe } from '../utils/recipe.model'
+import { Recipe } from '../models/recipe.model'
 import { RecipeActions as ItemActions } from './recipe.actions'
 import { RepositoryRequesEntity, RepositoryResponseList } from '../../../shared/repository/repository.model'
 import { formatPaginationData } from '../../../shared/repository/repository.utils'
-
-export interface State {
-  item: RepositoryRequesEntity<Recipe>
-  itemId: string
-  items: RepositoryResponseList<Recipe>
-  listResponseType: any
-  resetRequest: boolean
-}
-
-const initialState: State = {
-  item: {
-    data: null,
-  },
-  itemId: null,
-  items: {
-    data: null,
-    total: null,
-    current: null,
-    size: null,
-    error: null,
-  },
-  listResponseType: null,
-  resetRequest: null,
-}
+import { initialState, State } from './recipe.state'
 
 export const reducer = createReducer<State>(
   initialState,

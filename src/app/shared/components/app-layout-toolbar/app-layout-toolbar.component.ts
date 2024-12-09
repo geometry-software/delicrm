@@ -32,10 +32,10 @@ export class AppLayoutToolbarComponent {
   @Output()
   deleteItem = new EventEmitter()
 
-  getCreateUrl = (): string => `{'/' + this.url + '/create'}`
-  getEditUrl = (): string => this.url + '/' + this.id + '/edit/'
-  getPlaceUrl = (): string => this.url + '/' + this.placeUrl
-  getPlaceEditUrl = (): string => this.url + '/' + this.placeUrl + '/' + this.id + '/edit/'
+  getCreateUrl = () => `${'/' + this.url + '/create'}`
+  getEditUrl = () => this.url + '/' + this.id + '/edit/'
+  getPlaceUrl = () => this.url + '/' + this.placeUrl
+  getPlaceEditUrl = () => this.url + '/' + this.placeUrl + '/' + this.id + '/edit/'
 
   ngOnChanges(c) {
     // console.log(c)

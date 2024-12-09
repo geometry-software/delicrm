@@ -16,7 +16,11 @@ export const routes: Routes = [
       },
       {
         path: 'users',
-        loadChildren: () => import('../domains/users/users.module').then((m) => m.UserModule),
+        loadChildren: () => import('../domains/users/users.module').then((m) => m.UsersModule),
+      },
+      {
+        path: 'clients',
+        loadChildren: () => import('../domains/clients/clients.module').then((m) => m.ClientsModule),
       },
       {
         path: 'admin',

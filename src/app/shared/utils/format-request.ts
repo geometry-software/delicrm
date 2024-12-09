@@ -1,4 +1,4 @@
-import { RepositoryRequest } from "../repository/repository.model";
+import { RepositoryRequest } from "../repository/repository.model"
 
 export const formatRequest = <T, S>(request: RepositoryRequest<T, S>, resetRequest: boolean) => ({
   size: request?.size.size,

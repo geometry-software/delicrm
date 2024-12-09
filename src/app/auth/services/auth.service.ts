@@ -6,7 +6,7 @@ import { AdminSignUpLoadingStatus } from '../models/loading-status'
 import { AuthConstants } from '../models/auth.constants'
 import { RepositoryService } from '../../shared/repository/repository.service'
 import { Router } from '@angular/router'
-import { AuthStatus, AuthUser } from '../models/auth.model'
+import { AuthStatus, Auth } from '../models/auth.model'
 import { mapAuthAdmin, mapAuthUser } from '../models/auth-user.mapper'
 
 @Injectable({
@@ -15,7 +15,7 @@ import { mapAuthAdmin, mapAuthUser } from '../models/auth-user.mapper'
 export class AuthService {
 
   constructor(
-    private repositoryService: RepositoryService<AuthUser, AuthStatus>,
+    private repositoryService: RepositoryService<Auth, AuthStatus>,
     private angularFireAuth: AngularFireAuth,
     private router: Router
   ) { }

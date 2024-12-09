@@ -3,5 +3,5 @@ export abstract class SharedConstants {
     width: '80%',
     height: '80%',
   }
-  static readonly tableLoadingOpacity = 0.3;
+  static readonly tableLoadingOpacity = 0.3
 }

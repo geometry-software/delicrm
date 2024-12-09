@@ -4,6 +4,11 @@
   }
 }
 
+.progress-bar {
+  position: absolute;
+  width: 100%;
+}
+
 mat-drawer-content {
   display: flex;
   overflow-y: hidden;
@@ -112,7 +117,7 @@ mat-drawer-container {
   font-weight: 400;
   font-size: 1.1em;
   color: #555;
-  margin-left: 10px;
+  margin-left: 5px;
   text-align: left;
 }
 

@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
-import { Order } from '../../../menu/utils/waiter.model'
+import { Order } from '../../../menu/utils/menu.model'
 
 @Component({
   selector: 'app-delivery-detail',

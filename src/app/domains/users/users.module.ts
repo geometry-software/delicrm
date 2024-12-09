@@ -33,4 +33,4 @@ import { UserStatusComponent } from './components/user-status/users-status.compo
     EffectsModule.forFeature([UserEffects]),
   ]
 })
-export class UserModule { }
+export class UsersModule { }

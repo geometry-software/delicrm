@@ -9,8 +9,8 @@ import { fadeInLeftOnEnterAnimation, fadeInOnEnterAnimation } from 'angular-anim
 import { STATUS_COLOR, STATUS_ICON } from '../../utils/waiter.constants'
 import { PrintService } from '../../../../shared/services/print.service'
 import { tap } from 'rxjs'
-import { Order, OrderStatus, OrderStatusValue, ProgressStatus } from '../../../menu/utils/waiter.model'
-import { AppUser } from '../../../users/utils/user.model'
+import { Order, OrderStatus, OrderStatusValue, ProgressStatus } from '../../../menu/utils/menu.model'
+import { User } from '../../../users/utils/user.model'
 import { UserService } from '../../../users/services/user.service'
 
 @Component({
@@ -21,6 +21,16 @@ import { UserService } from '../../../users/services/user.service'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderDetailComponent implements OnInit {
+
+  constructor(
+    private orderService: OrderService,
+    private router: ActivatedRoute,
+    private printService: PrintService,
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef,
+    private userService: UserService
+  ) { }
+
   tableNumber: string
   isOrderClosed: boolean
   isTableOrder: boolean
@@ -34,16 +44,7 @@ export class OrderDetailComponent implements OnInit {
   printButtonTitle: string = 'Print'
   statusColor = STATUS_COLOR
   statusIcon = STATUS_ICON
-  user: AppUser
-
-  constructor(
-    private orderService: OrderService,
-    private router: ActivatedRoute,
-    private printService: PrintService,
-    private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef,
-    private userService: UserService
-  ) { }
+  user: User
 
   ngOnInit() {
     this.initAuth()
@@ -57,11 +58,13 @@ export class OrderDetailComponent implements OnInit {
   }
 
   copyAddress(): void {
-    navigator.clipboard.writeText(this.order.category.delivery.address).then(() => this.openSnackBar('Dirección fue copiado'))
+    navigator.clipboard.writeText(this.order.category.delivery.address)
+      .then(() => this.openSnackBar('Dirección fue copiado'))
   }
 
   copyPhone(): void {
-    navigator.clipboard.writeText(this.order.category.delivery.phone).then(() => this.openSnackBar('Teléfono fue copiado'))
+    navigator.clipboard.writeText(this.order.category.delivery.phone)
+      .then(() => this.openSnackBar('Teléfono fue copiado'))
   }
 
   openSnackBar(message: string): void {

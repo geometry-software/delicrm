@@ -1,32 +1,27 @@
 import { Injectable } from '@angular/core'
-import { AngularFirestore } from '@angular/fire/compat/firestore'
-import { map } from 'rxjs/operators'
-import { Order, OrderStatusValue } from '../../menu/utils/waiter.model'
-import { Observable } from 'rxjs'
+import { Order, OrderStatusValue } from '../../menu/utils/menu.model'
+import { RepositoryService } from '../../../shared/repository/repository.service'
+import { MenuConstants } from '../../menu/utils/menu.constants'
 
 @Injectable()
 export class DeliveryService {
-  collectionNameDelivery = 'Delivery'
-  collectionNameOrders = 'Orders'
 
-  constructor(private afs: AngularFirestore) {}
+  constructor(private repositoryService: RepositoryService<Order, OrderStatusValue>) { }
 
-  createOrder(data) {
-    return this.afs.collection(this.collectionNameOrders).add(data)
-  }
+  private readonly collection = MenuConstants.collectionName
 
-  getNewDeliveries(status: OrderStatusValue): Observable<Order> {
-    return this.afs
-      .collection(this.collectionNameDelivery, (ref) => ref.where('status', '==', status))
-      .snapshotChanges()
-      .pipe(map((res: any) => res.map((res: any) => ({ id: res.payload.doc.id, ...res.payload.doc.data() }))))
+  getNewDeliveries(status: OrderStatusValue) {
+    return this.repositoryService.getAllDocumentsByStatus(this.collection, status)
   }
 
   confirmDelivery(id: string, orderId: string) {
-    return this.afs.collection(this.collectionNameDelivery).doc(id).update({ status: 'delivery', orderId })
+    return this.repositoryService.updateDocument(this.collection, { status: 'delivery' }, id)
+    // return this.afs.collection(this.collectionNameDelivery).doc(id).update({ status: 'delivery', orderId })
   }
 
   rejectDelivery(id: string, comment: string) {
-    return this.afs.collection(this.collectionNameDelivery).doc(id).update({ status: 'canceled', comment: comment })
+    return this.repositoryService.updateDocument(this.collection, { status: 'canceled', comment: comment }, id)
+    // return this.afs.collection(this.collectionNameDelivery).doc(id).update({ status: 'canceled', comment: comment })
   }
+
 }

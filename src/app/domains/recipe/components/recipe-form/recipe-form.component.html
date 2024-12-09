@@ -1,88 +1,80 @@
 <div class="pt-[10px]">
-  <ng-container *ngIf="getItem | async as data">
-    <div class="fixed-height-form">
-      <form [formGroup]="form">
-        <mat-form-field [hideRequiredMarker]="true">
-          <mat-label>
-            {{ 'FORM.ENTER_PLATE_NAME' | translate }}
-          </mat-label>
-          <input matInput formControlName="name" />
-          <mat-error *ngIf="form.controls['name'].invalid && form.controls['name'].touched">
-            {{ getErrorMessage(form.controls['name']) }}
-          </mat-error>
-        </mat-form-field>
+  <div class="fixed-height-form">
+    <form [formGroup]="form">
 
+      <mat-form-field [hideRequiredMarker]="true">
+        <mat-label> {{ 'FORM.ENTER_PLATE_NAME' | translate }} </mat-label>
+        <input matInput [formControlName]="formProps.name" />
+        <mat-error *ngIf="showFieldErrors(form, formProps.name) as error">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field [hideRequiredMarker]="true">
+        <mat-label> {{ 'FORM.PLATE_TYPE' | translate }} </mat-label>
+        <input matInput [formControlName]="formProps.type" />
+        <mat-error *ngIf="showFieldErrors(form, formProps.type) as error">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+
+
+      <ng-container *ngIf="hasProtein">
         <mat-form-field [hideRequiredMarker]="true">
-          <mat-label>
-            {{ 'FORM.PLATE_TYPE' | translate }}
-          </mat-label>
-          <mat-select formControlName="type" (selectionChange)="changeType($event.value)">
-            <mat-option *ngFor="let item of plateTypeTranslate | keyvalue" [value]="item.key">
+          <mat-label> {{ 'FORM.PROTEIN_TYPE' | translate }} </mat-label>
+          <mat-select [formControlName]="formProps.protein">
+            <mat-option *ngFor="let item of plateProteinTranslate | keyvalue" [value]="item.key">
               <span>{{ item.value | translate }}</span>
             </mat-option>
           </mat-select>
-          <mat-error *ngIf="form.controls['type'].invalid && form.controls['type'].touched">
-            {{ getErrorMessage(form.controls['type']) }}
+          <mat-error *ngIf="showFieldErrors(form, formProps.name) as error">
+            {{ error }}
           </mat-error>
         </mat-form-field>
+      </ng-container>
 
-        <ng-container *ngIf="hasProtein">
-          <mat-form-field>
-            <mat-label>
-              {{ 'FORM.PROTEIN_TYPE' | translate }}
-            </mat-label>
-            <mat-select formControlName="protein">
-              <mat-option *ngFor="let item of plateProteinTranslate | keyvalue" [value]="item.key">
-                <span>{{ item.value | translate }}</span>
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </ng-container>
-
-        <ng-container *ngIf="hasPrice">
-          <mat-form-field style="width: 200px">
-            <mat-label>
-              {{ 'FORM.PRICE' | translate }}
-            </mat-label>
-            <input style="text-align: right" matInput type="number" formControlName="price" />
-            <span matTextSuffix>.00</span>
-            <mat-error *ngIf="form.controls['price'].invalid && form.controls['price'].touched">{{
-              getErrorMessage(form.controls['name']) }}
-            </mat-error>
-          </mat-form-field>
-        </ng-container>
-
-        <mat-form-field>
-          <mat-label>
-            {{ 'DESCRIPTION_PLACEHOLDER' | translate }}
-          </mat-label>
-          <input matInput formControlName="history" />
+      <ng-container *ngIf="hasPrice">
+        <mat-form-field [hideRequiredMarker]="true" style="width: 200px">
+          <mat-label> {{ 'FORM.PRICE' | translate }} </mat-label>
+          <input matInput type="number" [formControlName]="formProps.price" />
+          <mat-error *ngIf="showFieldErrors(form, formProps.name) as error">
+            {{ error }}
+          </mat-error>
         </mat-form-field>
+      </ng-container>
 
-        <div>{{ imgURL }}</div>
-        <div style="color: seagreen; font-weight: 500; margin: 10px 0" *ngIf="isUploadedImg">
-          {{ 'FORM.UPDATE_SUCCESS' | translate }}
-        </div>
+      <mat-form-field [hideRequiredMarker]="true">
+        <mat-label> {{ 'DESCRIPTION_PLACEHOLDER' | translate }} </mat-label>
+        <input matInput [formControlName]="formProps.description" />
+        <mat-error *ngIf="showFieldErrors(form, formProps.name) as error">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
 
-        <span class="file-wrapper" *ngIf="!isUploadingImg">
-          <input type="file" name="photo" id="photo" (change)="updateImg($event)" />
-          <span class="button">{{ 'FORM.CHANGE_IMAGE' | translate }}</span>
-        </span>
+      <div>{{ imgURL }}</div>
+      <div style="color: seagreen; font-weight: 500; margin: 10px 0" *ngIf="isUploadedImg">
+        {{ 'FORM.UPDATE_SUCCESS' | translate }}
+      </div>
 
-        <div *ngIf="showUploadButton && !isUploadingImg">
-          <br />
-          <button mat-stroked-button type="button" (click)="uploadFile()" style="color: #57aaf7">
-            <mat-icon>cloud_upload</mat-icon>
-            <span style="padding-left: 10px">{{ 'FORM.UPLOAD_IMAGE_TO_SERVER' | translate }}</span>
-          </button>
-        </div>
+      <span class="file-wrapper" *ngIf="!isUploadingImg">
+        <input type="file" name="photo" id="photo" (change)="updateImg($event)" />
+        <span class="button">{{ 'FORM.CHANGE_IMAGE' | translate }}</span>
+      </span>
 
-        <span *ngIf="isUploadingImg" class="upload-spinner">
-          <mat-progress-spinner mode="determinate" [value]="uploadProgress" [diameter]="25"></mat-progress-spinner>
-        </span>
-      </form>
+      <div *ngIf="showUploadButton && !isUploadingImg">
+        <br />
+        <button mat-stroked-button type="button" (click)="uploadFile()" style="color: #57aaf7">
+          <mat-icon>cloud_upload</mat-icon>
+          <span style="padding-left: 10px">{{ 'FORM.UPLOAD_IMAGE_TO_SERVER' | translate }}</span>
+        </button>
+      </div>
 
-      <app-save-button [form]="form" [loading]="loadingState | async" (submit)="submit($event)"></app-save-button>
-    </div>
-  </ng-container>
+      <span *ngIf="isUploadingImg" class="upload-spinner">
+        <mat-progress-spinner mode="determinate" [value]="uploadProgress" [diameter]="25"></mat-progress-spinner>
+      </span>
+    </form>
+
+    <app-save-button [form]="form" [loading]="(loadingState | async) === LoadingStatus.Loading"
+      (submit)="submit($event)"></app-save-button>
+  </div>
 </div>

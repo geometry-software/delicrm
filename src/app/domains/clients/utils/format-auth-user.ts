@@ -1,6 +1,5 @@
-import { AppUser } from './user.model'
 
-export const formatAuthUser = (profile, uid, provider): AppUser => null
+export const formatAuthUser = (profile, uid, provider) => null
 //    ({
 //   userName: profile.name,
 //   provider: provider,

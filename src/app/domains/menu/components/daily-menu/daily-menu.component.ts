@@ -4,9 +4,11 @@ import { MatDialog } from '@angular/material/dialog'
 import { CheckoutService } from '../../services/checkout.service'
 import { fadeInOnEnterAnimation, rubberBandOnEnterAnimation } from 'angular-animations'
 import { PlateDetailComponent } from '../plate-detail/plate-detail.component'
-import { Order } from '../../utils/waiter.model'
+import { Order } from '../../utils/menu.model'
 import { MenuService } from '../../services/menu.service'
-import { Recipe, RecipeProtein } from '../../../recipe/utils/recipe.model'
+import { Recipe, RecipeProtein } from '../../../recipe/models/recipe.model'
+import { setProteinImage } from '../../../../shared/utils/protein-image'
+import { MenuConstants } from '../../utils/menu.constants'
 
 @Component({
   selector: 'app-daily-menu',
@@ -21,8 +23,9 @@ export class DailyMenuComponent implements OnInit {
 
   dailyMenu: any
   alaCarteList: Array<Recipe & { isRemoved: boolean }>
-  readonly dailyMenuLabel = 'Daile Menu'
-  readonly alaCarteLabel = 'A la Carte'
+  readonly dailyMenuLabel = MenuConstants.dailyMenuLabel
+  readonly alaCarteLabel = MenuConstants.alaCarteLabel
+
   plateOrder: Order = {}
   plateList
 
@@ -37,7 +40,7 @@ export class DailyMenuComponent implements OnInit {
   hasDeleteAuth: boolean
   menuEntry: any
 
-  setProteinImage = (protein: RecipeProtein) => '/assets/images/' + protein + '.png'
+  setProteinImage = setProteinImage
 
   // TODO
   readonly isDesktop = window.screen.width > 760

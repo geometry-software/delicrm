@@ -6,6 +6,8 @@ import { ResponsiveLayout } from '../../models/navbar.model'
 import { UserService } from '../../../domains/users/services/user.service'
 import { SignalService } from '../../../shared/services/signal.service'
 import { UserLanguage } from '../../../domains/users/utils/user.model'
+import { LoadingStatus } from '../../../shared/models/loading-status'
+import { of } from 'rxjs'
 
 @Component({
   selector: 'app-navbar',
@@ -25,6 +27,9 @@ export class NavbarComponent implements OnInit {
   readonly userMenuOptions = userMenuOptions
   readonly appUser = this.userService.appUser
   readonly isUserLoading = this.userService.isUserLoading
+  readonly LoadingStatus = LoadingStatus
+
+  loadingStatus = of(LoadingStatus.NotLoaded)
 
   @ViewChild('drawer') drawer: MatDrawer
   responsiveLayout: ResponsiveLayout = {}

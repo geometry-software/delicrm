@@ -11,6 +11,12 @@ import { Observable, tap } from 'rxjs'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderListComponent implements OnInit {
+
+  constructor(
+    private orderService: OrderService,
+    private router: Router,
+    private cdr: ChangeDetectorRef) { }
+
   PAGE_ITEMS_SIZE = 20
 
   datasource: any
@@ -22,7 +28,6 @@ export class OrderListComponent implements OnInit {
   lastItem
   firstItem
 
-  constructor(private orderService: OrderService, private router: Router, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.initCookingOrders()

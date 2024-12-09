@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core'
 import { EMPTY, Observable, combineLatest, concat, delay, filter, from, map, of, shareReplay, switchMap, tap } from 'rxjs'
 import { UserConstants } from '../utils/user.constants'
-import { AppUser, UserLoadingStatus, UserRole } from '../utils/user.model'
+import { User, UserLoadingStatus, UserRole } from '../utils/user.model'
 import { OrderRequest } from '../../../shared/repository/repository.model'
 import { RepositoryService } from '../../../shared/repository/repository.service'
-import { AuthStatus, AuthUser } from '../../../auth/models/auth.model'
+import { AuthStatus, Auth } from '../../../auth/models/auth.model'
 import { mapAppUser } from '../utils/app-user.mapper'
 import { AuthService } from '../../../auth/services/auth.service'
 import { setRestaurantAuth } from '../../../auth/models/auth-user.mapper'
@@ -17,14 +17,14 @@ import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
 export class UserService {
 
   constructor(
-    private repositoryService: RepositoryService<AppUser, AuthStatus>,
+    private repositoryService: RepositoryService<User, AuthStatus>,
     private authService: AuthService,
   ) {
     // this.createDumpUsers()
   }
 
   createDumpUsers() {
-    const arr: AppUser[] = []
+    const arr: User[] = []
     const userAmount = 9
     for (let index = 0; index < userAmount; index++) {
       arr.push({
@@ -85,7 +85,7 @@ export class UserService {
         )))))))
   }
 
-  create(user: AuthUser, role: UserRole) {
+  create(user: Auth, role: UserRole) {
     return this.repositoryService.setDocument(this.collection, mapAppUser(user, role), user.authId).pipe(
       map(() => ({ id: user.authId, auth: user })))
   }
@@ -114,17 +114,17 @@ export class UserService {
         requested, confirmed, blocked
       })),
       tap(value => {
-        console.warn('user getTotalLabels');
-        console.log(value);
+        // console.warn('user getTotalLabels');
+        // console.log(value);
       })
     )
   }
 
   getFirstPage(order: OrderRequest, size: number, status: AuthStatus) {
-    console.warn('users: getFirstPage Service');
-    console.log(order);
-    console.log(size);
-    console.log(status);
+    // console.warn('users: getFirstPage Service');
+    // console.log(order);
+    // console.log(size);
+    // console.log(status);
     return this.repositoryService.getFirstPage<AuthStatus>(this.collection, order, size, 'status', status)
   }
 
@@ -140,11 +140,11 @@ export class UserService {
     return this.repositoryService.getAllDocumentsByIncludesQuery(this.collection, property, value)
   }
 
-  set(item: AppUser, id: string) {
+  set(item: User, id: string) {
     return this.repositoryService.setDocument(this.collection, item, id)
   }
 
-  update(item: AppUser, id: string) {
+  update(item: User, id: string) {
     return this.repositoryService.updateDocument(this.collection, item, id)
   }
 

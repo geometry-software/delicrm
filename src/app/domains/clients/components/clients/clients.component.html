@@ -1,0 +1,52 @@
+<div class="py-[4px] h-[5px] w-full">
+  <mat-progress-bar mode="indeterminate" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></mat-progress-bar>
+</div>
+
+<div class="relative">
+  <div class="table-loading-shade" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></div>
+
+  <mat-tab-group [@.disabled]="true" (selectedTabChange)="changeUserList($event)" [(selectedIndex)]="selectedTabIndex">
+    <ng-container *ngIf="(userList | async) as data">
+      <mat-tab [label]="(listLabels | async).active">
+        <ng-container *ngTemplateOutlet="userTable; context: { data  }"></ng-container>
+      </mat-tab>
+      <mat-tab [label]="(listLabels | async).blocked">
+        <ng-container *ngTemplateOutlet="userTable; context: { data  }"></ng-container>
+      </mat-tab>
+    </ng-container>
+  </mat-tab-group>
+</div>
+
+<ng-template #userTable let-data="data">
+  <mat-table [dataSource]="data">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div class="table-link" [routerLink]="['/users', element.id]">
+          {{ element.name }}
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <span class="text-ellipsis">
+          {{ element.auth.email }}
+        </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef class="flex justify-center"> Status </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="flex justify-center">
+        <button mat-icon-button (click)="openStatusForm(element)">
+          <mat-icon>badge</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
+  </mat-table>
+</ng-template>

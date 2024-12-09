@@ -1,11 +1,5 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit, inject } from '@angular/core'
-import { FormControl, FormsModule } from '@angular/forms'
-import { EMPTY, Observable, debounceTime, tap } from 'rxjs'
-import { Store, select } from '@ngrx/store'
-import { getItemId, getLayoutLoading } from '../../store/user.selectors'
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core'
 import { UserConstants } from '../../utils/user.constants'
-
-import { MatRadioModule } from '@angular/material/radio'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 import { AuthStatus } from '../../../../auth/models/auth.model'
 
@@ -25,14 +19,10 @@ export class UserStatusComponent implements OnInit {
   statusList = UserConstants.statusList
 
   ngOnInit(): void {
-    console.log(this.dialogData)
     this.currentStatus = this.dialogData.status
   }
 
   confirm() {
-
-    console.log(1);
-
     this.dialogRef.close(this.currentStatus)
   }
 

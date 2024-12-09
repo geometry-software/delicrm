@@ -6,7 +6,7 @@ import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@ang
 import { AdminService } from '../../services/admin.service'
 import { MatStepper } from '@angular/material/stepper'
 import { Observable, map, startWith } from 'rxjs'
-import { Recipe } from '../../../recipe/utils/recipe.model'
+import { Recipe } from '../../../recipe/models/recipe.model'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { RecipeEntityService } from '../../../recipe/services/recipe.service'
 

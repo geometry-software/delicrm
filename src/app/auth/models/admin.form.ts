@@ -1,4 +1,4 @@
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms"
 
 export enum AdminFormProps {
     email = 'email',

@@ -1,4 +1,4 @@
-export interface AuthUser {
+export interface Auth {
   displayName: string
   providerId: AuthProvider
   email: string
@@ -6,7 +6,7 @@ export interface AuthUser {
   createdAt: number
   status: AuthStatus
   avatar: string
-  locale?: string
+  locale: string
 }
 
 export interface AuthStatusTotalResponse {

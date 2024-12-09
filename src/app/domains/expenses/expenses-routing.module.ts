@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { ExpensesListComponent } from './expenses-list/expenses-list.component'
 
-const ROUTES: Routes = [
+const routes: Routes = [
   {
     path: '',
     component: ExpensesListComponent,
@@ -11,6 +11,6 @@ const ROUTES: Routes = [
 ]
 
 @NgModule({
-  imports: [RouterModule.forChild(ROUTES)],
+  imports: [RouterModule.forChild(routes)],
 })
-export class ExpensesRoutingModule {}
+export class ExpensesRoutingModule { }
