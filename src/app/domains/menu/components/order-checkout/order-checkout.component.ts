@@ -17,6 +17,7 @@ import { Recipe } from '../../../recipe/models/recipe.model'
 import { User } from '../../../users/utils/user.model'
 import { UserService } from '../../../users/services/user.service'
 import { MenuConstants } from '../../utils/menu.constants'
+import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 
 @Component({
   selector: 'app-order-checkout',
@@ -285,10 +286,10 @@ export class OrderCheckoutComponent implements OnInit {
     this.order.statusHistory.push({
       status: 'requested',
       user: this.user,
-      timestamp: new Date(),
+      createdAt: getCurrentUnixTime
     })
     this.order.comment = this.comment
-    // this.order.timestamp = new Date()
+    // this.order.createdAt = new Date()
   }
 
   initUserType(user: User): void {
@@ -316,8 +317,8 @@ export class OrderCheckoutComponent implements OnInit {
     // console.log(this.order)
 
     // this.tablesAmount.forEach(() => {
-    this.order.timestamp = new Date()
-    console.log(this.order.timestamp)
+    this.order.createdAt = getCurrentUnixTime
+    console.log(this.order.createdAt)
 
     this.checkoutService.createDelivery(this.order)
 
@@ -344,7 +345,7 @@ export class OrderCheckoutComponent implements OnInit {
     this.order.statusHistory.push({
       status: 'cooking',
       user: this.user,
-      timestamp: new Date(),
+      createdAt: getCurrentUnixTime,
     })
     console.log(this.order)
     this.checkoutService

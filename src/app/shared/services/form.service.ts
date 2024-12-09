@@ -21,10 +21,6 @@ export class FormService {
       )
     )
 
-  transformFormValueToCreateObject = <T, S>(form: FormGroup, status: S): T => ({ ...form.value, status, timestamp: new Date() })
-
-  transformFormValueToUpdateObject = <T, S>(form: FormGroup, status: S, id: string): T => ({ ...form.value, status, id, updated: new Date() })
-
   highlightInvalidFields(form: FormGroup): void {
     Object.values(form.controls).forEach((control: FormControl) => {
       if (control.invalid) {

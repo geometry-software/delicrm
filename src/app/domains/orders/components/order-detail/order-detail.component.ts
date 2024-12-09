@@ -12,6 +12,7 @@ import { tap } from 'rxjs'
 import { Order, OrderStatus, OrderStatusValue, ProgressStatus } from '../../../menu/utils/menu.model'
 import { User } from '../../../users/utils/user.model'
 import { UserService } from '../../../users/services/user.service'
+import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 
 @Component({
   selector: 'app-order-detail',
@@ -93,7 +94,7 @@ export class OrderDetailComponent implements OnInit {
     }
     const historyData: OrderStatus = {
       status: newStatus,
-      timestamp: new Date(),
+      createdAt: getCurrentUnixTime,
       user: this.user,
     }
     this.order.statusHistory.push(historyData)
@@ -112,8 +113,8 @@ export class OrderDetailComponent implements OnInit {
     //   .subscribe()
   }
 
-  getTimestamp(status: OrderStatusValue): Date {
-    return this.order.statusHistory.find((el) => el.status === status).timestamp
+  getTimestamp(status: OrderStatusValue) {
+    return this.order.statusHistory.find((el) => el.status === status).createdAt
   }
 
   getUser(status: OrderStatusValue) {

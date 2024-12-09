@@ -1,0 +1,19 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 0.7em;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #999;
+    text-transform: uppercase;
+}
+
+.value {
+    font-size: 1.1em;
+    font-weight: 400;
+    color: #666;
+}

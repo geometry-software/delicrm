@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit, computed, effect } 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { SignalService } from '../../../shared/services/signal.service'
+import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
 
 @Component({
   selector: 'app-expenses-form',
@@ -42,7 +43,7 @@ export class ExpensesFormComponent implements OnInit {
   confirm(form) {
     let item = form.value
     item.waiter = this.waiter
-    item.timestamp = new Date()
+    item.createdAt = getCurrentUnixTime
     this.dialogRef.close(item)
   }
 

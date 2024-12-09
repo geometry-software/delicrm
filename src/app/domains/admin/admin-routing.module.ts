@@ -5,6 +5,7 @@ import { MenuDetailComponent } from './components/menu-detail/menu-detail.compon
 import { CashDeskComponent } from './components/cash-desk/cash-desk.component'
 import { BoardLayoutComponent } from './components/board-layout/board-layout.component'
 import { ImageMenuComponent } from './components/image-menu/image-menu.component'
+import { OrderService } from '../orders/services/order.service'
 
 const routes: Routes = [
   {
@@ -38,5 +39,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
+  providers: [OrderService]
 })
 export class AdminRoutingModule { }

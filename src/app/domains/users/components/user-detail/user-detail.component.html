@@ -1,4 +1,4 @@
-<ng-container *ngIf="(user | async) as data">
+<ng-container *ngIf="user | async as data">
   <h2 class="mb-[10px]">{{ data.name }}</h2>
 
   <!-- <mat-form-field appearance="outline" style="width: 200px" *ngIf="data.status !== 'client'">
@@ -22,5 +22,5 @@
   </ng-container> -->
 
   <!-- <h3>Registered</h3>
-  <h4>{{ data.timestamp | timestamp | date : 'medium' }}</h4> -->
+  <h4>{{ data.createdAt| date : 'medium' }}</h4> -->
 </ng-container>

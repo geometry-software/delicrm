@@ -15,7 +15,7 @@ import { AppConfirmationDialogComponent } from '../../../../shared/components/ap
 })
 export class CashDeskComponent implements OnInit {
   datasource
-  displayedColumns = ['waiter', 'timestamp', 'price']
+  displayedColumns = ['waiter', 'createdAt', 'price']
 
   datasourceHistorial
   datasourceHistorialColumns = ['manager', 'createdAt', 'plates']

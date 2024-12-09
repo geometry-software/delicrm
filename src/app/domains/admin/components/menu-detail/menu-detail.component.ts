@@ -14,7 +14,7 @@ export class MenuDetailComponent implements OnInit {
   itemId: string
   item = {} as any
   datasource = new MatTableDataSource()
-  displayedColumns = ['waiter', 'timestamp', 'price']
+  displayedColumns = ['waiter', 'createdAt', 'price']
 
   isLoading: boolean
   isLoaded: boolean

@@ -29,8 +29,6 @@ export class NavbarComponent implements OnInit {
   readonly isUserLoading = this.userService.isUserLoading
   readonly LoadingStatus = LoadingStatus
 
-  loadingStatus = of(LoadingStatus.NotLoaded)
-
   @ViewChild('drawer') drawer: MatDrawer
   responsiveLayout: ResponsiveLayout = {}
 
@@ -39,6 +37,7 @@ export class NavbarComponent implements OnInit {
   isMobileShown: boolean
 
   readonly toolBarTitleSignal: Signal<string> = this.signalService.getToolbarTitle
+  readonly loadingStatus = this.signalService.getLoadingStatus
 
   ngOnInit(): void {
     this.checkDelivery()

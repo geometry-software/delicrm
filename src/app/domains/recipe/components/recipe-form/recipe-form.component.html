@@ -12,7 +12,11 @@
 
       <mat-form-field [hideRequiredMarker]="true">
         <mat-label> {{ 'FORM.PLATE_TYPE' | translate }} </mat-label>
-        <input matInput [formControlName]="formProps.type" />
+        <mat-select [formControlName]="formProps.type" (selectionChange)="changeType($event.value)">
+          <mat-option *ngFor="let item of plateTypeTranslate | keyvalue" [value]="item.key">
+            <span>{{ item.value | translate }}</span>
+          </mat-option>
+        </mat-select>
         <mat-error *ngIf="showFieldErrors(form, formProps.type) as error">
           {{ error }}
         </mat-error>
@@ -75,6 +79,6 @@
     </form>
 
     <app-save-button [form]="form" [loading]="(loadingState | async) === LoadingStatus.Loading"
-      (submit)="submit($event)"></app-save-button>
+      (submit)="submit($event)" />
   </div>
 </div>

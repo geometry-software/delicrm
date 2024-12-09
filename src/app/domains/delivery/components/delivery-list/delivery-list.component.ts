@@ -9,6 +9,7 @@ import { Order, OrderStatusValue } from '../../../menu/utils/menu.model'
 import { AuthService } from '../../../../auth/services/auth.service'
 import { User } from '../../../users/utils/user.model'
 import { DeliveryDetailComponent } from '../delivery-detail/delivery-detail.component'
+import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 
 @Component({
   selector: 'app-delivery-list',
@@ -48,7 +49,7 @@ export class DeliveryListComponent {
   }
 
   readonly defaultOrderControlValue: any = {
-    active: 'timestamp',
+    active: 'createdAt',
     direction: 'desc',
   }
 
@@ -63,7 +64,7 @@ export class DeliveryListComponent {
   //               size: size,
   //               status: 'requested',
   //               order: {
-  //                 key: 'timestamp',
+  //                 key: 'createdAt',
   //                 value: 'desc',
   //               },
   //             },
@@ -163,7 +164,7 @@ export class DeliveryListComponent {
     this.delivery.statusHistory.push({
       status: 'cooking',
       user: this.user,
-      timestamp: new Date(),
+      createdAt: getCurrentUnixTime,
     })
     delete this.delivery.id
     // this.deliveryService

@@ -73,14 +73,14 @@
     </ng-container>
 
     <h3>Created at</h3>
-    <h4>{{ getTimestamp('requested') | timestamp | date : 'MMMM d, y, h:mm a' }}</h4>
+    <h4>{{ getTimestamp('requested') | date : 'MMMM d, y, h:mm a' }}</h4>
 
     <h3>Created by</h3>
     <h4>{{ getUser('requested') }}</h4>
 
     <ng-container *ngIf="isOrderClosed">
       <h3>Closed at</h3>
-      <h4>{{ getTimestamp('requested') | timestamp | date : 'MMMM d, y, h:mm a' }}</h4>
+      <h4>{{ getTimestamp('requested') | date : 'MMMM d, y, h:mm a' }}</h4>
 
       <h3>Closed by</h3>
       <h4 class="m-0">{{ getUser('requested') }}</h4>

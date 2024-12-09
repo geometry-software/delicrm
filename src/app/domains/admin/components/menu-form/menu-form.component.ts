@@ -9,6 +9,7 @@ import { Observable, map, startWith } from 'rxjs'
 import { Recipe } from '../../../recipe/models/recipe.model'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { RecipeEntityService } from '../../../recipe/services/recipe.service'
+import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 
 @Component({
   selector: 'app-menu-form',
@@ -243,7 +244,7 @@ export class MenuFormComponent implements OnInit {
     this.isLoading = true
 
     this.dailyMenu.open = true
-    this.dailyMenu.createdAt = new Date()
+    this.dailyMenu.createdAt = getCurrentUnixTime
     this.dailyMenu.orders = new Array()
     console.log(this.dailyMenu)
 

@@ -19,7 +19,7 @@ export class OrderService {
 
   getCookingOrders() {
     const col = this.afs.collection(this.fsCollectionName, (ref) =>
-      ref.where('status', '==', 'cooking').orderBy('timestamp', 'desc')
+      ref.where('status', '==', 'cooking').orderBy('createdAt', 'desc')
     )
     return col.snapshotChanges().pipe(
       map((res: any) => {
@@ -35,7 +35,7 @@ export class OrderService {
 
   getDeliveryOrders() {
     const col = this.afs.collection(this.fsCollectionName, (ref) =>
-      ref.where('status', '==', 'delivery').orderBy('timestamp', 'desc')
+      ref.where('status', '==', 'delivery').orderBy('createdAt', 'desc')
     )
     return col.snapshotChanges().pipe(
       map((res: any) => {
@@ -51,7 +51,7 @@ export class OrderService {
 
   getPaidOrders() {
     const col = this.afs.collection(this.fsCollectionName, (ref) =>
-      ref.where('status', '==', 'paid').orderBy('timestamp', 'desc')
+      ref.where('status', '==', 'paid').orderBy('createdAt', 'desc')
     )
     return col.snapshotChanges().pipe(
       map((res: any) => {
@@ -67,7 +67,7 @@ export class OrderService {
 
   // getPaidOrdersFirstPage(pageSize) {
   //   let col = this.afs.collection(this.fsCollectionName, (ref) =>
-  //     ref.where('isDelivered', '==', true).where('isPaid', '==', true).orderBy('timestamp', 'desc').limit(pageSize)
+  //     ref.where('isDelivered', '==', true).where('isPaid', '==', true).orderBy('createdAt', 'desc').limit(pageSize)
   //   )
   //   return col.snapshotChanges().pipe(
   //     map((res: any) => {
@@ -83,8 +83,8 @@ export class OrderService {
   //     ref
   //       .where('isDelivered', '==', true)
   //       .where('isPaid', '==', true)
-  //       .orderBy('timestamp', 'desc')
-  //       .startAfter(item['timestamp'])
+  //       .orderBy('createdAt', 'desc')
+  //       .startAfter(item['createdAt'])
   //       .limit(pageSize)
   //   )
   //   return col.snapshotChanges().pipe(
@@ -101,8 +101,8 @@ export class OrderService {
   //     ref
   //       .where('isDelivered', '==', true)
   //       .where('isPaid', '==', true)
-  //       .orderBy('timestamp', 'desc')
-  //       .endBefore(item['timestamp'])
+  //       .orderBy('createdAt', 'desc')
+  //       .endBefore(item['createdAt'])
   //       .limitToLast(pageSize)
   //   )
   //   return col.snapshotChanges().pipe(
@@ -120,7 +120,7 @@ export class OrderService {
         .where('isDelivered', '==', true)
         .where('isPaid', '==', true)
         .where('isArchived', '==', false)
-        .orderBy('timestamp', 'desc')
+        .orderBy('createdAt', 'desc')
     )
     return col.snapshotChanges().pipe(
       map((res: any) => {
@@ -133,7 +133,7 @@ export class OrderService {
 
   getRejectedOrders() {
     let query = this.afs.collection(this.fsCollectionName, (ref) =>
-      ref.where('isRejected', '==', true).orderBy('timestamp', 'desc')
+      ref.where('isRejected', '==', true).orderBy('createdAt', 'desc')
     )
     return query.snapshotChanges().pipe(
       map((res) => {
@@ -149,7 +149,7 @@ export class OrderService {
 
   getOrdersByWaiter(id) {
     let col = this.afs.collection(this.fsCollectionName, (ref) =>
-      ref.where('waiter.id', '==', id).where('isPaid', '==', true).orderBy('timestamp', 'desc')
+      ref.where('waiter.id', '==', id).where('isPaid', '==', true).orderBy('createdAt', 'desc')
     )
     return col.snapshotChanges().pipe(
       map((res: any) => {
@@ -165,7 +165,7 @@ export class OrderService {
 
   getOrdersByClient(id) {
     let col = this.afs.collection(this.fsCollectionName, (ref) =>
-      ref.where('client.id', '==', id).where('type', '==', 'DOMICILIO').orderBy('timestamp', 'desc')
+      ref.where('client.id', '==', id).where('type', '==', 'DOMICILIO').orderBy('createdAt', 'desc')
     )
     return col.snapshotChanges().pipe(
       map((res: any) => {

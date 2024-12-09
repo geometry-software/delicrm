@@ -3,7 +3,7 @@ import { PaginationRequest } from '../models/pagination.model'
 
 export interface RepositoryEntity {
   id?: string
-  timestamp?: Date
+  createdAt?: number
   updated?: Date
   status?: RepositoryEntityStatus
 }
@@ -57,5 +57,5 @@ export interface OrderRequest {
 export interface Log<T> {
   item: T
   id: string
-  timestamp: Date
+  createdAt: number
 }

@@ -71,7 +71,9 @@ export class ImageMenuComponent implements OnInit {
   initServerData() {
     this.adminService
       .getDailyMenu()
-      .pipe(filter((value: any) => !!value.open))
+      .pipe(
+        filter((value: any) => Boolean(value?.open))
+      )
       .subscribe((value: any) => {
         this.isMenuPublished = true
         this.dailyMenu = value

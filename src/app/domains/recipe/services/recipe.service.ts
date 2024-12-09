@@ -4,6 +4,7 @@ import { RecipeConstants } from '../models/recipe.constants'
 import { Recipe, RecipeStatus } from '../models/recipe.model'
 import { OrderRequest } from '../../../shared/repository/repository.model'
 import { RepositoryService } from '../../../shared/repository/repository.service'
+import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
 
 @Injectable()
 export class RecipeEntityService {
@@ -44,7 +45,7 @@ export class RecipeEntityService {
     const document: Recipe = {
       ...item,
       status: 'active',
-      timestamp: new Date(),
+      createdAt: getCurrentUnixTime,
     }
     return this.repositoryService.createDocument(this.collection, document)
   }

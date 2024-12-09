@@ -3,7 +3,7 @@ import { User } from '../../users/utils/user.model'
 
 export class Order {
   id?: string
-  timestamp?: Date
+  createdAt?: number
   isComposed?: boolean
   main?: any
   extra?: any
@@ -20,7 +20,7 @@ export class Order {
 export class OrderStatus {
   user?: User
   status?: OrderStatusValue
-  timestamp?: Date
+  createdAt?: number
 }
 
 export class OrderCategory {

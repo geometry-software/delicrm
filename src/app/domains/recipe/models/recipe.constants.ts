@@ -7,7 +7,7 @@ export abstract class RecipeConstants {
   static readonly storeFeatureKey = 'RECIPES'
   static readonly collectionName = 'Recipes'
   static readonly defaultCreateStatus = 'active'
-  static readonly defaultTableSort = 'timestamp'
+  static readonly defaultTableSort = 'createdAt'
   static readonly defaultSearchKey = 'name'
   static readonly paginationTitle = 'recipes'
   static readonly paginationSize = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]

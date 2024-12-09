@@ -1,12 +1,14 @@
-.title {
-    color: #555;
-    font-size: 1.3em;
-    text-align: start;
+:host {
     margin-bottom: 20px;
-    padding: 0 5px;
 }
 
-p {
-    font-size: 1.2em;
-    color: #444
+.title {
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 1.1em;
+    font-weight: 400;
+    color: #666;
 }

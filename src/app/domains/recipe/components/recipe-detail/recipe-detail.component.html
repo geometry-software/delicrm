@@ -1,43 +1,25 @@
-<ng-container *ngIf="item | async as data">
-  <div class="content-toolbar-padding">
-    <h3>{{ 'RECIPES.PAGE.LIST.NAME' | translate }}</h3>
-    <h4>{{ data.name }}</h4>
+<div *ngIf="item | async as data" class="content-toolbar-padding">
+  <app-title-item [title]="'RECIPES.PAGE.LIST.NAME'" [value]="data.name" />
+  <app-title-item [title]="'RECIPES.PAGE.LIST.TYPE'" [value]="plateTypeTranslate[data.type] | translate " />
+  <app-title-item *ngIf="data.type === 'main'" [title]="'RECIPES.PAGE.LIST.PROTEIN'"
+    [value]="plateProteinTranslate[data.protein] | translate" />
+  <app-title-item *ngIf="data.price" [title]="'RECIPES.PAGE.LIST.PRICE'" [value]="data.price" />
+  <app-title-item [title]="'RECIPES.PAGE.LIST.NAME'" [value]="data.name" />
+  <app-title-item [title]="'RECIPES.PAGE.LIST.DESCRIPTION'" [value]="data.history ?? '-'" />
 
-    <h3>{{ 'RECIPES.PAGE.LIST.DESCRIPTION' | translate }}</h3>
-    <h4>{{ data.history || '-' }}</h4>
+  <ng-container *ngIf="data.imgURL">
+    <img [src]="data.imgURL" width="50%" height="50%" style="border-radius: 8px" />
+  </ng-container>
 
-    <h3>{{ 'RECIPES.PAGE.LIST.TYPE' | translate }}</h3>
-    <h4>{{ plateTypeTranslate[data.type] | translate }}</h4>
-
-    <ng-container *ngIf="data.type === 'main'">
-      <h3>{{ 'RECIPES.PAGE.LIST.PROTEIN' | translate }}</h3>
-      <h4>{{ plateProteinTranslate[data.protein] | translate }}</h4>
-    </ng-container>
-
-    <ng-container *ngIf="data.price">
-      <h3>{{ 'RECIPES.PAGE.LIST.PRICE' | translate }}</h3>
-      <h4>{{ data.price }}</h4>
-    </ng-container>
-
-    <ng-container *ngIf="data.imgURL">
-      <h3>{{ 'RECIPES.PAGE.LIST.IMAGE' | translate }}</h3>
-      <img [src]="data.imgURL" width="50%" height="50%" style="border-radius: 8px" />
-    </ng-container>
-
-    <!-- TODO: When whole order process will be done -->
-    <!-- <h3>Historial</h3>
+  <!-- TODO: When whole order process will be done -->
+  <!-- <h3>Historial</h3>
 
     <mat-table [dataSource]="datasource">
-      <ng-container matColumnDef="timestamp">
+      <ng-container matColumnDef="createdAt">
         <mat-header-cell *matHeaderCellDef> Date and time</mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{ element.timestamp.toDate() | date : 'MMMM d, h:mm a' }}</mat-cell>
+        <mat-cell *matCellDef="let element"> {{ element.createdAt | date : 'MMMM d, h:mm a' }}</mat-cell>
       </ng-container>
       <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
     </mat-table>
     <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar> -->
-  </div>
-</ng-container>
-
-<!-- <ng-template #loadingTemplate>
-  <app-loader></app-loader>
-</ng-template> -->
+</div>

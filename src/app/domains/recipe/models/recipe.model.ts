@@ -1,7 +1,7 @@
 import { RepositoryEntityStatus } from "../../../shared/repository/repository.model";
 
 export interface Recipe {
-  timestamp?: Date;
+  createdAt?: number;
   name?: string;
   history?: string;
   price?: number;

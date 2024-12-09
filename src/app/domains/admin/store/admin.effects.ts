@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { catchError, map, mergeMap, of, switchMap, tap, withLatestFrom } from 'rxjs'
+import { catchError, map, of, switchMap, tap, withLatestFrom } from 'rxjs'
 import { AdminActions as ItemActions } from './admin.actions'
 import { Router } from '@angular/router'
 import { AdminConstants } from '../utils/admin.constants'

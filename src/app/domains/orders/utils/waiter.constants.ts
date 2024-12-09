@@ -7,7 +7,7 @@ export abstract class AdminConstants {
   static readonly storeFeatureKey = 'ADMIN'
   static readonly collectionName = 'Recipes'
   static readonly defaultCreateStatus = 'active'
-  static readonly defaultTableSort = 'timestamp'
+  static readonly defaultTableSort = 'createdAt'
   static readonly defaultSearchKey = 'name'
   static readonly paginationTitle = 'recipes'
   static readonly paginationSize = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -24,7 +24,7 @@ export abstract class AdminConstants {
   static readonly defaultSizeControlValue: SizeRequest = {
     size: 4,
   }
-  static readonly defaultOrderControlValue: Sort = { active: 'timestamp', direction: 'desc' }
+  static readonly defaultOrderControlValue: Sort = { active: 'createdAt', direction: 'desc' }
   static readonly defaultRequestStatus = 'active'
   static readonly defaultFirstPageRequest: RepositoryRequest<Recipe, RecipeStatus> = {
     pagination: this.defaultPaginationControlValue,

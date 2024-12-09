@@ -13,6 +13,7 @@ import { SharedConstants } from '../../../../shared/utils/shared.constants'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { combineListControls } from '../../utils/combine-list-controls'
 import { SizeRequest } from '../../../../shared/repository/repository.model'
+import { LoadingStatus } from '../../../../shared/models/loading-status'
 
 @Component({
   selector: 'app-recipe-list',
@@ -21,6 +22,17 @@ import { SizeRequest } from '../../../../shared/repository/repository.model'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeListComponent implements OnInit {
+
+  constructor(
+    private store: Store,
+    private route: ActivatedRoute,
+    private router: Router,
+    private signalService: SignalService
+  ) { }
+
+  readonly LoadingStatus = LoadingStatus
+  readonly loadingStatus = this.signalService.getLoadingStatus
+
   // Selectors
   readonly dataList: Observable<Recipe[]> = this.store.select(getItems)
   // readonly downloadState: Observable<boolean> = this.store.select(getItemsLoadingState).pipe(shareReplay(1))
@@ -46,13 +58,6 @@ export class RecipeListComponent implements OnInit {
   paginationControl: FormControl<PaginationRequest<Recipe>> = new FormControl(this.defaultPaginationControlValue)
   sizeControl: FormControl<SizeRequest> = new FormControl(this.defaultSizeControlValue)
   orderControl: FormControl<Sort> = new FormControl(this.defaultOrderControlValue)
-
-  constructor(
-    private store: Store,
-    private route: ActivatedRoute,
-    private router: Router,
-    private signalService: SignalService
-  ) { }
 
   ngOnInit() {
     this.initData()

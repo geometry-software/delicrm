@@ -1,10 +1,10 @@
 <div class="layout">
-  <ng-container *ngIf="layoutTypeSignal() !== 'empty'">
+  <!-- <ng-container *ngIf="layoutTypeSignal() !== 'empty'">
     <div class="py-[4px] h-[5px] w-full">
       <mat-progress-bar mode="indeterminate"
         *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></mat-progress-bar>
     </div>
-  </ng-container>
+  </ng-container> -->
   <div class="header-toolbar" *ngIf="layoutTypeSignal() as type">
     <ng-container [ngSwitch]="type">
       <ng-container *ngSwitchCase="'form'">

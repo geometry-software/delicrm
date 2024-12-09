@@ -1,21 +1,13 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-} from '@angular/core'
-import { FormGroup, Validators, FormBuilder } from '@angular/forms'
+import { ChangeDetectionStrategy, Component, OnInit, } from '@angular/core'
+import { Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { AngularFireStorageReference } from '@angular/fire/compat/storage'
-import {
-  PLATE_PROTEIN_TRANSLATE,
-  PLATE_TYPE_TRANSLATE,
-} from '../../models/recipe.constants'
+import { PLATE_PROTEIN_TRANSLATE, PLATE_TYPE_TRANSLATE, } from '../../models/recipe.constants'
 import { Recipe, RecipeCourse } from '../../models/recipe.model'
 import { Store } from '@ngrx/store'
-import { getItem, getItemLoadingState, getLoadingStatus } from '../../store/recipe.selectors'
+import { getItem, getLoadingStatus } from '../../store/recipe.selectors'
 import { RecipeActions as ItemActions } from '../../store/recipe.actions'
-import { Observable, of, tap } from 'rxjs'
+import { filter, map, switchMap, tap } from 'rxjs'
 import { FileStorageService } from '../../../../shared/services/file-storage.service'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
@@ -33,16 +25,18 @@ export class RecipeFormComponent implements OnInit {
   constructor(
     private store: Store,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
     private fileStorageService: FileStorageService,
     private signalService: SignalService
   ) { }
 
-  LoadingStatus = LoadingStatus
+  readonly LoadingStatus = LoadingStatus
+  readonly loadingState = this.store.select(getLoadingStatus)
+  readonly getItem = this.route.params.pipe(
+    map(value => value['id']),
+    filter(Boolean),
+    switchMap(id => this.store.select(getItem(id)))
+  )
 
-  loadingState = this.store.select(getLoadingStatus)
-  getItem: Observable<Recipe | undefined> = this.store.select(getItem)
-  // form!: FormGroup
   recipeTosave: Recipe | undefined
   isEditForm: boolean | undefined
   itemId: string | undefined
@@ -58,9 +52,9 @@ export class RecipeFormComponent implements OnInit {
   plateTypeTranslate = PLATE_TYPE_TRANSLATE
   plateProteinTranslate = PLATE_PROTEIN_TRANSLATE
 
-  form = recipeFormGroup
-  formProps = RecipeFormProps
-  showFieldErrors = showFieldErrors
+  readonly form = recipeFormGroup
+  readonly formProps = RecipeFormProps
+  readonly showFieldErrors = showFieldErrors
 
   ngOnInit() {
     this.initForm()
@@ -72,7 +66,7 @@ export class RecipeFormComponent implements OnInit {
       this.itemId = this.route.snapshot.params['id']
       this.isEditForm = true
       this.store.dispatch(ItemActions.getItem({ id: this.itemId }))
-      this.store.select(getItem)
+      this.store.select(getItem(this.itemId))
         .pipe(
           tap(value => {
             console.log(value)

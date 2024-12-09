@@ -16,7 +16,7 @@ import { SignalService } from '../../../shared/services/signal.service'
 })
 export class ExpensesListComponent implements OnInit {
   dataSourceObs: Observable<CdkTableDataSourceInput<any>>
-  dataSourceColumn = ['waiter', 'timestamp', 'value', 'title']
+  dataSourceColumn = ['waiter', 'createdAt', 'value', 'title']
 
   isUpdatingOrders: boolean
 

@@ -27,10 +27,10 @@
         </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="timestamp">
+      <ng-container matColumnDef="createdAt">
         <mat-header-cell *matHeaderCellDef> Time </mat-header-cell>
         <mat-cell *matCellDef="let element">
-          {{ element.timestamp.toDate() | date : 'h:mm a' }}
+          {{ element.createdAt | date : 'h:mm a' }}
         </mat-cell>
       </ng-container>
 

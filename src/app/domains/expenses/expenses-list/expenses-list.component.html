@@ -13,12 +13,12 @@
     </mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="timestamp">
+  <ng-container matColumnDef="createdAt">
     <mat-header-cell *matHeaderCellDef>
       {{ 'EXPENSES.PAGE.LIST.TABLE.WAITER' | translate }}
     </mat-header-cell>
     <mat-cell *matCellDef="let element">
-      {{ element.timestamp.toDate() | date : 'MMMM d, h:mm a' }}
+      {{ element.createdAt | date : 'MMMM d, h:mm a' }}
     </mat-cell>
   </ng-container>
 

@@ -91,4 +91,5 @@ export class AdminService {
   getDailyMenu() {
     return this.afs.doc(this.fsCollectionNameMenu + '/menu').valueChanges()
   }
+
 }

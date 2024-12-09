@@ -14,7 +14,6 @@ export const reducer = createReducer<State>(
       total: state.items?.total,
       current: state.items?.current,
       size: state.items?.size,
-      loading: true,
       error: null,
     },
   })),
@@ -25,7 +24,6 @@ export const reducer = createReducer<State>(
       total: state.items?.total,
       current: state.items?.data?.length,
       size: state.items?.size,
-      loading: true,
       error: null,
     },
   })),
@@ -39,7 +37,6 @@ export const reducer = createReducer<State>(
         total: responseTotal,
         current: current,
         size: size ?? state.items.size,
-        loading: false,
         error: null,
       },
       resetRequest: false,
@@ -51,35 +48,24 @@ export const reducer = createReducer<State>(
     itemId: id,
     item: {
       data: null,
-      loading: true,
-    },
-  })),
-  on(ItemActions.getItemSuccess, (state, { item }) => ({
-    ...state,
-    item: {
-      data: item,
-      loading: false,
     },
   })),
   on(ItemActions.createItemFormInit, (state) => ({
     ...state,
     item: {
       data: {},
-      loading: false,
     },
   })),
   on(ItemActions.createItem, (state) => ({
     ...state,
     item: {
       data: state.item?.data,
-      loading: true,
     },
   })),
   on(ItemActions.updateItem, (state) => ({
     ...state,
     item: {
       data: state.item?.data,
-      loading: true,
     },
   })),
   on(ItemActions.resetRequestToTheFirstPage, (state) => ({

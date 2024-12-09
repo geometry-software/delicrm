@@ -1,6 +1,6 @@
 <mat-toolbar>
   <div class="progress-bar">
-    <mat-progress-bar mode="indeterminate" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></mat-progress-bar>
+    <mat-progress-bar mode="indeterminate" *ngIf="loadingStatus() === LoadingStatus.Loading"></mat-progress-bar>
   </div>
   <mat-toolbar-row [ngClass]="responsiveLayout.isDesktop ? 'mat-toolbar-desktop' : 'mat-toolbar-mobile'">
     <button [ngStyle]="{ 'margin-left': responsiveLayout.matToolbarRowButtonMargin }" mat-icon-button

@@ -1,12 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { MatTableDataSource } from '@angular/material/table'
 import { Store } from '@ngrx/store'
 import { PLATE_PROTEIN_TRANSLATE, PLATE_TYPE_TRANSLATE } from '../../models/recipe.constants'
-import { getItem, getItemLoadingState } from '../../store/recipe.selectors'
-import { RecipeActions as ItemActions } from '../../store/recipe.actions'
-import { Recipe } from '../../models/recipe.model'
-import { Observable, of } from 'rxjs'
+import { getItem, } from '../../store/recipe.selectors'
+import { map, switchMap } from 'rxjs'
 import { SignalService } from '../../../../shared/services/signal.service'
 
 @Component({
@@ -16,34 +13,26 @@ import { SignalService } from '../../../../shared/services/signal.service'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeDetailComponent implements OnInit {
-  itemId: string
-  // loadingState: Observable<boolean> = this.store.select(getItemLoadingState)
-  loadingState = of(null)
-  item: Observable<Recipe> = this.store.select(getItem)
-  datasource = new MatTableDataSource()
-  displayedColumns = ['timestamp']
 
-  plateTypeTranslate = PLATE_TYPE_TRANSLATE
-  plateProteinTranslate = PLATE_PROTEIN_TRANSLATE
+  constructor(
+    private store: Store,
+    private route: ActivatedRoute,
+    private signalService: SignalService) { }
 
-  constructor(private store: Store, private route: ActivatedRoute, private signalService: SignalService) { }
+  readonly plateTypeTranslate = PLATE_TYPE_TRANSLATE
+  readonly plateProteinTranslate = PLATE_PROTEIN_TRANSLATE
+  readonly item = this.route.params.pipe(
+    map(value => value['id']),
+    switchMap(id => this.store.select(getItem(id)))
+  )
 
   ngOnInit() {
-    this.initServerData()
     this.setSignals()
-  }
-
-  initServerData() {
-    this.itemId = this.route.snapshot.params['id']
-    this.store.dispatch(ItemActions.getItem({ id: this.itemId }))
-    // this.daoHistory.getHistoryById(this.itemId).subscribe((res) => {
-    //   this.datasource = new MatTableDataSource(res)
-    //   this.isLoading = false
-    // })
   }
 
   setSignals() {
     this.signalService.setToolbarTitle(this.route.snapshot.data['title'])
     this.signalService.setLayoutType(this.route.snapshot.data['type'])
   }
+
 }

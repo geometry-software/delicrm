@@ -1,6 +1,6 @@
-<div class="table-loading-shade" *ngIf="downloadState | async"></div>
+<div class="table-loading-shade" *ngIf="loadingStatus() === LoadingStatus.Loading"></div>
 
-<mat-table [dataSource]="dataList | async" matSort matSortActive="timestamp"
+<mat-table [dataSource]="dataList | async" matSort matSortActive="createdAt"
   (matSortChange)="orderControl.setValue($event)">
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -34,11 +34,6 @@
   <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
 </mat-table>
-<!-- </ng-container> -->
 
 <app-pagination [paginationControl]="paginationControl" [sizeControl]="sizeControl"
   [paginationPayload]="paginationPayload | async" [downloadState]="downloadState | async"></app-pagination>
-
-<!-- <ng-template #loadingTemplate>
-  <app-loader></app-loader>
-</ng-template> -->
