@@ -1,11 +1,8 @@
 import { NgModule } from '@angular/core'
 import { ReactiveFormsModule } from '@angular/forms'
-import { CommonModule } from '@angular/common'
-import { RouterModule } from '@angular/router'
 import { UsersRoutingModule } from './users-routing.module'
 import { UsersComponent } from './components/users/users.component'
 import { SharedModule } from '../../shared/shared.module'
-import { TranslateModule } from '@ngx-translate/core'
 import { StoreModule } from '@ngrx/store'
 import { reducer } from './store/user.reducer'
 import { EffectsModule } from '@ngrx/effects'
@@ -23,12 +20,9 @@ import { UserStatusComponent } from './components/user-status/users-status.compo
     UserStatusComponent
   ],
   imports: [
-    RouterModule,
-    CommonModule,
     SharedModule,
     ReactiveFormsModule,
     UsersRoutingModule,
-    TranslateModule,
     StoreModule.forFeature(UserConstants.storeFeatureKey, reducer),
     EffectsModule.forFeature([UserEffects]),
   ]

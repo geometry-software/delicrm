@@ -1,11 +1,11 @@
-<div class="checkout-container host-overflow" *ngIf="isTemplateReady" [@fadeInOnEnter]>
+<div class="checkout-container host-overflow" [@fadeInOnEnter]>
   <div *ngIf="!this.plates?.length">
     <div class="no-plates">To continue with starters and drinks, choose some dishes from the previous page.</div>
   </div>
 
-  <div *ngIf="!this.user">
+  <!-- <div *ngIf="!this.user">
     <div class="no-user">Please, sign up first</div>
-  </div>
+  </div> -->
 
   <div class="mb-[10px]" *ngIf="!isGifLoaderShowing">
     <app-button routerLink="/menu" title="Volver" width="full"></app-button>
@@ -17,7 +17,8 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="this.plates.length && this.user">
+  <!-- <ng-container *ngIf="this.plates.length && this.user"> -->
+  <ng-container *ngIf="this.plates.length ">
     <ng-container *ngIf="!isGifLoaderShowing">
       <div *ngFor="let item of plates; let i = index">
         <div class="card mt-[10px]">
@@ -25,25 +26,25 @@
           <div class="title">Choose starter</div>
 
           <mat-radio-group class="example-radio-group" (change)="chooseStarter($event.value, i)">
-            <mat-radio-button *ngFor="let plate of extra.starter" [value]="plate.item"
+            <mat-radio-button *ngFor="let plate of extra.starters" [value]="plate.item"
               [disabled]="plate?.item?.isRemoved"
               [style.text-decoration]="plate?.item?.isRemoved ? 'line-through' : 'none'">
               <span>{{ plate?.item.name }}</span>
             </mat-radio-button>
             <mat-radio-button value="skip" (change)="chooseStarter($event.value, i)">
-              <span>wihout starter</span>
+              <span>without starter</span>
             </mat-radio-button>
           </mat-radio-group>
 
           <div class="title">Choose drink</div>
 
           <mat-radio-group class="example-radio-group" (change)="chooseDrink($event.value, i)">
-            <mat-radio-button *ngFor="let plate of extra.drink" [value]="plate.item" [disabled]="plate?.item?.isRemoved"
-              [style.text-decoration]="plate?.isRemoved ? 'line-through' : 'none'">
+            <mat-radio-button *ngFor="let plate of extra.drinks" [value]="plate.item"
+              [disabled]="plate?.item?.isRemoved" [style.text-decoration]="plate?.isRemoved ? 'line-through' : 'none'">
               <span>{{ plate?.item.name }}</span>
             </mat-radio-button>
             <mat-radio-button value="skip" (change)="chooseDrink($event.value, i)">
-              <span>wi drink</span>
+              <span>without drink</span>
             </mat-radio-button>
           </mat-radio-group>
 
@@ -197,14 +198,20 @@
           <div *ngIf="hasClientDataError" class="validation-error-message" [@fadeInUpOnEnter]>
             Verify customer data again
           </div>
-          <div *ngIf="hasPaymentTypeError" class="validation-error-message" [@fadeInUpOnEnter]>Payment method missing
+          <div *ngIf="hasPaymentTypeError" class="validation-error-message" [@fadeInUpOnEnter]>
+            Payment method missing
           </div>
-          <div *ngIf="hasStarterError" class="validation-error-message" [@fadeInUpOnEnter]>Starters need to be added
+          <div *ngIf="hasStarterError" class="validation-error-message" [@fadeInUpOnEnter]>
+            Starters need to be added
           </div>
-          <div *ngIf="hasDrinkError" class="validation-error-message" [@fadeInUpOnEnter]>Drinks need to be added</div>
-          <div *ngIf="hasTableNumberError" class="validation-error-message" [@fadeInUpOnEnter]>Table number is missing
+          <div *ngIf="hasDrinkError" class="validation-error-message" [@fadeInUpOnEnter]>
+            Drinks need to be added
           </div>
-          <div *ngIf="hasTakeAwayError" class="validation-error-message" [@fadeInUpOnEnter]>Client name need to be added
+          <div *ngIf="hasTableNumberError" class="validation-error-message" [@fadeInUpOnEnter]>
+            Table number is missing
+          </div>
+          <div *ngIf="hasTakeAwayError" class="validation-error-message" [@fadeInUpOnEnter]>
+            Client name need to be added
           </div>
 
           <div style="text-align: center; min-width: 100%; margin-top: 20px">

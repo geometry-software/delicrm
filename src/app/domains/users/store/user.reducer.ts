@@ -31,7 +31,7 @@ export const reducer = createReducer<State>(
     const { responseTotal, current } = formatPaginationData(query, state, items.length, total, size ?? state.items?.size)
     return {
       ...state,
-      itemsLoadingStatus: LoadingStatus.LoadingSuccess,
+      itemsLoadingStatus: LoadingStatus.Loaded,
       listResponseType: query,
       items: {
         data: items,

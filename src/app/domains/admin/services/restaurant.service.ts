@@ -1,25 +1,38 @@
 import { Injectable } from '@angular/core'
 import { RepositoryService } from '../../../shared/repository/repository.service'
-import { AdminConstants } from '../utils/admin.constants'
-import { Restaurant } from '../models/restaurant'
+import { DailyMenu, Restaurant } from '../models/restaurant'
+import { RestaurantConstants } from '../models/restaurant.constants'
+import { Observable } from 'rxjs'
 
 @Injectable({
   providedIn: 'root',
 })
 export class RestaurantService {
 
-  constructor(
-    private repositoryService: RepositoryService,
-  ) { }
+  constructor(private repositoryService: RepositoryService) { }
 
-  private readonly collection = AdminConstants.restaurantCollectionName
+  private readonly collection = RestaurantConstants.collectionName
+  private readonly infoDocument = RestaurantConstants.infoDocument
+  private readonly menuDocument = RestaurantConstants.menuDocument
 
-  create(item: Restaurant) {
-    return this.repositoryService.createDocument(this.collection, item)
+  createRestaurant(item: Restaurant) {
+    return this.repositoryService.setDocument(this.collection, item, this.infoDocument)
   }
 
-  update(item: Restaurant, id: string) {
-    return this.repositoryService.setDocument(this.collection, item, id)
+  updateRestaurant(item: Restaurant) {
+    return this.repositoryService.updateDocument(this.collection, item, this.infoDocument)
+  }
+
+  updateDailyMenu(menu: DailyMenu) {
+    return this.repositoryService.setDocument(this.collection, menu, this.menuDocument)
+  }
+
+  clearDailyMenu() {
+    return this.repositoryService.updateDocument(this.collection, { open: false }, this.menuDocument)
+  }
+
+  getDailyMenu(): Observable<DailyMenu> {
+    return this.repositoryService.getDocumentById(this.collection, this.menuDocument)
   }
 
 }

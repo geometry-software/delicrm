@@ -9,7 +9,7 @@ import { fadeInLeftOnEnterAnimation, fadeInOnEnterAnimation } from 'angular-anim
 import { STATUS_COLOR, STATUS_ICON } from '../../utils/waiter.constants'
 import { PrintService } from '../../../../shared/services/print.service'
 import { tap } from 'rxjs'
-import { Order, OrderStatus, OrderStatusValue, ProgressStatus } from '../../../menu/utils/menu.model'
+import { Order, OrderStatus, OrderStatusValue, OrderProgressStatus } from '../../../menu/utils/menu.model'
 import { User } from '../../../users/utils/user.model'
 import { UserService } from '../../../users/services/user.service'
 import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
@@ -81,7 +81,7 @@ export class OrderDetailComponent implements OnInit {
   update() {
     const currentStatus = this.order.status
     let newStatus: OrderStatusValue
-    let progress: ProgressStatus
+    let progress: OrderProgressStatus
     switch (currentStatus) {
       case 'cooking':
         newStatus = 'delivery'

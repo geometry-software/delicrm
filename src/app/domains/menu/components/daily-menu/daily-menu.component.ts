@@ -1,80 +1,93 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { MatDialog } from '@angular/material/dialog'
-import { CheckoutService } from '../../services/checkout.service'
-import { fadeInOnEnterAnimation, rubberBandOnEnterAnimation } from 'angular-animations'
-import { PlateDetailComponent } from '../plate-detail/plate-detail.component'
-import { Order } from '../../utils/menu.model'
 import { MenuService } from '../../services/menu.service'
-import { Recipe, RecipeProtein } from '../../../recipe/models/recipe.model'
+import { fadeInOnEnterAnimation, fadeInUpOnEnterAnimation, rubberBandOnEnterAnimation } from 'angular-animations'
+import { PlateDetailComponent } from '../plate-detail/plate-detail.component'
+import { MenuActions as ItemActions } from '../../store/menu.actions'
+import { Order } from '../../utils/menu.model'
+import { Recipe } from '../../../recipe/models/recipe.model'
 import { setProteinImage } from '../../../../shared/utils/protein-image'
 import { MenuConstants } from '../../utils/menu.constants'
+import { Store } from '@ngrx/store'
+import { getMenu, isRestaurantOpen, loadingStatus } from '../../store/menu.selectors'
+import { LoadingStatus } from '../../../../shared/models/loading-status'
 
 @Component({
   selector: 'app-daily-menu',
   templateUrl: './daily-menu.component.html',
   styleUrls: ['./daily-menu.component.scss'],
-  animations: [fadeInOnEnterAnimation(), rubberBandOnEnterAnimation()],
+  animations: [
+    fadeInOnEnterAnimation(),
+    fadeInUpOnEnterAnimation(),
+    rubberBandOnEnterAnimation()
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DailyMenuComponent implements OnInit {
-  menuTableArray = new Array()
-  barTableArray = new Array()
-
-  dailyMenu: any
-  alaCarteList: Array<Recipe & { isRemoved: boolean }>
-  readonly dailyMenuLabel = MenuConstants.dailyMenuLabel
-  readonly alaCarteLabel = MenuConstants.alaCarteLabel
-
-  plateOrder: Order = {}
-  plateList
-
-  chosenPlates = []
-  chosenAlaCarteItems = []
-  dishAmount: number = 0
-
-  isMenuUpdated: boolean
-  hasNoOrder: boolean
-  hasEmptyMenu: boolean
-
-  hasDeleteAuth: boolean
-  menuEntry: any
-
-  setProteinImage = setProteinImage
-
-  // TODO
-  readonly isDesktop = window.screen.width > 760
 
   constructor(
     private dialog: MatDialog,
     private router: Router,
-    private menuService: MenuService,
+    private store: Store,
     private cdr: ChangeDetectorRef
   ) { }
+
+  readonly dailyMenuLabel = MenuConstants.dailyMenuLabel
+  readonly alaCarteLabel = MenuConstants.alaCarteLabel
+
+  menuTableArray = new Array()
+  barTableArray = new Array()
+
+  alaCarteList: Array<Recipe & { isRemoved: boolean }>
+  plateOrder: Order = {}
+  plateList
+  readonly chosenDailyMenuItems = []
+  readonly chosenAlaCarteItems = []
+  dishAmount: number = 0
+  isMenuUpdated: boolean
+  hasNoOrder: boolean
+  hasEmptyMenu: boolean
+  hasDeleteAuth: boolean
+  menuEntry: any
+  emptyOrderError: boolean
+
+  // TODO move to a single const (another in navbar) and make dependent from prod env
+  readonly isDesktop = window.screen.width > 760
+
+  readonly setProteinImage = setProteinImage
+
+  readonly LoadingStatus = LoadingStatus
+
+  dailyMenu = this.store.select(getMenu)
+  isRestaurantOpen = this.store.select(isRestaurantOpen)
+  loadingStatus = this.store.select(loadingStatus)
 
   ngOnInit(): void {
     this.initServerData()
   }
 
   initServerData() {
-    this.menuService.getDailyMenu().subscribe((value: any) => {
-      if (value?.open) {
-        this.dailyMenu = value
-        this.isMenuUpdated = true
-        this.cdr.markForCheck()
-      } else {
-        this.hasEmptyMenu = true
-        this.isMenuUpdated = false
-      }
-    })
-    this.menuService.getAlaCarteList().subscribe((value: any) => {
-      this.alaCarteList = value
-      console.log(value)
-    })
+    // this.restaurantService.getDailyMenu().subscribe((value: any) => {
+    //   console.log(value);
+
+    //   if (value?.open) {
+    //     this.dailyMenu = value
+    //     this.isMenuUpdated = true
+    //     this.cdr.markForCheck()
+    //   } else {
+    //     this.hasEmptyMenu = true
+    //     this.isMenuUpdated = false
+    //   }
+    // })
+    // this.menuService.getAlaCarteList().subscribe((value: any) => {
+    //   this.alaCarteList = value
+    //   console.log(value)
+    // })
   }
 
   addItem(item) {
-    this.chosenPlates.push(item)
+    this.chosenDailyMenuItems.push(item)
     this.dishAmount++
     this.cdr.markForCheck()
   }
@@ -86,10 +99,10 @@ export class DailyMenuComponent implements OnInit {
   }
 
   removeItem(name): void {
-    const index = this.chosenPlates.indexOf(name)
+    const index = this.chosenDailyMenuItems.indexOf(name)
     if (index >= 0) {
       this.dishAmount--
-      this.chosenPlates.splice(index, 1)
+      this.chosenDailyMenuItems.splice(index, 1)
     }
   }
 
@@ -102,11 +115,16 @@ export class DailyMenuComponent implements OnInit {
   }
 
   save() {
-    this.menuService.order.isComposed = true
-    this.menuService.order.main = this.chosenPlates
-    this.menuService.order.extra = this.dailyMenu.extra
-    this.menuService.order.alacarte = this.chosenAlaCarteItems
-    this.router.navigate(['/menu/checkout'])
+    const order: Order = {
+      main: this.chosenDailyMenuItems,
+      alacarte: this.chosenAlaCarteItems
+    }
+    if (!order?.main?.length) {
+      this.emptyOrderError = true
+    } else {
+      this.emptyOrderError = false
+      this.store.dispatch(ItemActions.setOrder({ order }))
+    }
   }
 
   openDetail(event) {

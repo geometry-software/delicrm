@@ -11,6 +11,20 @@
     <ng-container
       *ngTemplateOutlet="(dataList$ | async) ? deliveryTable : null; context: { $implicit: (dataList$ | async) }"></ng-container>
   </mat-tab>
+</mat-tab-group>
+
+<mat-tab-group [@.disabled]="true" (selectedTabChange)="preloadTabData($event)">
+  <ng-container *ngIf="(dataList | async) as data">
+    <mat-tab [label]="(listLabels | async).requested">
+      <ng-container *ngTemplateOutlet="deliveryTable; context: { data  }"></ng-container>
+    </mat-tab>
+    <mat-tab [label]="(listLabels | async).confirmed">
+      <ng-container *ngTemplateOutlet="deliveryTable; context: { data  }"></ng-container>
+    </mat-tab>
+    <mat-tab [label]="(listLabels | async).blocked">
+      <ng-container *ngTemplateOutlet="deliveryTable; context: { data  }"></ng-container>
+    </mat-tab>
+  </ng-container>
 </mat-tab-group> -->
 
 <ng-template #deliveryTable let-context>
@@ -25,7 +39,7 @@
     </ng-container>
 
     <ng-container matColumnDef="plates">
-      <mat-header-cell *matHeaderCellDef> PLates </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Plates </mat-header-cell>
       <mat-cell *matCellDef="let element" class="plates">
         <li *ngFor="let item of element.plates; let i = index">
           {{ item.plate.name }}

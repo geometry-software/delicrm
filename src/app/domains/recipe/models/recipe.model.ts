@@ -31,6 +31,6 @@ export type RecipeCourse =
   | 'rice'
   | 'garnish'
   | 'dessert'
-  | 'alacarte';
+  | 'alacarte'
 
-export type RecipeProtein = 'meat' | 'chicken' | 'fish' | 'veg';
+export type RecipeProtein = 'meat' | 'chicken' | 'fish' | 'veg'

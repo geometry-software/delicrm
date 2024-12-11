@@ -1,11 +1,7 @@
 import { NgModule } from '@angular/core'
-import { ReactiveFormsModule } from '@angular/forms'
-import { CommonModule } from '@angular/common'
-import { RouterModule } from '@angular/router'
 import { ClientsRoutingModule, } from './clients-routing.module'
 import { ClientsComponent } from './components/clients/clients.component'
 import { SharedModule } from '../../shared/shared.module'
-import { TranslateModule } from '@ngx-translate/core'
 import { StoreModule } from '@ngrx/store'
 import { reducer } from './store/client.reducer'
 import { EffectsModule } from '@ngrx/effects'
@@ -23,12 +19,8 @@ import { ClientsLayoutComponent } from './components/clients-layout/clients-layo
     ClientStatusComponent
   ],
   imports: [
-    RouterModule,
-    CommonModule,
     SharedModule,
-    ReactiveFormsModule,
     ClientsRoutingModule,
-    TranslateModule,
     StoreModule.forFeature(ClientConstants.storeFeatureKey, reducer),
     EffectsModule.forFeature([ClientEffects]),
   ]

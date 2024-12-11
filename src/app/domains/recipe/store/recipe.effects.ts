@@ -38,7 +38,7 @@ export class RecipeEffects implements OnInitEffects {
       switchMap(({ item }) =>
         this.entityService.create(item).pipe(
           tap((id) => {
-            this.signalService.setLoadingStatus(LoadingStatus.LoadingSuccess)
+            this.signalService.setLoadingStatus(LoadingStatus.Loaded)
             this.router.navigate([this.moduleUrl, id])
             this.form.reset()
           }),
@@ -130,7 +130,7 @@ export class RecipeEffects implements OnInitEffects {
   getItemsSuccess = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.getItemsSuccess),
-      tap(() => this.signalService.setLoadingStatus(LoadingStatus.LoadingSuccess))),
+      tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loaded))),
     { dispatch: false }
   )
 

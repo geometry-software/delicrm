@@ -1,27 +1,57 @@
-import { Component, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { MatTableDataSource } from '@angular/material/table'
 import { fadeInUpOnEnterAnimation, fadeInDownOnEnterAnimation, fadeOutDownOnLeaveAnimation } from 'angular-animations'
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms'
 import { AdminService } from '../../services/admin.service'
 import { MatStepper } from '@angular/material/stepper'
-import { Observable, map, startWith } from 'rxjs'
+import { Observable, filter, map, of, startWith, switchMap, tap } from 'rxjs'
 import { Recipe } from '../../../recipe/models/recipe.model'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { RecipeEntityService } from '../../../recipe/services/recipe.service'
 import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
+import { RestaurantConstants } from '../../models/restaurant.constants'
+import { LoadingStatus } from '../../../../shared/models/loading-status'
+import { RestaurantService } from '../../services/restaurant.service'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { Store } from '@ngrx/store'
+import { AdminActions as ItemActions } from '../../store/admin.actions'
+import { loadingStatus } from '../../store/admin.selectors'
 
 @Component({
   selector: 'app-menu-form',
   templateUrl: './menu-form.component.html',
   styleUrls: ['./menu-form.component.scss'],
   animations: [fadeOutDownOnLeaveAnimation(), fadeInDownOnEnterAnimation(), fadeInUpOnEnterAnimation()],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MenuFormComponent implements OnInit {
+
+  constructor(
+    private signalService: SignalService,
+    private formBuilder: FormBuilder,
+    private recipeEntityService: RecipeEntityService,
+    private store: Store,
+  ) { }
+
+  private readonly startersAmount = RestaurantConstants.startersAmount
+  private readonly drinksAmount = RestaurantConstants.drinksAmount
+  readonly isFormDataLoaded = of(this.signalService.setLoadingStatus(LoadingStatus.Loading)).pipe(
+    switchMap(() => this.recipeEntityService.getAll().pipe(
+      tap(recipes => {
+        this.signalService.setLoadingStatus(LoadingStatus.Loaded)
+        this.initAutocompleteOptions(recipes)
+      }),
+      map(() => true)))
+  )
+  readonly isLoading = this.store.select(loadingStatus).pipe(
+    filter(value => value === LoadingStatus.Loading),
+    map(Boolean)
+  )
+
   menuForm: FormGroup
   plateForm: FormGroup
 
-  recipeList: Array<Recipe>
   plateList: Array<Recipe & { isAdded?: boolean }>
   starterList: Array<Recipe>
   drinkList: Array<Recipe>
@@ -39,8 +69,6 @@ export class MenuFormComponent implements OnInit {
 
   hasStartersValidationError: boolean
 
-  isLoading: boolean
-  isFormDataLoaded: boolean
   dailyMenu: any = {}
 
   adminList: Array<any>
@@ -55,27 +83,15 @@ export class MenuFormComponent implements OnInit {
   filteredGarnishOptions: Observable<Recipe[]>
   filteredDessertOptions: Observable<Recipe[]>
 
-  readonly starterAmount = 3
-  readonly drinkAmount = 2
-
-  constructor(
-    private adminService: AdminService,
-    private signalService: SignalService,
-    private router: Router,
-    private formBuilder: FormBuilder,
-    private recipeEntityService: RecipeEntityService
-  ) { }
-
   ngOnInit() {
     this.initForm()
-    this.updateServerDataMenu()
     this.updateServerDataBar()
   }
 
   initForm() {
     this.menuForm = this.formBuilder.group({
-      starter: this.initStarter(),
-      drink: this.initDrink(),
+      starters: this.addFormArrayItem(this.startersAmount),
+      drinks: this.addFormArrayItem(this.drinksAmount),
       salad: [null, Validators.required],
       rice: [null, Validators.required],
       garnish: [null, Validators.required],
@@ -84,21 +100,9 @@ export class MenuFormComponent implements OnInit {
     this.plateForm = this.formBuilder.group({})
   }
 
-  initStarter() {
+  addFormArrayItem(amount: number) {
     const array: FormArray = this.formBuilder.array([])
-    for (let i = 0; i < this.starterAmount; i++) {
-      array.push(
-        this.formBuilder.group({
-          item: [null, [Validators.required]],
-        })
-      )
-    }
-    return array
-  }
-
-  initDrink() {
-    const array: FormArray = this.formBuilder.array([])
-    for (let i = 0; i < this.drinkAmount; i++) {
+    for (let i = 0; i < amount; i++) {
       array.push(
         this.formBuilder.group({
           item: [null, [Validators.required]],
@@ -115,88 +119,78 @@ export class MenuFormComponent implements OnInit {
   }
 
   getStarters() {
-    return this.menuForm.get('starter') as FormArray
+    return this.menuForm.get('starters') as FormArray
   }
 
   getDrinks() {
-    return this.menuForm.get('drink') as FormArray
+    return this.menuForm.get('drinks') as FormArray
   }
 
-  updateServerDataMenu() {
-    this.recipeEntityService.getAll().subscribe((recipes) => {
-      this.recipeList = recipes
-      this.starterList = recipes.filter(value => value.type == 'starter')
-      this.drinkList = recipes.filter(value => value.type == 'drink')
-      this.saladList = recipes.filter(value => value.type == 'salad')
-      this.riceList = recipes.filter(value => value.type == 'rice')
-      this.garnishList = recipes.filter(value => value.type == 'garnish')
-      this.dessertList = recipes.filter(value => value.type == 'dessert')
-      this.barList = recipes.filter(value => value.type == 'alacarte')
-      this.plateList = recipes.filter(value => value.type == 'main')
-      this.initAutocomplete()
-      this.isFormDataLoaded = true
-    })
-  }
-
-  initAutocomplete() {
-    for (let i = 0; i < this.starterAmount; i++) {
+  initAutocompleteOptions(recipes) {
+    this.starterList = recipes.filter(value => value.type == 'starter')
+    this.drinkList = recipes.filter(value => value.type == 'drink')
+    this.saladList = recipes.filter(value => value.type == 'salad')
+    this.riceList = recipes.filter(value => value.type == 'rice')
+    this.garnishList = recipes.filter(value => value.type == 'garnish')
+    this.dessertList = recipes.filter(value => value.type == 'dessert')
+    this.barList = recipes.filter(value => value.type == 'alacarte')
+    this.plateList = recipes.filter(value => value.type == 'main')
+    for (let i = 0; i < this.startersAmount; i++) {
       this.filteredStarterOptions[i] = this.getStarters()
         .at(i)
         .get('item')
         .valueChanges.pipe(
           startWith<string | Recipe>(''),
           map(value => (typeof value === 'string' ? value : value.name)),
-          map((name) =>
-            name
-              ? this.starterList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
-              : this.starterList.slice()
+          map(name => name
+            ? this.starterList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
+            : this.starterList.slice()
           )
         )
     }
-    for (let i = 0; i < this.drinkAmount; i++) {
+    for (let i = 0; i < this.drinksAmount; i++) {
       this.filteredDrinkOptions[i] = this.getDrinks()
         .at(i)
         .get('item')
         .valueChanges.pipe(
           startWith<string | Recipe>(''),
           map(value => (typeof value === 'string' ? value : value.name)),
-          map((name) =>
-            name
-              ? this.drinkList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
-              : this.drinkList.slice()
+          map(name => name
+            ? this.drinkList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
+            : this.drinkList.slice()
           )
         )
     }
     this.filteredSaladOptions = this.menuForm.get('salad').valueChanges.pipe(
       startWith(''),
       map(value => (typeof value === 'string' ? value : value.name)),
-      map((name) =>
-        name ? this.saladList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase())) : this.saladList.slice()
+      map(name => name
+        ? this.saladList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
+        : this.saladList.slice()
       )
     )
     this.filteredRiceOptions = this.menuForm.get('rice').valueChanges.pipe(
       startWith(''),
       map(value => (typeof value === 'string' ? value : value.name)),
-      map((name) =>
-        name ? this.riceList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase())) : this.riceList.slice()
+      map(name => name
+        ? this.riceList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
+        : this.riceList.slice()
       )
     )
     this.filteredGarnishOptions = this.menuForm.get('garnish').valueChanges.pipe(
       startWith(''),
       map(value => (typeof value === 'string' ? value : value.name)),
-      map((name) =>
-        name
-          ? this.garnishList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
-          : this.garnishList.slice()
+      map(name => name
+        ? this.garnishList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
+        : this.garnishList.slice()
       )
     )
     this.filteredDessertOptions = this.menuForm.get('dessert').valueChanges.pipe(
       startWith(''),
       map(value => (typeof value === 'string' ? value : value.name)),
-      map((name) =>
-        name
-          ? this.dessertList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
-          : this.dessertList.slice()
+      map(name => name
+        ? this.dessertList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
+        : this.dessertList.slice()
       )
     )
   }
@@ -218,7 +212,6 @@ export class MenuFormComponent implements OnInit {
   chooseDrinks(form, stepper: MatStepper) {
     this.hasStartersValidationError = false
     if (form.valid) {
-      console.log(form.value)
       stepper.next()
     } else this.hasStartersValidationError = true
   }
@@ -232,29 +225,18 @@ export class MenuFormComponent implements OnInit {
   }
 
   addPlate(item) {
-    if (!item.isAdded) {
-      item.isAdded = true
-      this.chosenPlates.push(item)
-    } else {
+    if (item.isAdded) {
       this.chosenPlates = this.chosenPlates.filter((el) => el.id !== item.id)
+    } else {
+      this.chosenPlates.push({ item, isAdded: true })
     }
   }
 
-  savePlates() {
-    this.isLoading = true
-
+  createDailyMenu() {
     this.dailyMenu.open = true
     this.dailyMenu.createdAt = getCurrentUnixTime
     this.dailyMenu.orders = new Array()
-    console.log(this.dailyMenu)
-
-    this.adminService.updateDailyMenu(this.dailyMenu).then(() => {
-      this.isLoading = false
-      this.router.navigateByUrl('admin/board')
-    })
+    this.store.dispatch(ItemActions.createDailyMenu({ menu: this.dailyMenu }))
   }
 
-  removeItem(id) {
-    // this.daoBar.delete(id).then(() => this.updateServerDataBar())
-  }
 }

@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Signal, ChangeDetectorRef } from '@angular/core'
+import { Component, ViewChild, OnInit, Signal, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core'
 import { MatDrawer } from '@angular/material/sidenav'
 import { userMenuOptions, authMenuOptions } from '../../models/menu-options'
 import { TranslateService } from '@ngx-translate/core'
@@ -7,12 +7,14 @@ import { UserService } from '../../../domains/users/services/user.service'
 import { SignalService } from '../../../shared/services/signal.service'
 import { UserLanguage } from '../../../domains/users/utils/user.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { of } from 'rxjs'
+import { combineLatest, map, shareReplay } from 'rxjs'
+import { toObservable } from '@angular/core/rxjs-interop'
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent implements OnInit {
 
@@ -26,8 +28,6 @@ export class NavbarComponent implements OnInit {
   readonly authMenuOptions = authMenuOptions
   readonly userMenuOptions = userMenuOptions
   readonly appUser = this.userService.appUser
-  readonly isUserLoading = this.userService.isUserLoading
-  readonly LoadingStatus = LoadingStatus
 
   @ViewChild('drawer') drawer: MatDrawer
   responsiveLayout: ResponsiveLayout = {}
@@ -37,7 +37,14 @@ export class NavbarComponent implements OnInit {
   isMobileShown: boolean
 
   readonly toolBarTitleSignal: Signal<string> = this.signalService.getToolbarTitle
-  readonly loadingStatus = this.signalService.getLoadingStatus
+  readonly isLoading = combineLatest([
+    toObservable(this.signalService.getLoadingStatus).pipe(
+      map(value => value === LoadingStatus.Loading ? true : false)),
+    this.userService.isUserLoading
+  ]).pipe(
+    map(([signal, auth]) => signal || auth),
+    shareReplay(1)
+  )
 
   ngOnInit(): void {
     this.checkDelivery()
@@ -53,12 +60,14 @@ export class NavbarComponent implements OnInit {
     this.translate.use(lang.match(/es|en/) ? lang : 'es')
   }
 
-  checkDelivery(): void { }
+  checkDelivery() { }
 
-  checkClient(): void { }
+  checkClient() { }
 
   toggleDrawer() {
-    if (!this.responsiveLayout.isDesktop) this.drawer.toggle()
+    if (!this.responsiveLayout.isDesktop) {
+      this.drawer.toggle()
+    }
   }
 
   onActivateRouter() {
@@ -89,4 +98,5 @@ export class NavbarComponent implements OnInit {
   toggleMobile() {
     this.isMobileShown = !this.isMobileShown
   }
+
 }

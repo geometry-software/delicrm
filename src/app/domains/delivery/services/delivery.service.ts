@@ -8,7 +8,7 @@ export class DeliveryService {
 
   constructor(private repositoryService: RepositoryService<Order, OrderStatusValue>) { }
 
-  private readonly collection = MenuConstants.collectionName
+  private readonly collection = MenuConstants.collectionNameDelivery
 
   getNewDeliveries(status: OrderStatusValue) {
     return this.repositoryService.getAllDocumentsByStatus(this.collection, status)

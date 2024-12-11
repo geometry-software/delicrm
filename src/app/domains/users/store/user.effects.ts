@@ -173,13 +173,13 @@ export class UserEffects implements OnInitEffects {
   notifyError = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.notifyError),
-      tap(({ error }) => console.error(error))
-      // switchMap(() => of(this.notificationService.notifyError()))
-    ), { dispatch: false }
+      tap(({ error }) => console.error(error))),
+    // switchMap(() => of(this.notificationService.notifyError()))
+    { dispatch: false }
   )
 
   ngrxOnInitEffects(): Action {
-    return ItemActions.getItems({ request: this.defaultFirstPageRequest });
+    return ItemActions.getItems({ request: this.defaultFirstPageRequest })
   }
 
 }

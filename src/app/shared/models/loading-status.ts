@@ -1,6 +1,6 @@
 export enum LoadingStatus {
   NotLoaded = 'NotLoaded',
   Loading = 'Loading',
-  LoadingFailed = 'LoadingFailed',
-  LoadingSuccess = 'LoadingSuccess'
+  Loaded = 'Loaded',
+  LoadingFailed = 'LoadingFailed'
 }

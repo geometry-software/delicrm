@@ -3,7 +3,7 @@ import { Recipe, RecipeStatus } from '../../recipe/models/recipe.model'
 import { PaginationRequest } from '../../../shared/models/pagination.model'
 import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from '../../../shared/repository/repository.model'
 
-export abstract class AdminConstants {
+export abstract class WaiterConstants {
   static readonly storeFeatureKey = 'ADMIN'
   static readonly collectionName = 'Recipes'
   static readonly defaultCreateStatus = 'active'

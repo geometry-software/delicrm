@@ -12,6 +12,14 @@ button {
   font-family: 'Open Sans', sans-serif !important;
 }
 
+button:disabled {
+  min-width: 100%;
+  background-color: #ddd !important;
+  color: white !important;
+  border: none;
+  cursor: not-allowed;
+}
+
 mat-icon {
   transform: scale(0.9);
 }
@@ -53,12 +61,12 @@ button.active:focus {
   color: white !important;
 }
 
-.save:disabled {
-  min-width: 100%;
-  background-color: #ddd !important;
-  color: white !important;
-  border: 3px solid #ddd;
-}
+// .save:disabled {
+//   min-width: 100%;
+//   background-color: #ddd !important;
+//   color: white !important;
+//   border: 3px solid #ddd;
+// }
 
 .save:disabled:hover {
   background-color: #ddd !important;

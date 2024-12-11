@@ -11,19 +11,23 @@
     border-radius: 10px;
     margin: 20px 20px 30px 20px;
   }
+
   &__title {
     padding: 20px 0 10px 0;
     color: sandybrown;
     font-family: 'Verdana';
     font-size: 5em;
     font-weight: 500;
+    line-height: 0.9em;
   }
+
   &__subtitle {
     font-weight: 500;
     font-size: 1.5em;
     margin-top: 10px;
     color: #777;
   }
+
   &__day {
     font-weight: 500;
     font-size: 1.5em;
@@ -40,22 +44,26 @@
     padding: 15px;
     margin-bottom: 20px;
   }
+
   &__title {
     padding-bottom: 10px;
     color: #555;
     font-weight: 400;
   }
+
   &__subtitle {
     margin-left: 5px;
     color: #444;
     font-weight: 500;
   }
+
   &__link {
     border-bottom: 1px solid #444;
   }
+
   &__footer {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 0px;
     color: #666;
   }

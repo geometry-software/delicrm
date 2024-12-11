@@ -1,10 +1,10 @@
 <br />
-<mat-stepper [linear]="true" #stepper>
+<mat-stepper [linear]="true" #stepper *ngIf="isFormDataLoaded | async">
   <mat-step [stepControl]="menuForm" label="Choose starters">
-    <form [formGroup]="menuForm" (ngSubmit)="chooseDrinks(menuForm, stepper)" *ngIf="isFormDataLoaded">
+    <form [formGroup]="menuForm" (ngSubmit)="chooseDrinks(menuForm, stepper)">
       <h5>Starters</h5>
 
-      <div formArrayName="starter" *ngFor="let item of getStarters().controls; let i = index">
+      <div formArrayName="starters" *ngFor="let item of getStarters().controls; let i = index">
         <ng-container [formGroupName]="i">
           <mat-form-field>
             <input type="text" matInput formControlName="item" [placeholder]="'Sopa ' + (i + 1)"
@@ -20,7 +20,7 @@
 
       <h5>Drinks</h5>
 
-      <div formArrayName="drink" *ngFor="let item of getDrinks().controls; let i = index">
+      <div formArrayName="drinks" *ngFor="let item of getDrinks().controls; let i = index">
         <ng-container [formGroupName]="i">
           <mat-form-field>
             <input type="text" matInput formControlName="item" [placeholder]="'Juice ' + (i + 1)"
@@ -73,7 +73,7 @@
       </mat-form-field>
 
       <div *ngIf="hasStartersValidationError" class="validation-error-message">Not all positions were chosen</div>
-      <app-button title="Add starters and drinks" actionType="save" type="submit" width="full"></app-button>
+      <app-button title="Add starters and drinks" type="submit" width="full"></app-button>
     </form>
   </mat-step>
 
@@ -95,8 +95,8 @@
     <ng-container *ngIf="dailyMenu.main">
       <app-formatted-daily-menu [dailyMenu]="dailyMenu"> </app-formatted-daily-menu>
       <br />
-      <app-button [title]="!isLoading ? 'Update menu and open a service' : 'Loading ..'" [disabled]="isLoading"
-        actionType="save" (click)="savePlates()"></app-button>
+      <app-button [title]="!(isLoading | async) ? 'Update menu and open a service' : 'Loading ..'"
+        [disabled]="(isLoading | async)" actionType="save" [width]="'full'" (click)="createDailyMenu()"></app-button>
     </ng-container>
   </mat-step>
 </mat-stepper>

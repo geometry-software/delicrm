@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core'
-import { catchError, filter, switchMap, tap } from 'rxjs/operators'
+import { catchError, filter, map, switchMap, tap } from 'rxjs/operators'
 import { AuthService } from '../../services/auth.service'
 import { adminFormGroup, AdminFormProps } from '../../models/admin.form'
 import { showFieldErrors } from '../../../shared/utils/form-error-handling'
@@ -10,9 +10,11 @@ import { RestaurantService } from '../../../domains/admin/services/restaurant.se
 import { BehaviorSubject, of } from 'rxjs'
 import { RestaurantLoadingStatus } from '../../models/loading-status'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { AdminConstants } from '../../../domains/admin/utils/admin.constants'
+import { AdminConstants } from '../../../domains/admin/models/admin.constants'
 import { UserService } from '../../../domains/users/services/user.service'
 import { SharedConstants } from '../../../shared/utils/shared.constants'
+import { Restaurant } from '../../../domains/admin/models/restaurant'
+import { RestaurantConstants } from '../../../domains/admin/models/restaurant.constants'
 
 @Component({
   selector: 'app-login',
@@ -33,6 +35,7 @@ export class LoginComponent {
   readonly googleIconPath = AuthConstants.googleIconPath
   readonly adminCollectionId = AuthConstants.adminCollectionId
   readonly restaurantFormComponentConfig = SharedConstants.formComponentConfig
+  readonly defaultCurrency = RestaurantConstants.defaultCurrency
   readonly adminForm = adminFormGroup
   readonly adminFormProps = AdminFormProps
   readonly isAdminUser = this.authService.isAdminUser
@@ -63,8 +66,9 @@ export class LoginComponent {
       .afterClosed().pipe(
         filter(Boolean),
         tap(() => this.restaurantRegisterStatus.next(RestaurantLoadingStatus.Registering)),
+        map((value: Restaurant) => ({ ...value, currency: this.defaultCurrency })),
         switchMap(value => this.userService.createAdminUser(this.adminCollectionId, this.adminCollectionId).pipe(
-          switchMap(() => this.restaurantService.create(value).pipe(
+          switchMap(() => this.restaurantService.createRestaurant(value).pipe(
             tap(() => this.restaurantRegisterStatus.next(RestaurantLoadingStatus.RegisterSuccess)),
             catchError(error => this.handleRegisterRestaurantError(error)))),
           catchError(error => this.handleRegisterRestaurantError(error)))),

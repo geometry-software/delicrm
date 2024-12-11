@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { ActivatedRoute } from '@angular/router'
 import { pulseOnEnterAnimation } from 'angular-animations'
 
-import { CheckoutService } from '../../services/checkout.service'
+import { MenuService } from '../../services/menu.service'
 import { Order } from '../../utils/menu.model'
 import { RecipeProtein } from '../../../recipe/models/recipe.model'
 import { setProteinImage } from '../../../../shared/utils/protein-image'
@@ -15,17 +15,19 @@ import { setProteinImage } from '../../../../shared/utils/protein-image'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClientOrderComponent implements OnInit {
+
+  constructor(private route: ActivatedRoute, private checkoutService: MenuService, private cdr: ChangeDetectorRef) { }
+
   item: Order
 
-  setProteinImage = setProteinImage
-
-  constructor(private route: ActivatedRoute, private checkoutService: CheckoutService, private cdr: ChangeDetectorRef) { }
+  readonly setProteinImage = setProteinImage
 
   ngOnInit() {
     const id = this.route.snapshot.params['id']
-    this.checkoutService.getDeliveryById(id).subscribe(value => {
-      this.item = value
-      this.cdr.markForCheck()
-    })
+    // this.checkoutService.getDeliveryById(id).subscribe(value => {
+    //   this.item = value
+    //   this.cdr.markForCheck()
+    // })
   }
+
 }

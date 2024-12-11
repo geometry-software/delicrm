@@ -1,16 +1,11 @@
 <mat-toolbar>
   <div class="progress-bar">
-    <mat-progress-bar mode="indeterminate" *ngIf="loadingStatus() === LoadingStatus.Loading"></mat-progress-bar>
+    <mat-progress-bar mode="indeterminate" *ngIf="isLoading | async"></mat-progress-bar>
   </div>
   <mat-toolbar-row [ngClass]="responsiveLayout.isDesktop ? 'mat-toolbar-desktop' : 'mat-toolbar-mobile'">
-    <button [ngStyle]="{ 'margin-left': responsiveLayout.matToolbarRowButtonMargin }" mat-icon-button
-      (click)="drawer.toggle()" onclick="this.blur()">
-      <ng-container *ngIf="isUserLoading | async; else menuIcon">
-        <mat-spinner [diameter]="20"></mat-spinner>
-      </ng-container>
-      <ng-template #menuIcon>
-        <mat-icon class="menu-icon"> menu </mat-icon>
-      </ng-template>
+    <button [disabled]="isLoading | async" [ngStyle]="{ 'margin-left': responsiveLayout.matToolbarRowButtonMargin }"
+      mat-icon-button (click)="drawer.toggle()" onclick="this.blur()">
+      <mat-icon class="menu-icon"> menu </mat-icon>
     </button>
     <span class="toolbar-title text-ellipsis">{{ toolBarTitleSignal() | translate }}</span>
     <span class="toolbar-spacer"></span>
@@ -37,7 +32,7 @@
   <mat-drawer #drawer [mode]="responsiveLayout.matDrawerMode" [opened]="responsiveLayout.isDesktop"
     class="mat-drawer-scrollbar">
     <div class="menu-list-container" [ngStyle]="{ 'margin-top': responsiveLayout.menuListContainerMargin }">
-      <ng-container *ngIf="!(isUserLoading | async) && ( appUser | async) as appUser; else clientTemplate">
+      <ng-container *ngIf="( appUser | async) as appUser; else clientTemplate">
         <ng-container *ngFor="let item of userMenuOptions">
           <ng-container *ngIf="item.roles.includes(appUser.role)">
             <div class="menu-list-item" [ngStyle]="{

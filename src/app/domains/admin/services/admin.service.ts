@@ -80,16 +80,4 @@ export class AdminService {
     return this.afs.doc(this.fsCollectionName + '/' + id).delete()
   }
 
-  updateDailyMenu(data) {
-    return this.fsCollectionMenu.doc('menu').set(data)
-  }
-
-  clearDailyMenu() {
-    return this.fsCollectionMenu.doc('menu').set({ open: false })
-  }
-
-  getDailyMenu() {
-    return this.afs.doc(this.fsCollectionNameMenu + '/menu').valueChanges()
-  }
-
 }

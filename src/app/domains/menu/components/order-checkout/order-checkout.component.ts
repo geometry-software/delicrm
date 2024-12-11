@@ -1,9 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, ViewChild } from '@angular/core'
-import { Router } from '@angular/router'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core'
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
-import { CheckoutService } from '../../services/checkout.service'
-import { AngularFireAuth } from '@angular/fire/compat/auth'
-import { Observable, map, startWith } from 'rxjs'
+import { Observable, combineLatest, firstValueFrom, map, startWith, tap } from 'rxjs'
 import {
   zoomOutUpOnLeaveAnimation,
   expandOnEnterAnimation,
@@ -11,13 +8,17 @@ import {
   fadeInUpOnEnterAnimation,
   fadeInOnEnterAnimation,
 } from 'angular-animations'
-import { CheckoutOrder, DeliveryTime, Order, OrderDelivery, OrderType } from '../../utils/menu.model'
-import { MenuService } from '../../services/menu.service'
+import { OrderItem, OrderDeliveryTime, Order, OrderType } from '../../utils/menu.model'
+import { MenuActions as ItemActions } from '../../store/menu.actions'
 import { Recipe } from '../../../recipe/models/recipe.model'
 import { User } from '../../../users/utils/user.model'
 import { UserService } from '../../../users/services/user.service'
 import { MenuConstants } from '../../utils/menu.constants'
 import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
+import { Store } from '@ngrx/store'
+import { getExtra, getOrder } from '../../store/menu.selectors'
+import { Router } from '@angular/router'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
 @Component({
   selector: 'app-order-checkout',
@@ -35,12 +36,12 @@ import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 export class OrderCheckoutComponent implements OnInit {
 
   constructor(
-    private checkoutService: CheckoutService,
-    private menuService: MenuService,
+    private store: Store,
     private userService: UserService,
-    private navRouter: Router,
     private formBuilder: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private destroyRef: DestroyRef
   ) { }
 
   readonly appUser = this.userService.appUser
@@ -50,10 +51,10 @@ export class OrderCheckoutComponent implements OnInit {
   plates: Array<any> = new Array()
   extra: any
   total: number = 0
-  deliveryTime: DeliveryTime = 'now'
+  deliveryTime: OrderDeliveryTime = 'now'
   order: Order = {
     plates: new Array(),
-    alacarte: this.menuService.order.alacarte,
+    // alacarte: this.menuService.order.alacarte,
     statusHistory: new Array(),
     category: {
       delivery: {},
@@ -65,7 +66,7 @@ export class OrderCheckoutComponent implements OnInit {
 
   dishTemplate = {} as Recipe
   isCash: boolean
-  changeTypes: Array<string> = []
+  changeTypes: Array<string> = ['Exact value', '10', '20', '50', '100']
 
   form: FormGroup
   isOldClient: boolean = false
@@ -112,26 +113,12 @@ export class OrderCheckoutComponent implements OnInit {
 
   isServiceUser: boolean
   isClientUser: boolean
-  isTemplateReady: boolean
 
   ngOnInit() {
     this.initOrderDetails()
     this.initForm()
     this.initClients()
     this.initTables()
-    this.initChangeType()
-    this.initUser()
-  }
-
-  initUser() {
-    // this.userService.getAppAuth().subscribe(value => {
-    //   this.initUserType(value)
-    //   if (this.isClientUser) {
-    //     this.initClientUser()
-    //   }
-    //   this.isTemplateReady = true
-    //   this.cdr.markForCheck()
-    // })
   }
 
   initClientUser() {
@@ -145,37 +132,41 @@ export class OrderCheckoutComponent implements OnInit {
     this.orderType = 'delivery'
   }
 
-  initChangeType() {
-    this.changeTypes.push('Exact value')
-    this.changeTypes.push('10')
-    this.changeTypes.push('20')
-    this.changeTypes.push('50')
-    this.changeTypes.push('100')
-  }
-
   initTables() {
     this.tablesAmount = Array.from(Array(10).keys())
     this.tablesAmount.shift()
   }
 
   initOrderDetails() {
-    if (this.menuService.order.isComposed) {
-      this.plates = this.menuService.order.main
-      this.extra = this.menuService.order.extra
-      this.prepareOrder()
-      // this.priceService.getDiscountPrice().subscribe((res: any) => {
-      //   this.discountAmount = res?.amount
-      //   this.hasDiscount = res?.isActive
-      //   if (this.hasDiscount == false) this.discountAmount = 0
-      //   this.priceService.getDeliveryPrice().subscribe((res: any) => {
-      //     this.deliveryAmount = res?.amount
-      //     this.hasDelivery = res?.isActive
-      //     if (this.hasDelivery == false) this.deliveryAmount = 0
-      //     this.prepareOrder()
-      //   })
-      // })
-      // this.userService.getAllClients().subscribe(value => console.log(value))
-    }
+    combineLatest([
+      this.store.select(getOrder),
+      this.store.select(getExtra)
+    ]).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(([order, extra]) => {
+      if (!order) {
+        this.router.navigate(['/menu'])
+      } else {
+        this.prepareOrder(order.main, extra)
+      }
+    })
+    // if (this.menuService.order.isComposed) {
+    // this.plates = this.menuService.order.main
+    // this.extra = this.menuService.order.extra
+
+    // this.priceService.getDiscountPrice().subscribe((res: any) => {
+    //   this.discountAmount = res?.amount
+    //   this.hasDiscount = res?.isActive
+    //   if (this.hasDiscount == false) this.discountAmount = 0
+    //   this.priceService.getDeliveryPrice().subscribe((res: any) => {
+    //     this.deliveryAmount = res?.amount
+    //     this.hasDelivery = res?.isActive
+    //     if (this.hasDelivery == false) this.deliveryAmount = 0
+    //     this.prepareOrder()
+    //   })
+    // })
+    // this.userService.getAllClients().subscribe(value => console.log(value))
+    // }
   }
 
   initForm() {
@@ -184,11 +175,15 @@ export class OrderCheckoutComponent implements OnInit {
     })
   }
 
-  prepareOrder() {
-    this.plates = this.menuService.order.main
-    this.extra = this.menuService.order.extra
+  prepareOrder(main, extra) {
+    this.plates = main
+
+
+    this.extra = extra
+    console.log(this.plates);
+    console.log(this.extra);
     this.plates.forEach((el) => {
-      const combinedOrder: CheckoutOrder = {
+      const combinedOrder: OrderItem = {
         starter: {
           name: 'NA',
           id: null,
@@ -214,8 +209,12 @@ export class OrderCheckoutComponent implements OnInit {
           id: this.extra.dessert.id,
         },
         plate: el,
+        name: '',
+        type: ''
       }
       this.order.plates.push(combinedOrder)
+      console.log(this.order);
+
     })
     const platePrice = this.plates.map((a) => a.price).reduce((a, b) => a + b, 0)
     const barPrice = this.barList.map((a) => a.price).reduce((a, b) => a + b, 0)
@@ -254,11 +253,14 @@ export class OrderCheckoutComponent implements OnInit {
           }
           break
         case 'table':
-          this.form.controls['table'].errors['required'] ? (this.hasTableNumberError = true) : (this.hasTableNumberError = false)
-
+          this.form.controls['table'].errors['required']
+            ? (this.hasTableNumberError = true)
+            : (this.hasTableNumberError = false)
           break
         case 'takeaway':
-          this.form.controls['name'].hasError('required') ? (this.hasTakeAwayError = true) : (this.hasTakeAwayError = false)
+          this.form.controls['name'].hasError('required')
+            ? (this.hasTakeAwayError = true)
+            : (this.hasTakeAwayError = false)
           break
       }
       this.form.markAllAsTouched()
@@ -285,7 +287,7 @@ export class OrderCheckoutComponent implements OnInit {
     this.order.status = 'requested'
     this.order.statusHistory.push({
       status: 'requested',
-      user: this.user,
+      user: this.user ?? 'default user' as any,
       createdAt: getCurrentUnixTime
     })
     this.order.comment = this.comment
@@ -298,30 +300,27 @@ export class OrderCheckoutComponent implements OnInit {
     // this.isClientUser = this.user.role === 'client'
   }
 
-  confirmOrder() {
+  async confirmOrder() {
     this.resetValidation()
     if (!this.hasSkippedStarter && !this.hasSkippedDrink && this.form.valid) {
       this.isUploading = true
       this.formatOrder()
-      this.isServiceUser ? this.confirmTableOrder() : this.confirmDelivery()
+      this.user = await firstValueFrom(this.appUser)
+      console.log(this.user);
+
+      this.user
+        ? this.confirmTableOrder()
+        : this.confirmDelivery()
     } else {
       this.hightlightValidation()
     }
   }
 
-  private handleDocumentCreateError(error) {
-    console.error(error)
-  }
-
   private confirmDelivery() {
-    // console.log(this.order)
+    this.order.createdAt = getCurrentUnixTime
 
     // this.tablesAmount.forEach(() => {
-    this.order.createdAt = getCurrentUnixTime
-    console.log(this.order.createdAt)
-
-    this.checkoutService.createDelivery(this.order)
-
+    // this.checkoutService.createDelivery(this.order)
     // })
     // this.checkoutService
     //   .createDelivery(this.order)
@@ -337,6 +336,8 @@ export class OrderCheckoutComponent implements OnInit {
     //     }, 4000)
     //   })
     //   .catch(error => this.handleDocumentCreateError(error))
+    console.log(this.order)
+    this.store.dispatch(ItemActions.createDeliveryOrder({ order: this.order }))
   }
 
   private confirmTableOrder() {
@@ -348,10 +349,10 @@ export class OrderCheckoutComponent implements OnInit {
       createdAt: getCurrentUnixTime,
     })
     console.log(this.order)
-    this.checkoutService
-      .createTableOrder(this.order)
-      .then(value => this.navRouter.navigate(['/orders', value.id]))
-      .catch(error => this.handleDocumentCreateError(error))
+    this.store.dispatch(ItemActions.createTableOrder({ order: this.order }))
+    // this.checkoutService.createTableOrder(this.order)
+    // .then(value => this.navRouter.navigate(['/orders', value.id]))
+    // .catch(error => this.handleDocumentCreateError(error))
   }
 
   updateMenuHistoryAmount() {
@@ -447,20 +448,20 @@ export class OrderCheckoutComponent implements OnInit {
     this.order.category.delivery.time = event
   }
 
-  updateTime(time: DeliveryTime) {
+  updateTime(time: OrderDeliveryTime) {
     this.deliveryTime = time
     if (time === 'now') this.order.category.delivery.time = 'now'
   }
 
   initClients() {
-    this.userService.getAllClients().subscribe((res) => {
-      this.clientList = res
-      this.filteredClients = this.clientFormControl.valueChanges.pipe(
-        startWith(''),
-        map(value => (typeof value === 'string' ? value : value.name)),
-        map((name) => (name ? this.filterAutocompleteName(name) : this.clientList.slice()))
-      )
-    })
+    // this.userService.getAllClients().subscribe((res) => {
+    //   this.clientList = res
+    //   this.filteredClients = this.clientFormControl.valueChanges.pipe(
+    //     startWith(''),
+    //     map(value => (typeof value === 'string' ? value : value.name)),
+    //     map((name) => (name ? this.filterAutocompleteName(name) : this.clientList.slice()))
+    //   )
+    // })
   }
 
   displayFn(item): string {
