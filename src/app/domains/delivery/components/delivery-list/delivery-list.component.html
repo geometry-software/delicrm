@@ -1,31 +1,20 @@
-<!-- <mat-tab-group [@.disabled]="true" (selectedIndexChange)="preloadTabData($event)">
-  <mat-tab label="New">
-    <ng-container
-      *ngTemplateOutlet="(dataList$ | async) ? deliveryTable : null; context: { $implicit: (dataList$ | async) }"></ng-container>
-  </mat-tab>
-  <mat-tab label="Confirmed">
-    <ng-container
-      *ngTemplateOutlet="(dataList$ | async) ? deliveryTable : null; context: { $implicit: (dataList$ | async) }"></ng-container>
-  </mat-tab>
-  <mat-tab label="Canceled">
-    <ng-container
-      *ngTemplateOutlet="(dataList$ | async) ? deliveryTable : null; context: { $implicit: (dataList$ | async) }"></ng-container>
-  </mat-tab>
-</mat-tab-group>
+<!-- <div class="relative">
+  <div class="table-loading-shade" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></div>
 
-<mat-tab-group [@.disabled]="true" (selectedTabChange)="preloadTabData($event)">
-  <ng-container *ngIf="(dataList | async) as data">
-    <mat-tab [label]="(listLabels | async).requested">
-      <ng-container *ngTemplateOutlet="deliveryTable; context: { data  }"></ng-container>
-    </mat-tab>
-    <mat-tab [label]="(listLabels | async).confirmed">
-      <ng-container *ngTemplateOutlet="deliveryTable; context: { data  }"></ng-container>
-    </mat-tab>
-    <mat-tab [label]="(listLabels | async).blocked">
-      <ng-container *ngTemplateOutlet="deliveryTable; context: { data  }"></ng-container>
-    </mat-tab>
-  </ng-container>
-</mat-tab-group> -->
+  <mat-tab-group [@.disabled]="true" (selectedTabChange)="changeUserList($event)" [(selectedIndex)]="selectedTabIndex">
+    <ng-container *ngIf="{ list: orderList | async, label: listLabels | async } as data">
+      <mat-tab [label]="data.label.new">
+        <ng-container *ngTemplateOutlet="deliveryTable; context: { data: data.list  }"></ng-container>
+      </mat-tab>
+      <mat-tab [label]="data.label.confirmed">
+        <ng-container *ngTemplateOutlet="deliveryTable; context: { data: data.list  }"></ng-container>
+      </mat-tab>
+      <mat-tab [label]="data.label.canceled">
+        <ng-container *ngTemplateOutlet="deliveryTable; context: { data: data.list  }"></ng-container>
+      </mat-tab>
+    </ng-container>
+  </mat-tab-group>
+</div> -->
 
 <ng-template #deliveryTable let-context>
   <mat-table [dataSource]="context">

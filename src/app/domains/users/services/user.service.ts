@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core'
 import { EMPTY, Observable, combineLatest, concat, delay, filter, from, map, of, shareReplay, switchMap, tap } from 'rxjs'
-import { UserConstants } from '../utils/user.constants'
-import { User, UserLoadingStatus, UserRole } from '../utils/user.model'
 import { OrderRequest } from '../../../shared/repository/repository.model'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { AuthStatus, Auth } from '../../../auth/models/auth.model'
@@ -10,6 +8,8 @@ import { AuthService } from '../../../auth/services/auth.service'
 import { setRestaurantAuth } from '../../../auth/models/auth-user.mapper'
 import { AuthConstants } from '../../../auth/models/auth.constants'
 import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
+import { User, UserRole } from '../models/user.model'
+import { UserConstants } from '../models/user.constants'
 
 @Injectable({
   providedIn: 'root',

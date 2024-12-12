@@ -3,8 +3,8 @@ import { FormControl } from '@angular/forms'
 import { EMPTY, Observable, debounceTime, tap } from 'rxjs'
 import { Store, select } from '@ngrx/store'
 import { getItemId, getLayoutLoading } from '../../store/user.selectors'
-import { UserConstants } from '../../utils/user.constants'
 import { UserActions as ItemActions } from '../../store/user.actions'
+import { UserConstants } from '../../models/user.constants'
 
 @Component({
   selector: 'app-users-layout',

@@ -1,5 +1,5 @@
 import { Recipe } from '../../recipe/models/recipe.model'
-import { User } from '../../users/utils/user.model'
+import { User } from '../../users/models/user.model'
 
 export class Order {
   id?: string
@@ -10,15 +10,15 @@ export class Order {
   price?: OrderPrice
   category?: OrderCategory
   progress?: OrderProgressStatus
-  status?: OrderStatusValue
-  statusHistory?: Array<OrderStatus>
+  status?: OrderStatus
+  statusHistory?: Array<OrderStatusHistory>
   plates?: Array<OrderItem>
   comment?: string
 }
 
-export class OrderStatus {
+export class OrderStatusHistory {
   user?: User
-  status?: OrderStatusValue
+  status?: OrderStatus
   createdAt?: number
 }
 
@@ -40,7 +40,7 @@ export class OrderCategory {
   table?: number
 }
 
-export type OrderStatusValue = 'requested' | 'cooking' | 'delivery' | 'paid' | 'canceled'
+export type OrderStatus = 'requested' | 'cooking' | 'delivery' | 'paid' | 'canceled'
 
 export type OrderProgressStatus = '60%' | '80%' | '100%'
 
@@ -62,6 +62,12 @@ export class OrderDelivery {
   comments?: string
 }
 
+export interface OrderStatusResponse {
+  cooking: number
+  delivery: number
+  paid: number
+  canceled: number
+}
 
 export type OrderDeliveryTime = 'now' | 'delayed'
 

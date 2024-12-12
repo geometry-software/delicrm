@@ -1,10 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { pulseOnEnterAnimation } from 'angular-animations'
-
-import { MenuService } from '../../services/menu.service'
-import { Order } from '../../utils/menu.model'
-import { RecipeProtein } from '../../../recipe/models/recipe.model'
+import { Order } from '../../../orders/models/order.model'
 import { setProteinImage } from '../../../../shared/utils/protein-image'
 
 @Component({
@@ -16,7 +13,7 @@ import { setProteinImage } from '../../../../shared/utils/protein-image'
 })
 export class ClientOrderComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private checkoutService: MenuService, private cdr: ChangeDetectorRef) { }
+  constructor(private route: ActivatedRoute, private cdr: ChangeDetectorRef) { }
 
   item: Order
 

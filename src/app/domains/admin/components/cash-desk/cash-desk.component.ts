@@ -61,28 +61,28 @@ export class CashDeskComponent implements OnInit {
   }
 
   loadPaidOrders() {
-    this.orderService.getArchivedOrders().subscribe((res) => {
-      this.orders = res
-      this.datasource = new MatTableDataSource(res)
-      this.sum = this.orders.map((a) => a.totalPrice).reduce((a, b) => a + b, 0)
-      this.amount = this.orders.length
-    })
+    // this.orderService.getArchivedOrders().subscribe((res) => {
+    //   this.orders = res
+    //   this.datasource = new MatTableDataSource(res)
+    //   this.sum = this.orders.map((a) => a.totalPrice).reduce((a, b) => a + b, 0)
+    //   this.amount = this.orders.length
+    // })
   }
 
   loadHistoryOrders() {
-    this.isLoadingHistory = true
-    this.adminService.getHistoryFirstPage(this.PAGE_ITEMS_SIZE).subscribe((res) => {
-      this.lastItem = [...res].pop()
-      this.datasourceHistorial = new MatTableDataSource(res)
-      this.isLoadingHistory = false
-    })
+    // this.isLoadingHistory = true
+    // this.adminService.getHistoryFirstPage(this.PAGE_ITEMS_SIZE).subscribe((res) => {
+    //   this.lastItem = [...res].pop()
+    //   this.datasourceHistorial = new MatTableDataSource(res)
+    //   this.isLoadingHistory = false
+    // })
   }
 
   loadServicePayments() {
-    this.orderService.getPaidOrders().subscribe((res) => {
-      this.orders = res
-      this.datasource = new MatTableDataSource(res)
-    })
+    // this.orderService.getPaidOrders().subscribe((res) => {
+    //   this.orders = res
+    //   this.datasource = new MatTableDataSource(res)
+    // })
   }
 
   applyFilter(filterValue: string) {
@@ -106,13 +106,13 @@ export class CashDeskComponent implements OnInit {
   }
 
   clearAllOrders() {
-    this.isUpdatingOrders = true
-    let queries = this.datasource.data.map((element) => {
-      return this.orderService.delete(element.id)
-    })
-    Promise.all(queries).then((res) => {
-      this.isUpdatingOrders = false
-    })
+    // this.isUpdatingOrders = true
+    // let queries = this.datasource.data.map((element) => {
+    //   return this.orderService.delete(element.id)
+    // })
+    // Promise.all(queries).then((res) => {
+    //   this.isUpdatingOrders = false
+    // })
   }
 
   redirect(path, id) {

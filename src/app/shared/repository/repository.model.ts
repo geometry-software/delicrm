@@ -36,8 +36,8 @@ export type RepositoryRequestOrder = 'desc' | 'asc'
 export interface RepositoryRequest<T, S> {
   pagination: PaginationRequest<T>
   size: SizeRequest
-  status: S
   order: OrderRequest
+  status: S
 }
 
 export interface SizeRequest {

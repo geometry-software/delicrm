@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core'
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
-import { Observable, combineLatest, firstValueFrom, map, startWith, tap } from 'rxjs'
+import { Observable, combineLatest, firstValueFrom, from, map, startWith, tap } from 'rxjs'
 import {
   zoomOutUpOnLeaveAnimation,
   expandOnEnterAnimation,
@@ -8,10 +8,10 @@ import {
   fadeInUpOnEnterAnimation,
   fadeInOnEnterAnimation,
 } from 'angular-animations'
-import { OrderItem, OrderDeliveryTime, Order, OrderType } from '../../utils/menu.model'
+import { OrderItem, OrderDeliveryTime, Order, OrderType } from '../../../orders/models/order.model'
 import { MenuActions as ItemActions } from '../../store/menu.actions'
 import { Recipe } from '../../../recipe/models/recipe.model'
-import { User } from '../../../users/utils/user.model'
+import { User } from '../../../users/models/user.model'
 import { UserService } from '../../../users/services/user.service'
 import { MenuConstants } from '../../utils/menu.constants'
 import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
@@ -53,9 +53,10 @@ export class OrderCheckoutComponent implements OnInit {
   total: number = 0
   deliveryTime: OrderDeliveryTime = 'now'
   order: Order = {
+    createdAt: getCurrentUnixTime,
     plates: new Array(),
     // alacarte: this.menuService.order.alacarte,
-    statusHistory: new Array(),
+    statusHistory: [],
     category: {
       delivery: {},
     },
@@ -353,6 +354,10 @@ export class OrderCheckoutComponent implements OnInit {
     // this.checkoutService.createTableOrder(this.order)
     // .then(value => this.navRouter.navigate(['/orders', value.id]))
     // .catch(error => this.handleDocumentCreateError(error))
+
+    // from(new Array(20)).subscribe(() => {
+    //   this.store.dispatch(ItemActions.createTableOrder({ order: this.order }))
+    // })
   }
 
   updateMenuHistoryAmount() {

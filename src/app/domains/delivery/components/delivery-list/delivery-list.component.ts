@@ -3,13 +3,19 @@ import { Router } from '@angular/router'
 import { MatDialog } from '@angular/material/dialog'
 import { MatTableDataSource } from '@angular/material/table'
 import { DeliveryService } from '../../services/delivery.service'
-import { Observable, combineLatest, of, shareReplay, switchMap, tap } from 'rxjs'
+import { EMPTY, Observable, combineLatest, of, shareReplay, switchMap, tap } from 'rxjs'
 import { Store } from '@ngrx/store'
-import { Order, OrderStatusValue } from '../../../menu/utils/menu.model'
+import { Order, OrderStatus } from '../../../orders/models/order.model'
 import { AuthService } from '../../../../auth/services/auth.service'
-import { User } from '../../../users/utils/user.model'
+import { User } from '../../../users/models/user.model'
 import { DeliveryDetailComponent } from '../delivery-detail/delivery-detail.component'
 import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
+import { MatTabChangeEvent } from '@angular/material/tabs'
+import { LoadingStatus } from '../../../../shared/models/loading-status'
+import { DeliveryConstants } from '../../models/delivery.constants'
+import { FormControl } from '@angular/forms'
+import { getPaginationResponse } from '../../store/orders.selectors'
+import { DeliveryActions } from '../../store/orders.actions'
 
 @Component({
   selector: 'app-delivery-list',
@@ -31,26 +37,40 @@ export class DeliveryListComponent {
   datasource
   displayedColumns = ['user', 'plates']
 
-  orders = new Array()
-  delivery: Order = {}
-  deliveryId
-  user: User
+  selectedTabIndex: number
+  updatedStatus: OrderStatus
 
-  // PAGE_ITEMS_SIZE = 20
-  // firstItem
-  // lastItem
+  readonly LoadingStatus = LoadingStatus
+  readonly defaultFirstPageRequest = DeliveryConstants.defaultFirstPageRequest
+  readonly defaultOrderControl = DeliveryConstants.defaultOrderControlValue
+  readonly tableColumns = DeliveryConstants.tableColumns
+  readonly defaultOrderControlValue = DeliveryConstants.defaultOrderControlValue
+  readonly defaultPaginationControlValue = DeliveryConstants.defaultPaginationControlValue
+  readonly defaultSizeControlValue = DeliveryConstants.defaultSizeControlValue
+  readonly defaultRequestStatus = DeliveryConstants.defaultRequestStatus
+  // readonly userStatusFormComponentConfig = SharedConstants.formComponentConfig
 
-  readonly defaultPaginationControlValue: any = {
-    query: 'first',
-    item: null,
-  }
-  readonly defaultSizeControlValue = {
-    size: 10,
-  }
+  // readonly orderList = this.store.select(getItems)
+  // readonly listLabels = this.store.select(getListLabels)
+  // readonly loadingStatus = this.store.select(getItemsLoadingStatus)
 
-  readonly defaultOrderControlValue: any = {
-    active: 'createdAt',
-    direction: 'desc',
+  readonly paginationControl = new FormControl(this.defaultPaginationControlValue)
+  readonly sizeControl = new FormControl(this.defaultSizeControlValue)
+  readonly orderControl = new FormControl(this.defaultOrderControlValue)
+  readonly downloadState = EMPTY
+  readonly paginationPayload = this.store.select(getPaginationResponse)
+
+  changeUserList(event: MatTabChangeEvent) {
+    let labelAmount = event.tab.textLabel.split('(').pop().slice(0, -1)
+    const status = event.tab.textLabel.slice(0, -labelAmount.length - 3).toLowerCase() as unknown as OrderStatus
+    this.store.dispatch(DeliveryActions.getItems({
+      request: {
+        pagination: this.defaultFirstPageRequest.pagination,
+        size: this.defaultFirstPageRequest.size,
+        status,
+        order: this.defaultFirstPageRequest.order
+      }
+    }))
   }
 
   // ngOnInit() {
@@ -83,22 +103,22 @@ export class DeliveryListComponent {
   }
 
   preloadTabData(ev) {
-    switch (ev) {
-      case 0:
-        this.initDelivery('requested')
-        break
-      case 1:
-        this.initDelivery('delivery')
-        break
-      case 2:
-        this.initDelivery('canceled')
-        break
-      default:
-        break
-    }
+    // switch (ev) {
+    //   case 0:
+    //     this.initDelivery('requested')
+    //     break
+    //   case 1:
+    //     this.initDelivery('delivery')
+    //     break
+    //   case 2:
+    //     this.initDelivery('canceled')
+    //     break
+    //   default:
+    //     break
+    // }
   }
 
-  initDelivery(status: OrderStatusValue) {
+  initDelivery(status: OrderStatus) {
     this.datasource = combineLatest([]).pipe(
       switchMap(() =>
         this.deliveryService.getNewDeliveries(status).pipe(
@@ -141,8 +161,8 @@ export class DeliveryListComponent {
   // }
 
   showDetail(data): void {
-    this.delivery = data
-    this.deliveryId = data.id
+    // this.delivery = data
+    // this.deliveryId = data.id
     let dialogRef = this.dialog.open(DeliveryDetailComponent, {
       width: '300px',
       maxHeight: 'auto',
@@ -158,15 +178,15 @@ export class DeliveryListComponent {
   }
 
   confirm(): void {
-    this.delivery.status = 'cooking'
-    this.delivery.progress = '60%'
-    this.delivery.category.delivery.id = this.delivery.id
-    this.delivery.statusHistory.push({
-      status: 'cooking',
-      user: this.user,
-      createdAt: getCurrentUnixTime,
-    })
-    delete this.delivery.id
+    // this.delivery.status = 'cooking'
+    // this.delivery.progress = '60%'
+    // this.delivery.category.delivery.id = this.delivery.id
+    // this.delivery.statusHistory.push({
+    //   status: 'cooking',
+    //   user: this.user,
+    //   createdAt: getCurrentUnixTime,
+    // })
+    // delete this.delivery.id
     // this.deliveryService
     //   .createOrder(this.delivery)
     //   .then(value =>
@@ -175,9 +195,9 @@ export class DeliveryListComponent {
   }
 
   reject(): void {
-    this.deliveryService.rejectDelivery(this.deliveryId, 'cause of').pipe(
-      tap(() => this.preloadTabData(2))
-    )
+    // this.deliveryService.rejectDelivery(this.deliveryId, 'cause of').pipe(
+    //   tap(() => this.preloadTabData(2))
+    // )
   }
 
   // showOrder(id) {

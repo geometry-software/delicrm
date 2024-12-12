@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { MatDialog } from '@angular/material/dialog'
-import { MenuService } from '../../services/menu.service'
 import { fadeInOnEnterAnimation, fadeInUpOnEnterAnimation, rubberBandOnEnterAnimation } from 'angular-animations'
 import { PlateDetailComponent } from '../plate-detail/plate-detail.component'
 import { MenuActions as ItemActions } from '../../store/menu.actions'
-import { Order } from '../../utils/menu.model'
+import { Order } from '../../../orders/models/order.model'
 import { Recipe } from '../../../recipe/models/recipe.model'
 import { setProteinImage } from '../../../../shared/utils/protein-image'
 import { MenuConstants } from '../../utils/menu.constants'
@@ -40,7 +39,7 @@ export class DailyMenuComponent implements OnInit {
   barTableArray = new Array()
 
   alaCarteList: Array<Recipe & { isRemoved: boolean }>
-  plateOrder: Order = {}
+  plateOrder: Order
   plateList
   readonly chosenDailyMenuItems = []
   readonly chosenAlaCarteItems = []

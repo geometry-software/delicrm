@@ -2,15 +2,13 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { ActivatedRoute, Router } from '@angular/router'
 import { MatTableDataSource } from '@angular/material/table'
 import { MatDialog } from '@angular/material/dialog'
-import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { OrderService } from '../../services/order.service'
 import { fadeInLeftOnEnterAnimation, fadeInOnEnterAnimation } from 'angular-animations'
-import { STATUS_COLOR, STATUS_ICON } from '../../utils/waiter.constants'
+import { STATUS_COLOR, STATUS_ICON } from '../../models/order.constants'
 import { PrintService } from '../../../../shared/services/print.service'
 import { tap } from 'rxjs'
-import { Order, OrderStatus, OrderStatusValue, OrderProgressStatus } from '../../../menu/utils/menu.model'
-import { User } from '../../../users/utils/user.model'
+import { Order, OrderStatus, OrderProgressStatus } from '../../models/order.model'
 import { UserService } from '../../../users/services/user.service'
 import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 
@@ -45,17 +43,16 @@ export class OrderDetailComponent implements OnInit {
   printButtonTitle: string = 'Print'
   statusColor = STATUS_COLOR
   statusIcon = STATUS_ICON
-  user: User
 
   ngOnInit() {
     this.initAuth()
     this.orderId = this.router.snapshot.params['id']
-    this.orderService.getDocument(this.orderId).subscribe(value => {
-      console.log(value)
-      this.order = value
-      this.cdr.markForCheck()
-      this.isOrderClosed = !!this.order.statusHistory.find((el) => el.status === 'paid' || el.status === 'canceled')
-    })
+    // this.orderService.getDocument(this.orderId).subscribe(value => {
+    //   console.log(value)
+    //   this.order = value
+    //   this.cdr.markForCheck()
+    //   this.isOrderClosed = !!this.order.statusHistory.find((el) => el.status === 'paid' || el.status === 'canceled')
+    // })
   }
 
   copyAddress(): void {
@@ -80,7 +77,7 @@ export class OrderDetailComponent implements OnInit {
 
   update() {
     const currentStatus = this.order.status
-    let newStatus: OrderStatusValue
+    let newStatus: OrderStatus
     let progress: OrderProgressStatus
     switch (currentStatus) {
       case 'cooking':
@@ -92,13 +89,13 @@ export class OrderDetailComponent implements OnInit {
         progress = '100%'
         break
     }
-    const historyData: OrderStatus = {
-      status: newStatus,
-      createdAt: getCurrentUnixTime,
-      user: this.user,
-    }
-    this.order.statusHistory.push(historyData)
-    this.orderService.updateStatus(this.orderId, newStatus, this.order.statusHistory, progress)
+    // const historyData: OrderStatusHistory = {
+    //   status: newStatus,
+    //   createdAt: getCurrentUnixTime,
+    //   user: this.user,
+    // }
+    // this.order.statusHistory.push(historyData)
+    // this.orderService.updateStatus(this.orderId, newStatus, this.order.statusHistory, progress)
   }
 
   initAuth() {
@@ -113,11 +110,11 @@ export class OrderDetailComponent implements OnInit {
     //   .subscribe()
   }
 
-  getTimestamp(status: OrderStatusValue) {
-    return this.order.statusHistory.find((el) => el.status === status).createdAt
+  getTimestamp(status: OrderStatus) {
+    // return this.order.statusHistory.find((el) => el.status === status).createdAt
   }
 
-  getUser(status: OrderStatusValue) {
+  getUser(status: OrderStatus) {
     // return this.order.statusHistory.find((el) => el.status === status).user.name
   }
 }

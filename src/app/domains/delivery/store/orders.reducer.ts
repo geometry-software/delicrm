@@ -1,0 +1,112 @@
+import { createReducer, on } from '@ngrx/store'
+import { DeliveryActions as ItemActions } from './orders.actions'
+import { formatPaginationData } from '../../../shared/repository/repository.utils'
+import { State, initialState } from './orders.state'
+import { LoadingStatus } from '../../../shared/models/loading-status'
+
+export const reducer = createReducer<State>(
+  initialState,
+  on(ItemActions.getItems, (state) => ({
+    ...state,
+    itemsLoadingStatus: LoadingStatus.Loading,
+    items: {
+      data: state.items?.data,
+      total: state.items?.total,
+      current: state.items?.data?.length,
+      size: state.items?.size,
+      error: null,
+    },
+  })),
+  on(ItemActions.getItemsBySearchQuery, (state) => ({
+    ...state,
+    items: {
+      data: state.items?.data,
+      total: state.items?.total,
+      current: state.items?.data?.length,
+      size: state.items?.size,
+      error: null,
+    },
+  })),
+  on(ItemActions.getItemsSuccess, (state, { items, total, query, size, itemAmountByStatus }) => {
+    const { responseTotal, current } = formatPaginationData(query, state, items.length, total, size ?? state.items?.size)
+    return {
+      ...state,
+      itemsLoadingStatus: LoadingStatus.Loaded,
+      listResponseType: query,
+      items: {
+        data: items,
+        total: responseTotal,
+        current: current,
+        size: size ?? state.items.size,
+        error: null,
+      },
+      itemAmountByStatus,
+      resetRequest: false,
+      itemId: null,
+    }
+  }),
+  // on(ItemActions.getUsersTotalAmount, (state) => ({
+  //   ...state,
+  //   items: {
+  //     data: null,
+  //     loading: true,
+  //     total: state.items?.total,
+  //     current: state.items?.data?.length,
+  //     size: state.items?.size,
+  //     error: null,
+  //   },
+  // })),
+  // on(ItemActions.updateUserStatus, (state) => ({
+  //   ...state,
+  //   isStatusUpdated: false,
+  // })),
+  // on(ItemActions.updateUserStatusSuccess, (state) => ({
+  //   ...state,
+  //   isStatusUpdated: true,
+  // })),
+  // on(ItemActions.getUsersTotalAmountSuccess, (state, { response }) => ({
+  //   ...state,
+  //   items: {
+  //     loading: false,
+  //     data: state.items?.data,
+  //     total: state.items?.total,
+  //     current: state.items?.data?.length,
+  //     size: state.items?.size,
+  //     error: null,
+  //   },
+  //   listLabelAmount: response,
+  // })),
+  on(ItemActions.getItem, (state, { id }) => ({
+    ...state,
+    itemId: id,
+    item: {
+      data: null,
+      loading: true,
+    },
+  })),
+  on(ItemActions.getItemSuccess, (state, { item }) => ({
+    ...state,
+    item: {
+      data: item,
+      loading: false,
+    },
+  })),
+  on(ItemActions.createItem, (state) => ({
+    ...state,
+    item: {
+      data: state.item?.data,
+      loading: true,
+    },
+  })),
+  on(ItemActions.updateItem, (state) => ({
+    ...state,
+    item: {
+      data: state.item?.data,
+      loading: true,
+    },
+  })),
+  on(ItemActions.resetRequestToTheFirstPage, (state) => ({
+    ...state,
+    resetRequest: true,
+  }))
+)

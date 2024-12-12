@@ -1,5 +1,5 @@
 import { MatDrawerMode } from '@angular/material/sidenav'
-import { UserRole } from '../../domains/users/utils/user.model'
+import { UserRole } from '../../domains/users/models/user.model'
 
 export interface MenuOption {
   title?: string

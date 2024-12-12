@@ -1,31 +1,31 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
 import { FilterRequest, RepositoryEntityAction, RepositoryRequest, RepositoryRequestQuery } from '../../../shared/repository/repository.model'
-import { AuthStatus } from '../../../auth/models/auth.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { UserConstants } from '../models/user.constants'
-import { User, UserStatusResponse } from '../models/user.model'
+import { DeliveryConstants } from '../models/delivery.constants'
+import { Order, OrderStatus, OrderStatusResponse } from '../../orders/models/order.model'
+// import { Order, OrderStatus, OrderStatusResponse } from '../models/order.model'
 
-export const UserActions = createActionGroup({
-  source: UserConstants.storeFeatureKey,
+export const DeliveryActions = createActionGroup({
+  source: DeliveryConstants.storeFeatureKey,
   events: {
-    'Get Items': props<{ request: RepositoryRequest<User, AuthStatus> }>(),
+    'Get Items': props<{ request: RepositoryRequest<Order, OrderStatus> }>(),
     'Set Items Loading Status': props<{ status: LoadingStatus }>(),
-    'Create Item': props<{ item: User }>(),
-    'Update User Status': props<{ id: string, status: AuthStatus }>(),
-    'Update User Status Failed': emptyProps(),
-    'Update User Status Success': emptyProps(),
+    'Create Item': props<{ item: Order }>(),
+    'Update Order Status': props<{ id: string, status: OrderStatus }>(),
+    'Update Order Status Failed': emptyProps(),
+    'Update Order Status Success': emptyProps(),
     'Create Item Success': props<{ response: any; total: number }>(),
-    'Update Item': props<{ item: User; id: string }>(),
+    'Update Item': props<{ item: Order; id: string }>(),
     'Update Item Success': emptyProps(),
     'Get Item': props<{ id: string }>(),
-    'Get Item Success': props<{ item: User }>(),
+    'Get Item Success': props<{ item: Order }>(),
     'Get Items By Search Query': props<{ request: FilterRequest }>(),
     'Get Items Success': props<{
-      items: User[]
+      items: Order[]
       query: RepositoryRequestQuery
       total?: number
       size?: number
-      listLabelAmount?: UserStatusResponse
+      itemAmountByStatus?: OrderStatusResponse
     }>(),
     'Notify Error': props<{ error: Error; errorType: RepositoryEntityAction }>(),
     'Reset Request To The First Page': emptyProps(),

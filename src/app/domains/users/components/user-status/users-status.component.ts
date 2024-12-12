@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core'
-import { UserConstants } from '../../utils/user.constants'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 import { AuthStatus } from '../../../../auth/models/auth.model'
+import { UserConstants } from '../../models/user.constants'
 
 @Component({
   selector: 'app-user-status',

@@ -1,4 +1,4 @@
-import { Order } from "../../menu/utils/menu.model"
+import { Order } from "../../orders/models/order.model"
 
 export type Restaurant = {
     name: string

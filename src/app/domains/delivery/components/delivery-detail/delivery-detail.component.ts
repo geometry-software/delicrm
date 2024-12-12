@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
-import { Order } from '../../../menu/utils/menu.model'
+import { Order } from '../../../orders/models/order.model'
 
 @Component({
   selector: 'app-delivery-detail',
@@ -14,14 +14,16 @@ export class DeliveryDetailComponent {
   isDeleteOrder: boolean
   isRejectedOrder: boolean
 
-  constructor(public dialogRef: MatDialogRef<DeliveryDetailComponent>, @Inject(MAT_DIALOG_DATA) public data: Order) { }
+  data: any
+
+  constructor() { }
 
   confirm() {
-    this.dialogRef.close('confirm')
+    // this.dialogRef.close('confirm')
   }
 
   cancel() {
-    this.dialogRef.close('delete')
+    // this.dialogRef.close('delete')
   }
 
   showConfirmaion() {

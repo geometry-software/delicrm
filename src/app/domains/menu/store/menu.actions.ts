@@ -2,7 +2,7 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store'
 import { FilterRequest, RepositoryEntityAction, RepositoryRequest, RepositoryRequestQuery } from '../../../shared/repository/repository.model'
 import { AuthStatus } from '../../../auth/models/auth.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { Order } from '../utils/menu.model'
+import { Order } from '../../orders/models/order.model'
 import { MenuConstants } from '../utils/menu.constants'
 
 export const MenuActions = createActionGroup({

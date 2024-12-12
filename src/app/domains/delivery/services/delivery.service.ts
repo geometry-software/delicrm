@@ -1,16 +1,22 @@
 import { Injectable } from '@angular/core'
-import { Order, OrderStatusValue } from '../../menu/utils/menu.model'
+import { Order, OrderStatus } from '../../orders/models/order.model'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { MenuConstants } from '../../menu/utils/menu.constants'
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class DeliveryService {
 
-  constructor(private repositoryService: RepositoryService<Order, OrderStatusValue>) { }
+  constructor(private repositoryService: RepositoryService<Order, OrderStatus>) { }
 
   private readonly collection = MenuConstants.collectionNameDelivery
 
-  getNewDeliveries(status: OrderStatusValue) {
+  create(order: Order) {
+    return this.repositoryService.createDocument(this.collection, order)
+  }
+
+  getNewDeliveries(status: OrderStatus) {
     return this.repositoryService.getAllDocumentsByStatus(this.collection, status)
   }
 

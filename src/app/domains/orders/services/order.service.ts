@@ -1,215 +1,91 @@
 import { Injectable } from '@angular/core'
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/compat/firestore'
-import { map } from 'rxjs/operators'
-import { Order } from '../../menu/utils/menu.model'
+import { EMPTY, Observable, combineLatest, map } from 'rxjs'
+import { OrderConstants } from '../models/order.constants'
+import { OrderRequest } from '../../../shared/repository/repository.model'
+import { RepositoryService } from '../../../shared/repository/repository.service'
+import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
+import { Order, OrderStatus } from '../models/order.model'
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class OrderService {
-  fsCollectionName = 'Orders'
-  fsDocument: AngularFirestoreDocument<Order>
 
-  public order: Order = {}
-  public barList = new Array()
+  constructor(
+    private repositoryService: RepositoryService<Order, OrderStatus>,
+  ) { }
 
-  constructor(private afs: AngularFirestore) { }
+  private readonly collection = OrderConstants.collectionName
 
-  createDocument(data) {
-    return this.afs.collection(this.fsCollectionName).add(data)
+  create(order: Order) {
+    return this.repositoryService.createDocument(this.collection, order)
   }
 
-  getCookingOrders() {
-    const col = this.afs.collection(this.fsCollectionName, (ref) =>
-      ref.where('status', '==', 'cooking').orderBy('createdAt', 'desc')
-    )
-    return col.snapshotChanges().pipe(
-      map((res: any) => {
-        return res.map((res) => {
-          return {
-            id: res.payload.doc.id,
-            ...(res.payload.doc.data() as Order),
-          }
-        })
-      })
-    )
+  getAll() {
+    return this.repositoryService.getAllDocuments(this.collection)
   }
 
-  getDeliveryOrders() {
-    const col = this.afs.collection(this.fsCollectionName, (ref) =>
-      ref.where('status', '==', 'delivery').orderBy('createdAt', 'desc')
-    )
-    return col.snapshotChanges().pipe(
-      map((res: any) => {
-        return res.map((res) => {
-          return {
-            id: res.payload.doc.id,
-            ...(res.payload.doc.data() as Order),
-          }
-        })
-      })
+  getById(id: string) {
+    return this.repositoryService.getDocumentById(this.collection, id)
+  }
+
+  getTotalByStatus(status: OrderStatus) {
+    return this.repositoryService.getCollectionSizeByStatus<OrderStatus>(this.collection, status)
+  }
+
+  getTotalLabels() {
+    return combineLatest([
+      this.getTotalByStatus('cooking'),
+      this.getTotalByStatus('delivery'),
+      this.getTotalByStatus('paid'),
+      this.getTotalByStatus('canceled'),
+    ]).pipe(
+      map(([cooking, delivery, paid, canceled]) => ({
+        cooking, delivery, paid, canceled
+      }))
     )
   }
 
-  getPaidOrders() {
-    const col = this.afs.collection(this.fsCollectionName, (ref) =>
-      ref.where('status', '==', 'paid').orderBy('createdAt', 'desc')
-    )
-    return col.snapshotChanges().pipe(
-      map((res: any) => {
-        return res.map((res) => {
-          return {
-            id: res.payload.doc.id,
-            ...(res.payload.doc.data() as Order),
-          }
-        })
-      })
-    )
+  getFirstPage(order: OrderRequest, size: number, status: OrderStatus) {
+    // console.warn('users: getFirstPage Service');
+    // console.log(order);
+    // console.log(size);
+    // console.log(status);
+    return this.repositoryService.getFirstPage<OrderStatus>(this.collection, order, size, 'status', status)
   }
 
-  // getPaidOrdersFirstPage(pageSize) {
-  //   let col = this.afs.collection(this.fsCollectionName, (ref) =>
-  //     ref.where('isDelivered', '==', true).where('isPaid', '==', true).orderBy('createdAt', 'desc').limit(pageSize)
-  //   )
-  //   return col.snapshotChanges().pipe(
-  //     map((res: any) => {
-  //       return res.map((res) => {
-  //         return { id: res.payload.doc.id, ...res.payload.doc.data() }
-  //       })
-  //     })
-  //   )
-  // }
-
-  // getPaidOrdersNextPage(pageSize, item) {
-  //   let col = this.afs.collection(this.fsCollectionName, (ref) =>
-  //     ref
-  //       .where('isDelivered', '==', true)
-  //       .where('isPaid', '==', true)
-  //       .orderBy('createdAt', 'desc')
-  //       .startAfter(item['createdAt'])
-  //       .limit(pageSize)
-  //   )
-  //   return col.snapshotChanges().pipe(
-  //     map((res: any) => {
-  //       return res.map((res) => {
-  //         return { id: res.payload.doc.id, ...res.payload.doc.data() }
-  //       })
-  //     })
-  //   )
-  // }
-
-  // getPaidOrdersPreviousPage(pageSize, item) {
-  //   let col = this.afs.collection(this.fsCollectionName, (ref) =>
-  //     ref
-  //       .where('isDelivered', '==', true)
-  //       .where('isPaid', '==', true)
-  //       .orderBy('createdAt', 'desc')
-  //       .endBefore(item['createdAt'])
-  //       .limitToLast(pageSize)
-  //   )
-  //   return col.snapshotChanges().pipe(
-  //     map((res: any) => {
-  //       return res.map((res) => {
-  //         return { id: res.payload.doc.id, ...res.payload.doc.data() }
-  //       })
-  //     })
-  //   )
-  // }
-
-  getArchivedOrders() {
-    let col = this.afs.collection(this.fsCollectionName, (ref) =>
-      ref
-        .where('isDelivered', '==', true)
-        .where('isPaid', '==', true)
-        .where('isArchived', '==', false)
-        .orderBy('createdAt', 'desc')
-    )
-    return col.snapshotChanges().pipe(
-      map((res: any) => {
-        return res.map((res) => {
-          return { id: res.payload.doc.id, ...res.payload.doc.data() }
-        })
-      })
-    )
+  getNextPage<V>(order: OrderRequest, size: number, status: OrderStatus, value: V) {
+    return this.repositoryService.getNextPage<OrderStatus, V>(this.collection, order, size, 'status', status, value)
   }
 
-  getRejectedOrders() {
-    let query = this.afs.collection(this.fsCollectionName, (ref) =>
-      ref.where('isRejected', '==', true).orderBy('createdAt', 'desc')
-    )
-    return query.snapshotChanges().pipe(
-      map((res) => {
-        return res.map((res: any) => {
-          return {
-            id: res.payload.doc.id,
-            ...res.payload.doc.data(),
-          }
-        })
-      })
-    )
+  getPreviousPage<V>(order: OrderRequest, size: number, status: OrderStatus, value: V) {
+    return this.repositoryService.getPreviousPage<OrderStatus, V>(this.collection, order, size, 'status', status, value)
   }
 
-  getOrdersByWaiter(id) {
-    let col = this.afs.collection(this.fsCollectionName, (ref) =>
-      ref.where('waiter.id', '==', id).where('isPaid', '==', true).orderBy('createdAt', 'desc')
-    )
-    return col.snapshotChanges().pipe(
-      map((res: any) => {
-        return res.map((res) => {
-          return {
-            id: res.payload.doc.id,
-            ...(res.payload.doc.data() as Order),
-          }
-        })
-      })
-    )
+  getAllByQuery(property: string, value: string) {
+    return this.repositoryService.getAllDocumentsByIncludesQuery(this.collection, property, value)
   }
 
-  getOrdersByClient(id) {
-    let col = this.afs.collection(this.fsCollectionName, (ref) =>
-      ref.where('client.id', '==', id).where('type', '==', 'DOMICILIO').orderBy('createdAt', 'desc')
-    )
-    return col.snapshotChanges().pipe(
-      map((res: any) => {
-        return res.map((res) => {
-          return {
-            id: res.payload.doc.id,
-            ...(res.payload.doc.data() as Order),
-          }
-        })
-      })
-    )
+  set(item: Order, id: string) {
+    return this.repositoryService.setDocument(this.collection, item, id)
   }
 
-  getDocument(id) {
-    return this.afs.doc(this.fsCollectionName + '/' + id).valueChanges()
+  update(item: Order, id: string) {
+    return this.repositoryService.updateDocument(this.collection, item, id)
   }
 
-  delete(id) {
-    return this.afs.doc(this.fsCollectionName + '/' + id).delete()
+  updateStatus(status: OrderStatus, id: string) {
+    return this.repositoryService.updateDocument(this.collection, { status }, id)
   }
 
-  updateDocument(id, data) {
-    // this.fsCollection.doc(id).update({ data: data })
+  updateRestaurant<T>(item: T): Observable<void> {
+    // return this.repositoryService.setDocument(this.restaurantCollectionName, item, this.restaurantCollectionId)
+    return EMPTY
   }
 
-  updateStatus(id, status, history, progress) {
-    return this.afs
-      .collection(this.fsCollectionName)
-      .doc(id)
-      .update({ status: status, statusHistory: history, progress: progress })
+
+  getAllClients() {
+    return this.repositoryService.getAllDocumentsByStatus(this.collection, 'client')
   }
 
-  updateDeliveryOrder(id, waiter) {
-    // return this.fsCollection.doc(id).update({ isDelivered: true, waiter: waiter })
-    return
-  }
-
-  updatePaidOrder(id, waiter) {
-    // return this.fsCollection.doc(id).update({ isPaid: true, isDelivered: true, waiter: waiter })
-    return
-  }
-
-  updateToArchiveOrder(id) {
-    // return this.fsCollection.doc(id).update({ isArchived: true })
-    return
-  }
 }

@@ -6,7 +6,6 @@ import { SharedModule } from '../../shared/shared.module'
 import { OrderCheckoutComponent } from './components/order-checkout/order-checkout.component'
 import { MenuLayoutComponent } from './components/menu-layout/menu-layout.component'
 import { ClientOrderComponent } from './components/client-order/client-order.component'
-import { MenuService } from './services/menu.service'
 import { MenuConstants } from './utils/menu.constants'
 import { MenuEffects } from './store/menu.effects'
 import { reducer } from './store/menu.reducer'
@@ -26,7 +25,6 @@ import { EffectsModule } from '@ngrx/effects'
     WaiterRoutingModule,
     StoreModule.forFeature(MenuConstants.storeFeatureKey, reducer),
     EffectsModule.forFeature([MenuEffects]),
-  ],
-  providers: [MenuService],
+  ]
 })
 export class WaiterModule { }

@@ -5,10 +5,11 @@ import { MenuActions as ItemActions } from './menu.actions'
 import { Router } from '@angular/router'
 import { Action, Store } from '@ngrx/store'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { MenuService } from '../services/menu.service'
 import { SignalService } from '../../../shared/services/signal.service'
 import { RestaurantService } from '../../admin/services/restaurant.service'
 import { MenuConstants } from '../utils/menu.constants'
+import { OrderService } from '../../orders/services/order.service'
+import { DeliveryService } from '../../delivery/services/delivery.service'
 
 @Injectable()
 export class MenuEffects implements OnInitEffects {
@@ -17,7 +18,8 @@ export class MenuEffects implements OnInitEffects {
     private router: Router,
     private actions: Actions,
     private store: Store,
-    private menuService: MenuService,
+    private deliveryService: DeliveryService,
+    private orderService: OrderService,
     private restaurantService: RestaurantService,
     private signalService: SignalService
   ) { }
@@ -51,7 +53,7 @@ export class MenuEffects implements OnInitEffects {
   createDeliveryOrder = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.createDeliveryOrder),
-      switchMap(({ order }) => this.menuService.createDelivery(order).pipe(
+      switchMap(({ order }) => this.deliveryService.create(order).pipe(
         map(id => ItemActions.createOrderSuccess({ id })),
         catchError(() => this.handleError())
       )))
@@ -60,7 +62,7 @@ export class MenuEffects implements OnInitEffects {
   createTableOrder = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.createTableOrder),
-      switchMap(({ order }) => this.menuService.createTableOrder(order).pipe(
+      switchMap(({ order }) => this.orderService.create(order).pipe(
         tap(() => this.router.navigate([this.ordersUrl])),
         map(id => ItemActions.createOrderSuccess({ id })),
         catchError(() => this.handleError())

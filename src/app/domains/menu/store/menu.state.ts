@@ -1,5 +1,5 @@
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { Order } from '../utils/menu.model'
+import { Order } from '../../orders/models/order.model'
 
 export interface State {
   open: boolean

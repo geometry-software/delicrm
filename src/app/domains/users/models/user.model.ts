@@ -17,7 +17,7 @@ export enum UserLoadingStatus {
   LoadingSuccess = 'LoadingSuccess'
 }
 
-export interface UserStatusTotalResponse {
+export interface UserStatusResponse {
   requested: number
   confirmed: number
   blocked: number

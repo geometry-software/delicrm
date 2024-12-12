@@ -91,12 +91,9 @@
 
           <ng-container [ngSwitch]="orderType">
             <ng-container *ngSwitchCase="'table'">
-              <mat-form-field>
-                <mat-select placeholder="Table number" formControlName="type" formControlName="table">
-                  <mat-option *ngFor="let item of tablesAmount" [value]="item">
-                    <span>{{ item }}</span>
-                  </mat-option>
-                </mat-select>
+              <mat-form-field [hideRequiredMarker]="true">
+                <mat-label>Table number</mat-label>
+                <input matInput type="number" formControlName="table" />
               </mat-form-field>
             </ng-container>
             <ng-container *ngSwitchCase="'takeaway'">
