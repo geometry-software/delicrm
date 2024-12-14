@@ -1,50 +1,49 @@
 import { createReducer, on } from '@ngrx/store'
 import { ClientActions as ItemActions } from './client.actions'
-import { formatPaginationData } from '../../../shared/repository/repository.utils'
 import { State, initialState } from './client.state'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 
 export const reducer = createReducer<State>(
   initialState,
-  on(ItemActions.getItems, (state) => ({
-    ...state,
-    itemsLoadingStatus: LoadingStatus.Loading,
-    items: {
-      data: state.items?.data,
-      total: state.items?.total,
-      current: state.items?.data?.length,
-      size: state.items?.size,
-      error: null,
-    },
-  })),
-  on(ItemActions.getItemsBySearchQuery, (state) => ({
-    ...state,
-    items: {
-      data: state.items?.data,
-      total: state.items?.total,
-      current: state.items?.data?.length,
-      size: state.items?.size,
-      error: null,
-    },
-  })),
-  on(ItemActions.getItemsSuccess, (state, { items, total, query, size, listLabelAmount }) => {
-    const { responseTotal, current } = formatPaginationData(query, state, items.length, total, size ?? state.items?.size)
-    return {
-      ...state,
-      itemsLoadingStatus: LoadingStatus.Loaded,
-      listResponseType: query,
-      items: {
-        data: items,
-        total: responseTotal,
-        current: current,
-        size: size ?? state.items.size,
-        error: null,
-      },
-      listLabelAmount,
-      resetRequest: false,
-      itemId: null,
-    }
-  }),
+  // on(ItemActions.getItems, (state) => ({
+  //   ...state,
+  //   itemsLoadingStatus: LoadingStatus.Loading,
+  //   items: {
+  //     data: state.items?.data,
+  //     total: state.items?.total,
+  //     current: state.items?.data?.length,
+  //     size: state.items?.size,
+  //     error: null,
+  //   },
+  // })),
+  // on(ItemActions.getItemsBySearchQuery, (state) => ({
+  //   ...state,
+  //   items: {
+  //     data: state.items?.data,
+  //     total: state.items?.total,
+  //     current: state.items?.data?.length,
+  //     size: state.items?.size,
+  //     error: null,
+  //   },
+  // })),
+  // on(ItemActions.getItemsSuccess, (state, { items, total, query, size, listLabelAmount }) => {
+  //   const { responseTotal, current } = getAmountCurrentItems(query, state, items.length, size ?? state.items?.size)
+  //   return {
+  //     ...state,
+  //     itemsLoadingStatus: LoadingStatus.Loaded,
+  //     listResponseType: query,
+  //     items: {
+  //       data: items,
+  //       total: responseTotal,
+  //       current: current,
+  //       size: size ?? state.items.size,
+  //       error: null,
+  //     },
+  //     listLabelAmount,
+  //     resetRequest: false,
+  //     itemId: null,
+  //   }
+  // }),
   // on(ItemActions.getUsersTotalAmount, (state) => ({
   //   ...state,
   //   items: {

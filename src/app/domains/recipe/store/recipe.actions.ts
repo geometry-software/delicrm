@@ -1,7 +1,7 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
 import { Recipe, RecipeStatus } from '../models/recipe.model'
 import { RecipeConstants } from '../models/recipe.constants'
-import { FilterRequest, RepositoryEntityAction, RepositoryRequest, RepositoryRequestQuery } from '../../../shared/repository/repository.model';
+import { FilterRequest, RepositoryRequestQuery, RepositoryRequest, RepositoryRequestListQuery } from '../../../shared/repository/repository.models';
 
 export const RecipeActions = createActionGroup({
   source: RecipeConstants.storeFeatureKey,
@@ -17,8 +17,8 @@ export const RecipeActions = createActionGroup({
     // 'Get Item Success': props<{ item: Recipe }>(),
     'Get Items': props<{ request: RepositoryRequest<Recipe, RecipeStatus> }>(),
     'Get Items By Search Query': props<{ request: FilterRequest }>(),
-    'Get Items Success': props<{ items: Recipe[]; query: RepositoryRequestQuery; total?: number; size?: number }>(),
-    'Notify Error': props<{ error: Error; errorType: RepositoryEntityAction }>(),
+    'Get Items Success': props<{ items: Recipe[]; query: RepositoryRequestListQuery; total?: number; size?: number }>(),
+    'Notify Error': props<{ error: Error; query: RepositoryRequestQuery }>(),
     'Reset Request To The First Page': emptyProps(),
     'Reset State': emptyProps(),
   },

@@ -2,9 +2,10 @@ import { Injectable, inject } from '@angular/core'
 import { EMPTY, Observable, delay } from 'rxjs'
 import { RecipeConstants } from '../models/recipe.constants'
 import { Recipe, RecipeStatus } from '../models/recipe.model'
-import { OrderRequest } from '../../../shared/repository/repository.model'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
+import { SortRequest } from '../../../shared/repository/repository.models'
+
 
 @Injectable()
 export class RecipeEntityService {
@@ -25,15 +26,15 @@ export class RecipeEntityService {
     return this.repositoryService.getCollectionSizeByStatus(this.collection, status)
   }
 
-  getFirstPage(order: OrderRequest, size: number, status: RecipeStatus) {
+  getFirstPage(order: SortRequest, size: number, status: RecipeStatus) {
     return this.repositoryService.getFirstPage(this.collection, order, size, 'status', status)
   }
 
-  getNextPage<V>(order: OrderRequest, size: number, status: RecipeStatus, value: V) {
+  getNextPage<V>(order: SortRequest, size: number, status: RecipeStatus, value: V) {
     return this.repositoryService.getNextPage<RecipeStatus, V>(this.collection, order, size, 'status', status, value)
   }
 
-  getPreviousPage<V>(order: OrderRequest, size: number, status: RecipeStatus, value: V) {
+  getPreviousPage<V>(order: SortRequest, size: number, status: RecipeStatus, value: V) {
     return this.repositoryService.getPreviousPage<RecipeStatus, V>(this.collection, order, size, 'status', status, value)
   }
 
@@ -45,7 +46,7 @@ export class RecipeEntityService {
     const document: Recipe = {
       ...item,
       status: 'active',
-      createdAt: getCurrentUnixTime,
+      createdAt: getCurrentUnixTime(),
     }
     return this.repositoryService.createDocument(this.collection, document)
   }

@@ -53,7 +53,7 @@ export class OrderCheckoutComponent implements OnInit {
   total: number = 0
   deliveryTime: OrderDeliveryTime = 'now'
   order: Order = {
-    createdAt: getCurrentUnixTime,
+    createdAt: getCurrentUnixTime(),
     plates: new Array(),
     // alacarte: this.menuService.order.alacarte,
     statusHistory: [],
@@ -289,7 +289,7 @@ export class OrderCheckoutComponent implements OnInit {
     this.order.statusHistory.push({
       status: 'requested',
       user: this.user ?? 'default user' as any,
-      createdAt: getCurrentUnixTime
+      createdAt: getCurrentUnixTime()
     })
     this.order.comment = this.comment
     // this.order.createdAt = new Date()
@@ -307,7 +307,7 @@ export class OrderCheckoutComponent implements OnInit {
       this.isUploading = true
       this.formatOrder()
       this.user = await firstValueFrom(this.appUser)
-      console.log(this.user);
+      console.log(this.form.value);
 
       this.user
         ? this.confirmTableOrder()
@@ -318,7 +318,7 @@ export class OrderCheckoutComponent implements OnInit {
   }
 
   private confirmDelivery() {
-    this.order.createdAt = getCurrentUnixTime
+    this.order.createdAt = getCurrentUnixTime()
 
     // this.tablesAmount.forEach(() => {
     // this.checkoutService.createDelivery(this.order)
@@ -341,22 +341,29 @@ export class OrderCheckoutComponent implements OnInit {
     this.store.dispatch(ItemActions.createDeliveryOrder({ order: this.order }))
   }
 
+  // 9
+  // 1734108837.579
+  // 10
+  // 1734108837.579
+
   private confirmTableOrder() {
     this.order.status = 'cooking'
     this.order.progress = '60%'
     this.order.statusHistory.push({
       status: 'cooking',
       user: this.user,
-      createdAt: getCurrentUnixTime,
+      createdAt: getCurrentUnixTime(),
     })
-    console.log(this.order)
+    // console.log(this.order)
     this.store.dispatch(ItemActions.createTableOrder({ order: this.order }))
     // this.checkoutService.createTableOrder(this.order)
     // .then(value => this.navRouter.navigate(['/orders', value.id]))
     // .catch(error => this.handleDocumentCreateError(error))
 
-    // from(new Array(20)).subscribe(() => {
-    //   this.store.dispatch(ItemActions.createTableOrder({ order: this.order }))
+    // from(new Array(20)).subscribe((v) => {
+    // const order = this.order
+    // console.log(v);
+    // this.store.dispatch(ItemActions.createTableOrder({ order: this.order }))
     // })
   }
 

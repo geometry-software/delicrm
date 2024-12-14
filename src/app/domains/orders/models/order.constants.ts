@@ -1,8 +1,5 @@
-import { Sort } from '@angular/material/sort'
-import { Recipe, RecipeStatus } from '../../recipe/models/recipe.model'
-import { PaginationRequest } from '../../../shared/models/pagination.model'
-import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from '../../../shared/repository/repository.model'
-import { Order, OrderStatus, OrderStatusHistory } from './order.model'
+import { RepositoryRequest } from '../../../shared/repository/repository.models'
+import { Order, OrderStatus } from './order.model'
 
 export abstract class OrderConstants {
   static readonly storeFeatureKey = 'ORDERS'
@@ -10,34 +7,26 @@ export abstract class OrderConstants {
   static readonly defaultCreateStatus = 'active'
   static readonly defaultTableSort = 'createdAt'
   static readonly defaultSearchKey = 'name'
-  static readonly paginationTitle = 'recipes'
+  static readonly paginationTitle = 'orders'
   static readonly labelCooking = 'Cooking'
   static readonly labelDelivery = 'In delivery'
   static readonly labelPaid = 'Paid'
   static readonly labelCanceled = 'Canceled'
-  static readonly paginationSize = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-  static readonly moduleUrl = '/recipes'
-  static readonly tableColumns = ['name', 'type', 'price']
+  static readonly paginationSize = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20]
+  static readonly moduleUrl = '/orders'
+  static readonly tableColumns = ['client', 'waiter', 'price']
   static readonly disableSort = true
   static readonly searchPlaceholder = 'RECIPES.PAGE.LIST.TABLE.SEARCH'
   static readonly deleteTitle = 'RECIPES.PAGE.DETAIL.DELETE_TITLE'
   static readonly backToListButton = 'RECIPES.NAVBAR'
-  static readonly defaultPaginationControlValue: PaginationRequest<Order> = {
-    query: 'first',
-    item: null,
-  }
-  static readonly defaultSizeControlValue: SizeRequest = {
-    size: 4,
-  }
-  static readonly defaultOrderControlValue: Sort = { active: 'createdAt', direction: 'desc' }
   static readonly defaultRequestStatus = 'cooking'
-  static readonly defaultFirstPageRequest: RepositoryRequest<Order, OrderStatus> = {
-    pagination: this.defaultPaginationControlValue,
-    order: {
-      key: this.defaultOrderControlValue.active,
-      value: this.defaultOrderControlValue.direction as RepositoryRequestOrder,
+  static readonly defaultPageRequest: RepositoryRequest<Order, OrderStatus> = {
+    pagination: {
+      query: 'first',
+      item: null,
     },
-    size: this.defaultSizeControlValue,
+    sort: { active: 'createdAt', direction: 'desc' },
+    size: 10,
     status: this.defaultRequestStatus,
   }
 }

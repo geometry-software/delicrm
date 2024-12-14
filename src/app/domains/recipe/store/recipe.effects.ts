@@ -68,52 +68,53 @@ export class RecipeEffects implements OnInitEffects {
     { dispatch: false }
   )
 
-  getItems = createEffect(() =>
-    this.actions.pipe(
-      ofType(ItemActions.getItems),
-      tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loading)),
-      withLatestFrom(this.store.select(getResetRequestToTheFirstPage), this.store.select(getItemsPageAmount)),
-      switchMap(([{ request }, resetRequest, pageAmount]) => {
-        const { size, item, query, order, status } = formatRequest(request, resetRequest)
-        switch (query) {
-          case 'all':
-            return this.entityService.getAll().pipe(
-              switchMap((items) =>
-                this.entityService
-                  .getTotalByStatus(status)
-                  .pipe(map((total) => ItemActions.getItemsSuccess({ items, query: 'all', total })))
-              ),
-              catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
-            )
-          case 'first':
-            return this.entityService.getFirstPage(order, size, status).pipe(
-              switchMap((items) =>
-                this.entityService
-                  .getTotalByStatus(status)
-                  .pipe(map((total) => ItemActions.getItemsSuccess({ items, query: 'first', total })))
-              ),
-              catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
-            )
-          case 'next':
-            return this.entityService
-              .getNextPage<typeof order.key>(order, size, status, item[order.key])
-              .pipe(
-                map((items) => ItemActions.getItemsSuccess({ items, query: 'next', size: pageAmount })),
-                catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
-              )
-          case 'previous':
-            return this.entityService
-              .getPreviousPage<typeof order.key>(order, size, status, item[order.key])
-              .pipe(
-                map((items) => ItemActions.getItemsSuccess({ items, query: 'previous', size: pageAmount })),
-                catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
-              )
-          case 'custom':
-            return of(ItemActions.getItemsSuccess({ items: null, query: 'custom' }))
-        }
-      })
-    )
-  )
+  // getItems = createEffect(() =>
+  //   this.actions.pipe(
+  //     ofType(ItemActions.getItems),
+  //     tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loading)),
+  //     withLatestFrom(this.store.select(getResetRequestToTheFirstPage), this.store.select(getItemsPageAmount)),
+  //     switchMap(([{ request }, resetRequest, pageAmount]) => {
+  //       const { size, item, query, order } = formatRequest(request)
+  //       const status = {} as any
+  //       switch (query) {
+  //         case 'all':
+  //           return this.entityService.getAll().pipe(
+  //             switchMap((items) =>
+  //               this.entityService
+  //                 .getTotalByStatus(status)
+  //                 .pipe(map((total) => ItemActions.getItemsSuccess({ items, query: 'all', total })))
+  //             ),
+  //             catchError(error => of(ItemActions.notifyError({ error, query })))
+  //           )
+  //         case 'first':
+  //           return this.entityService.getFirstPage(order, size, status).pipe(
+  //             switchMap((items) =>
+  //               this.entityService
+  //                 .getTotalByStatus(status)
+  //                 .pipe(map((total) => ItemActions.getItemsSuccess({ items, query: 'first', total })))
+  //             ),
+  //             catchError(error => of(ItemActions.notifyError({ error, query })))
+  //           )
+  //         case 'next':
+  //           return this.entityService
+  //             .getNextPage<typeof order.key>(order, size, status, item[order.key])
+  //             .pipe(
+  //               map((items) => ItemActions.getItemsSuccess({ items, query: 'next', size: pageAmount })),
+  //               catchError(error => of(ItemActions.notifyError({ error, query })))
+  //             )
+  //         case 'previous':
+  //           return this.entityService
+  //             .getPreviousPage<typeof order.key>(order, size, status, item[order.key])
+  //             .pipe(
+  //               map((items) => ItemActions.getItemsSuccess({ items, query: 'previous', size: pageAmount })),
+  //               catchError(error => of(ItemActions.notifyError({ error, query })))
+  //             )
+  //         case 'custom':
+  //           return of(ItemActions.getItemsSuccess({ items: null, query: 'custom' }))
+  //       }
+  //     })
+  //   )
+  // )
 
   getItemsBySearchQuery = createEffect(() =>
     this.actions.pipe(
@@ -121,7 +122,7 @@ export class RecipeEffects implements OnInitEffects {
       switchMap(({ request }) =>
         this.entityService.getAllByQuery(request.key, request.value).pipe(
           map((items) => ItemActions.getItemsSuccess({ items, query: 'custom', total: items.length })),
-          catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
+          catchError(error => of(ItemActions.notifyError({ error, query: 'custom' })))
         )
       )
     )
@@ -143,9 +144,9 @@ export class RecipeEffects implements OnInitEffects {
     { dispatch: false }
   )
 
-  private handleError(error, type) {
+  private handleError(error, query) {
     this.signalService.setLoadingStatus(LoadingStatus.LoadingFailed)
-    return of(ItemActions.notifyError({ error, errorType: type }))
+    return of(ItemActions.notifyError({ error, query }))
   }
 
   ngrxOnInitEffects(): Action {

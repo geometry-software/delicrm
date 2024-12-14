@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core'
 import { EMPTY, Observable, combineLatest, concat, delay, filter, from, map, of, shareReplay, switchMap, tap } from 'rxjs'
 import { ClientConstants } from '../utils/client.constants'
 import { ClientStatusTotalResponse, Client, ClientStatus } from '../models/client.model'
-import { OrderRequest } from '../../../shared/repository/repository.model'
+// import { OrderRequest } from '../../../shared/repository/repository.models'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { AuthService } from '../../../auth/services/auth.service'
 import { setRestaurantAuth } from '../../../auth/models/auth-user.mapper'
 import { AuthConstants } from '../../../auth/models/auth.constants'
 import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
+import { Sort } from '@angular/material/sort'
+import { SortRequest } from '../../../shared/repository/repository.models'
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +28,7 @@ export class ClientService {
       arr.push({
         authId: `${index + 1}`,
         name: `User ${index + 1}`,
-        createdAt: getCurrentUnixTime,
+        createdAt: getCurrentUnixTime(),
         status: 'active',
         orders: []
       })
@@ -95,20 +97,20 @@ export class ClientService {
     )
   }
 
-  getFirstPage(order: OrderRequest, size: number, status: ClientStatus) {
+  getFirstPage(sort: SortRequest, size: number, status: ClientStatus) {
     // console.warn('users: getFirstPage Service');
     // console.log(order);
     // console.log(size);
     // console.log(status);
-    return this.repositoryService.getFirstPage<ClientStatus>(this.collection, order, size, 'status', status)
+    return this.repositoryService.getFirstPage<ClientStatus>(this.collection, sort, size, 'status', status)
   }
 
-  getNextPage<V>(order: OrderRequest, size: number, status: ClientStatus, value: V) {
-    return this.repositoryService.getNextPage<ClientStatus, V>(this.collection, order, size, 'status', status, value)
+  getNextPage<V>(sort: SortRequest, size: number, status: ClientStatus, value: V) {
+    return this.repositoryService.getNextPage<ClientStatus, V>(this.collection, sort, size, 'status', status, value)
   }
 
-  getPreviousPage<V>(order: OrderRequest, size: number, status: ClientStatus, value: V) {
-    return this.repositoryService.getPreviousPage<ClientStatus, V>(this.collection, order, size, 'status', status, value)
+  getPreviousPage<V>(sort: SortRequest, size: number, status: ClientStatus, value: V) {
+    return this.repositoryService.getPreviousPage<ClientStatus, V>(this.collection, sort, size, 'status', status, value)
   }
 
   getAllByQuery(property: string, value: string) {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, ViewChild } from '@angular/core'
 import { MatSort, Sort } from '@angular/material/sort'
 import { EMPTY, Observable, shareReplay, tap } from 'rxjs'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -12,8 +12,9 @@ import { PaginationRequest, PaginationResponse } from '../../../../shared/models
 import { SharedConstants } from '../../../../shared/utils/shared.constants'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { combineListControls } from '../../utils/combine-list-controls'
-import { SizeRequest } from '../../../../shared/repository/repository.model'
+// import { SizeRequest } from '../../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
 @Component({
   selector: 'app-recipe-list',
@@ -27,7 +28,8 @@ export class RecipeListComponent implements OnInit {
     private store: Store,
     private route: ActivatedRoute,
     private router: Router,
-    private signalService: SignalService
+    private signalService: SignalService,
+    private destroyRef: DestroyRef
   ) { }
 
   readonly LoadingStatus = LoadingStatus
@@ -56,7 +58,7 @@ export class RecipeListComponent implements OnInit {
 
   // Controls
   paginationControl: FormControl<PaginationRequest<Recipe>> = new FormControl(this.defaultPaginationControlValue)
-  sizeControl: FormControl<SizeRequest> = new FormControl(this.defaultSizeControlValue)
+  sizeControl: FormControl<number> = new FormControl(this.defaultSizeControlValue)
   orderControl: FormControl<Sort> = new FormControl(this.defaultOrderControlValue)
 
   ngOnInit() {
@@ -65,22 +67,18 @@ export class RecipeListComponent implements OnInit {
   }
 
   initData() {
-    combineListControls(this.paginationControl, this.sizeControl, this.orderControl, this.store)
-      .pipe(
-        tap(([pagination, size, order]) =>
-          this.store.dispatch(
-            ItemActions.getItems({
-              request: {
-                pagination: pagination,
-                size: size,
-                status: this.defaultRequestStatus,
-                order: order,
-              },
-            })
-          )
-        )
-      )
-      .subscribe()
+    // combineListControls(this.paginationControl, this.sizeControl, this.orderControl, this.store)
+    //   .pipe(takeUntilDestroyed(this.destroyRef))
+    //   .subscribe(([pagination, size, order]) =>
+    //     this.store.dispatch(
+    //       ItemActions.getItems({
+    //         request: {
+    //           pagination: pagination,
+    //           size: size,
+    //           status: this.defaultRequestStatus,
+    //           order: order,
+    //         },
+    //       })))
   }
 
   setSignals() {

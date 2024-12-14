@@ -1,6 +1,6 @@
 import { Observable, UnaryFunction, auditTime, debounceTime, first, pipe, retry, take, throttleTime, throwError, timeout } from 'rxjs'
 import { NotificationService } from '../services/notification.service'
-import { RepositoryRequestQuery } from './repository.model'
+import { RepositoryRequestListQuery, RepositoryResponseList } from './repository.models'
 import * as moment from 'moment'
 
 const REQUEST_TIME_LIMIT_VALUE = 5000
@@ -12,42 +12,37 @@ export const appendId = <T>(documents): T =>
     id: value.payload.doc.id,
   }))
 
-export const responseTransform = <T>(
-  notificationService: NotificationService = null
-): UnaryFunction<Observable<T>, Observable<T>> => pipe(
-  first(),
-  timeout({
-    each: REQUEST_TIME_LIMIT_VALUE,
-    with: () => {
-      // notificationService.notifyConnectionWarning()
-      return throwError(() => REQUEST_TIME_LIMIT_ERROR_CODE)
-    },
-  }),
-  retry({ count: 2 }))
+export const responseTransform = <T>(notificationService: NotificationService = null):
+  UnaryFunction<Observable<T>, Observable<T>> =>
+  pipe(
+    first(),
+    timeout({
+      each: REQUEST_TIME_LIMIT_VALUE,
+      with: () => {
+        // notificationService.notifyConnectionWarning()
+        return throwError(() => REQUEST_TIME_LIMIT_ERROR_CODE)
+      },
+    }),
+    retry({ count: 2 })
+  )
 
-export const formatPaginationData = (query: RepositoryRequestQuery, items, responseLength, total, size) => {
-  let current, responseTotal
+export const formatResponseList = <T>(query: RepositoryRequestListQuery, data: T[], total: number, current: number, size?: boolean):
+  RepositoryResponseList<T> => {
   switch (query) {
     case 'first':
-      responseTotal = total
-      current = responseLength
+      current = data.length
       break
     case 'next':
-      responseTotal = items.total
-      current = items.current + responseLength
+      current = data.length + current
       break
     case 'previous':
-      responseTotal = items.total
-      current = items.current - size
-      break
-    case 'custom':
-      responseTotal = total
-      current = responseLength
+      current = !(total % current) ? current - data.length : total % current
       break
   }
   return {
-    responseTotal,
-    current,
+    data,
+    total,
+    current
   }
 }
 

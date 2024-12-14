@@ -4,10 +4,12 @@ import {
   catchError,
   combineLatest,
   concatMap,
+  distinctUntilChanged,
   EMPTY,
   forkJoin,
   map,
   of,
+  skip,
   switchMap,
   take,
   tap,
@@ -17,17 +19,19 @@ import {
 import { OrderActions as ItemActions } from './orders.actions'
 import { Router } from '@angular/router'
 import { Action, Store } from '@ngrx/store'
-import { getItemsPageAmount, getResetRequestToTheFirstPage } from './orders.selectors'
+import { getCurrent, getItemsPageAmount, getQuery, getSize, getStatus, getTotal } from './orders.selectors'
 import { OrderService } from '../services/order.service'
 import { ConfirmationService } from '../../../shared/services/confirmation.service'
-import { formatRequest } from '../../../shared/utils/format-request'
+import { compareItemsRequestStateSize, formatRequest } from '../../../shared/utils/format-request'
 import { OrderActions } from './orders.actions'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { OrderConstants } from '../models/order.constants'
 import { SignalService } from '../../../shared/services/signal.service'
+import { formatResponseList } from '../../../shared/repository/repository.utils'
+import { RepositoryRequestListQuery } from '../../../shared/repository/repository.models'
 
 @Injectable()
-export class OrderEffects implements OnInitEffects {
+export class OrderEffects {
 
   constructor(
     private router: Router,
@@ -40,8 +44,8 @@ export class OrderEffects implements OnInitEffects {
   readonly moduleUrl = OrderConstants.moduleUrl
   // readonly confirmationTitleStart = OrderConstants.confirmationTitleStart
   // readonly confirmationTitleEnd = OrderConstants.confirmationTitleEnd
-  readonly defaultCreateStatus = OrderConstants.defaultCreateStatus
-  readonly defaultFirstPageRequest = OrderConstants.defaultFirstPageRequest
+  // readonly defaultCreateStatus = OrderConstants.defaultCreateStatus
+  // readonly defaultPageRequest = OrderConstants.defaultPageRequest
 
   updateOrderStatus = createEffect(() =>
     this.actions.pipe(
@@ -50,7 +54,7 @@ export class OrderEffects implements OnInitEffects {
       switchMap(({ id, status }) => this.orderService.updateStatus(status, id).pipe(
         map(() => ItemActions.updateOrderStatusSuccess()),
         catchError(error => of(
-          ItemActions.notifyError({ error, errorType: 'edit' }),
+          ItemActions.notifyError({ error, query: 'edit' }),
           OrderActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed })
         )))))
   )
@@ -73,19 +77,7 @@ export class OrderEffects implements OnInitEffects {
             this.router.navigate([this.moduleUrl, id])
             return ItemActions.updateItemSuccess()
           }),
-          catchError(error => of(ItemActions.notifyError({ error, errorType: 'edit' })))
-        )
-      )
-    )
-  )
-
-  getItem = createEffect(() =>
-    this.actions.pipe(
-      ofType(ItemActions.getItem),
-      switchMap(({ id }) =>
-        this.orderService.getById(id).pipe(
-          map((item) => ItemActions.getItemSuccess({ item })),
-          catchError(error => of(ItemActions.notifyError({ error, errorType: 'create' })))
+          catchError(error => of(ItemActions.notifyError({ error, query: 'edit' })))
         )
       )
     )
@@ -98,91 +90,72 @@ export class OrderEffects implements OnInitEffects {
         this.signalService.setLoadingStatus(LoadingStatus.Loading)
         this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.Loading }))
       }),
-      withLatestFrom(this.store.select(getResetRequestToTheFirstPage), this.store.select(getItemsPageAmount)),
-      switchMap(([{ request }, resetRequest, pageAmount]) => {
-        const { size, item, query, order, status } = formatRequest(request, resetRequest)
-        console.log(formatRequest(request, resetRequest));
-
+      withLatestFrom(
+        this.store.select(getCurrent),
+        this.store.select(getTotal),
+        this.store.select(getSize)
+      ),
+      switchMap(([{ request }, current, total, stateSize]) => {
+        const { query, size, item, sort, status } = formatRequest(request, stateSize)
         switch (query) {
           case 'first':
             return combineLatest([
               this.orderService.getTotalLabels(),
-              this.orderService.getFirstPage(order, size, status)
+              this.orderService.getFirstPage(sort, size, status),
+              this.orderService.getTotalByStatus(status),
             ]).pipe(
               tap(() => this.handleLoadedRequest()),
-              map(([itemAmountByStatus, items]) =>
-                ItemActions.getItemsSuccess({
-                  items,
-                  query: 'first',
-                  total: items.length,
-                  itemAmountByStatus,
-                })
+              switchMap(([amount, items, total]) =>
+                [
+                  ItemActions.getItemsSuccess({
+                    items: formatResponseList(query, items, total, current, compareItemsRequestStateSize(size, stateSize)),
+                    size
+                  }),
+                  ItemActions.setItemsAmountByStatus({ status, amount })
+                ]
               ),
-              catchError(error => of(ItemActions.notifyError({ error, errorType: 'edit' })))
+              catchError(error => of(ItemActions.notifyError({ error, query })))
             )
           case 'next':
             return this.orderService
-              .getNextPage<typeof order.key>(order, size, status, item[order.key])
+              .getNextPage<typeof sort.active>(sort, size, status, item[sort.active])
               .pipe(
                 tap(() => this.handleLoadedRequest()),
-                map((items) =>
-                  ItemActions.getItemsSuccess({
-                    items,
-                    query: 'next',
-                    size: pageAmount,
-                  })
-                ),
-                catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
+                map(items => ItemActions.getItemsSuccess({ items: formatResponseList(query, items, total, current) })),
+                catchError(error => of(ItemActions.notifyError({ error, query })))
               )
           case 'previous':
             return this.orderService
-              .getPreviousPage<typeof order.key>(order, size, status, item[order.key])
+              .getPreviousPage<typeof sort.active>(sort, size, status, item[sort.active])
               .pipe(
                 tap(() => this.handleLoadedRequest()),
-                map((items) =>
-                  ItemActions.getItemsSuccess({
-                    items,
-                    query: 'previous',
-                    size: pageAmount,
-                  })
-                ),
-                catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
+                map(items => ItemActions.getItemsSuccess({ items: formatResponseList(query, items, total, current) })),
+                catchError(error => of(ItemActions.notifyError({ error, query })))
               )
           default: return EMPTY
         }
-      })
-    )
+      }))
   )
 
   getItemsBySearchQuery = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.getItemsBySearchQuery),
-      switchMap(({ request }) =>
+      withLatestFrom(this.store.select(getTotal)),
+      switchMap(([{ request }, total]) =>
         this.orderService.getAllByQuery(request.key, request.value).pipe(
-          map((items) =>
-            ItemActions.getItemsSuccess({
-              items,
-              query: 'custom',
-              total: items.length,
-            })
-          ),
-          catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
-        )
-      )
-    )
+          map((items) => ItemActions.getItemsSuccess({ items: formatResponseList('custom', items, total, 0) })),
+          catchError(error => of(ItemActions.notifyError({ error, query: 'custom' })))
+        )))
   )
 
   notifyError = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.notifyError),
       tap(({ error }) => console.error(error))),
+    // TODO
     // switchMap(() => of(this.notificationService.notifyError()))
     { dispatch: false }
   )
-
-  ngrxOnInitEffects(): Action {
-    return ItemActions.getItems({ request: this.defaultFirstPageRequest })
-  }
 
   private handleLoadedRequest() {
     this.signalService.setLoadingStatus(LoadingStatus.Loaded)

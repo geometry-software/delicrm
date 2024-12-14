@@ -1,8 +1,7 @@
 import { createReducer, on } from '@ngrx/store'
 import { Recipe } from '../models/recipe.model'
 import { RecipeActions as ItemActions } from './recipe.actions'
-import { RepositoryRequesEntity, RepositoryResponseList } from '../../../shared/repository/repository.model'
-import { formatPaginationData } from '../../../shared/repository/repository.utils'
+import { RepositoryRequesEntity, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 
 export interface State {
@@ -23,8 +22,6 @@ export const initialState: State = {
     data: [],
     total: 0,
     current: 0,
-    size: 0,
-    error: null,
   },
   loadingStatus: LoadingStatus.NotLoaded,
   listResponseType: null,

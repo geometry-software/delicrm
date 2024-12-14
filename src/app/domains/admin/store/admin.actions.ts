@@ -1,7 +1,7 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
 import { AdminConstants } from '../models/admin.constants'
 import { DailyMenu } from '../models/restaurant'
-import { RepositoryEntityAction } from '../../../shared/repository/repository.model';
+import { RepositoryRequestQuery } from '../../../shared/repository/repository.models';
 import { LoadingStatus } from '../../../shared/models/loading-status';
 
 export const AdminActions = createActionGroup({
@@ -11,6 +11,6 @@ export const AdminActions = createActionGroup({
     'Create Daily Menu': props<{ menu: DailyMenu }>(),
     'Print Menu': emptyProps(),
     'Print Menu Success': emptyProps(),
-    'Notify Error': props<{ error: Error; errorType: RepositoryEntityAction }>(),
+    'Notify Error': props<{ error: Error; errorType: RepositoryRequestQuery }>(),
   },
 })

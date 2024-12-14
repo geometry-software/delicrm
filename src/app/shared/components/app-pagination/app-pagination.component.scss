@@ -1,5 +1,7 @@
-.layout {
-  // background-color: #f1f1f1;
+:host {
+  background-color: #f1f1f1;
+  width: 100%;
+  display: block;
 }
 
 button {
@@ -11,6 +13,7 @@ button {
   position: sticky;
   // z-index: 2;
   bottom: 0;
+
   // background: #f1f1f1;
   mat-select {
     width: 60px;

@@ -1,1 +1,1 @@
-export const getCurrentUnixTime = new Date().getTime() / 1000
+export const getCurrentUnixTime = () => new Date().getTime() / 1000

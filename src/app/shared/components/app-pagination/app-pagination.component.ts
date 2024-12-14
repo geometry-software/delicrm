@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core'
 import { FormControl } from '@angular/forms'
 import { PaginationRequest, PaginationResponse } from '../../models/pagination.model'
-import { RepositoryRequestQuery, SizeRequest } from '../../repository/repository.model'
+import { RepositoryRequestListQuery } from '../../repository/repository.models'
+import { LoadingStatus } from '../../models/loading-status'
 
 @Component({
   selector: 'app-pagination',
@@ -13,24 +14,22 @@ export class AppPaginationComponent implements OnInit {
   @Input()
   paginationControl: FormControl<PaginationRequest<any>>
   @Input()
-  sizeControl: FormControl<SizeRequest>
+  sizeControl: FormControl<number>
   @Input()
   paginationPayload: PaginationResponse<any>
   @Input()
-  downloadState: boolean
+  loadingStatus: LoadingStatus
   size: number
 
   ngOnInit(): void {
-    this.size = this.sizeControl.value.size
+    this.size = this.sizeControl.value
   }
 
   changeSize(size) {
-    this.sizeControl.setValue({
-      size: size,
-    })
+    this.sizeControl.setValue(size)
   }
 
-  changePage(query: RepositoryRequestQuery) {
+  changePage(query: RepositoryRequestListQuery) {
     let item
     switch (query) {
       case 'first':
@@ -48,4 +47,27 @@ export class AppPaginationComponent implements OnInit {
       item: item,
     })
   }
+
+  disablePrevious() {
+    // console.log(this.paginationControl.value.query);
+    // console.log(this.sizeControl.value.size);
+    // console.log(this.paginationPayload.options.current);
+    // console.log(this.loadingStatus === LoadingStatus.Loading);
+
+    return this.paginationControl.value.query === 'custom' ||
+      this.sizeControl.value === this.paginationPayload.options.current ||
+      this.loadingStatus === LoadingStatus.Loading
+  }
+
+  disableNext() {
+    return this.paginationControl.value.query === 'custom'
+      ? true
+      : this.paginationPayload.options.current === this.paginationPayload.options.total ||
+      this.loadingStatus === LoadingStatus.Loading
+  }
+
+  disableOnLoading() {
+    return this.loadingStatus === LoadingStatus.Loading
+  }
+
 }

@@ -4,7 +4,6 @@ import { AuthService } from '../../services/auth.service'
 import { adminFormGroup, AdminFormProps } from '../../models/admin.form'
 import { showFieldErrors } from '../../../shared/utils/form-error-handling'
 import { Router } from '@angular/router'
-import { tap } from 'rxjs'
 
 @Component({
   selector: 'app-admin-sign-up',
@@ -26,11 +25,9 @@ export class AdminSignUpComponent {
 
   submitForm() {
     if (this.form.valid) {
-      this.authService.signUpAdmin(this.form.value)
-        .pipe(
-          takeUntilDestroyed(this.destroyRef),
-          tap(() => this.router.navigate(['/auth/login'])))
-        .subscribe()
+      this.authService.signUpAdmin(this.form.value).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe(() => this.router.navigate(['/auth/login']))
     }
   }
 

@@ -3,6 +3,7 @@ import { Sort } from '@angular/material/sort'
 import { Store } from '@ngrx/store'
 import { combineLatest, map, skip, startWith, tap } from 'rxjs'
 import { ClientActions as ItemActions } from '../store/client.actions'
+import { SortRequest } from '../../../shared/repository/repository.models'
 
 export const combineListControls = (pagination: FormControl, order: FormControl, status: FormControl, store: Store) =>
   combineLatest([
@@ -14,7 +15,7 @@ export const combineListControls = (pagination: FormControl, order: FormControl,
     order.valueChanges.pipe(
       startWith(order.value),
       tap(() => store.dispatch(ItemActions.resetRequestToTheFirstPage())),
-      map((sort: Sort) => ({ key: sort.active, value: sort.direction ? sort.direction : 'desc' }))
+      map((sort: Sort): SortRequest => ({ active: sort.active, direction: sort.direction === '' ? 'desc' : sort.direction }))
     ),
     status.valueChanges.pipe(
       startWith(status.value),

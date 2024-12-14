@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators'
 import { Observable, from } from 'rxjs'
 import { getCountFromServer, collection, query, where } from 'firebase/firestore'
 import { appendId, responseTransform } from './repository.utils'
-import { OrderRequest, RepositoryEntityStatus, RepositoryResponseEntity } from './repository.model'
+import { RepositoryEntityStatus, RepositoryResponseEntity, SortRequest } from './repository.models'
 
 @Injectable({
   providedIn: 'root',
@@ -90,9 +90,9 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
    * @param status filter a query by entity status
    * @returns Observable with list of documents that matches a query
    */
-  getFirstPage = <S>(collection: string, order: OrderRequest, size: number, field: string, status: S): Observable<T[]> =>
+  getFirstPage = <S>(collection: string, sort: SortRequest, size: number, field: string, status: S): Observable<T[]> =>
     this.angularFirestore
-      .collection<T>(collection, (query) => query.orderBy(order.key, order.value).where(field, '==', status).limit(size))
+      .collection<T>(collection, (query) => query.orderBy(sort.active, sort.direction).where(field, '==', status).limit(size))
       .snapshotChanges()
       .pipe(map(appendId<T[]>), responseTransform())
 
@@ -107,7 +107,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
    */
   getNextPage = <S, V>(
     collection: string,
-    order: OrderRequest,
+    sort: SortRequest,
     size: number,
     field: string,
     status: S,
@@ -115,7 +115,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
   ): Observable<T[]> =>
     this.angularFirestore
       .collection<T>(collection, (query) =>
-        query.orderBy(order.key, order.value).where(field, '==', status).startAfter(value).limit(size))
+        query.orderBy(sort.active, sort.direction).where(field, '==', status).startAfter(value).limit(size))
       .snapshotChanges()
       .pipe(map(appendId<T[]>), responseTransform())
 
@@ -130,7 +130,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
    */
   getPreviousPage = <S, V>(
     collection: string,
-    order: OrderRequest,
+    sort: SortRequest,
     size: number,
     field: string,
     status: S,
@@ -138,7 +138,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
   ): Observable<T[]> =>
     this.angularFirestore
       .collection<T>(collection, (query) =>
-        query.orderBy(order.key, order.value).where(field, '==', status).endBefore(value).limitToLast(size)
+        query.orderBy(sort.active, sort.direction).where(field, '==', status).endBefore(value).limitToLast(size)
       )
       .snapshotChanges()
       .pipe(map(appendId<T[]>), responseTransform())
@@ -151,9 +151,9 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
    * @param value value of the property to compare
    * @returns Observable with list of documents that matches a query
    */
-  getAllDocumentsByStrictQuery = (collection: string, order: OrderRequest, property: string, value: string): Observable<T[]> =>
+  getAllDocumentsByStrictQuery = (collection: string, sort: SortRequest, property: string, value: string): Observable<T[]> =>
     this.angularFirestore
-      .collection<T>(collection, (query) => query.orderBy(order.key, order.value).where(property, '==', value))
+      .collection<T>(collection, (query) => query.orderBy(sort.active, sort.direction).where(property, '==', value))
       .snapshotChanges()
       .pipe(map(appendId<T[]>), responseTransform())
 

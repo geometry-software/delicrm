@@ -234,7 +234,7 @@ export class MenuFormComponent implements OnInit {
 
   createDailyMenu() {
     this.dailyMenu.open = true
-    this.dailyMenu.createdAt = getCurrentUnixTime
+    this.dailyMenu.createdAt = getCurrentUnixTime()
     this.dailyMenu.orders = new Array()
     this.store.dispatch(ItemActions.createDailyMenu({ menu: this.dailyMenu }))
   }

@@ -1,6 +1,6 @@
-import { Sort } from '@angular/material/sort'
+
 import { PaginationRequest } from '../../../shared/models/pagination.model'
-import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from '../../../shared/repository/repository.model'
+import { RepositoryRequest, SortRequest } from '../../../shared/repository/repository.models'
 
 export abstract class AdminConstants {
   static readonly storeFeatureKey = 'ADMIN'
@@ -20,18 +20,15 @@ export abstract class AdminConstants {
     query: 'first',
     item: null,
   }
-  static readonly defaultSizeControlValue: SizeRequest = {
-    size: 4,
-  }
-  static readonly defaultOrderControlValue: Sort = { active: 'createdAt', direction: 'desc' }
+  // static readonly defaultSizeControlValue: SizeRequest = {
+  //   size: 4,
+  // }
+  static readonly defaultOrderControlValue: SortRequest = { active: 'createdAt', direction: 'desc' }
   static readonly defaultRequestStatus = 'active'
   static readonly defaultFirstPageRequest: RepositoryRequest<any, any> = {
     pagination: this.defaultPaginationControlValue,
-    order: {
-      key: this.defaultOrderControlValue.active,
-      value: this.defaultOrderControlValue.direction as RepositoryRequestOrder,
-    },
-    size: this.defaultSizeControlValue,
+    sort: AdminConstants.defaultOrderControlValue,
+    size: 4,
     status: this.defaultRequestStatus,
   }
 }

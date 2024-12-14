@@ -176,10 +176,19 @@ mat-cell {
   left: 0;
   bottom: 0;
   right: 0;
-  background: #000;
+  background: linear-gradient(-45deg, black, white, black);
+  background-size: 300%;
   opacity: 0.2;
   z-index: 5;
   border-radius: 8px;
+  background-position-x: 100%;
+  animation: shimmer 1s infinite linear;
+}
+
+@keyframes shimmer {
+  to {
+    background-position-x: 0%
+  }
 }
 
 .table-link {

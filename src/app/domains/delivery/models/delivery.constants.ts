@@ -1,7 +1,7 @@
 import { Sort } from '@angular/material/sort'
 import { Recipe, RecipeStatus } from '../../recipe/models/recipe.model'
 import { PaginationRequest } from '../../../shared/models/pagination.model'
-import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from '../../../shared/repository/repository.model'
+import { RepositoryRequest, SortRequest } from '../../../shared/repository/repository.models'
 import { Order, OrderStatus } from '../../orders/models/order.model'
 // import { Order, OrderStatus, OrderStatusHistory } from './order.model'
 
@@ -27,17 +27,12 @@ export abstract class DeliveryConstants {
     query: 'first',
     item: null,
   }
-  static readonly defaultSizeControlValue: SizeRequest = {
-    size: 4,
-  }
-  static readonly defaultOrderControlValue: Sort = { active: 'createdAt', direction: 'desc' }
+  static readonly defaultSizeControlValue = 4
+  static readonly defaultOrderControlValue: SortRequest = { active: 'createdAt', direction: 'desc' }
   static readonly defaultRequestStatus = 'cooking'
   static readonly defaultFirstPageRequest: RepositoryRequest<Order, OrderStatus> = {
     pagination: this.defaultPaginationControlValue,
-    order: {
-      key: this.defaultOrderControlValue.active,
-      value: this.defaultOrderControlValue.direction as RepositoryRequestOrder,
-    },
+    sort: DeliveryConstants.defaultOrderControlValue,
     size: this.defaultSizeControlValue,
     status: this.defaultRequestStatus,
   }

@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
-import { FilterRequest, RepositoryEntityAction, RepositoryRequest, RepositoryRequestQuery } from '../../../shared/repository/repository.model'
+import { FilterRequest, RepositoryRequestQuery, RepositoryRequest, RepositoryRequestListQuery } from '../../../shared/repository/repository.models'
 import { AuthStatus } from '../../../auth/models/auth.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { Order } from '../../orders/models/order.model'

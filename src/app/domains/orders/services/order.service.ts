@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core'
 import { EMPTY, Observable, combineLatest, map } from 'rxjs'
 import { OrderConstants } from '../models/order.constants'
-import { OrderRequest } from '../../../shared/repository/repository.model'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
 import { Order, OrderStatus } from '../models/order.model'
+import { SortRequest } from '../../../shared/repository/repository.models'
+
 
 @Injectable({
   providedIn: 'root',
@@ -46,7 +47,7 @@ export class OrderService {
     )
   }
 
-  getFirstPage(order: OrderRequest, size: number, status: OrderStatus) {
+  getFirstPage(order: SortRequest, size: number, status: OrderStatus) {
     // console.warn('users: getFirstPage Service');
     // console.log(order);
     // console.log(size);
@@ -54,11 +55,11 @@ export class OrderService {
     return this.repositoryService.getFirstPage<OrderStatus>(this.collection, order, size, 'status', status)
   }
 
-  getNextPage<V>(order: OrderRequest, size: number, status: OrderStatus, value: V) {
+  getNextPage<V>(order: SortRequest, size: number, status: OrderStatus, value: V) {
     return this.repositoryService.getNextPage<OrderStatus, V>(this.collection, order, size, 'status', status, value)
   }
 
-  getPreviousPage<V>(order: OrderRequest, size: number, status: OrderStatus, value: V) {
+  getPreviousPage<V>(order: SortRequest, size: number, status: OrderStatus, value: V) {
     return this.repositoryService.getPreviousPage<OrderStatus, V>(this.collection, order, size, 'status', status, value)
   }
 

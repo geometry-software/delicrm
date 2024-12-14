@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store'
-import { State } from './orders.state'
+import { State } from './delivery.state'
 import { DeliveryConstants } from '../models/delivery.constants'
 
 const storeFeatureKey = DeliveryConstants.storeFeatureKey

@@ -1,4 +1,4 @@
-import { RepositoryEntityStatus } from "../../../shared/repository/repository.model";
+import { RepositoryEntityStatus } from "../../../shared/repository/repository.models";
 
 export interface Recipe {
   createdAt?: number;

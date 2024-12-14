@@ -14,8 +14,9 @@ import { MatTabChangeEvent } from '@angular/material/tabs'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { DeliveryConstants } from '../../models/delivery.constants'
 import { FormControl } from '@angular/forms'
-import { getPaginationResponse } from '../../store/orders.selectors'
-import { DeliveryActions } from '../../store/orders.actions'
+import { getPaginationResponse } from '../../store/delivery.selectors'
+import { DeliveryActions } from '../../store/delivery.actions'
+import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
 
 @Component({
   selector: 'app-delivery-list',
@@ -61,14 +62,12 @@ export class DeliveryListComponent {
   readonly paginationPayload = this.store.select(getPaginationResponse)
 
   changeUserList(event: MatTabChangeEvent) {
-    let labelAmount = event.tab.textLabel.split('(').pop().slice(0, -1)
-    const status = event.tab.textLabel.slice(0, -labelAmount.length - 3).toLowerCase() as unknown as OrderStatus
     this.store.dispatch(DeliveryActions.getItems({
       request: {
         pagination: this.defaultFirstPageRequest.pagination,
         size: this.defaultFirstPageRequest.size,
-        status,
-        order: this.defaultFirstPageRequest.order
+        status: getStatusByLabel(event),
+        sort: this.defaultFirstPageRequest.sort
       }
     }))
   }

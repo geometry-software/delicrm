@@ -1,9 +1,11 @@
-import { RepositoryRequest } from "../repository/repository.model"
+import { RepositoryRequest } from "../repository/repository.models";
 
-export const formatRequest = <T, S>(request: RepositoryRequest<T, S>, resetRequest: boolean) => ({
-  size: request?.size.size,
-  item: request?.pagination?.item,
-  query: resetRequest ? 'first' : request?.pagination.query,
-  order: request.order,
+export const formatRequest = <T, S>(request: RepositoryRequest<T, S>, size: number) => ({
+  size: request.size,
+  item: request.pagination.item,
+  query: compareItemsRequestStateSize(request.size, size) ? request.pagination.query : 'first',
+  sort: request.sort,
   status: request.status,
 })
+
+export const compareItemsRequestStateSize = (requestSize: number, stateSize) => requestSize === stateSize 

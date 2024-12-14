@@ -1,8 +1,6 @@
 import { AuthStatus } from '../../../auth/models/auth.model'
 import { PaginationRequest } from '../../../shared/models/pagination.model'
-import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from '../../../shared/repository/repository.model'
-
-import { Sort } from '@angular/material/sort'
+import { RepositoryRequest, SortRequest } from '../../../shared/repository/repository.models'
 import { Client, ClientStatus } from '../models/client.model'
 
 export abstract class ClientConstants {
@@ -34,17 +32,12 @@ export abstract class ClientConstants {
     query: 'first',
     item: null,
   }
-  static readonly defaultSizeControlValue: SizeRequest = {
-    size: 4,
-  }
-  static readonly defaultOrderControlValue: Sort = { active: 'createdAt', direction: 'desc' }
+  static readonly defaultSizeControlValue = 4
+  static readonly defaultOrderControlValue: SortRequest = { active: 'createdAt', direction: 'desc' }
   static readonly defaultRequestStatus: ClientStatus = 'active'
   static readonly defaultFirstPageRequest: RepositoryRequest<Client, ClientStatus> = {
     pagination: this.defaultPaginationControlValue,
-    order: {
-      key: this.defaultOrderControlValue.active,
-      value: this.defaultOrderControlValue.direction as RepositoryRequestOrder,
-    },
+    sort: ClientConstants.defaultOrderControlValue,
     size: this.defaultSizeControlValue,
     status: 'active',
   }

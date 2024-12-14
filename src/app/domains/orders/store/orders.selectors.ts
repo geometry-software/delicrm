@@ -12,25 +12,20 @@ const labelCanceled = OrderConstants.labelCanceled
 
 export const getState = createFeatureSelector<State>(storeFeatureKey)
 export const getItems = createSelector(getState, (state) => state.items.data)
-export const getRequestStatus = createSelector(getState, (state) => state.requestStatus)
-export const getItemsData = createSelector(getItems, getRequestStatus, (items, status) => ({
-  data: items,
-  status,
-}))
+export const getSize = createSelector(getState, (state) => state.size)
 export const getItemsPageAmount = createSelector(getState, (state) => state.items.data.length)
-export const getResetRequestToTheFirstPage = createSelector(getState, (state) => state.resetRequest)
+// export const getResetRequestToTheFirstPage = createSelector(getState, (state) => state.resetRequest)
 export const getItem = (id: string) => createSelector(getItems, (items) => items.find(el => el.id === id))
 export const getItemId = createSelector(getState, (state) => state.itemId)
 export const getPaginationItem = createSelector(getItems, (state) => ({
   first: state?.length ? [...state][0] : null,
   last: state?.length ? [...state].pop() : null,
 }))
-export const getItemsLoadingStatus = createSelector(getState, (state) => state.itemsLoadingStatus)
-export const getItemLoadedState = createSelector(getState, (state) => state.item.data)
-export const getLayoutLoading = createSelector(getItemsLoadingStatus, getItemsLoadingStatus, (item, items) => item || items)
+export const getLoadingStatus = createSelector(getState, (state) => state.itemsLoadingStatus)
 export const getTotal = createSelector(getState, (state) => state.items.total)
 export const getCurrent = createSelector(getState, (state) => state.items.current)
-export const getListResponseType = createSelector(getState, (state) => state.listResponseType)
+export const getStatus = createSelector(getState, (state) => state.status)
+export const getQuery = createSelector(getState, (state) => state.query)
 export const getPaginationResponse = createSelector(getPaginationItem, getCurrent, getTotal, (item, current, total) => ({
   item: {
     first: item.first,
@@ -43,11 +38,10 @@ export const getPaginationResponse = createSelector(getPaginationItem, getCurren
     sizeList: paginationSize,
   },
 }))
-export const itemAmountByStatus = createSelector(getState, (state) => state.itemAmountByStatus)
-export const getListLabels = createSelector(itemAmountByStatus, (state) => ({
-  cooking: labelCooking + ' (' + state.cooking + ')',
-  delivery: labelDelivery + ' (' + state.delivery + ')',
-  paid: labelPaid + ' (' + state.paid + ')',
-  canceled: labelCanceled + ' (' + state.canceled + ')',
+export const itemsAmountByStatus = createSelector(getState, (state) => state.itemsAmountByStatus)
+export const getListLabels = createSelector(itemsAmountByStatus, (status) => ({
+  cooking: labelCooking + ' (' + status.cooking + ')',
+  delivery: labelDelivery + ' (' + status.delivery + ')',
+  paid: labelPaid + ' (' + status.paid + ')',
+  canceled: labelCanceled + ' (' + status.canceled + ')',
 }))
-export const isStatusUpdated = createSelector(getState, (state) => state.isStatusUpdated)

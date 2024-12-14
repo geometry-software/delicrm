@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core'
 import { EMPTY, Observable, combineLatest, concat, delay, filter, from, map, of, shareReplay, switchMap, tap } from 'rxjs'
-import { OrderRequest } from '../../../shared/repository/repository.model'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { AuthStatus, Auth } from '../../../auth/models/auth.model'
 import { mapAppUser } from '../utils/app-user.mapper'
@@ -10,6 +9,7 @@ import { AuthConstants } from '../../../auth/models/auth.constants'
 import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
 import { User, UserRole } from '../models/user.model'
 import { UserConstants } from '../models/user.constants'
+import { SortRequest } from '../../../shared/repository/repository.models'
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +31,7 @@ export class UserService {
         auth: {
           authId: `${index + 1}`,
           avatar: '',
-          createdAt: getCurrentUnixTime,
+          createdAt: getCurrentUnixTime(),
           email: 'mail@mail.com',
           displayName: 'User',
           providerId: 'google',
@@ -40,7 +40,7 @@ export class UserService {
         },
         name: `User ${index + 1}`,
         role: 'waiter',
-        createdAt: getCurrentUnixTime,
+        createdAt: getCurrentUnixTime(),
         locale: 'pt',
         status: 'requested',
       })
@@ -120,7 +120,7 @@ export class UserService {
     )
   }
 
-  getFirstPage(order: OrderRequest, size: number, status: AuthStatus) {
+  getFirstPage(order: SortRequest, size: number, status: AuthStatus) {
     // console.warn('users: getFirstPage Service');
     // console.log(order);
     // console.log(size);
@@ -128,11 +128,11 @@ export class UserService {
     return this.repositoryService.getFirstPage<AuthStatus>(this.collection, order, size, 'status', status)
   }
 
-  getNextPage<V>(order: OrderRequest, size: number, status: AuthStatus, value: V) {
+  getNextPage<V>(order: SortRequest, size: number, status: AuthStatus, value: V) {
     return this.repositoryService.getNextPage<AuthStatus, V>(this.collection, order, size, 'status', status, value)
   }
 
-  getPreviousPage<V>(order: OrderRequest, size: number, status: AuthStatus, value: V) {
+  getPreviousPage<V>(order: SortRequest, size: number, status: AuthStatus, value: V) {
     return this.repositoryService.getPreviousPage<AuthStatus, V>(this.collection, order, size, 'status', status, value)
   }
 

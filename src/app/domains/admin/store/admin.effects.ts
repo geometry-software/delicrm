@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store'
 import { RestaurantService } from '../services/restaurant.service'
 import { SignalService } from '../../../shared/services/signal.service'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { RepositoryEntityAction } from '../../../shared/repository/repository.model'
+import { RepositoryRequestQuery } from '../../../shared/repository/repository.models'
 
 @Injectable()
 export class AdminEffects {
@@ -62,7 +62,7 @@ export class AdminEffects {
     { dispatch: false }
   )
 
-  private handleError(error, type: RepositoryEntityAction) {
+  private handleError(error, type: RepositoryRequestQuery) {
     this.signalService.setLoadingStatus(LoadingStatus.LoadingFailed)
     return of(ItemActions.notifyError({ error, errorType: type }))
   }

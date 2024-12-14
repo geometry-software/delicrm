@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
-import { FilterRequest, RepositoryEntityAction, RepositoryRequest, RepositoryRequestQuery } from '../../../shared/repository/repository.model'
+import { FilterRequest, RepositoryRequestQuery, RepositoryRequest, RepositoryRequestListQuery } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { DeliveryConstants } from '../models/delivery.constants'
 import { Order, OrderStatus, OrderStatusResponse } from '../../orders/models/order.model'
@@ -22,12 +22,12 @@ export const DeliveryActions = createActionGroup({
     'Get Items By Search Query': props<{ request: FilterRequest }>(),
     'Get Items Success': props<{
       items: Order[]
-      query: RepositoryRequestQuery
+      query: RepositoryRequestListQuery
       total?: number
       size?: number
       itemAmountByStatus?: OrderStatusResponse
     }>(),
-    'Notify Error': props<{ error: Error; errorType: RepositoryEntityAction }>(),
+    'Notify Error': props<{ error: Error; errorType: RepositoryRequestQuery }>(),
     'Reset Request To The First Page': emptyProps(),
     'Reset State': emptyProps(),
   },

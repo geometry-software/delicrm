@@ -6,7 +6,7 @@ import { Auth } from "./auth.model"
 export const mapAuthAdmin = (user, name): Auth => ({
     displayName: name,
     email: user.email,
-    createdAt: getCurrentUnixTime,
+    createdAt: getCurrentUnixTime(),
     authId: user.uid,
     providerId: 'firebase',
     status: 'requested',
@@ -28,7 +28,7 @@ export const mapAuthUser = (user): Auth => ({
     authId: user.user.uid,
     email: user.user.email,
     displayName: user.user.displayName,
-    createdAt: getCurrentUnixTime,
+    createdAt: getCurrentUnixTime(),
     avatar: user.user.photoURL,
     providerId: 'google',
     status: 'requested',

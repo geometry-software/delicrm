@@ -1,44 +1,49 @@
 <div class="relative">
   <div class="table-loading-shade" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></div>
-
-  <mat-tab-group [@.disabled]="true" (selectedTabChange)="changeUserList($event)" [(selectedIndex)]="selectedTabIndex">
-    <ng-container *ngIf="{ list: orderList | async, label: listLabels | async } as data">
-      <mat-tab [label]="data.label.cooking">
-        <ng-container *ngTemplateOutlet="orderTable; context: { data: data.list  }"></ng-container>
-      </mat-tab>
-      <mat-tab [label]="data.label.delivery">
-        <ng-container *ngTemplateOutlet="orderTable; context: { data: data.list  }"></ng-container>
-      </mat-tab>
-      <mat-tab [label]="data.label.paid">
-        <ng-container *ngTemplateOutlet="orderTable; context: { data: data.list  }"></ng-container>
-      </mat-tab>
-      <mat-tab [label]="data.label.canceled">
-        <ng-container *ngTemplateOutlet="orderTable; context: { data: data.list  }"></ng-container>
-      </mat-tab>
-    </ng-container>
+  <mat-tab-group *ngIf="{ list: orderList | async, label: listLabels | async } as data" [@.disabled]="true"
+    (selectedTabChange)="changeTab($event)" [(selectedIndex)]="selectedTabIndex">
+    <mat-tab [label]="data.label.cooking">
+      <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
+    </mat-tab>
+    <mat-tab [label]="data.label.delivery">
+      <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
+    </mat-tab>
+    <mat-tab [label]="data.label.paid">
+      <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
+    </mat-tab>
+    <mat-tab [label]="data.label.canceled">
+      <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
+    </mat-tab>
   </mat-tab-group>
 </div>
 
-<ng-template #orderTable let-data="data">
-  <mat-table [dataSource]="data">
+<ng-template #table let-data="data">
+  <mat-table mat-table [dataSource]="data" matSort matSortDisableClear
+    [matSortDirection]="defaultSortControlValue.direction" [matSortActive]="defaultSortControlValue.active"
+    (matSortChange)="changeSort($event)">
     <ng-container matColumnDef="client">
-      <mat-header-cell *matHeaderCellDef>Client</mat-header-cell>
+      <mat-header-cell mat-sort-header="createdAt" *matHeaderCellDef>Client</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <ng-container *ngIf="element?.category?.delivery">
-          <div class="table-link flex items-center" [routerLink]="['/orders', element.id]">
-            <mat-icon style="color: #57aaf7; padding-right: 10px">shopping_basket</mat-icon>
-            <div>{{ element?.category?.delivery?.name }}</div>
-          </div>
+        <ng-container [ngSwitch]="element.category.type">
+          <ng-container *ngSwitchCase="'table'">
+            <div class="table-link flex items-center" [routerLink]="['/orders', element.id]">
+              <mat-icon class="table-icon ">deck</mat-icon>
+              <div class="table-item">{{ element.category.table }}</div>
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'delivery'">
+            <div class="table-link flex items-center" [routerLink]="['/orders', element.id]">
+              <mat-icon class="table-icon ">shopping_basket</mat-icon>
+              <div class="table-item">{{ element.category.table }}</div>
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'takeaway'">
+            <div class="table-link flex items-center" [routerLink]="['/orders', element.id]">
+              <mat-icon class="table-icon ">emoji_people</mat-icon>
+              <div class="table-item">{{ element.category.table }}</div>
+            </div>
+          </ng-container>
         </ng-container>
-
-        <button *ngIf="element.isTable && element.table == 0" mat-button>
-          <mat-icon style="color: #fdb16f; padding-right: 10px">emoji_people</mat-icon>
-          <span class="table-item">Take away</span>
-        </button>
-        <button *ngIf="element.isTable && element.table !== 0" mat-button>
-          <mat-icon style="color: #fdb16f; padding-right: 10px">deck</mat-icon>
-          <span class="table-item">{{ element.table }}</span>
-        </button>
       </mat-cell>
     </ng-container>
 
@@ -54,10 +59,10 @@
       <mat-cell *matCellDef="let element"> {{ element.price?.total }} currency</mat-cell>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    <mat-header-row *matHeaderRowDef="tableColumns; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
   </mat-table>
 </ng-template>
 
 <app-pagination [paginationControl]="paginationControl" [sizeControl]="sizeControl"
-  [paginationPayload]="paginationPayload | async" [downloadState]="downloadState | async"></app-pagination>
+  [paginationPayload]="paginationPayload | async" [loadingStatus]="loadingStatus | async" />

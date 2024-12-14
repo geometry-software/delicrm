@@ -72,7 +72,7 @@ export class ClientEffects implements OnInitEffects {
             this.router.navigate([this.moduleUrl, id])
             return ItemActions.updateItemSuccess()
           }),
-          catchError(error => of(ItemActions.notifyError({ error, errorType: 'edit' })))
+          catchError(error => of(ItemActions.notifyError({ error, query: 'edit' })))
         )
       )
     )
@@ -84,73 +84,74 @@ export class ClientEffects implements OnInitEffects {
       switchMap(({ id }) =>
         this.clientService.getById(id).pipe(
           map((item) => ItemActions.getItemSuccess({ item })),
-          catchError(error => of(ItemActions.notifyError({ error, errorType: 'create' })))
+          catchError(error => of(ItemActions.notifyError({ error, query: 'create' })))
         )
       )
     )
   )
 
-  getItems = createEffect(() =>
-    this.actions.pipe(
-      ofType(ItemActions.getItems),
-      withLatestFrom(this.store.select(getResetRequestToTheFirstPage), this.store.select(getItemsPageAmount)),
-      switchMap(([{ request }, resetRequest, pageAmount]) => {
-        const { size, item, query, order, status } = formatRequest<Client, ClientStatus>(request, resetRequest)
-        // console.log(formatRequest(request, resetRequest));
+  // getItems = createEffect(() =>
+  //   this.actions.pipe(
+  //     ofType(ItemActions.getItems),
+  //     withLatestFrom(this.store.select(getResetRequestToTheFirstPage), this.store.select(getItemsPageAmount)),
+  //     switchMap(([{ request }, resetRequest, pageAmount]) => {
+  //       const { size, item, query, order } = formatRequest(request)
+  //       // console.log(formatRequest(request, resetRequest));
+  //       const status = {} as any
 
-        switch (query) {
-          case 'first':
-            return combineLatest([
-              this.clientService.getTotalLabels(),
-              this.clientService.getFirstPage(order, size, status).pipe(
-                tap(value => {
-                  console.warn('user getItems Effects');
-                  console.log(value);
-                })
-              ),
-            ]).pipe(
-              map(([listLabelAmount, items]) =>
-                ItemActions.getItemsSuccess({
-                  items,
-                  query: 'first',
-                  total: items.length,
-                  listLabelAmount,
-                })
-              ),
-              catchError(error => of(ItemActions.notifyError({ error, errorType: 'edit' })))
-            )
-          case 'next':
-            return this.clientService
-              .getNextPage<typeof order.key>(order, size, status, item[order.key])
-              .pipe(
-                map((items) =>
-                  ItemActions.getItemsSuccess({
-                    items,
-                    query: 'next',
-                    size: pageAmount,
-                  })
-                ),
-                catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
-              )
-          case 'previous':
-            return this.clientService
-              .getPreviousPage<typeof order.key>(order, size, status, item[order.key])
-              .pipe(
-                map((items) =>
-                  ItemActions.getItemsSuccess({
-                    items,
-                    query: 'previous',
-                    size: pageAmount,
-                  })
-                ),
-                catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
-              )
-          default:
-            return of(ItemActions.getItemsSuccess({ items: null, query: 'custom' }))
-        }
-      })
-    )
-  )
+  //       switch (query) {
+  //         case 'first':
+  //           return combineLatest([
+  //             this.clientService.getTotalLabels(),
+  //             this.clientService.getFirstPage(order, size, status).pipe(
+  //               tap(value => {
+  //                 console.warn('user getItems Effects');
+  //                 console.log(value);
+  //               })
+  //             ),
+  //           ]).pipe(
+  //             map(([listLabelAmount, items]) =>
+  //               ItemActions.getItemsSuccess({
+  //                 items,
+  //                 query: 'first',
+  //                 total: items.length,
+  //                 listLabelAmount,
+  //               })
+  //             ),
+  //             catchError(error => of(ItemActions.notifyError({ error, query })))
+  //           )
+  //         case 'next':
+  //           return this.clientService
+  //             .getNextPage<typeof order.key>(order, size, status, item[order.key])
+  //             .pipe(
+  //               map((items) =>
+  //                 ItemActions.getItemsSuccess({
+  //                   items,
+  //                   query: 'next',
+  //                   size: pageAmount,
+  //                 })
+  //               ),
+  //               catchError(error => of(ItemActions.notifyError({ error, query })))
+  //             )
+  //         case 'previous':
+  //           return this.clientService
+  //             .getPreviousPage<typeof order.key>(order, size, status, item[order.key])
+  //             .pipe(
+  //               map((items) =>
+  //                 ItemActions.getItemsSuccess({
+  //                   items,
+  //                   query: 'previous',
+  //                   size: pageAmount,
+  //                 })
+  //               ),
+  //               catchError(error => of(ItemActions.notifyError({ error, query })))
+  //             )
+  //         default:
+  //           return of(ItemActions.getItemsSuccess({ items: null, query: 'custom' }))
+  //       }
+  //     })
+  //   )
+  // )
 
   getItemsBySearchQuery = createEffect(() =>
     this.actions.pipe(
@@ -164,7 +165,7 @@ export class ClientEffects implements OnInitEffects {
               total: items.length,
             })
           ),
-          catchError(error => of(ItemActions.notifyError({ error, errorType: 'list' })))
+          catchError(error => of(ItemActions.notifyError({ error, query: 'custom' })))
         )
       )
     )

@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
-import { FilterRequest, RepositoryEntityAction, RepositoryRequest, RepositoryRequestQuery } from '../../../shared/repository/repository.model'
+import { FilterRequest, RepositoryRequestQuery, RepositoryRequest, RepositoryRequestListQuery } from '../../../shared/repository/repository.models'
 import { AuthStatus } from '../../../auth/models/auth.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { UserConstants } from '../models/user.constants'
@@ -22,12 +22,12 @@ export const UserActions = createActionGroup({
     'Get Items By Search Query': props<{ request: FilterRequest }>(),
     'Get Items Success': props<{
       items: User[]
-      query: RepositoryRequestQuery
+      query: RepositoryRequestListQuery
       total?: number
       size?: number
       listLabelAmount?: UserStatusResponse
     }>(),
-    'Notify Error': props<{ error: Error; errorType: RepositoryEntityAction }>(),
+    'Notify Error': props<{ error: Error; query: RepositoryRequestQuery }>(),
     'Reset Request To The First Page': emptyProps(),
     'Reset State': emptyProps(),
   },

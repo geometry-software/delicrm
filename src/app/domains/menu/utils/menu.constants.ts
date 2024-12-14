@@ -1,7 +1,7 @@
 import { Sort } from '@angular/material/sort'
 import { Recipe, RecipeStatus } from '../../recipe/models/recipe.model'
 import { PaginationRequest } from '../../../shared/models/pagination.model'
-import { RepositoryRequest, RepositoryRequestOrder, SizeRequest } from '../../../shared/repository/repository.model'
+import { RepositoryRequest } from '../../../shared/repository/repository.models'
 
 export abstract class MenuConstants {
   static readonly storeFeatureKey = 'MENU'

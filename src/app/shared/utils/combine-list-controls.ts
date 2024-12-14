@@ -1,10 +1,7 @@
 import { FormControl } from '@angular/forms'
 import { Sort } from '@angular/material/sort'
-import { Store } from '@ngrx/store'
-import { combineLatest, map, Observable, startWith, tap } from 'rxjs'
-import { OrderActions as ItemActions } from '../store/orders.actions'
-import { OrderStatus } from '../models/order.model'
-import { SortRequest } from '../../../shared/repository/repository.models'
+import { combineLatest, map, Observable, startWith } from 'rxjs'
+import { SortRequest } from '../repository/repository.models'
 
 export const combineListControls = <S>(pagination: FormControl, size: FormControl, sort: FormControl, status: Observable<S>) =>
   combineLatest([

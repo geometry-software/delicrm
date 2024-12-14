@@ -13,12 +13,13 @@ import { MatDialog } from '@angular/material/dialog'
 import { UserDetailComponent } from '../user-detail/user-detail.component'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { PaginationRequest } from '../../../../shared/models/pagination.model'
-import { SizeRequest } from '../../../../shared/repository/repository.model'
+// import { SizeRequest } from '../../../../shared/repository/repository.models'
 import { AuthStatus } from '../../../../auth/models/auth.model'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { SharedConstants } from '../../../../shared/utils/shared.constants'
 import { UserStatusComponent } from '../user-status/users-status.component'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
 
 @Component({
   selector: 'app-users',
@@ -66,16 +67,14 @@ export class UsersComponent implements OnInit {
   // }
 
   changeUserList(event: MatTabChangeEvent) {
-    let labelAmount = event.tab.textLabel.split('(').pop().slice(0, -1)
-    const status = event.tab.textLabel.slice(0, -labelAmount.length - 3).toLowerCase() as unknown as AuthStatus
-    this.store.dispatch(UserActions.getItems({
-      request: {
-        pagination: this.defaultFirstPageRequest.pagination,
-        size: this.defaultFirstPageRequest.size,
-        status,
-        order: this.defaultFirstPageRequest.order
-      }
-    }))
+    // this.store.dispatch(UserActions.getItems({
+    //   request: {
+    //     pagination: this.defaultFirstPageRequest.pagination,
+    //     size: this.defaultFirstPageRequest.size,
+    //     status: getStatusByLabel(event),
+    //     order: this.defaultFirstPageRequest.order
+    //   }
+    // }))
   }
 
   onSwitchTabAfterUpdate() {

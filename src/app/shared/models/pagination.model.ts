@@ -1,7 +1,7 @@
-import { RepositoryRequestQuery } from '../repository/repository.model'
+import { RepositoryRequestListQuery } from '../repository/repository.models'
 
 export interface PaginationRequest<T> {
-  query: RepositoryRequestQuery
+  query: RepositoryRequestListQuery
   item: T
 }
 

@@ -6,7 +6,7 @@ export const mapAppUser = (auth: Auth, role: UserRole): User => ({
     auth,
     role,
     name: auth.displayName,
-    createdAt: getCurrentUnixTime,
+    createdAt: getCurrentUnixTime(),
     locale: '',
     status: auth.status
 })
