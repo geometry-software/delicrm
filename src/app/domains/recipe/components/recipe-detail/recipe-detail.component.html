@@ -1,11 +1,11 @@
 <div *ngIf="item | async as data" class="content-toolbar-padding">
-  <app-title-item [title]="'RECIPES.PAGE.LIST.NAME'" [value]="data.name" />
-  <app-title-item [title]="'RECIPES.PAGE.LIST.TYPE'" [value]="plateTypeTranslate[data.type] | translate " />
+  <app-title-item title="RECIPES.PAGE.LIST.NAME" [value]="data.name" />
+  <app-title-item title="RECIPES.PAGE.LIST.TYPE" [value]="plateTypeTranslate[data.type] | translate " />
   <app-title-item *ngIf="data.type === 'main'" [title]="'RECIPES.PAGE.LIST.PROTEIN'"
     [value]="plateProteinTranslate[data.protein] | translate" />
   <app-title-item *ngIf="data.price" [title]="'RECIPES.PAGE.LIST.PRICE'" [value]="data.price" />
-  <app-title-item [title]="'RECIPES.PAGE.LIST.NAME'" [value]="data.name" />
-  <app-title-item [title]="'RECIPES.PAGE.LIST.DESCRIPTION'" [value]="data.history ?? '-'" />
+  <app-title-item title="RECIPES.PAGE.LIST.NAME" [value]="data.name" />
+  <app-title-item title="RECIPES.PAGE.LIST.DESCRIPTION" [value]="data.history ?? '-'" />
 
   <ng-container *ngIf="data.imgURL">
     <img [src]="data.imgURL" width="50%" height="50%" style="border-radius: 8px" />

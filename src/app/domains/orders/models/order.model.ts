@@ -1,7 +1,7 @@
 import { Recipe } from '../../recipe/models/recipe.model'
 import { User } from '../../users/models/user.model'
 
-export class Order {
+export type Order = {
   id?: string
   createdAt?: number
   main?: any
@@ -9,20 +9,20 @@ export class Order {
   alacarte?: Array<Recipe>
   price?: OrderPrice
   category?: OrderCategory
-  progress?: OrderProgressStatus
+  progress?: OrderProgress
   status?: OrderStatus
   statusHistory?: Array<OrderStatusHistory>
   plates?: Array<OrderItem>
   comment?: string
 }
 
-export class OrderStatusHistory {
+export type OrderStatusHistory = {
   user?: User
   status?: OrderStatus
   createdAt?: number
 }
 
-export class OrderItem {
+export type OrderItem = {
   type: string
   name: string
   plate: Recipe
@@ -34,7 +34,7 @@ export class OrderItem {
   dessert: Recipe
 }
 
-export class OrderCategory {
+export type OrderCategory = {
   type?: OrderType
   delivery?: OrderDelivery
   table?: number
@@ -42,16 +42,35 @@ export class OrderCategory {
 
 export type OrderStatus = 'requested' | 'cooking' | 'delivery' | 'paid' | 'canceled'
 
-export type OrderProgressStatus = '60%' | '80%' | '100%'
+export const orderStatusTest: Record<OrderStatus, string> = {
+  requested: '0%',
+  cooking: '50%',
+  delivery: '80%',
+  paid: '100%',
+  canceled: '0%',
+}
 
-export class OrderPrice {
+export enum OrderProgress {
+  Requested = '0%',
+  Cooking = '50%',
+  Delivery = '80%',
+  Paid = '100%',
+  Canceled = '0%'
+}
+
+export type OrderStatusBar = {
+  status: OrderStatus,
+  progress: OrderProgress
+}
+
+export type OrderPrice = {
   currency?: string
   total?: number
   discount?: number
   delivery?: number
 }
 
-export class OrderDelivery {
+export type OrderDelivery = {
   id?: string
   time?: string
   name?: string
@@ -62,7 +81,7 @@ export class OrderDelivery {
   comments?: string
 }
 
-export interface OrderStatusResponse {
+export type OrderStatusResponse = {
   cooking: number
   delivery: number
   paid: number

@@ -1,6 +1,6 @@
 import { RepositoryRequesEntity, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { Order, OrderStatus, OrderStatusResponse } from '../models/order.model'
+import { Order, OrderStatus, OrderStatusBar, OrderStatusResponse } from '../models/order.model'
 
 export interface State {
   query: RepositoryRequestListQuery,
@@ -11,6 +11,7 @@ export interface State {
   status: OrderStatus
   itemsAmountByStatus: OrderStatusResponse
   size: number
+  statusBar: OrderStatusBar
 }
 
 export const initialState: State = {
@@ -33,4 +34,5 @@ export const initialState: State = {
     canceled: 0,
   },
   size: null,
+  statusBar: null
 }

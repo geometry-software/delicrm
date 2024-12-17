@@ -17,7 +17,8 @@ export class RecipeDetailComponent implements OnInit {
   constructor(
     private store: Store,
     private route: ActivatedRoute,
-    private signalService: SignalService) { }
+    private signalService: SignalService
+  ) { }
 
   readonly plateTypeTranslate = PLATE_TYPE_TRANSLATE
   readonly plateProteinTranslate = PLATE_PROTEIN_TRANSLATE

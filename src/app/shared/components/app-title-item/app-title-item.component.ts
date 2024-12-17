@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core'
 
 @Component({
   selector: 'app-title-item',
@@ -7,6 +7,10 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppTitleItemComponent {
+
+  @Input()
+  @HostBinding('style.margin-bottom')
+  margin = '20px';
 
   @Input()
   title: string

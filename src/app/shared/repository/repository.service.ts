@@ -4,13 +4,21 @@ import { map } from 'rxjs/operators'
 import { Observable, from } from 'rxjs'
 import { getCountFromServer, collection, query, where } from 'firebase/firestore'
 import { appendId, responseTransform } from './repository.utils'
-import { RepositoryEntityStatus, RepositoryResponseEntity, SortRequest } from './repository.models'
+import {
+  defaultStatusPropertyName,
+  RepositoryEntityStatus,
+  RepositoryResponseEntity,
+  SortRequest
+} from './repository.models'
 
 @Injectable({
   providedIn: 'root',
 })
-export class RepositoryService<T = any, S = RepositoryEntityStatus> {
+export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> {
+
   constructor(private angularFirestore: AngularFirestore) { }
+
+  private readonly defaultStatusPropertyName = defaultStatusPropertyName
 
   /**
    * Queries a Firestore collection
@@ -30,7 +38,9 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
    */
   getAllDocumentsByStatus = (collection: string, status: string): Observable<T[]> =>
     this.angularFirestore
-      .collection<T>(collection, (query) => query.orderBy('name', 'desc').where('status', '==', status))
+      .collection<T>(collection, (query) => query
+        .orderBy('name', 'desc')
+        .where(defaultStatusPropertyName, '==', status))
       .snapshotChanges()
       .pipe(map(appendId<T[]>), responseTransform())
 
@@ -58,104 +68,141 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
    * @param status filter a query by entity status
    * @returns Observable with an amount of documents matches a query
    */
-  getCollectionSizeByStatus = <S>(collectionName: string, status: S): Observable<number> => from(
-    getCountFromServer(query(collection(this.angularFirestore.firestore, collectionName), where('status', '==', status))))
-    .pipe(map((val) => val.data().count))
+  getCollectionSizeByStatus = (collectionName: string, status: S): Observable<number> => from(
+    getCountFromServer(query(collection(this.angularFirestore.firestore, collectionName),
+      where(defaultStatusPropertyName, '==', status))))
+    .pipe(map(value => value.data().count))
 
   /**
    * Queries a Firestore collection
    * @param collectionName name of the collection
-   * @param status filter a query by entity status
    * @returns Observable with an amount of documents matches a query
    */
   getCollectionSize = (collectionName: string): Observable<number> =>
     from(getCountFromServer(query(collection(this.angularFirestore.firestore, collectionName))))
-      .pipe(map((val) => val.data().count))
+      .pipe(map(value => value.data().count))
 
   /**
    * Queries a Firestore collection
    * @param collectionName name of the collection
-   * @param status filter a query by entity status
+   * @param item name of the property
+   * @param value value of the property
    * @returns Observable with an amount of documents matches a query
    */
-  getCollectionSizeByRole = (collectionName: string, role: S): Observable<number> =>
-    from(getCountFromServer(query(collection(this.angularFirestore.firestore, collectionName), where('role', '==', role)))).pipe(
-      map((val) => val.data().count))
+  getCollectionSizeByItem = <V>(collectionName: string, item: string, value: V): Observable<number> =>
+    from(getCountFromServer(query(collection(this.angularFirestore.firestore, collectionName),
+      where(item, '==', value)))).pipe(
+        map(value => value.data().count))
 
   /**
    * Queries a Firestore collection
    * @param collection name of the collection
-   * @param order sorted by the specified field, and in descending or ascending order
-   * @param size limit a size of documents to return
-   * @param status filter a query by entity status
+   * @param sort sorted by the specified field, and in descending or ascending order
+   * @param size limit an amount of documents to return
+   * @param field name of the field that is related for status property
+   * @param status value of the status field
    * @returns Observable with list of documents that matches a query
    */
-  getFirstPage = <S>(collection: string, sort: SortRequest, size: number, field: string, status: S): Observable<T[]> =>
-    this.angularFirestore
-      .collection<T>(collection, (query) => query.orderBy(sort.active, sort.direction).where(field, '==', status).limit(size))
-      .snapshotChanges()
-      .pipe(map(appendId<T[]>), responseTransform())
-
-  /**
-   * Queries a Firestore collection
-   * @param collection name of the collection
-   * @param order sorted by the specified field, and in descending or ascending order
-   * @param size limit a size of documents to return
-   * @param status filter a query by entity status
-   * @param value value of the property which query will be ordered by. Item that holds a property is the last element in the previously requested list
-   * @returns Observable with list of documents that matches a query
-   */
-  getNextPage = <S, V>(
+  getFirstPage = <S>(
     collection: string,
     sort: SortRequest,
     size: number,
-    field: string,
     status: S,
-    value: V
+    field: string = defaultStatusPropertyName
   ): Observable<T[]> =>
     this.angularFirestore
-      .collection<T>(collection, (query) =>
-        query.orderBy(sort.active, sort.direction).where(field, '==', status).startAfter(value).limit(size))
+      .collection<T>(collection, (query) => query
+        .orderBy(sort.active, sort.direction)
+        .where(field, '==', status)
+        .limit(size))
       .snapshotChanges()
-      .pipe(map(appendId<T[]>), responseTransform())
+      .pipe(
+        map(appendId<T[]>),
+        responseTransform()
+      )
 
   /**
    * Queries a Firestore collection
    * @param collection name of the collection
-   * @param order sorted by the specified field, and in descending or ascending order
-   * @param size limit a size of documents to return
-   * @param status filter a query by entity status
-   * @param value value of the property which object is the last element in the previously requested list.
+   * @param sort sorted by the specified field, and in descending or ascending order
+   * @param size limit an amount of documents to return
+   * @param field name of the field that is related for status property
+   * @param status value of the status field
+   * @param value value of the property which query will be ordered by, that equals to last element in the previously requested list
    * @returns Observable with list of documents that matches a query
    */
-  getPreviousPage = <S, V>(
+  getNextPage = (
     collection: string,
     sort: SortRequest,
     size: number,
-    field: string,
+    value: V,
     status: S,
-    value: V
+    field: string = defaultStatusPropertyName,
   ): Observable<T[]> =>
     this.angularFirestore
-      .collection<T>(collection, (query) =>
-        query.orderBy(sort.active, sort.direction).where(field, '==', status).endBefore(value).limitToLast(size)
+      .collection<T>(collection, (query) => query
+        .orderBy(sort.active, sort.direction)
+        .where(field, '==', status)
+        .startAfter(value)
+        .limit(size))
+      .snapshotChanges()
+      .pipe(
+        map(appendId<T[]>),
+        responseTransform()
+      )
+
+  /**
+   * Queries a Firestore collection
+   * @param collection name of the collection
+   * @param sort sorted by the specified field, and in descending or ascending order
+   * @param size limit an amount of documents to return
+   * @param field name of the field that is related for status property
+   * @param status value of the status field
+   * @param value value of the property which item was the last element in the previously requested list.
+   * @returns Observable with list of documents that matches a query
+   */
+  getPreviousPage = (
+    collection: string,
+    sort: SortRequest,
+    size: number,
+    value: V,
+    status: S,
+    field: string = defaultStatusPropertyName,
+  ): Observable<T[]> =>
+    this.angularFirestore
+      .collection<T>(collection, (query) => query
+        .orderBy(sort.active, sort.direction)
+        .where(field, '==', status)
+        .endBefore(value)
+        .limitToLast(size)
       )
       .snapshotChanges()
-      .pipe(map(appendId<T[]>), responseTransform())
+      .pipe(
+        map(appendId<T[]>),
+        responseTransform()
+      )
 
   /**
    * Queries a Firestore collection
    * @param collection name of the collection
-   * @param order sorted by the specified field, and in descending or ascending order
+   * @param sort sorted by the specified field, and in descending or ascending order
    * @param property name of the property is used to compare
    * @param value value of the property to compare
    * @returns Observable with list of documents that matches a query
    */
-  getAllDocumentsByStrictQuery = (collection: string, sort: SortRequest, property: string, value: string): Observable<T[]> =>
+  getAllDocumentsByStrictQuery = (
+    collection: string,
+    sort: SortRequest,
+    property: string,
+    value: string
+  ): Observable<T[]> =>
     this.angularFirestore
       .collection<T>(collection, (query) => query.orderBy(sort.active, sort.direction).where(property, '==', value))
       .snapshotChanges()
-      .pipe(map(appendId<T[]>), responseTransform())
+      .pipe(
+        map(appendId<T[]>),
+        responseTransform()
+      )
 
   /**
    * Queries a Firestore collection
@@ -166,14 +213,16 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus> {
    */
   getAllDocumentsByIncludesQuery = (collection: string, property: string, value: string): Observable<T[]> =>
     this.angularFirestore
-      .collection<T>(collection, (query) =>
-        query
-          .orderBy(property)
-          .startAt(value)
-          .endAt(value + '~')
+      .collection<T>(collection, (query) => query
+        .orderBy(property)
+        .startAt(value)
+        .endAt(value + '~')
       )
       .snapshotChanges()
-      .pipe(map(appendId<T[]>), responseTransform())
+      .pipe(
+        map(appendId<T[]>),
+        responseTransform()
+      )
 
   /**
    * Creates a record in a Firestore collection

@@ -5,16 +5,18 @@ import { OrderDetailComponent } from './components/order-detail/order-detail.com
 import { SharedModule } from '../../shared/shared.module'
 import { OrdersLayoutComponent } from './components/orders-layout/orders-layout.component'
 import { StoreModule } from '@ngrx/store'
-import { OrderEffects } from './store/orders.effects'
+import { OrderEffects } from './store/order.effects'
 import { OrderConstants } from './models/order.constants'
 import { EffectsModule } from '@ngrx/effects'
-import { reducer } from './store/orders.reducer'
+import { reducer } from './store/order.reducer'
+import { OrderStatusComponent } from './components/order-status/order-status.component'
 
 @NgModule({
   declarations: [
     OrdersLayoutComponent,
     OrderListComponent,
-    OrderDetailComponent
+    OrderDetailComponent,
+    OrderStatusComponent
   ],
   imports: [
     SharedModule,

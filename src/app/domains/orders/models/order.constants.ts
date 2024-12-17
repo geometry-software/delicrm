@@ -15,6 +15,7 @@ export abstract class OrderConstants {
   static readonly paginationSize = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20]
   static readonly moduleUrl = '/orders'
   static readonly tableColumns = ['client', 'waiter', 'price']
+  static readonly statusList: OrderStatus[] = ['cooking', 'delivery', 'paid', 'canceled']
   static readonly disableSort = true
   static readonly searchPlaceholder = 'RECIPES.PAGE.LIST.TABLE.SEARCH'
   static readonly deleteTitle = 'RECIPES.PAGE.DETAIL.DELETE_TITLE'
@@ -31,16 +32,30 @@ export abstract class OrderConstants {
   }
 }
 
-export enum STATUS_COLOR {
-  cooking = '#f6d7b0',
+export enum ORDER_STATUS_COLOR {
+  cooking = '#fdb16f',
   delivery = '#fcb1fe',
   paid = '#19b7c6',
-  canceled = '#cf573cH',
+  canceled = '#ff5c47',
 }
 
-export enum STATUS_ICON {
+export enum ORDER_STATUS_ICON {
   cooking = 'skillet',
   delivery = 'directions_bike',
   paid = 'attach_money',
   canceled = 'delete_forever',
+}
+
+export enum ORDER_STATUS_PROGRESS {
+  cooking = 'Cook',
+  delivery = 'in Delivery',
+  paid = 'Paid',
+  canceled = 'Cancel',
+}
+
+export enum ORDER_STATUS_TRANSLATE {
+  cooking = 'Cook',
+  delivery = 'In Delivery',
+  paid = 'Paid',
+  canceled = 'Cancel',
 }

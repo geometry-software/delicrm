@@ -27,15 +27,15 @@ export class RecipeEntityService {
   }
 
   getFirstPage(order: SortRequest, size: number, status: RecipeStatus) {
-    return this.repositoryService.getFirstPage(this.collection, order, size, 'status', status)
+    return this.repositoryService.getFirstPage(this.collection, order, size, status)
   }
 
-  getNextPage<V>(order: SortRequest, size: number, status: RecipeStatus, value: V) {
-    return this.repositoryService.getNextPage<RecipeStatus, V>(this.collection, order, size, 'status', status, value)
+  getNextPage<V>(order: SortRequest, size: number, status: RecipeStatus, value: number) {
+    return this.repositoryService.getNextPage(this.collection, order, size, value, status)
   }
 
-  getPreviousPage<V>(order: SortRequest, size: number, status: RecipeStatus, value: V) {
-    return this.repositoryService.getPreviousPage<RecipeStatus, V>(this.collection, order, size, 'status', status, value)
+  getPreviousPage<V>(order: SortRequest, size: number, status: RecipeStatus, value: number) {
+    return this.repositoryService.getPreviousPage(this.collection, order, size, value, status)
   }
 
   getAllByQuery(property: string, value: string) {

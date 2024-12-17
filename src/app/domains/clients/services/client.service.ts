@@ -77,9 +77,7 @@ export class ClientService {
   }
 
   getTotalByStatus(status: ClientStatus) {
-    console.log(status);
-
-    return this.repositoryService.getCollectionSizeByStatus<ClientStatus>(this.collection, status)
+    return this.repositoryService.getCollectionSizeByStatus(this.collection, status)
   }
 
   getTotalLabels() {
@@ -102,15 +100,15 @@ export class ClientService {
     // console.log(order);
     // console.log(size);
     // console.log(status);
-    return this.repositoryService.getFirstPage<ClientStatus>(this.collection, sort, size, 'status', status)
+    return this.repositoryService.getFirstPage<ClientStatus>(this.collection, sort, size, status)
   }
 
-  getNextPage<V>(sort: SortRequest, size: number, status: ClientStatus, value: V) {
-    return this.repositoryService.getNextPage<ClientStatus, V>(this.collection, sort, size, 'status', status, value)
+  getNextPage(sort: SortRequest, size: number, status: ClientStatus, value: number) {
+    return this.repositoryService.getNextPage(this.collection, sort, size, value, status)
   }
 
-  getPreviousPage<V>(sort: SortRequest, size: number, status: ClientStatus, value: V) {
-    return this.repositoryService.getPreviousPage<ClientStatus, V>(this.collection, sort, size, 'status', status, value)
+  getPreviousPage(sort: SortRequest, size: number, status: ClientStatus, value: number) {
+    return this.repositoryService.getPreviousPage(this.collection, sort, size, value, status)
   }
 
   getAllByQuery(property: string, value: string) {

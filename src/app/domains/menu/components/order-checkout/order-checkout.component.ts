@@ -8,7 +8,7 @@ import {
   fadeInUpOnEnterAnimation,
   fadeInOnEnterAnimation,
 } from 'angular-animations'
-import { OrderItem, OrderDeliveryTime, Order, OrderType } from '../../../orders/models/order.model'
+import { OrderItem, OrderDeliveryTime, Order, OrderType, OrderProgress } from '../../../orders/models/order.model'
 import { MenuActions as ItemActions } from '../../store/menu.actions'
 import { Recipe } from '../../../recipe/models/recipe.model'
 import { User } from '../../../users/models/user.model'
@@ -348,7 +348,7 @@ export class OrderCheckoutComponent implements OnInit {
 
   private confirmTableOrder() {
     this.order.status = 'cooking'
-    this.order.progress = '60%'
+    this.order.progress = OrderProgress.Cooking
     this.order.statusHistory.push({
       status: 'cooking',
       user: this.user,

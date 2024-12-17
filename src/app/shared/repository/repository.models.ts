@@ -9,7 +9,10 @@ export type RepositoryEntity = {
   status?: RepositoryEntityStatus
 }
 
+export const defaultStatusPropertyName = 'status'
+
 export type RepositoryEntityStatus = 'active' | 'archived'
+
 export type RepositoryRequestQuery = RepositoryRequestListQuery | 'create' | 'edit' | 'detail' | 'status' | 'log'
 
 export type RepositoryResponseEntity<T> = {

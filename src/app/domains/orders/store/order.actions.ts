@@ -2,7 +2,7 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store'
 import { FilterRequest, RepositoryRequestQuery, RepositoryRequest, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { OrderConstants } from '../models/order.constants'
-import { Order, OrderStatus, OrderStatusResponse } from '../models/order.model'
+import { Order, OrderProgress, OrderStatus, OrderStatusBar, OrderStatusHistory, OrderStatusResponse } from '../models/order.model'
 
 export const OrderActions = createActionGroup({
   source: OrderConstants.storeFeatureKey,
@@ -11,9 +11,14 @@ export const OrderActions = createActionGroup({
     'Get Items By Status': props<{ status: OrderStatus }>(),
     'Set Items Loading Status': props<{ status: LoadingStatus }>(),
     'Create Item': props<{ item: Order }>(),
-    'Update Order Status': props<{ id: string, status: OrderStatus }>(),
+    'Update Order Status': props<{
+      id: string,
+      status: OrderStatus,
+      statusHistory: OrderStatusHistory[],
+      progress: OrderProgress
+    }>(),
     'Update Order Status Failed': emptyProps(),
-    'Update Order Status Success': emptyProps(),
+    'Update Order Status Success': props<{ statusBar: OrderStatusBar }>(),
     'Create Item Success': props<{ response: any; total: number }>(),
     'Update Item': props<{ item: Order; id: string }>(),
     'Update Item Success': emptyProps(),
@@ -26,7 +31,5 @@ export const OrderActions = createActionGroup({
     }>(),
     'Set Items Amount By Status': props<{ status: OrderStatus, amount: OrderStatusResponse }>(),
     'Notify Error': props<{ error: Error; query: RepositoryRequestQuery }>(),
-    'Reset Request To The First Page': emptyProps(),
-    'Reset State': emptyProps(),
   },
 })

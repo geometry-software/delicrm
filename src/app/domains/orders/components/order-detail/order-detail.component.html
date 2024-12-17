@@ -1,102 +1,104 @@
-<div *ngIf="order" [@fadeInOnEnter]>
-  <div class="card">
-    <ng-container [ngSwitch]="order.category.type">
-      <h2 *ngSwitchCase="'delivery'">Delivery</h2>
-      <h2 *ngSwitchCase="'table'">Table {{ order.category.table }}</h2>
-      <h2 *ngSwitchCase="'takeaway'">Takeaway</h2>
-    </ng-container>
-    <div class="flex justify-between items-center">
-      <div class="progress">
-        <div [style.width]="order.progress" [style.background]="statusColor[order.status]">
-          <span class="material-symbols-outlined icon"> {{ statusIcon[order.status] }} </span>
-          {{ order.status }}
-        </div>
-      </div>
-      <div class="flex gap-2">
-        <app-button *ngIf="order.status !== 'paid'" [title]="statusButtonTitle" icon="arrow_forward"
-          (click)="update()"></app-button>
-        <app-button *ngIf="order.status === 'paid'" [title]="printButtonTitle" icon="print"
-          (click)="print()"></app-button>
-      </div>
-    </div>
-    <ol>
-      <li *ngFor="let item of order.plates">
-        <div>{{ item.plate.name }}</div>
-        <div class="description">
-          Starter: <strong>{{ item.starter.name }}</strong>
-          <br />
-          Drink: <strong>{{ item.drink.name }}</strong>
-          <br />
-          <div *ngIf="item.salad.name == 'NA'">
-            <strong>- without salad</strong>
-          </div>
-          <div *ngIf="item.garnish?.name == 'NA'">
-            <strong>- without garnish</strong>
-          </div>
-          <div *ngIf="item.rice?.name == 'NA'">
-            <strong>- without rice</strong>
-          </div>
-          <div *ngIf="item.dessert?.name == 'NA'">
-            <strong>- without dessert</strong>
-          </div>
-        </div>
-      </li>
-    </ol>
-  </div>
-
-  <div class="card mt-[20px]">
-    <h2>Order details</h2>
-
-    <ng-container *ngIf="order.category.type === 'delivery' || order.category.type === 'takeaway'">
-      <h3>Name</h3>
-      <h4>{{ order.category.delivery.name }}</h4>
-    </ng-container>
-
-    <ng-container *ngIf="order.category.type === 'delivery'">
-
-      <h3>Address</h3>
-      <h4 class="table-link" (click)="copyAddress()">{{ order.category.delivery.address }}</h4>
-
-      <h3>Phone</h3>
-      <h4 class="table-link" (click)="copyPhone()">{{ order.category.delivery.phone }}</h4>
-
-      <h3>Payment</h3>
-      <h4>{{ order.category.delivery.payment }}</h4>
-
-      <ng-container *ngIf="order.category.delivery.change">
-        <h3>Change</h3>
-        <h4>{{ order.category.delivery.change }}</h4>
+<ng-container *ngIf="order; else orderNotFoundTemplate">
+  <div [@fadeInOnEnter]>
+    <div class="card">
+      <ng-container [ngSwitch]="order.category.type">
+        <h1 *ngSwitchCase="'delivery'">Delivery</h1>
+        <h1 *ngSwitchCase="'table'">Table {{ order.category.table }}</h1>
+        <h1 *ngSwitchCase="'takeaway'">Takeaway</h1>
       </ng-container>
+      <div class="flex justify-between items-center">
+        <div class="progress">
+          <div [style.width]="orderStatusBar.progress" [style.background]="statusColor[orderStatusBar.status]">
+            <span class="material-symbols-outlined icon"> {{ statusIcon[orderStatusBar.status] }} </span>
+            {{ orderTranslate[orderStatusBar.status] }}
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <ng-container *ngIf="getPrintButton(order.status); else statusActionButton">
+            <app-button [title]="printButtonTitle" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
+              icon="print" (click)="print()" />
+          </ng-container>
+          <ng-template #statusActionButton>
+            <app-button [title]="statusButtonTitle" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
+              icon="arrow_forward" (click)="update()" />
+          </ng-template>
+        </div>
+      </div>
+      <ol>
+        <li *ngFor="let item of order.plates">
+          <h2>{{ item.plate.name }}</h2>
+          <div class="description">
+            <app-title-item title="Starter" [value]="item.starter.name " />
+            <app-title-item title="Drink" [value]="item.drink.name " />
 
-      <h3>Delivery time</h3>
-      <h4>{{ order.category.delivery.time === 'now' ? 'Now' : order.category.delivery.time }}</h4>
-    </ng-container>
+            <!-- TODO            
+            <div *ngIf="item.salad.name == 'NA'">
+              <strong>- without salad</strong>
+            </div>
+            <div *ngIf="item.garnish?.name == 'NA'">
+              <strong>- without garnish</strong>
+            </div>
+            <div *ngIf="item.rice?.name == 'NA'">
+              <strong>- without rice</strong>
+            </div>
+            <div *ngIf="item.dessert?.name == 'NA'">
+              <strong>- without dessert</strong>
+            </div> -->
+          </div>
+        </li>
+      </ol>
+    </div>
 
-    <h3>Created at</h3>
-    <!-- <h4>{{ getTimestamp('requested') | date : 'MMMM d, y, h:mm a' }}</h4> -->
+    <div class="card mt-[20px]">
+      <h1>Order details</h1>
 
-    <h3>Created by</h3>
-    <h4>{{ getUser('requested') }}</h4>
+      <!--       TODO
+      <ng-container *ngIf="order.category.type === 'delivery' || order.category.type === 'takeaway'">
+        <h3>Name</h3>
+        <h4>{{ order.category.delivery.name }}</h4>
+      </ng-container> 
 
-    <ng-container *ngIf="isOrderClosed">
-      <h3>Closed at</h3>
-      <!-- <h4>{{ getTimestamp('requested') | date : 'MMMM d, y, h:mm a' }}</h4> -->
+      <ng-container *ngIf="order.category.type === 'delivery'">
 
-      <h3>Closed by</h3>
-      <h4 class="m-0">{{ getUser('requested') }}</h4>
-    </ng-container>
+        <h3>Address</h3>
+        <h4 class="table-link" (click)="copyAddress()">{{ order.category.delivery.address }}</h4>
+
+        <h3>Phone</h3>
+        <h4 class="table-link" (click)="copyPhone()">{{ order.category.delivery.phone }}</h4>
+
+        <h3>Payment</h3>
+        <h4>{{ order.category.delivery.payment }}</h4>
+
+        <ng-container *ngIf="order.category.delivery.change">
+          <h3>Change</h3>
+          <h4>{{ order.category.delivery.change }}</h4>
+        </ng-container>
+
+        <h3>Delivery time</h3>
+        <h4>{{ order.category.delivery.time === 'now' ? 'Now' : order.category.delivery.time }}</h4>
+      </ng-container>
+      -->
+
+      <app-title-item title="Created at" [value]="getFullTimeFromUnix(order.createdAt)" />
+      <app-title-item title="Created by" [value]="getUser(order.status)" margin="0" />
+
+      <!-- TODO
+      <ng-container *ngIf="isOrderClosed">
+        <h3>Closed at</h3>
+        <h3>Closed by</h3>
+      </ng-container> -->
+    </div>
+
+    <div class="card mt-[20px]">
+      <h1>Summary</h1>
+
+      <app-title-item title="Comment" [value]="getComment(order.comment)" />
+      <app-title-item title="Total" [value]="getTotal(order.price.total)" margin="0" />
+    </div>
   </div>
-
-  <div class="card mt-[20px]">
-    <h2>Summary</h2>
-
-    <ng-container *ngIf="order.comment">
-      <h3>Comment</h3>
-      <h4>{{ order.comment }}</h4>
-    </ng-container>
-
-    <h3>Total</h3>
-    <h4 class="m-0">{{ order.price.total }} currency</h4>
+</ng-container>
+<ng-template #orderNotFoundTemplate>
+  <div class="validation-error-message" *ngIf="orderNotFound">
+    Order id: {{orderId }} was not found
   </div>
-</div>
-<br />
+</ng-template>
