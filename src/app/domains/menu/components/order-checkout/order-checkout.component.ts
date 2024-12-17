@@ -19,6 +19,7 @@ import { Store } from '@ngrx/store'
 import { getExtra, getOrder } from '../../store/menu.selectors'
 import { Router } from '@angular/router'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { Delivery } from '../../../delivery/models/delivery.model'
 
 @Component({
   selector: 'app-order-checkout',
@@ -338,7 +339,19 @@ export class OrderCheckoutComponent implements OnInit {
     //   })
     //   .catch(error => this.handleDocumentCreateError(error))
     console.log(this.order)
-    this.store.dispatch(ItemActions.createDeliveryOrder({ order: this.order }))
+    const delivery: Delivery = {
+      client: 'new client',
+      createdAt: getCurrentUnixTime(),
+      order: this.order,
+      status: 'requested',
+      statusHistory: [{
+        status: 'requested',
+        user: this.user ?? 'default user' as any,
+        createdAt: getCurrentUnixTime()
+      }],
+      user: this.user,
+    }
+    this.store.dispatch(ItemActions.createDeliveryOrder({ delivery }))
   }
 
   // 9
@@ -348,7 +361,7 @@ export class OrderCheckoutComponent implements OnInit {
 
   private confirmTableOrder() {
     this.order.status = 'cooking'
-    this.order.progress = OrderProgress.Cooking
+    this.order.progress = OrderProgress['0%']
     this.order.statusHistory.push({
       status: 'cooking',
       user: this.user,

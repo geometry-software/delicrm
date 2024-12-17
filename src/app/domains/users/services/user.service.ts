@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { EMPTY, Observable, combineLatest, concat, delay, filter, from, map, of, shareReplay, switchMap, tap } from 'rxjs'
+import { EMPTY, Observable, combineLatest, concat, filter, from, map, of, shareReplay, switchMap, tap } from 'rxjs'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { AuthStatus, Auth } from '../../../auth/models/auth.model'
 import { mapAppUser } from '../utils/app-user.mapper'
@@ -119,10 +119,6 @@ export class UserService {
   }
 
   getFirstPage(order: SortRequest, size: number, status: AuthStatus) {
-    // console.warn('users: getFirstPage Service');
-    // console.log(order);
-    // console.log(size);
-    // console.log(status);
     return this.repositoryService.getFirstPage<AuthStatus>(this.collection, order, size, status)
   }
 
@@ -148,16 +144,6 @@ export class UserService {
 
   updateStatus(status: AuthStatus, id: string) {
     return this.repositoryService.updateDocument(this.collection, { status }, id)
-  }
-
-  updateRestaurant<T>(item: T): Observable<void> {
-    // return this.repositoryService.setDocument(this.restaurantCollectionName, item, this.restaurantCollectionId)
-    return EMPTY
-  }
-
-
-  getAllClients() {
-    return this.repositoryService.getAllDocumentsByStatus(this.collection, 'client')
   }
 
 }

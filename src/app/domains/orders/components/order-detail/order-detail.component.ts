@@ -3,10 +3,10 @@ import { ActivatedRoute } from '@angular/router'
 import { MatDialog } from '@angular/material/dialog'
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { fadeInOnEnterAnimation } from 'angular-animations'
-import { ORDER_STATUS_COLOR, ORDER_STATUS_ICON, ORDER_STATUS_TRANSLATE } from '../../models/order.constants'
+import { ORDER_STATUS_COLOR, ORDER_STATUS_ICON, ORDER_STATUS_TRANSLATE } from '../../models/order.model'
 import { PrintService } from '../../../../shared/services/print.service'
 import { catchError, delay, filter, firstValueFrom, map, of, switchMap, tap } from 'rxjs'
-import { Order, OrderStatus, OrderProgress, OrderStatusHistory, OrderStatusBar, orderStatusTest } from '../../models/order.model'
+import { Order, OrderStatus, OrderProgress, OrderStatusHistory, OrderStatusBar, orderStatusProgress } from '../../models/order.model'
 import { UserService } from '../../../users/services/user.service'
 import { getCurrentUnixTime, getFullTimeFromUnix } from '../../../../shared/utils/format-unix-time'
 import { Store } from '@ngrx/store'
@@ -97,7 +97,7 @@ export class OrderDetailComponent implements OnInit {
         createdAt: getCurrentUnixTime(),
         user: this.user,
       }
-      let progress: OrderProgress = orderStatusTest[status]
+      let progress: OrderProgress = orderStatusProgress[status]
       const statusHistory = [...this.order.statusHistory]
       statusHistory.push(history)
       this.store.dispatch(ItemActions.updateOrderStatus({

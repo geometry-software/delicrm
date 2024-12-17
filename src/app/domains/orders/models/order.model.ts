@@ -42,20 +42,14 @@ export type OrderCategory = {
 
 export type OrderStatus = 'requested' | 'cooking' | 'delivery' | 'paid' | 'canceled'
 
-export const orderStatusTest: Record<OrderStatus, string> = {
+export enum OrderProgress { '0%', '50%', '80%', '100%' }
+
+export const orderStatusProgress: Record<OrderStatus, keyof typeof OrderProgress> = {
   requested: '0%',
   cooking: '50%',
   delivery: '80%',
   paid: '100%',
-  canceled: '0%',
-}
-
-export enum OrderProgress {
-  Requested = '0%',
-  Cooking = '50%',
-  Delivery = '80%',
-  Paid = '100%',
-  Canceled = '0%'
+  canceled: '100%',
 }
 
 export type OrderStatusBar = {
@@ -91,3 +85,24 @@ export type OrderStatusResponse = {
 export type OrderDeliveryTime = 'now' | 'delayed'
 
 export type OrderType = 'table' | 'delivery' | 'takeaway'
+
+export enum ORDER_STATUS_COLOR {
+  cooking = '#fdb16f',
+  delivery = '#fcb1fe',
+  paid = '#19b7c6',
+  canceled = '#ff5c47',
+}
+
+export enum ORDER_STATUS_ICON {
+  cooking = 'skillet',
+  delivery = 'directions_bike',
+  paid = 'attach_money',
+  canceled = 'delete_forever',
+}
+
+export enum ORDER_STATUS_TRANSLATE {
+  cooking = 'Cooking',
+  delivery = 'In Delivery',
+  paid = 'Paid',
+  canceled = 'Canceled',
+}

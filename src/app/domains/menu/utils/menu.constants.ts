@@ -5,8 +5,8 @@ import { RepositoryRequest } from '../../../shared/repository/repository.models'
 
 export abstract class MenuConstants {
   static readonly storeFeatureKey = 'MENU'
-  static readonly collectionName = 'Orders'
-  static readonly collectionNameDelivery = 'Deliveries'
+  // static readonly collectionName = 'Orders'
+  // static readonly collectionNameDelivery = 'Deliveries'
   static readonly alaCarteLabel = 'A la Carte'
   static readonly dailyMenuLabel = 'Daily Menu'
   static readonly checkOutUrl = '/menu/checkout'

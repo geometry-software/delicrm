@@ -1,4 +1,4 @@
-import { Observable, UnaryFunction, auditTime, debounceTime, first, pipe, retry, take, throttleTime, throwError, timeout } from 'rxjs'
+import { Observable, UnaryFunction, first, pipe, retry, throwError, timeout } from 'rxjs'
 import { NotificationService } from '../services/notification.service'
 import { RepositoryRequestListQuery, RepositoryResponseList } from './repository.models'
 import * as moment from 'moment'
@@ -12,14 +12,15 @@ export const appendId = <T>(documents): T =>
     id: value.payload.doc.id,
   }))
 
-export const responseTransform = <T>(notificationService: NotificationService = null):
+export const responseTransform = <T>(notificationService: NotificationService):
   UnaryFunction<Observable<T>, Observable<T>> =>
   pipe(
     first(),
     timeout({
       each: REQUEST_TIME_LIMIT_VALUE,
       with: () => {
-        // notificationService.notifyConnectionWarning()
+        const error = new Error('Request time too long')
+        notificationService.error(error)
         return throwError(() => REQUEST_TIME_LIMIT_ERROR_CODE)
       },
     }),

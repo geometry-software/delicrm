@@ -27,14 +27,11 @@ import { httpLoaderFactory } from './utils/translate'
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    CommonModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
-    FormsModule,
-    ReactiveFormsModule,
     AppRoutingModule,
     TranslateModule.forRoot({
       loader: {

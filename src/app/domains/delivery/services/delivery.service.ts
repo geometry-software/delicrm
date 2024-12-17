@@ -1,33 +1,78 @@
 import { Injectable } from '@angular/core'
-import { Order, OrderStatus } from '../../orders/models/order.model'
+// import { Order, DeliveryStatus } from '../../orders/models/order.model'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { MenuConstants } from '../../menu/utils/menu.constants'
+import { Delivery, DeliveryStatus, DeliveryStatusHistory } from '../models/delivery.model'
+import { DeliveryConstants } from '../models/delivery.constants'
+import { SortRequest } from '../../../shared/repository/repository.models'
+import { combineLatest, map } from 'rxjs'
 
 @Injectable({
   providedIn: 'root',
 })
 export class DeliveryService {
 
-  constructor(private repositoryService: RepositoryService<Order, OrderStatus>) { }
+  constructor(
+    private repositoryService: RepositoryService<Delivery, DeliveryStatus>
+  ) { }
 
-  private readonly collection = MenuConstants.collectionNameDelivery
+  private readonly collection = DeliveryConstants.collectionName
 
-  create(order: Order) {
-    return this.repositoryService.createDocument(this.collection, order)
+
+  create(delivery: Delivery) {
+    return this.repositoryService.createDocument(this.collection, delivery)
   }
 
-  getNewDeliveries(status: OrderStatus) {
-    return this.repositoryService.getAllDocumentsByStatus(this.collection, status)
+  getAll() {
+    return this.repositoryService.getAllDocuments(this.collection)
   }
 
-  confirmDelivery(id: string, orderId: string) {
-    return this.repositoryService.updateDocument(this.collection, { status: 'delivery' }, id)
-    // return this.afs.collection(this.collectionNameDelivery).doc(id).update({ status: 'delivery', orderId })
+  getById(id: string) {
+    return this.repositoryService.getDocumentById(this.collection, id)
   }
 
-  rejectDelivery(id: string, comment: string) {
-    return this.repositoryService.updateDocument(this.collection, { status: 'canceled', comment: comment }, id)
-    // return this.afs.collection(this.collectionNameDelivery).doc(id).update({ status: 'canceled', comment: comment })
+  getTotalByStatus(status: DeliveryStatus) {
+    return this.repositoryService.getCollectionSizeByStatus(this.collection, status)
+  }
+
+  getTotalLabels() {
+    return combineLatest([
+      this.getTotalByStatus('requested'),
+      this.getTotalByStatus('confirmed'),
+      this.getTotalByStatus('canceled'),
+    ]).pipe(
+      map(([requested, confirmed, canceled]) => ({
+        requested, confirmed, canceled
+      }))
+    )
+  }
+
+  getFirstPage(sort: SortRequest, size: number, status: DeliveryStatus) {
+    return this.repositoryService.getFirstPage(this.collection, sort, size, status)
+  }
+
+  getNextPage(sort: SortRequest, size: number, status: DeliveryStatus, value: number) {
+    return this.repositoryService.getNextPage(this.collection, sort, size, value, status)
+  }
+
+  getPreviousPage(sort: SortRequest, size: number, status: DeliveryStatus, value: number) {
+    return this.repositoryService.getPreviousPage(this.collection, sort, size, value, status)
+  }
+
+  getAllByQuery(property: string, value: string) {
+    return this.repositoryService.getAllDocumentsByIncludesQuery(this.collection, property, value)
+  }
+
+  set(item: Delivery, id: string) {
+    return this.repositoryService.setDocument(this.collection, item, id)
+  }
+
+  update(item: Delivery, id: string) {
+    return this.repositoryService.updateDocument(this.collection, item, id)
+  }
+
+  updateStatus(id: string, status: DeliveryStatus, statusHistory: DeliveryStatusHistory[]) {
+    return this.repositoryService.updateDocument(this.collection, { status, statusHistory }, id)
   }
 
 }

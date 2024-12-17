@@ -5,7 +5,6 @@ import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { Store } from '@ngrx/store'
 import { getItems, getListLabels, getLoadingStatus, getPaginationResponse, getStatus } from '../../store/order.selectors'
 import { MatTabChangeEvent } from '@angular/material/tabs'
-import { OrderActions } from '../../store/order.actions'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormControl } from '@angular/forms'
 import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
@@ -47,7 +46,7 @@ export class OrderListComponent implements OnInit {
   }
 
   changeTab(event: MatTabChangeEvent) {
-    this.store.dispatch(OrderActions.getItems({
+    this.store.dispatch(ItemActions.getItems({
       request: {
         pagination: this.paginationControl.value,
         size: this.sizeControl.value,

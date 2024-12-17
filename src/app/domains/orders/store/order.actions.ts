@@ -10,7 +10,6 @@ export const OrderActions = createActionGroup({
     'Get Items': props<{ request: RepositoryRequest<Order, OrderStatus> }>(),
     'Get Items By Status': props<{ status: OrderStatus }>(),
     'Set Items Loading Status': props<{ status: LoadingStatus }>(),
-    'Create Item': props<{ item: Order }>(),
     'Update Order Status': props<{
       id: string,
       status: OrderStatus,
@@ -19,12 +18,8 @@ export const OrderActions = createActionGroup({
     }>(),
     'Update Order Status Failed': emptyProps(),
     'Update Order Status Success': props<{ statusBar: OrderStatusBar }>(),
-    'Create Item Success': props<{ response: any; total: number }>(),
-    'Update Item': props<{ item: Order; id: string }>(),
-    'Update Item Success': emptyProps(),
     'Get Item': props<{ id: string }>(),
     'Get Item Success': props<{ item: Order }>(),
-    'Get Items By Search Query': props<{ request: FilterRequest }>(),
     'Get Items Success': props<{
       items: RepositoryResponseList<Order>,
       size?: number,

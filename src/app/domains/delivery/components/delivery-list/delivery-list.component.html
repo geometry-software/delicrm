@@ -1,27 +1,28 @@
-<!-- <div class="relative">
+<div class="relative">
   <div class="table-loading-shade" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></div>
-
-  <mat-tab-group [@.disabled]="true" (selectedTabChange)="changeUserList($event)" [(selectedIndex)]="selectedTabIndex">
-    <ng-container *ngIf="{ list: orderList | async, label: listLabels | async } as data">
-      <mat-tab [label]="data.label.new">
-        <ng-container *ngTemplateOutlet="deliveryTable; context: { data: data.list  }"></ng-container>
-      </mat-tab>
-      <mat-tab [label]="data.label.confirmed">
-        <ng-container *ngTemplateOutlet="deliveryTable; context: { data: data.list  }"></ng-container>
-      </mat-tab>
-      <mat-tab [label]="data.label.canceled">
-        <ng-container *ngTemplateOutlet="deliveryTable; context: { data: data.list  }"></ng-container>
-      </mat-tab>
-    </ng-container>
+  <mat-tab-group *ngIf="{ list: orderList | async, label: listLabels | async } as data" [@.disabled]="true"
+    (selectedTabChange)="changeTab($event)" [(selectedIndex)]="selectedTabIndex">
+    <mat-tab [label]="data.label.requested">
+      <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
+    </mat-tab>
+    <mat-tab [label]="data.label.confirmed">
+      <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
+    </mat-tab>
+    <mat-tab [label]="data.label.canceled">
+      <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
+    </mat-tab>
   </mat-tab-group>
-</div> -->
+</div>
 
-<ng-template #deliveryTable let-context>
-  <mat-table [dataSource]="context">
+<ng-template #table let-data="data">
+  <mat-table mat-table [dataSource]="data" matSort matSortDisableClear
+    [matSortDirection]="defaultSortControlValue.direction" [matSortActive]="defaultSortControlValue.active"
+    (matSortChange)="changeSort($event)">
     <ng-container matColumnDef="user">
       <mat-header-cell *matHeaderCellDef> Client </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <div class="table-link" (click)="showDetail(element)">
+        <div class="table-link">
+          <!-- <div class="table-link" (click)="showDetail(element)"> -->
           {{ element.category.delivery?.name }}
         </div>
       </mat-cell>
@@ -36,10 +37,10 @@
       </mat-cell>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
   </mat-table>
 </ng-template>
 
-<!-- <app-pagination [paginationControl]="paginationControl" [sizeControl]="sizeControl"
-  [paginationPayload]="paginationPayload$ | async" [downloadState]="downloadState$ | async"></app-pagination> -->
+<app-pagination [paginationControl]="paginationControl" [sizeControl]="sizeControl"
+  [paginationPayload]="paginationPayload | async" [loadingStatus]="loadingStatus | async" />

@@ -8,7 +8,7 @@ import { isStatusUpdated, getItemsData, getItemsLoadingStatus, getListLabels, ge
 import { ClientConstants } from '../../utils/client.constants'
 import { FormControl } from '@angular/forms'
 import { Sort } from '@angular/material/sort'
-import { combineListControls } from '../../utils/combine-list-controls'
+// import { combineListControls } from '../../utils/combine-list-controls'
 import { MatDialog } from '@angular/material/dialog'
 import { ClientDetailComponent } from '../client-detail/client-detail.component'
 import { SignalService } from '../../../../shared/services/signal.service'

@@ -53,7 +53,7 @@ export class MenuEffects implements OnInitEffects {
   createDeliveryOrder = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.createDeliveryOrder),
-      switchMap(({ order }) => this.deliveryService.create(order).pipe(
+      switchMap(({ delivery }) => this.deliveryService.create(delivery).pipe(
         map(id => ItemActions.createOrderSuccess({ id })),
         catchError(() => this.handleError())
       )))

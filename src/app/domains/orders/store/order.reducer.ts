@@ -1,13 +1,9 @@
 import { createReducer, on } from '@ngrx/store'
 import { OrderActions as ItemActions } from './order.actions'
 import { State, initialState } from './order.state'
-import { LoadingStatus } from '../../../shared/models/loading-status'
 
 export const reducer = createReducer<State>(
   initialState,
-  // on(ItemActions.getItems, (state, { request }) => ({
-  //   ...state
-  // })),
   on(ItemActions.getItemsSuccess, (state, { items, size }) => ({
     ...state,
     items,
@@ -26,20 +22,6 @@ export const reducer = createReducer<State>(
     ...state,
     item: {
       data: item,
-    },
-  })),
-  on(ItemActions.createItem, (state) => ({
-    ...state,
-    item: {
-      data: state.item?.data,
-      loading: true,
-    },
-  })),
-  on(ItemActions.updateItem, (state) => ({
-    ...state,
-    item: {
-      data: state.item?.data,
-      loading: true,
     },
   })),
   on(ItemActions.updateOrderStatusSuccess, (state, { statusBar }) => ({

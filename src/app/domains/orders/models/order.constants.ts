@@ -31,31 +31,3 @@ export abstract class OrderConstants {
     status: this.defaultRequestStatus,
   }
 }
-
-export enum ORDER_STATUS_COLOR {
-  cooking = '#fdb16f',
-  delivery = '#fcb1fe',
-  paid = '#19b7c6',
-  canceled = '#ff5c47',
-}
-
-export enum ORDER_STATUS_ICON {
-  cooking = 'skillet',
-  delivery = 'directions_bike',
-  paid = 'attach_money',
-  canceled = 'delete_forever',
-}
-
-export enum ORDER_STATUS_PROGRESS {
-  cooking = 'Cook',
-  delivery = 'in Delivery',
-  paid = 'Paid',
-  canceled = 'Cancel',
-}
-
-export enum ORDER_STATUS_TRANSLATE {
-  cooking = 'Cook',
-  delivery = 'In Delivery',
-  paid = 'Paid',
-  canceled = 'Cancel',
-}

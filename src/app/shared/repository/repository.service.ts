@@ -10,15 +10,17 @@ import {
   RepositoryResponseEntity,
   SortRequest
 } from './repository.models'
+import { NotificationService } from '../services/notification.service'
 
 @Injectable({
   providedIn: 'root',
 })
 export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> {
 
-  constructor(private angularFirestore: AngularFirestore) { }
-
-  private readonly defaultStatusPropertyName = defaultStatusPropertyName
+  constructor(
+    private angularFirestore: AngularFirestore,
+    private notificationService: NotificationService,
+  ) { }
 
   /**
    * Queries a Firestore collection
@@ -29,7 +31,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
     this.angularFirestore
       .collection<T>(collection)
       .snapshotChanges()
-      .pipe(map(appendId<T[]>), responseTransform())
+      .pipe(map(appendId<T[]>), responseTransform(this.notificationService))
 
   /**
    * Queries a Firestore collection
@@ -42,7 +44,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
         .orderBy('name', 'desc')
         .where(defaultStatusPropertyName, '==', status))
       .snapshotChanges()
-      .pipe(map(appendId<T[]>), responseTransform())
+      .pipe(map(appendId<T[]>), responseTransform(this.notificationService))
 
   /**
    * Queries a Firestore collection
@@ -51,7 +53,8 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
    * @returns Observable with a single document by id
    */
   getDocumentById = (collection: string, id: string): Observable<T> =>
-    this.angularFirestore.collection(collection).doc<T>(id).valueChanges().pipe(responseTransform())
+    this.angularFirestore.collection(collection).doc<T>(id).valueChanges().pipe(
+      responseTransform(this.notificationService))
 
   /**
    * Queries a Firestore collection with subscription
@@ -70,8 +73,8 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
    */
   getCollectionSizeByStatus = (collectionName: string, status: S): Observable<number> => from(
     getCountFromServer(query(collection(this.angularFirestore.firestore, collectionName),
-      where(defaultStatusPropertyName, '==', status))))
-    .pipe(map(value => value.data().count))
+      where(defaultStatusPropertyName, '==', status)))).pipe(
+        map(value => value.data().count))
 
   /**
    * Queries a Firestore collection
@@ -118,7 +121,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
       .snapshotChanges()
       .pipe(
         map(appendId<T[]>),
-        responseTransform()
+        responseTransform(this.notificationService)
       )
 
   /**
@@ -148,7 +151,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
       .snapshotChanges()
       .pipe(
         map(appendId<T[]>),
-        responseTransform()
+        responseTransform(this.notificationService)
       )
 
   /**
@@ -179,7 +182,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
       .snapshotChanges()
       .pipe(
         map(appendId<T[]>),
-        responseTransform()
+        responseTransform(this.notificationService)
       )
 
   /**
@@ -201,7 +204,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
       .snapshotChanges()
       .pipe(
         map(appendId<T[]>),
-        responseTransform()
+        responseTransform(this.notificationService)
       )
 
   /**
@@ -216,12 +219,11 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
       .collection<T>(collection, (query) => query
         .orderBy(property)
         .startAt(value)
-        .endAt(value + '~')
-      )
+        .endAt(value + '~'))
       .snapshotChanges()
       .pipe(
         map(appendId<T[]>),
-        responseTransform()
+        responseTransform(this.notificationService)
       )
 
   /**
@@ -232,9 +234,8 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
    */
   createDocument = (collection: string, item: T): Observable<string> =>
     from(this.angularFirestore.collection(collection).add(item)).pipe(
-      responseTransform(),
-      map(doc => doc.id)
-    )
+      responseTransform(this.notificationService),
+      map(doc => doc.id))
 
   /**
    * Updates a document in a Firestore collection
@@ -244,7 +245,8 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
    * @returns void Observable
    */
   updateDocument = (collection: string, item: Partial<T>, id: string): Observable<void> =>
-    from(this.angularFirestore.collection(collection).doc(id).update(item)).pipe(responseTransform())
+    from(this.angularFirestore.collection(collection).doc(id).update(item)).pipe(
+      responseTransform(this.notificationService))
 
   /**
    * Sets a document in a Firestore collection
@@ -255,9 +257,8 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
    */
   setDocument = <T>(collection: string, item: T, id: string): Observable<RepositoryResponseEntity<T>> =>
     from(this.angularFirestore.collection(collection).doc(id).set(item, { merge: true })).pipe(
-      responseTransform(),
-      map(() => ({ id, item }))
-    )
+      responseTransform(this.notificationService),
+      map(() => ({ id, item })))
 
   /**
    * Deletes a document in a Firestore collection
@@ -267,5 +268,6 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
    * @returns void Observable
    */
   deleteDocument = (collection: string, id: string): Observable<void> =>
-    from(this.angularFirestore.collection(collection).doc(id).delete()).pipe(responseTransform())
+    from(this.angularFirestore.collection(collection).doc(id).delete()).pipe(
+      responseTransform(this.notificationService))
 }

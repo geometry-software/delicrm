@@ -15,7 +15,6 @@ import { Store } from '@ngrx/store'
 import { getCurrent, getSize, getTotal } from './order.selectors'
 import { OrderService } from '../services/order.service'
 import { compareItemsRequestStateSize, formatRequest } from '../../../shared/utils/format-request'
-import { OrderActions } from './order.actions'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { OrderConstants } from '../models/order.constants'
 import { SignalService } from '../../../shared/services/signal.service'
@@ -45,7 +44,7 @@ export class OrderEffects {
           }),
           catchError(error => of(
             ItemActions.notifyError({ error, query: 'edit' }),
-            OrderActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed })
+            ItemActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed })
           )))))
   )
 
@@ -112,17 +111,6 @@ export class OrderEffects {
           default: return EMPTY
         }
       }))
-  )
-
-  getItemsBySearchQuery = createEffect(() =>
-    this.actions.pipe(
-      ofType(ItemActions.getItemsBySearchQuery),
-      withLatestFrom(this.store.select(getTotal)),
-      switchMap(([{ request }, total]) =>
-        this.orderService.getAllByQuery(request.key, request.value).pipe(
-          map((items) => ItemActions.getItemsSuccess({ items: formatResponseList('custom', items, total, 0) })),
-          catchError(error => of(ItemActions.notifyError({ error, query: 'custom' })))
-        )))
   )
 
   notifyError = createEffect(() =>

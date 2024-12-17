@@ -1,9 +1,8 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
-import { FilterRequest, RepositoryRequestQuery, RepositoryRequest, RepositoryRequestListQuery } from '../../../shared/repository/repository.models'
-import { AuthStatus } from '../../../auth/models/auth.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { Order } from '../../orders/models/order.model'
 import { MenuConstants } from '../utils/menu.constants'
+import { Delivery } from '../../delivery/models/delivery.model'
 
 export const MenuActions = createActionGroup({
   source: MenuConstants.storeFeatureKey,
@@ -12,7 +11,7 @@ export const MenuActions = createActionGroup({
     'Init Daily Menu Success': props<{ menu: any }>(),
     'Set Items Loading Status': props<{ status: LoadingStatus }>(),
     'Set Order': props<{ order: Order }>(),
-    'Create Delivery Order': props<{ order: Order }>(),
+    'Create Delivery Order': props<{ delivery: Delivery }>(),
     'Create Table Order': props<{ order: Order }>(),
     'Create Order Success': props<{ id: string }>(),
   },

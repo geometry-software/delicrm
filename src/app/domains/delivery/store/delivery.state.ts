@@ -1,39 +1,35 @@
-import { RepositoryRequesEntity, RepositoryResponseList } from '../../../shared/repository/repository.models'
+import { RepositoryRequesEntity, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { Order, OrderStatus, OrderStatusResponse } from '../../orders/models/order.model'
-// import { Order, OrderStatus, OrderStatusResponse } from '../models/order.model'
+import { Delivery, DeliveryStatus, DeliveryStatusResponse } from '../models/delivery.model'
 
 export interface State {
-  items: RepositoryResponseList<Order>
+  query: RepositoryRequestListQuery,
+  items: RepositoryResponseList<Delivery>
   itemsLoadingStatus: LoadingStatus
-  item: RepositoryRequesEntity<Order>
+  item: RepositoryRequesEntity<Delivery>
   itemId: string
-  listResponseType: any
-  resetRequest: boolean
-  requestStatus: OrderStatus
-  itemAmountByStatus: OrderStatusResponse
-  isStatusUpdated: boolean
+  status: DeliveryStatus
+  itemsAmountByStatus: DeliveryStatusResponse
+  size: number
 }
 
 export const initialState: State = {
+  query: 'first',
   itemId: null,
   items: {
     data: [],
     total: 0,
-    current: 0,
+    current: 0
   },
   itemsLoadingStatus: LoadingStatus.NotLoaded,
   item: {
     data: null,
   },
-  listResponseType: null,
-  resetRequest: null,
-  itemAmountByStatus: {
-    cooking: 0,
-    delivery: 0,
-    paid: 0,
+  status: 'requested',
+  itemsAmountByStatus: {
+    requested: 0,
+    confirmed: 0,
     canceled: 0,
   },
-  isStatusUpdated: null,
-  requestStatus: null,
+  size: null,
 }
