@@ -5,8 +5,9 @@ import { LoadingStatus } from '../models/loading-status'
   providedIn: 'root',
 })
 export class SignalService {
+
   userData = signal(null)
-  setUserData = (data): void => this.userData.set(data)
+  setUserData = (data) => this.userData.set(data)
   getUserData = computed(() => this.userData())
 
   toolbarTitle = signal(null)
@@ -20,4 +21,5 @@ export class SignalService {
   loadingStatus = signal(LoadingStatus.NotLoaded)
   setLoadingStatus = (status: LoadingStatus) => this.loadingStatus.set(status)
   getLoadingStatus = computed(() => this.loadingStatus())
+
 }

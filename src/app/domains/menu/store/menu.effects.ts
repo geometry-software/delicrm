@@ -10,6 +10,7 @@ import { RestaurantService } from '../../admin/services/restaurant.service'
 import { MenuConstants } from '../utils/menu.constants'
 import { OrderService } from '../../orders/services/order.service'
 import { DeliveryService } from '../../delivery/services/delivery.service'
+import { prepareOrder } from '../utils/prepare-order'
 
 @Injectable()
 export class MenuEffects implements OnInitEffects {
@@ -46,8 +47,10 @@ export class MenuEffects implements OnInitEffects {
   setOrder = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.setOrder),
-      tap(() => this.router.navigate([this.checkOutUrl])))
-    , { dispatch: false }
+      tap(() => this.router.navigate([this.checkOutUrl])),
+      map(({ main, alacarte }) => prepareOrder(main, alacarte)),
+      map(order => ItemActions.setOrderSuccess({ order }))
+    )
   )
 
   createDeliveryOrder = createEffect(() =>
@@ -63,7 +66,7 @@ export class MenuEffects implements OnInitEffects {
     this.actions.pipe(
       ofType(ItemActions.createTableOrder),
       switchMap(({ order }) => this.orderService.create(order).pipe(
-        tap(() => this.router.navigate([this.ordersUrl])),
+        tap((id) => this.router.navigate([this.ordersUrl, id])),
         map(id => ItemActions.createOrderSuccess({ id })),
         catchError(() => this.handleError())
       )))

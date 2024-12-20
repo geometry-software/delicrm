@@ -2,7 +2,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store'
 import { MenuConstants } from '../utils/menu.constants'
 import { State } from './menu.state'
 
-const storeFeatureKey: string = MenuConstants.storeFeatureKey
+const storeFeatureKey = MenuConstants.storeFeatureKey
 
 export const getState = createFeatureSelector<State>(storeFeatureKey)
 export const loadingStatus = createSelector(getState, (state) => state.loadingStatus)

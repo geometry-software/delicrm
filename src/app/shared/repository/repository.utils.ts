@@ -3,7 +3,7 @@ import { NotificationService } from '../services/notification.service'
 import { RepositoryRequestListQuery, RepositoryResponseList } from './repository.models'
 import * as moment from 'moment'
 
-const REQUEST_TIME_LIMIT_VALUE = 5000
+const REQUEST_TIME_LIMIT_VALUE = 10000
 const REQUEST_TIME_LIMIT_ERROR_CODE = 'REQUEST_TIME_LIMIT_ERROR'
 
 export const appendId = <T>(documents): T =>

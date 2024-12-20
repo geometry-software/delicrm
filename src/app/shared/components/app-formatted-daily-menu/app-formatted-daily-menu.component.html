@@ -7,7 +7,7 @@
     </div>
   </div>
   <div class="flex items-center">
-    <div class="item__price">{{ !item?.isRemoved ? item.price : '86' }} currency</div>
+    <div class="item__price">{{ !item.isRemoved ? item.price : '86' }} currency</div>
     <button mat-icon-button (click)="add(item)" *ngIf="isAddAvailable">
       <mat-icon class="add-button">add</mat-icon>
     </button>
@@ -15,13 +15,13 @@
 </div>
 <div class="section">Starters</div>
 <div *ngFor="let item of dailyMenu.extra.starters">
-  <div class="item__title">{{ item.item.name }}</div>
-  <div class="item__history">{{ item.item.history }}</div>
+  <div class="item__title">{{ item.name }}</div>
+  <div class="item__history">{{ item.history }}</div>
 </div>
 <div class="section">Drinks</div>
 <div *ngFor="let item of dailyMenu.extra.drinks">
-  <div class="item__title">{{ item.item.name }}</div>
-  <div class="item__history">{{ item.item.history }}</div>
+  <div class="item__title">{{ item.name }}</div>
+  <div class="item__history">{{ item.history }}</div>
 </div>
 <div class="section">Side dishes</div>
 <div class="item__title">{{ dailyMenu.extra.rice.name }}</div>
@@ -37,7 +37,7 @@
   {{ dailyMenu.extra.garnish.histrory }}
 </div>
 <div class="section">Dessert</div>
-<div class="item__title">{{ dailyMenu.extra?.dessert.name }}</div>
+<div class="item__title">{{ dailyMenu.extra.dessert.name }}</div>
 <div class="item__history">
   {{ dailyMenu.extra?.dessert.histrory }}
 </div>

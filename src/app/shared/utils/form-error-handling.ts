@@ -24,6 +24,8 @@ const getErrorMessage = (control: AbstractControl): string => {
     return 'Field is required'
   } else if (control.hasError('email')) {
     return 'Email format is not valid'
+  } else if (control.hasError('tableZeroNumber')) {
+    return 'table could not be 0'
   } else {
     return 'Error'
   }

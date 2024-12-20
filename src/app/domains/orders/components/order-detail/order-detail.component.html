@@ -25,7 +25,7 @@
         </div>
       </div>
       <ol>
-        <li *ngFor="let item of order.plates">
+        <li *ngFor="let item of order.main">
           <h2>{{ item.plate.name }}</h2>
           <div class="description">
             <app-title-item title="Starter" [value]="item.starter.name " />

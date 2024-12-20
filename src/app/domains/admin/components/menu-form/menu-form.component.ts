@@ -1,9 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
-import { MatTableDataSource } from '@angular/material/table'
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
 import { fadeInUpOnEnterAnimation, fadeInDownOnEnterAnimation, fadeOutDownOnLeaveAnimation } from 'angular-animations'
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms'
-import { AdminService } from '../../services/admin.service'
 import { MatStepper } from '@angular/material/stepper'
 import { Observable, filter, map, of, startWith, switchMap, tap } from 'rxjs'
 import { Recipe } from '../../../recipe/models/recipe.model'
@@ -12,8 +9,6 @@ import { RecipeEntityService } from '../../../recipe/services/recipe.service'
 import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 import { RestaurantConstants } from '../../models/restaurant.constants'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
-import { RestaurantService } from '../../services/restaurant.service'
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Store } from '@ngrx/store'
 import { AdminActions as ItemActions } from '../../store/admin.actions'
 import { loadingStatus } from '../../store/admin.selectors'
@@ -90,8 +85,8 @@ export class MenuFormComponent implements OnInit {
 
   initForm() {
     this.menuForm = this.formBuilder.group({
-      starters: this.addFormArrayItem(this.startersAmount),
-      drinks: this.addFormArrayItem(this.drinksAmount),
+      starters: this.initFormArrayItem(this.startersAmount),
+      drinks: this.initFormArrayItem(this.drinksAmount),
       salad: [null, Validators.required],
       rice: [null, Validators.required],
       garnish: [null, Validators.required],
@@ -100,22 +95,16 @@ export class MenuFormComponent implements OnInit {
     this.plateForm = this.formBuilder.group({})
   }
 
-  addFormArrayItem(amount: number) {
+  initFormArrayItem(amount: number) {
     const array: FormArray = this.formBuilder.array([])
     for (let i = 0; i < amount; i++) {
-      array.push(
-        this.formBuilder.group({
-          item: [null, [Validators.required]],
-        })
-      )
+      array.push(new FormControl(null, Validators.required))
     }
     return array
   }
 
   addFormItem() {
-    return new FormGroup({
-      item: new FormControl(null, Validators.required),
-    })
+    return new FormControl(null, Validators.required)
   }
 
   getStarters() {
@@ -136,30 +125,24 @@ export class MenuFormComponent implements OnInit {
     this.barList = recipes.filter(value => value.type == 'alacarte')
     this.plateList = recipes.filter(value => value.type == 'main')
     for (let i = 0; i < this.startersAmount; i++) {
-      this.filteredStarterOptions[i] = this.getStarters()
-        .at(i)
-        .get('item')
-        .valueChanges.pipe(
-          startWith<string | Recipe>(''),
-          map(value => (typeof value === 'string' ? value : value.name)),
-          map(name => name
-            ? this.starterList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
-            : this.starterList.slice()
-          )
+      this.filteredStarterOptions[i] = this.getStarters().at(i).valueChanges.pipe(
+        startWith<string | Recipe>(''),
+        map(value => (typeof value === 'string' ? value : value.name)),
+        map(name => name
+          ? this.starterList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
+          : this.starterList.slice()
         )
+      )
     }
     for (let i = 0; i < this.drinksAmount; i++) {
-      this.filteredDrinkOptions[i] = this.getDrinks()
-        .at(i)
-        .get('item')
-        .valueChanges.pipe(
-          startWith<string | Recipe>(''),
-          map(value => (typeof value === 'string' ? value : value.name)),
-          map(name => name
-            ? this.drinkList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
-            : this.drinkList.slice()
-          )
+      this.filteredDrinkOptions[i] = this.getDrinks().at(i).valueChanges.pipe(
+        startWith<string | Recipe>(''),
+        map(value => (typeof value === 'string' ? value : value.name)),
+        map(name => name
+          ? this.drinkList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
+          : this.drinkList.slice()
         )
+      )
     }
     this.filteredSaladOptions = this.menuForm.get('salad').valueChanges.pipe(
       startWith(''),
@@ -200,16 +183,10 @@ export class MenuFormComponent implements OnInit {
   }
 
   updateServerDataBar() {
-    // this.daoBar.getAll().subscribe(value => {
-    //   if (value.length == 0) this.hasBarItems = false
-    //   else {
-    //     this.barSource = new MatTableDataSource(value)
-    //     this.hasBarItems = true
-    //   }
-    // })
+    // TODO
   }
 
-  chooseDrinks(form, stepper: MatStepper) {
+  addExtras(form, stepper: MatStepper) {
     this.hasStartersValidationError = false
     if (form.valid) {
       stepper.next()
@@ -220,13 +197,13 @@ export class MenuFormComponent implements OnInit {
     if (this.chosenPlates.length) {
       stepper.next()
       this.dailyMenu.extra = this.menuForm.value
-      this.dailyMenu.main = this.chosenPlates
+      this.dailyMenu.main = this.chosenPlates.map(el => el.item)
     }
   }
 
   addPlate(item) {
     if (item.isAdded) {
-      this.chosenPlates = this.chosenPlates.filter((el) => el.id !== item.id)
+      this.chosenPlates = this.chosenPlates.filter(el => el.id !== item.id)
     } else {
       this.chosenPlates.push({ item, isAdded: true })
     }

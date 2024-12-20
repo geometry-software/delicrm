@@ -1,15 +1,19 @@
-.mat-stepper-horizontal {
-  background: none;
-  // border-radius: 10px;
-  // border: 1px solid #ddd;
-}
+:host {
+  ::ng-deep .mat-step-icon-selected {
+    background-color: #57aaf7 !important;
+  }
 
-::ng-deep .mat-step-icon-selected {
-  background-color: #57aaf7 !important;
-}
+  ::ng-deep .mat-step-icon-state-edit {
+    background-color: #57aaf7 !important;
+  }
 
-::ng-deep .mat-step-icon-state-edit {
-  background-color: #57aaf7 !important;
+  ::ng-deep .mat-horizontal-content-container {
+    padding-bottom: 0;
+  }
+
+  .mat-stepper-horizontal {
+    background: none;
+  }
 }
 
 .empty-bar {

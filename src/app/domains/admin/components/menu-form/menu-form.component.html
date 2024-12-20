@@ -1,40 +1,37 @@
 <br />
 <mat-stepper [linear]="true" #stepper *ngIf="isFormDataLoaded | async">
   <mat-step [stepControl]="menuForm" label="Choose starters">
-    <form [formGroup]="menuForm" (ngSubmit)="chooseDrinks(menuForm, stepper)">
-      <h5>Starters</h5>
+    <form [formGroup]="menuForm" (ngSubmit)="addExtras(menuForm, stepper)">
+
+      <div class="section">Starters</div>
 
       <div formArrayName="starters" *ngFor="let item of getStarters().controls; let i = index">
-        <ng-container [formGroupName]="i">
-          <mat-form-field>
-            <input type="text" matInput formControlName="item" [placeholder]="'Sopa ' + (i + 1)"
-              [matAutocomplete]="autoStarter" />
-            <mat-autocomplete #autoStarter="matAutocomplete" [displayWith]="displayFn">
-              <mat-option *ngFor="let option of filteredStarterOptions[i] | async" [value]="option">
-                {{ option.name }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </ng-container>
+        <mat-form-field>
+          <input type="text" matInput [formControlName]="i" [placeholder]="'Sopa ' + (i + 1)"
+            [matAutocomplete]="autoStarter" />
+          <mat-autocomplete #autoStarter="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredStarterOptions[i] | async" [value]="option">
+              {{ option.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
       </div>
 
-      <h5>Drinks</h5>
+      <div class="section">Drinks</div>
 
       <div formArrayName="drinks" *ngFor="let item of getDrinks().controls; let i = index">
-        <ng-container [formGroupName]="i">
-          <mat-form-field>
-            <input type="text" matInput formControlName="item" [placeholder]="'Juice ' + (i + 1)"
-              [matAutocomplete]="autoDrink" />
-            <mat-autocomplete #autoDrink="matAutocomplete" [displayWith]="displayFn">
-              <mat-option *ngFor="let option of filteredDrinkOptions[i] | async" [value]="option">
-                {{ option.name }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </ng-container>
+        <mat-form-field>
+          <input type="text" matInput [formControlName]="i" [placeholder]="'Juice ' + (i + 1)"
+            [matAutocomplete]="autoDrink" />
+          <mat-autocomplete #autoDrink="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredDrinkOptions[i] | async" [value]="option">
+              {{ option.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
       </div>
 
-      <h5>Side dished</h5>
+      <div class="section">Side dishes</div>
 
       <mat-form-field>
         <input type="text" matInput formControlName="salad" placeholder="Salad" [matAutocomplete]="autoSalad" />

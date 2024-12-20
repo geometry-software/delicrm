@@ -9,7 +9,7 @@
     <app-button (click)="save()" title="Continuar" width="full">
       <span class="dish-amount" *ngIf="dishAmount">({{ dishAmount }})</span>
     </app-button>
-    <div *ngIf="emptyOrderError" class="validation-error-message" style="margin-top: 10px;" [@fadeInUpOnEnter]>
+    <div *ngIf="emptyOrderError" class="validation-error-message mt-[10px]" [@fadeInUpOnEnter]>
       At least one option has to be added
     </div>
   </div>

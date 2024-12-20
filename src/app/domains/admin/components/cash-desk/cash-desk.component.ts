@@ -120,35 +120,14 @@ export class CashDeskComponent implements OnInit {
   }
 
   nextPage() {
-    this.isLoadingHistory = true
-    this.adminService.getHistoryNextPage(this.PAGE_ITEMS_SIZE, this.lastItem).subscribe((res) => {
-      this.isLoadingHistory = false
-      this.datasourceHistorial = new MatTableDataSource(res)
-      this.firstItem = [...res][0]
-      this.lastItem = [...res].pop()
-    })
+
   }
 
   updatePage() {
-    this.isLoadingHistory = true
-    this.firstItem = undefined
-    this.adminService.getHistoryFirstPage(this.PAGE_ITEMS_SIZE).subscribe((res) => {
-      setTimeout(() => {
-        this.datasourceHistorial = new MatTableDataSource(res)
-        this.lastItem = [...res].pop()
-        this.isLoadingHistory = false
-      }, 1000)
-    })
+
   }
 
   previousPage() {
-    this.adminService.getHistoryPreviousPage(this.PAGE_ITEMS_SIZE, this.firstItem).subscribe((res) => {
-      let list = res.sort(function (a, b) {
-        return b.createdAt - a.createdAt
-      })
-      this.datasourceHistorial = new MatTableDataSource(list)
-      this.firstItem = [...res][0]
-      this.lastItem = [...res].pop()
-    })
+
   }
 }

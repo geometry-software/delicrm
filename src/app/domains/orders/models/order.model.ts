@@ -3,28 +3,24 @@ import { User } from '../../users/models/user.model'
 
 export type Order = {
   id?: string
-  createdAt?: number
-  main?: any
-  extra?: any
-  alacarte?: Array<Recipe>
-  price?: OrderPrice
-  category?: OrderCategory
-  progress?: OrderProgress
-  status?: OrderStatus
-  statusHistory?: Array<OrderStatusHistory>
-  plates?: Array<OrderItem>
-  comment?: string
+  createdAt: number
+  main: Array<OrderItem>
+  alacarte: Array<Recipe>
+  price: OrderPrice
+  category: OrderCategory
+  progress: OrderProgress
+  status: OrderStatus
+  statusHistory: Array<OrderStatusHistory>
+  comment: string
 }
 
 export type OrderStatusHistory = {
-  user?: User
-  status?: OrderStatus
-  createdAt?: number
+  user: User
+  status: OrderStatus
+  createdAt: number
 }
 
 export type OrderItem = {
-  type: string
-  name: string
   plate: Recipe
   starter: Recipe
   drink: Recipe
@@ -32,19 +28,20 @@ export type OrderItem = {
   rice: Recipe
   salad: Recipe
   dessert: Recipe
+  name: string
 }
 
 export type OrderCategory = {
-  type?: OrderType
+  type: OrderType
   delivery?: OrderDelivery
   table?: number
 }
 
 export type OrderStatus = 'requested' | 'cooking' | 'delivery' | 'paid' | 'canceled'
 
-export enum OrderProgress { '0%', '50%', '80%', '100%' }
+export type OrderProgress = '0%' | '50%' | '80%' | '100%'
 
-export const orderStatusProgress: Record<OrderStatus, keyof typeof OrderProgress> = {
+export const orderStatusProgress: Record<OrderStatus, string> = {
   requested: '0%',
   cooking: '50%',
   delivery: '80%',
@@ -58,10 +55,11 @@ export type OrderStatusBar = {
 }
 
 export type OrderPrice = {
-  currency?: string
-  total?: number
-  discount?: number
-  delivery?: number
+  currency: string
+  total: number
+  order: number
+  delivery: number
+  alacarte: number
 }
 
 export type OrderDelivery = {

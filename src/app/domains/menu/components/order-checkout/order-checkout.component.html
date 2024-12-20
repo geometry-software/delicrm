@@ -1,224 +1,213 @@
-<div class="checkout-container host-overflow" [@fadeInOnEnter]>
-  <div *ngIf="!this.plates?.length">
-    <div class="no-plates">To continue with starters and drinks, choose some dishes from the previous page.</div>
-  </div>
+<div class="checkout-container" *ngIf="order" [@fadeInOnEnter]>
+  <app-button routerLink="/menu" title="Back" width="full" />
+  <ng-container *ngFor="let plate of order.main; let i = index">
+    <div class="card mt-[10px]">
+      <app-title [title]="getDishTitle(i, plate.name)" subtitle="choose starter, drink and sidedishes"></app-title>
 
-  <!-- <div *ngIf="!this.user">
-    <div class="no-user">Please, sign up first</div>
-  </div> -->
+      <div class="section">Starter</div>
 
-  <div class="mb-[10px]" *ngIf="!isGifLoaderShowing">
-    <app-button routerLink="/menu" title="Volver" width="full"></app-button>
-  </div>
+      <mat-radio-group class="radio-group" (change)="chooseStarter($event.value, i)">
+        <mat-radio-button *ngFor="let starter of extra.starters" [value]="starter" [disabled]="starter.eightySix"
+          [style.text-decoration]="starter.eightySix ? 'line-through' : 'none'">
+          {{ starter.name }}
+        </mat-radio-button>
+      </mat-radio-group>
 
-  <ng-container *ngIf="isGifLoaderShowing">
-    <div style="min-width: 100%; text-align: center">
-      <img src="/assets/images/cooking.gif" width="200px" height="200px" />
+      <div class="section">Drink</div>
+
+      <mat-radio-group class="radio-group" (change)="chooseDrink($event.value, i)">
+        <mat-radio-button *ngFor="let drink of extra.drinks" [value]="drink" [disabled]="drink.eightySix"
+          [style.text-decoration]="drink.eightySix ? 'line-through' : 'none'">
+          {{ drink.name }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div class="section">Side dishes</div>
+
+      <mat-checkbox [checked]="!extra.garnish.eightySix" (change)="chooseSideDish(extra.garnish, i)"
+        [disabled]="extra.garnish.eightySix">
+        <span [style.text-decoration]="extra.garnish.eightySix ? 'line-through' : 'none'">
+          {{ extra.garnish.name }}
+        </span>
+      </mat-checkbox>
+      <br />
+      <mat-checkbox [checked]="!extra.rice.eightySix" (change)="chooseSideDish(extra.rice, i)"
+        [disabled]="extra.rice.eightySix">
+        <span [style.text-decoration]="extra.rice.eightySix ? 'line-through' : 'none'">
+          {{ extra.rice.name }}
+        </span>
+      </mat-checkbox>
+      <br />
+      <mat-checkbox [checked]="!extra.salad.eightySix" (change)="chooseSideDish(extra.salad, i)"
+        [disabled]="extra.salad.eightySix">
+        <span [style.text-decoration]="extra.salad.eightySix ? 'line-through' : 'none'">
+          {{ extra.salad.name }}
+        </span>
+      </mat-checkbox>
+      <br />
+      <mat-checkbox [checked]="!extra.dessert.eightySix" (change)="chooseSideDish(extra.dessert, i)"
+        [disabled]="extra.dessert.eightySix">
+        <span [style.text-decoration]="extra.dessert.eightySix ? 'line-through' : 'none'">
+          {{ extra.dessert.name }}
+        </span>
+      </mat-checkbox>
     </div>
   </ng-container>
 
-  <!-- <ng-container *ngIf="this.plates.length && this.user"> -->
-  <ng-container *ngIf="this.plates.length ">
-    <ng-container *ngIf="!isGifLoaderShowing">
-      <div *ngFor="let item of plates; let i = index">
-        <div class="card mt-[10px]">
-          <h2>{{ i + 1 }}. {{ item?.name }}</h2>
-          <div class="title">Choose starter</div>
+  <form [formGroup]="form" (ngSubmit)="submitOrderDetails()" autocomplete="off">
+    <div class="card mt-[20px] ">
+      <app-title title="Order details" [subtitle]="'choose required option to finalize the order'"></app-title>
+      <br>
 
-          <mat-radio-group class="example-radio-group" (change)="chooseStarter($event.value, i)">
-            <mat-radio-button *ngFor="let plate of extra.starters" [value]="plate.item"
-              [disabled]="plate?.item?.isRemoved"
-              [style.text-decoration]="plate?.item?.isRemoved ? 'line-through' : 'none'">
-              <span>{{ plate?.item.name }}</span>
-            </mat-radio-button>
-            <mat-radio-button value="skip" (change)="chooseStarter($event.value, i)">
-              <span>without starter</span>
-            </mat-radio-button>
-          </mat-radio-group>
+      <mat-radio-group *ngIf="isServiceUser" class="radio-group" (change)="chooseOrderType($event.value)">
+        <mat-radio-button value="table" checked="true"> Table </mat-radio-button>
+        <mat-radio-button value="delivery"> Delivery </mat-radio-button>
+        <!-- TODO -->
+        <!-- <mat-checkbox *ngIf="order.category.type === 'delivery'" [(ngModel)]="isOldClient"
+          [ngModelOptions]="{ standalone: true }">
+          Is old client?
+        </mat-checkbox> -->
+        <mat-radio-button value="takeaway"> Take away </mat-radio-button>
+      </mat-radio-group>
 
-          <div class="title">Choose drink</div>
+      <ng-container [ngSwitch]="order.category.type">
+        <ng-container *ngSwitchCase="'table'">
+          <mat-form-field [hideRequiredMarker]="true">
+            <mat-label>Table number</mat-label>
+            <input matInput type="number" formControlName="table" />
+            <mat-error *ngIf="showFieldErrors(form, 'table') as error">
+              {{ error }}
+            </mat-error>
+          </mat-form-field>
+        </ng-container>
+        <ng-container *ngSwitchCase="'takeaway'">
+          <mat-form-field [hideRequiredMarker]="true">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="name" />
+            <mat-error *ngIf="showFieldErrors(form, 'name') as error">
+              {{ error }}
+            </mat-error>
+          </mat-form-field>
+        </ng-container>
+        <ng-container *ngSwitchCase="'delivery'">
+          <br>
 
-          <mat-radio-group class="example-radio-group" (change)="chooseDrink($event.value, i)">
-            <mat-radio-button *ngFor="let plate of extra.drinks" [value]="plate.item"
-              [disabled]="plate?.item?.isRemoved" [style.text-decoration]="plate?.isRemoved ? 'line-through' : 'none'">
-              <span>{{ plate?.item.name }}</span>
-            </mat-radio-button>
-            <mat-radio-button value="skip" (change)="chooseDrink($event.value, i)">
-              <span>without drink</span>
-            </mat-radio-button>
-          </mat-radio-group>
+          <!-- TODO -->
+          <!-- <mat-form-field *ngIf="isOldClient" appearance="outline" style="margin-top: 10px">
+            <mat-label>Find client by name</mat-label>
+            <input type="text" matInput [formControl]="clientFormControl" [matAutocomplete]="auto" />
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+              (optionSelected)="addClientData($event.option.value)" formControlName="name">
+              <mat-option *ngFor="let option of filteredClients | async" [value]="option">
+                {{ option.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field> -->
 
-          <div class="title" style="margin-bottom: 5px">Side dishes</div>
-
-          <mat-checkbox [checked]="extra?.garnish?.isRemoved !== true" (change)="chooseToppings(extra.garnish, i)"
-            [disabled]="extra?.garnish?.isRemoved">
-            <span [style.text-decoration]="extra?.garnish?.isRemoved ? 'line-through' : 'none'">
-              {{ extra?.garnish?.name }}
-            </span>
-          </mat-checkbox>
-          <br />
-          <mat-checkbox [checked]="extra?.rice?.isRemoved !== true" (change)="chooseToppings(extra.rice, i)"
-            [disabled]="extra?.rice?.isRemoved">
-            <span [style.text-decoration]="extra?.rice?.isRemoved ? 'line-through' : 'none'">
-              {{ extra?.rice?.name }}
-            </span>
-          </mat-checkbox>
-          <br />
-          <mat-checkbox [checked]="extra?.salad?.isRemoved !== true" (change)="chooseToppings(extra.salad, i)"
-            [disabled]="extra?.salad?.isRemoved">
-            <span [style.text-decoration]="extra?.salad?.isRemoved ? 'line-through' : 'none'">
-              {{ extra?.salad?.name }}
-            </span>
-          </mat-checkbox>
-          <br />
-          <mat-checkbox [checked]="extra?.dessert?.isRemoved !== true" (change)="chooseToppings(extra.dessert, i)"
-            [disabled]="extra?.dessert?.isRemoved">
-            <span [style.text-decoration]="extra?.dessert?.isRemoved ? 'line-through' : 'none'">
-              {{ extra?.dessert?.name }}
-            </span>
-          </mat-checkbox>
-        </div>
-      </div>
-
-      <form [formGroup]="form" (ngSubmit)="confirmOrder()" autocomplete="off">
-        <div class="card mt-[20px]">
-          <h2>Order details</h2>
-          <mat-radio-group *ngIf="isServiceUser" class="radio-group-example" (change)="chooseOrderType($event.value)">
-            <mat-radio-button value="table" checked="true"> Table </mat-radio-button>
-            <mat-radio-button value="delivery"> Delivery </mat-radio-button>
-            <mat-radio-button value="takeaway"> Take away </mat-radio-button>
-          </mat-radio-group>
-
-          <ng-container [ngSwitch]="orderType">
-            <ng-container *ngSwitchCase="'table'">
-              <mat-form-field [hideRequiredMarker]="true">
-                <mat-label>Table number</mat-label>
-                <input matInput type="number" formControlName="table" />
-              </mat-form-field>
-            </ng-container>
-            <ng-container *ngSwitchCase="'takeaway'">
-              <mat-form-field [hideRequiredMarker]="true">
-                <mat-label>Name</mat-label>
-                <input matInput type="text" formControlName="name" />
-              </mat-form-field>
-            </ng-container>
-            <ng-container *ngSwitchCase="'delivery'">
-              <mat-checkbox *ngIf="isServiceUser" [(ngModel)]="isOldClient" [ngModelOptions]="{ standalone: true }">
-                Is old client?
-              </mat-checkbox>
-              <mat-form-field *ngIf="isOldClient" appearance="outline" style="margin-top: 10px">
-                <mat-label>Find client by name</mat-label>
-                <input type="text" matInput [formControl]="clientFormControl" [matAutocomplete]="auto" />
-                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
-                  (optionSelected)="addClientData($event.option.value)">
-                  <mat-option *ngFor="let option of filteredClients | async" [value]="option">
-                    {{ option.name }}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-
-              <div class="title">Delivery details</div>
-
-              <mat-form-field>
-                <input matInput type="text" placeholder="Nombre" formControlName="name" />
-              </mat-form-field>
-
-              <mat-form-field>
-                <input matInput type="text" placeholder="Dirección" formControlName="address" />
-              </mat-form-field>
-
-              <mat-form-field>
-                <input matInput type="text" placeholder="Celular" formControlName="phone" />
-              </mat-form-field>
-
-              <div class="title">Payment type</div>
-              <mat-radio-group class="example-radio-group" formControlName="payment"
-                (change)="chooseCash($event.value)">
-                <mat-radio-button value="cash"> Cash </mat-radio-button>
-                <mat-radio-button value="card"> Card </mat-radio-button>
-              </mat-radio-group>
-
-              <div *ngIf="isCash">
-                <div class="title">Bill nomination</div>
-                <mat-radio-group class="example-radio-group" formControlName="change">
-                  <mat-radio-button [checked]="'Exact value'" *ngFor="let item of changeTypes">
-                    <span>{{ item }}</span>
-                  </mat-radio-button>
-                </mat-radio-group>
-              </div>
-
-              <div class="title">Delivery hour</div>
-              <mat-radio-group class="example-radio-group" [value]="deliveryTime">
-                <mat-radio-button value="now" (change)="updateTime($event.value)">
-                  <span>Now</span>
-                </mat-radio-button>
-                <mat-radio-button value="delayed" (change)="updateTime($event.value)">
-                  <span>Choose a time</span>
-                  <ng-container *ngIf="deliveryTime === 'delayed'">
-                    <input class="delivery-time" [ngxTimepicker]="picker" />
-                    <ngx-material-timepicker #picker (timeSet)="setDeliveryTime($event)"></ngx-material-timepicker>
-                  </ng-container>
-                </mat-radio-button>
-              </mat-radio-group>
-            </ng-container>
-          </ng-container>
+          <div class="section">Delivery details</div>
 
           <mat-form-field>
-            <mat-label>Comments</mat-label>
-            <input matInput type="text" [(ngModel)]="comment" [ngModelOptions]="{ standalone: true }" />
+            <mat-label>Nombre</mat-label>
+            <input matInput type="text" formControlName="name" />
+            <mat-error *ngIf="showFieldErrors(form, 'name') as error">
+              {{ error }}
+            </mat-error>
           </mat-form-field>
-        </div>
 
-        <div class="card mt-[20px]" *ngIf="order.alacarte?.length">
-          <h2> {{ alaCarteLabel }} </h2>
-          <ol>
-            <li *ngFor="let item of order.alacarte">
-              {{ item.name }}
-            </li>
-          </ol>
-        </div>
+          <mat-form-field>
+            <mat-label>Dirección</mat-label>
+            <input matInput type="text" formControlName="address" />
+            <mat-error *ngIf="showFieldErrors(form, 'address') as error">
+              {{ error }}
+            </mat-error>
+          </mat-form-field>
 
-        <div class="card mt-[20px]">
-          <div class="title" style="margin-top: 5px; color: lightcoral" *ngIf="hasDelivery">Delivery:</div>
-          <div class="title" style="font-weight: 700; color: lightcoral" *ngIf="hasDelivery">
-            {{ deliveryAmount * platesAmount }} mil pesos
-          </div>
+          <mat-form-field>
+            <mat-label>Celular</mat-label>
+            <input matInput type="text" formControlName="phone" />
+            <mat-error *ngIf="showFieldErrors(form, 'phone') as error">
+              {{ error }}
+            </mat-error>
+          </mat-form-field>
 
-          <div class="title" style="margin-top: 5px; color: mediumseagreen" *ngIf="hasDiscount">Discount:</div>
-          <div class="title" style="color: mediumseagreen" *ngIf="hasDiscount">
-            - {{ discountAmount * platesAmount }} currency
-          </div>
+          <div class="section">Payment type</div>
+          <mat-radio-group class="radio-group" formControlName="payment" (change)="chooseCash($event.value)">
+            <mat-radio-button value="cash"> Cash </mat-radio-button>
+            <mat-radio-button value="card"> Card </mat-radio-button>
+          </mat-radio-group>
 
-          <h2>Total</h2>
-          <h3>{{ total }} currency</h3>
+          <ng-container *ngIf="isCash">
+            <div class="section">Payment type</div>
+            <div class="title">Bill nomination</div>
+            <mat-radio-group class="radio-group" formControlName="change">
+              <mat-radio-button [checked]="'Exact value'" *ngFor="let item of changeTypes">
+                <span>{{ item }}</span>
+              </mat-radio-button>
+            </mat-radio-group>
+          </ng-container>
 
-          <div *ngIf="hasClientDataError" class="validation-error-message" [@fadeInUpOnEnter]>
-            Verify customer data again
-          </div>
-          <div *ngIf="hasPaymentTypeError" class="validation-error-message" [@fadeInUpOnEnter]>
-            Payment method missing
-          </div>
-          <div *ngIf="hasStarterError" class="validation-error-message" [@fadeInUpOnEnter]>
-            Starters need to be added
-          </div>
-          <div *ngIf="hasDrinkError" class="validation-error-message" [@fadeInUpOnEnter]>
-            Drinks need to be added
-          </div>
-          <div *ngIf="hasTableNumberError" class="validation-error-message" [@fadeInUpOnEnter]>
-            Table number is missing
-          </div>
-          <div *ngIf="hasTakeAwayError" class="validation-error-message" [@fadeInUpOnEnter]>
-            Client name need to be added
-          </div>
+          <div class="section">Delivery hour</div>
 
-          <div style="text-align: center; min-width: 100%; margin-top: 20px">
-            <app-button actionType="save" type="submit" [title]="!isUploading ? 'Request order' : 'Requesting ..'"
-              width="full">
-            </app-button>
-          </div>
-        </div>
-      </form>
-      <br />
-    </ng-container>
-  </ng-container>
+          <mat-radio-group class="radio-group" [value]="deliveryTime">
+            <mat-radio-button value="now" (change)="updateTime($event.value)">
+              <span>Now</span>
+            </mat-radio-button>
+            <mat-radio-button value="delayed" (change)="updateTime($event.value)">
+              <span>Choose a time</span>
+              <ng-container *ngIf="deliveryTime === 'delayed'">
+                <input class="delivery-time" [ngxTimepicker]="picker" />
+                <ngx-material-timepicker #picker (timeSet)="setDeliveryTime($event)"></ngx-material-timepicker>
+              </ng-container>
+            </mat-radio-button>
+          </mat-radio-group>
+        </ng-container>
+      </ng-container>
+
+      <mat-form-field>
+        <mat-label>Comment</mat-label>
+        <input matInput type="text" formControlName="comment" />
+      </mat-form-field>
+    </div>
+
+    <div class="card mt-[20px]" *ngIf="order.alacarte?.length">
+      <h2> {{ alaCarteLabel }} </h2>
+      <ol>
+        <li *ngFor="let item of order.alacarte">
+          {{ item.name }}
+        </li>
+      </ol>
+    </div>
+
+    <div class="card mt-[20px] mb-[10px]">
+
+      <app-title title="Total" [subtitle]="total"></app-title>
+
+      <hr><br>
+      <app-title-item title="Order price" [value]="orderPrice" />
+      <app-title-item title="Delivery price" [value]="deliveryPrice" />
+      <app-title-item title="Ala Carte price" [value]="alacartePrice" />
+
+      <div *ngIf="hasClientDataError" class="validation-error-message" [@fadeInUpOnEnter]>
+        Verify customer data again
+      </div>
+      <div *ngIf="hasPaymentTypeError" class="validation-error-message" [@fadeInUpOnEnter]>
+        Payment method missing
+      </div>
+      <div *ngIf="hasStarterError" class="validation-error-message" [@fadeInUpOnEnter]>
+        Starter is not chosen
+      </div>
+      <div *ngIf="hasDrinkError" class="validation-error-message" [@fadeInUpOnEnter]>
+        Drink is not chosen
+      </div>
+      <div *ngIf="hasTableNumberError" class="validation-error-message" [@fadeInUpOnEnter]>
+        Table number is missing
+      </div>
+      <div *ngIf="hasTakeAwayError" class="validation-error-message" [@fadeInUpOnEnter]>
+        Client name need to be added
+      </div>
+    </div>
+    <app-button actionType="save" type="submit" [disabled]="(loadingStatus| async) === LoadingStatus.Loading"
+      [title]="(loadingStatus| async) === LoadingStatus.Loading ? 'Requesting ..' : 'Request order'" width="full">
+    </app-button>
+  </form>
 </div>

@@ -145,7 +145,7 @@ export class OrderDetailComponent implements OnInit {
         status: this.order?.status
       }
       // debug
-      // console.log(this.order);
+      console.log(this.order);
       this.cdr.markForCheck()
     })
   }

@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
-import { RecipeProtein } from '../../../domains/recipe/models/recipe.model'
 import { setProteinImage } from '../../utils/protein-image'
 
 @Component({
@@ -9,6 +8,7 @@ import { setProteinImage } from '../../utils/protein-image'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppFormattedDailyMenuComponent {
+
   @Input()
   dailyMenu: any
 

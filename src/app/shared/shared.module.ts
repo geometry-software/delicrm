@@ -22,6 +22,7 @@ import { AppTitleComponent } from './components/app-title/app-title.component'
 import { AppTitleItemComponent } from './components/app-title-item/app-title-item.component'
 import { NotificationService } from './services/notification.service'
 import { ConfirmationService } from './services/confirmation.service'
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
 
 @NgModule({
   declarations: [
@@ -73,10 +74,13 @@ import { ConfirmationService } from './services/confirmation.service'
     TranslateModule,
     ToastrModule.forRoot(),
     NgxMaterialTimepickerModule,
+    NgxMaskDirective,
+    NgxMaskPipe
   ],
   providers: [
     ConfirmationService,
-    NotificationService
+    NotificationService,
+    provideNgxMask()
   ]
 })
 export class SharedModule { }

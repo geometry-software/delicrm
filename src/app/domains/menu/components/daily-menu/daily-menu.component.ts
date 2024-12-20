@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
 import { MatDialog } from '@angular/material/dialog'
 import { fadeInOnEnterAnimation, fadeInUpOnEnterAnimation, rubberBandOnEnterAnimation } from 'angular-animations'
 import { PlateDetailComponent } from '../plate-detail/plate-detail.component'
@@ -11,6 +10,7 @@ import { MenuConstants } from '../../utils/menu.constants'
 import { Store } from '@ngrx/store'
 import { getMenu, isRestaurantOpen, loadingStatus } from '../../store/menu.selectors'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
+import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 
 @Component({
   selector: 'app-daily-menu',
@@ -23,11 +23,10 @@ import { LoadingStatus } from '../../../../shared/models/loading-status'
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DailyMenuComponent implements OnInit {
+export class DailyMenuComponent {
 
   constructor(
     private dialog: MatDialog,
-    private router: Router,
     private store: Store,
     private cdr: ChangeDetectorRef
   ) { }
@@ -62,36 +61,15 @@ export class DailyMenuComponent implements OnInit {
   isRestaurantOpen = this.store.select(isRestaurantOpen)
   loadingStatus = this.store.select(loadingStatus)
 
-  ngOnInit(): void {
-    this.initServerData()
-  }
-
-  initServerData() {
-    // this.restaurantService.getDailyMenu().subscribe((value: any) => {
-    //   console.log(value);
-
-    //   if (value?.open) {
-    //     this.dailyMenu = value
-    //     this.isMenuUpdated = true
-    //     this.cdr.markForCheck()
-    //   } else {
-    //     this.hasEmptyMenu = true
-    //     this.isMenuUpdated = false
-    //   }
-    // })
-    // this.menuService.getAlaCarteList().subscribe((value: any) => {
-    //   this.alaCarteList = value
-    //   console.log(value)
-    // })
-  }
-
   addItem(item) {
+    this.emptyOrderError = false
     this.chosenDailyMenuItems.push(item)
     this.dishAmount++
     this.cdr.markForCheck()
   }
 
   addAlaCarteItem(item) {
+    this.emptyOrderError = false
     this.chosenAlaCarteItems.push(item)
     this.dishAmount++
     this.cdr.markForCheck()
@@ -114,15 +92,22 @@ export class DailyMenuComponent implements OnInit {
   }
 
   save() {
-    const order: Order = {
-      main: this.chosenDailyMenuItems,
-      alacarte: this.chosenAlaCarteItems
-    }
-    if (!order?.main?.length) {
+    // const order: Order = {
+    //   main: this.chosenDailyMenuItems,
+    //   alacarte: this.chosenAlaCarteItems,
+    // createdAt: getCurrentUnixTime(),
+    // statusHistory: [],
+    // category: {
+    //   type: 'table',
+    //   delivery: {},
+    // },
+    // price: {}
+    // }
+    if (!this.chosenDailyMenuItems.length) {
       this.emptyOrderError = true
     } else {
       this.emptyOrderError = false
-      this.store.dispatch(ItemActions.setOrder({ order }))
+      this.store.dispatch(ItemActions.setOrder({ main: this.chosenDailyMenuItems, alacarte: this.chosenAlaCarteItems }))
     }
   }
 

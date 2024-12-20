@@ -1,7 +1,6 @@
 <ng-container *ngIf="item">
   <div class="name-title">
-    <div>Thanks for your order,</div>
-    <div>{{ item.category.delivery.name }}!</div>
+    <div>Thanks for your order, {{ item.category.delivery.name }}!</div>
   </div>
 
   <div class="text-center my-[30px]">
@@ -9,6 +8,7 @@
   </div>
 
   <div class="card">
+    <!-- // TODO
     <div *ngFor="let item of item?.plates; let i = index">
       <div class="item-card" [@pulseOnEnter]>
         <div class="flex items-center">
@@ -19,13 +19,10 @@
         </div>
         <div class="item__price">{{ item.plate.price }} currency</div>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <div class="card mt-[20px]">
-    <h3>
-      <Address></Address>
-    </h3>
     <h4>{{ item?.category.delivery.address }}</h4>
     <h3>Phone</h3>
     <h4>{{ item?.category.delivery?.phone }}</h4>

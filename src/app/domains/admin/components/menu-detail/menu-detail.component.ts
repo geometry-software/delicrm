@@ -37,15 +37,15 @@ export class MenuDetailComponent implements OnInit {
 
   initServerData() {
     this.itemId = this.route.snapshot.params['id']
-    this.adminService.getDocument(this.itemId).subscribe((res: any) => {
-      this.item = res
-      this.plateArray = res.plates
-      this.starterArray = res.starters.starterArray
-      this.toppingsList = res.starters.toppingsList
-      this.drinkArray = res.starters.drinkArray
-      this.datasource = new MatTableDataSource(res.orders)
-      this.isLoaded = true
-    })
+    // this.adminService.getDocument(this.itemId).subscribe((res: any) => {
+    //   this.item = res
+    //   this.plateArray = res.plates
+    //   this.starterArray = res.starters.starterArray
+    //   this.toppingsList = res.starters.toppingsList
+    //   this.drinkArray = res.starters.drinkArray
+    //   this.datasource = new MatTableDataSource(res.orders)
+    //   this.isLoaded = true
+    // })
 
     /*
     this.isLoading = true
