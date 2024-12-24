@@ -2,7 +2,7 @@
   <app-button routerLink="/menu" title="Back" width="full" />
   <ng-container *ngFor="let plate of order.main; let i = index">
     <div class="card mt-[10px]">
-      <app-title [title]="getDishTitle(i, plate.name)" subtitle="choose starter, drink and sidedishes"></app-title>
+      <app-title [title]="getDishTitle(i, plate.name)" subtitle="choose starter, drink and sidedishes" />
 
       <div class="section">Starter</div>
 
@@ -56,7 +56,7 @@
 
   <form [formGroup]="form" (ngSubmit)="submitOrderDetails()" autocomplete="off">
     <div class="card mt-[20px] ">
-      <app-title title="Order details" [subtitle]="'choose required option to finalize the order'"></app-title>
+      <app-title title="Order details" [subtitle]="'choose required option to finalize the order'" />
       <br>
 
       <mat-radio-group *ngIf="isServiceUser" class="radio-group" (change)="chooseOrderType($event.value)">
@@ -180,7 +180,7 @@
 
     <div class="card mt-[20px] mb-[10px]">
 
-      <app-title title="Total" [subtitle]="total"></app-title>
+      <app-title title="Total" [subtitle]="total" />
 
       <hr><br>
       <app-title-item title="Order price" [value]="orderPrice" />
@@ -206,8 +206,8 @@
         Client name need to be added
       </div>
     </div>
-    <app-button actionType="save" type="submit" [disabled]="(loadingStatus| async) === LoadingStatus.Loading"
-      [title]="(loadingStatus| async) === LoadingStatus.Loading ? 'Requesting ..' : 'Request order'" width="full">
-    </app-button>
+    <app-button actionType="save" type="submit" width="full"
+      [disabled]="(loadingStatus| async) === LoadingStatus.Loading"
+      [title]="(loadingStatus| async) === LoadingStatus.Loading ? 'Requesting ..' : 'Request order'" />
   </form>
 </div>

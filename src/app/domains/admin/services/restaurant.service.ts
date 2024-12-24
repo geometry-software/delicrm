@@ -5,7 +5,7 @@ import { RestaurantConstants } from '../models/restaurant.constants'
 import { Observable } from 'rxjs'
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class RestaurantService {
 

@@ -1,5 +1,5 @@
-<h2> Admin registration </h2>
-<h4> This is an initial registration. Following email and password will be used as admin credentials. </h4>
+<app-title [title]="'Admin registration'"
+  subtitle="This is an initial registration. Following email and password will be used as admin credentials" />
 
 <form [formGroup]="form" (ngSubmit)="submitForm()">
 
@@ -43,6 +43,7 @@
   </div>
 
   <br>
-  <button mat-stroked-button class="login-button" type="submit">Register</button>
+  <app-button actionType="save" width="full" type="submit" [disabled]="isLoading"
+    [title]="isLoading ? 'Registering ..' : 'Register admin'" />
 
 </form>

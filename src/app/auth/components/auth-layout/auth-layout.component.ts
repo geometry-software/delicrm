@@ -10,7 +10,9 @@ import { AdminSignUpLoadingStatus } from '../../models/loading-status'
 })
 export class AuthLayoutComponent {
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService
+  ) { }
 
   AdminUserLoadingStatus = AdminSignUpLoadingStatus
   adminSignUpStatus = this.authService.adminSignUpStatus

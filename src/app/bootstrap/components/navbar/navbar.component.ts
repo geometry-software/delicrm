@@ -7,7 +7,7 @@ import { UserService } from '../../../domains/users/services/user.service'
 import { SignalService } from '../../../shared/services/signal.service'
 import { UserLanguage } from '../../../domains/users/models/user.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { combineLatest, map, shareReplay } from 'rxjs'
+import { combineLatest, map, shareReplay, tap } from 'rxjs'
 import { toObservable } from '@angular/core/rxjs-interop'
 
 @Component({
@@ -27,7 +27,9 @@ export class NavbarComponent implements OnInit {
 
   readonly authMenuOptions = authMenuOptions
   readonly userMenuOptions = userMenuOptions
-  readonly appUser = this.userService.appUser
+  readonly appUser = this.userService.appUser.pipe(
+    tap(v => console.log(v))
+  )
 
   @ViewChild('drawer') drawer: MatDrawer
   responsiveLayout: ResponsiveLayout = {}

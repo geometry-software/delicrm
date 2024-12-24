@@ -1,5 +1,5 @@
-<h2>Register restaurant</h2>
-<h4>Fill the form to proceed the registeration</h4>
+<app-title [title]="'Register restaurant'" subtitle="Fill the form to proceed the registeration" />
+<br>
 
 <form [formGroup]="form">
 
@@ -35,6 +35,14 @@
     </mat-error>
   </mat-form-field>
 
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label> Currency </mat-label>
+    <input matInput [formControlName]="formProps.currency" />
+    <mat-error *ngIf="showFieldErrors(form, formProps.currency) as error">
+      {{ error }}
+    </mat-error>
+  </mat-form-field>
+
   <div class="amount-configurations">
 
     <mat-form-field [hideRequiredMarker]="true">
@@ -58,7 +66,7 @@
     <button mat-button type="button" color="primary" (click)="close()">
       Cancel
     </button>
-    <button mat-raised-button type="submit" (click)="confirm()">
+    <button mat-raised-button color="primary" class="mr-[5px]" type="submit" (click)="confirm()">
       Register
     </button>
   </div>

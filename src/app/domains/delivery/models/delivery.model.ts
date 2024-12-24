@@ -7,8 +7,15 @@ export type Delivery = {
   order: Order
   user: User
   client: any
+  deliveryInfo: DeliveryInfo
   status: DeliveryStatus
   statusHistory: DeliveryStatusHistory[]
+}
+
+export type DeliveryInfo = {
+  name: string
+  phone: string
+  address: string
 }
 
 export type DeliveryStatus = 'requested' | 'confirmed' | 'canceled'

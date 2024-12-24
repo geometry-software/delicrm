@@ -8,7 +8,7 @@ import { SortRequest } from '../../../shared/repository/repository.models'
 import { combineLatest, map } from 'rxjs'
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class DeliveryService {
 

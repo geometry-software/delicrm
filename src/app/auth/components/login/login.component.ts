@@ -10,11 +10,12 @@ import { RestaurantService } from '../../../domains/admin/services/restaurant.se
 import { BehaviorSubject, of } from 'rxjs'
 import { RestaurantLoadingStatus } from '../../models/loading-status'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { AdminConstants } from '../../../domains/admin/models/admin.constants'
 import { UserService } from '../../../domains/users/services/user.service'
 import { SharedConstants } from '../../../shared/utils/shared.constants'
 import { Restaurant } from '../../../domains/admin/models/restaurant'
 import { RestaurantConstants } from '../../../domains/admin/models/restaurant.constants'
+import { mapExtraData } from '../../models/auth.mapper'
+// import { mapGoogleData } from '../../models/auth.mapper'
 
 @Component({
   selector: 'app-login',
@@ -38,20 +39,28 @@ export class LoginComponent {
   readonly defaultCurrency = RestaurantConstants.defaultCurrency
   readonly adminForm = adminFormGroup
   readonly adminFormProps = AdminFormProps
-  readonly isAdminUser = this.authService.isAdminUser
-  readonly authUser = this.authService.fireAuthUser
+  readonly isAdminUser = this.authService.isAdminUser.pipe(
+    // tap(console.error)
+  )
+  // readonly authUser = this.authService.firebaseAuthUser
   readonly adminEmailWasVerified = this.authService.isAdminEmailVerified
   readonly RestaurantLoadingStatus = RestaurantLoadingStatus
   readonly restaurantRegisterStatus = new BehaviorSubject(RestaurantLoadingStatus.NotRegistered)
 
-  userDisplayName
+  displayName = this.authService.firebaseUser.pipe(
+    tap(v => console.log(v)),
+    map(auth => auth?.displayName ?? '123')
+  )
   hasFirebasAuth
   registerRestaurantErrorMessage: string
 
   showFieldErrors = showFieldErrors
 
   loginUser() {
-    this.authService.loginGoogle()
+    this.authService.linkWithGoogle().pipe(
+      tap(v => console.log(v)),
+
+    ).subscribe(v => console.log(v))
   }
 
   loginAdmin() {
@@ -66,14 +75,21 @@ export class LoginComponent {
       .afterClosed().pipe(
         filter(Boolean),
         tap(() => this.restaurantRegisterStatus.next(RestaurantLoadingStatus.Registering)),
-        map((value: Restaurant) => ({ ...value, currency: this.defaultCurrency })),
-        switchMap(value => this.userService.createAdminUser(this.adminCollectionId, this.adminCollectionId).pipe(
+        // map((value: Restaurant) => ({ ...value, currency: this.defaultCurrency })),
+        switchMap(value => this.userService.createAdminUser(this.adminCollectionId).pipe(
           switchMap(() => this.restaurantService.createRestaurant(value).pipe(
-            tap(() => this.restaurantRegisterStatus.next(RestaurantLoadingStatus.RegisterSuccess)),
+            switchMap(() => this.authService.deleteAdminAuth().pipe(
+              tap(() => this.restaurantRegisterStatus.next(RestaurantLoadingStatus.RegisterSuccess)),
+              catchError(error => this.handleRegisterRestaurantError(error))
+            )),
             catchError(error => this.handleRegisterRestaurantError(error)))),
           catchError(error => this.handleRegisterRestaurantError(error)))),
         takeUntilDestroyed(this.destroyRef))
       .subscribe(error => this.registerRestaurantErrorMessage = error)
+  }
+
+  sendEmail() {
+    this.authService.sendEmailVerification().subscribe()
   }
 
   private handleRegisterRestaurantError(error) {

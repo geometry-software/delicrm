@@ -5,8 +5,10 @@ import { User, UserRole } from "../models/user.model"
 export const mapAppUser = (auth: Auth, role: UserRole): User => ({
     auth,
     role,
-    name: auth.displayName,
+    locale: auth.extra.locale,
+    name: auth.extra.name,
+    avatar: auth.extra.avatar,
+    status: auth.status,
+    email: auth.extra.email,
     createdAt: getCurrentUnixTime(),
-    locale: '',
-    status: auth.status
 })

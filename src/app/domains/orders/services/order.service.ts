@@ -6,7 +6,7 @@ import { Order, OrderProgress, OrderStatus, OrderStatusHistory } from '../models
 import { SortRequest } from '../../../shared/repository/repository.models'
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class OrderService {
 

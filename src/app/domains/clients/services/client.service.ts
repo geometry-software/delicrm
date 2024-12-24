@@ -5,14 +5,14 @@ import { ClientStatusTotalResponse, Client, ClientStatus } from '../models/clien
 // import { OrderRequest } from '../../../shared/repository/repository.models'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { AuthService } from '../../../auth/services/auth.service'
-import { setRestaurantAuth } from '../../../auth/models/auth-user.mapper'
+import { setRestaurantAuth } from '../../../auth/models/auth.mapper'
 import { AuthConstants } from '../../../auth/models/auth.constants'
 import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
 import { Sort } from '@angular/material/sort'
 import { SortRequest } from '../../../shared/repository/repository.models'
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ClientService {
 
@@ -42,8 +42,8 @@ export class ClientService {
   }
 
   private readonly collection = ClientConstants.collectionName
-  private readonly authCollection = AuthConstants.collectionName
-  private readonly authCollectionId = AuthConstants.authCollectionId
+  // private readonly authCollection = AuthConstants.collectionName
+  // private readonly authCollectionId = AuthConstants.authCollectionId
 
 
   // createAdminUser(id: string, role: UserRole) {
@@ -87,19 +87,11 @@ export class ClientService {
     ]).pipe(
       map(([active, blocked]) => ({
         active, blocked
-      })),
-      tap(value => {
-        // console.warn('user getTotalLabels');
-        // console.log(value);
-      })
+      }))
     )
   }
 
   getFirstPage(sort: SortRequest, size: number, status: ClientStatus) {
-    // console.warn('users: getFirstPage Service');
-    // console.log(order);
-    // console.log(size);
-    // console.log(status);
     return this.repositoryService.getFirstPage<ClientStatus>(this.collection, sort, size, status)
   }
 

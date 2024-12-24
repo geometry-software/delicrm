@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ExpensesService {
 

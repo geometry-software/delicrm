@@ -2,7 +2,7 @@ import { Injectable, computed, signal } from '@angular/core'
 import { LoadingStatus } from '../models/loading-status'
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SignalService {
 

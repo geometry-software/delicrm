@@ -348,6 +348,7 @@ export class OrderCheckoutComponent implements OnInit {
         createdAt: this.order.createdAt
       }],
       user: this.user,
+      deliveryInfo: this.user.auth.deliveryInfo
     }
     this.store.dispatch(ItemActions.createDeliveryOrder({ delivery }))
   }

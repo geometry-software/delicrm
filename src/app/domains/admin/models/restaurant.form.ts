@@ -5,8 +5,9 @@ export enum RestaurantFormProps {
     address = 'address',
     description = 'description',
     phone = 'phone',
+    currency = 'currency',
     delivery = 'delivery',
-    discount = 'discount',
+    discount = 'discount'
 }
 
 export const restaurantFormGroup = new FormGroup({
@@ -14,6 +15,7 @@ export const restaurantFormGroup = new FormGroup({
     [RestaurantFormProps.address]: new FormControl(null, Validators.required),
     [RestaurantFormProps.description]: new FormControl(null),
     [RestaurantFormProps.phone]: new FormControl(null, Validators.required),
+    [RestaurantFormProps.currency]: new FormControl('$', Validators.required),
     [RestaurantFormProps.delivery]: new FormControl(0, Validators.required),
     [RestaurantFormProps.discount]: new FormControl(0, Validators.required),
 })

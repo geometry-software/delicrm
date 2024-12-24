@@ -1,15 +1,22 @@
-export interface Auth {
-  displayName: string
+import { DeliveryInfo } from "../../domains/delivery/models/delivery.model"
+
+export type Auth = {
   providerId: AuthProvider
-  email: string
   authId: string
   createdAt: number
   status: AuthStatus
+  deliveryInfo: DeliveryInfo
+  extra: ExtraData | null
+}
+
+export type ExtraData = {
+  name: string
+  email: string
   avatar: string
   locale: string
 }
 
-export interface AuthStatusTotalResponse {
+export type AuthStatusTotalResponse = {
   requested: number
   client: number
   employee: number
@@ -17,4 +24,5 @@ export interface AuthStatusTotalResponse {
 }
 
 export type AuthStatus = 'requested' | 'blocked' | 'confirmed'
+
 export type AuthProvider = 'google' | 'firebase' | 'anonymous'

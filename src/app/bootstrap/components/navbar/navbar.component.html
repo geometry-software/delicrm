@@ -55,7 +55,7 @@
       </ng-container>
       <ng-template #clientTemplate>
         <ng-container *ngFor="let item of authMenuOptions ">
-          <div *ngIf="!item.hidden" class="menu-list-item menu-list-item-image-padding" [ngStyle]="{
+          <div class="menu-list-item menu-list-item-image-padding" [ngStyle]="{
               'margin-right': responsiveLayout.isDesktop ? 0 : '10px'
             }" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }" [routerLink]="item.link"
             (click)="toggleDrawer()">

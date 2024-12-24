@@ -1,9 +1,10 @@
 import { AuthStatus, Auth } from '../../../auth/models/auth.model'
-import { UserConstants } from './user.constants'
 
-export interface User {
+export type User = {
   auth: Auth
   name: string
+  email: string
+  avatar: string
   role: UserRole
   locale: string
   createdAt: number
@@ -17,7 +18,7 @@ export enum UserLoadingStatus {
   LoadingSuccess = 'LoadingSuccess'
 }
 
-export interface UserStatusResponse {
+export type UserStatusResponse = {
   requested: number
   confirmed: number
   blocked: number

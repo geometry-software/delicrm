@@ -177,13 +177,13 @@ mat-cell {
   left: 0;
   bottom: 0;
   right: 0;
-  background: linear-gradient(-45deg, #444, white, #777);
-  background-size: 300%;
-  opacity: 0.4;
+  background: linear-gradient(-40deg, #888, #eee, #888);
+  background-size: 400%;
+  opacity: 0.5;
   z-index: 5;
   border-radius: 8px;
   background-position-x: 100%;
-  animation: shimmer 1s infinite linear;
+  animation: shimmer 2s infinite linear;
 }
 
 @keyframes shimmer {

@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AuthService } from '../../services/auth.service'
 import { adminFormGroup, AdminFormProps } from '../../models/admin.form'
 import { showFieldErrors } from '../../../shared/utils/form-error-handling'
-import { Router } from '@angular/router'
+import { catchError, firstValueFrom } from 'rxjs'
 
 @Component({
   selector: 'app-admin-sign-up',
@@ -15,19 +15,31 @@ export class AdminSignUpComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router,
     private destroyRef: DestroyRef
   ) { }
 
   form = adminFormGroup
   formProps = AdminFormProps
+  isLoading: boolean
   showFieldErrors = showFieldErrors
 
-  submitForm() {
+  async submitForm() {
+    this.isLoading = true
     if (this.form.valid) {
       this.authService.signUpAdmin(this.form.value).pipe(
+        catchError((e) => {
+          console.log(e);
+
+          this.isLoading = false
+          return []
+        }),
         takeUntilDestroyed(this.destroyRef)
-      ).subscribe(() => this.router.navigate(['/auth/login']))
+      ).subscribe((v) => {
+        console.log(v);
+
+        this.isLoading = false
+        this.authService.checkAdminRegistration.next()
+      })
     }
   }
 
