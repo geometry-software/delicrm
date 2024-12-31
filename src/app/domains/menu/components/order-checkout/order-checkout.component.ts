@@ -15,7 +15,6 @@ import { Recipe } from '../../../recipe/models/recipe.model'
 import { User } from '../../../users/models/user.model'
 import { UserService } from '../../../users/services/user.service'
 import { MenuConstants } from '../../utils/menu.constants'
-import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 import { Store } from '@ngrx/store'
 import { getExtra, getOrder, loadingStatus } from '../../store/menu.selectors'
 import { Router } from '@angular/router'
@@ -24,6 +23,8 @@ import { Delivery } from '../../../delivery/models/delivery.model'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { showFieldErrors } from '../../../../shared/utils/form-error-handling'
 import { tableZeroNumberValidator } from '../../utils/table-zero-number-validator'
+import { Auth } from '../../../../auth/models/auth.model'
+import { PaymentType } from '../../models/checkout'
 
 @Component({
   selector: 'app-order-checkout',
@@ -84,8 +85,9 @@ export class OrderCheckoutComponent implements OnInit {
   hasTakeAwayError: boolean
 
   user: User
-  isServiceUser: boolean
-  isClientUser: boolean
+  auth: Auth
+
+  readonly PaymentType = PaymentType
 
   get total() {
     return this.order.price.total + ' ' + this.order.price.currency
@@ -111,33 +113,37 @@ export class OrderCheckoutComponent implements OnInit {
     combineLatest([
       this.store.select(getOrder),
       this.store.select(getExtra),
-      this.userService.appUser
+      this.userService.appUser,
+      this.userService.appAuth,
     ]).pipe(
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(([order, extra, user]) => {
+    ).subscribe(([order, extra, user, auth]) => {
       if (!order) {
         this.router.navigate(['/menu'])
       } else {
         this.order = cloneDeep(order)
         this.extra = extra
         this.user = user
-        console.log(this.order.main);
-
+        if (!this.user) {
+          this.auth = auth
+          this.order.category.type = 'delivery'
+          this.order.category.delivery = {}
+          this.chooseOrderType('delivery')
+        }
       }
     })
   }
 
-  chooseCash(ev) {
-    if (ev == 'cash') {
+  updatePaymentType(type: PaymentType) {
+    if (type == PaymentType.Cash) {
       this.isCash = true
       this.form.get('change').setValidators([Validators.required])
-      this.form.updateValueAndValidity()
     } else {
       this.isCash = false
       this.form.get('change').setValidators([])
       this.form.get('change').setValue(null)
-      this.form.updateValueAndValidity()
     }
+    this.form.updateValueAndValidity()
     this.cdr.markForCheck()
   }
 
@@ -203,10 +209,14 @@ export class OrderCheckoutComponent implements OnInit {
   }
 
   setDeliveryTime(event: string) {
+    console.log(this.order);
+
     this.order.category.delivery.time = event
   }
 
   updateTime(time: OrderDeliveryTime) {
+    console.log(time);
+
     this.deliveryTime = time
     if (time === 'now') this.order.category.delivery.time = 'now'
   }
@@ -225,47 +235,61 @@ export class OrderCheckoutComponent implements OnInit {
     this.form.patchValue(item)
   }
 
+  removeAllFormControls() {
+    this.form.removeControl('name')
+    this.form.removeControl('address')
+    this.form.removeControl('phone')
+    this.form.removeControl('payment')
+    this.form.removeControl('change')
+    this.form.removeControl('comment')
+    this.form.removeControl('table')
+  }
+
   chooseOrderType(type: OrderType) {
-    this.order.category.type = type
     switch (type) {
       case 'delivery':
-        this.form = this.formBuilder.group({
-          name: [null, [Validators.required]],
-          address: [null, [Validators.required]],
-          phone: [null, [Validators.required]],
-          payment: [null, [Validators.required]],
-          change: [null],
-          comment: [null],
-        })
+        this.removeAllFormControls()
+        this.form.addControl('name', new FormControl(null, Validators.required))
+        this.form.addControl('address', new FormControl(null, Validators.required))
+        this.form.addControl('phone', new FormControl(null, Validators.required))
+        this.form.addControl('payment', new FormControl(this.PaymentType.Card, Validators.required))
+        this.form.addControl('change', new FormControl(null))
+        this.form.addControl('comment', new FormControl(null))
+        this.order.category.delivery = {}
+        this.order.category.table = null
         break
       case 'table':
-        this.form = this.formBuilder.group({
-          table: [null, [Validators.required, tableZeroNumberValidator()]],
-          comment: [null],
-        })
+        this.removeAllFormControls()
+        this.form.addControl('table', new FormControl(null, [Validators.required, tableZeroNumberValidator()]))
+        this.form.addControl('comment', new FormControl(null))
+        this.order.category.delivery = null
         break
       case 'takeaway':
-        this.form = this.formBuilder.group({
-          name: [null, Validators.required],
-          comment: [null],
-        })
+        this.removeAllFormControls()
+        this.form.addControl('name', new FormControl(null, Validators.required))
+        this.form.addControl('comment', new FormControl(null))
+        this.order.category.delivery = null
+        this.order.category.table = null
         break
     }
-    this.form.updateValueAndValidity()
     this.order.category.type = type
+    this.form.updateValueAndValidity()
   }
 
   submitOrderDetails() {
     this.resetValidation()
     if (!this.hasSkippedStarter && !this.hasSkippedDrink && this.form.valid) {
       this.formatOrder()
+      // debug
       console.log(this.order);
-      if (this.user) {
-        this.confirmTableOrder()
-      } else {
-        this.confirmDelivery()
-      }
+      // if (this.user) {
+      //   this.confirmTableOrder()
+      // } else {
+      //   this.confirmDelivery()
+      // }
     } else {
+      console.log(this.form);
+
       this.hightlightValidation()
     }
   }
@@ -273,24 +297,37 @@ export class OrderCheckoutComponent implements OnInit {
   private formatOrder() {
     switch (this.order.category.type) {
       case 'delivery':
+        console.log(this.order);
         this.order.category.delivery = {
-          time: this.order.category?.delivery.time ?? 'now',
+          time: this.order.category?.delivery?.time ?? 'now',
           ...this.form.value,
         }
+        this.order.category.client = this.form.value.name
         break
       case 'table':
         this.order.category.table = this.form.value.table
         break
       case 'takeaway':
-        this.order.category.delivery.name = this.form.value.name
+        this.order.category.client = this.form.value.name
         break
     }
-    this.order.status = 'requested'
-    this.order.statusHistory.push({
-      status: 'requested',
-      user: this.user,
-      createdAt: this.order.createdAt
-    })
+    if (!this.user) {
+      this.order.status = 'requested'
+      this.order.progress = '0%'
+      this.order.statusHistory.push({
+        status: 'requested',
+        createdBy: this.auth,
+        createdAt: this.order.createdAt
+      })
+    } else {
+      this.order.status = 'cooking'
+      this.order.progress = '50%'
+      this.order.statusHistory.push({
+        status: 'cooking',
+        createdBy: this.user,
+        createdAt: this.order.createdAt
+      })
+    }
   }
 
   private resetValidation() {
@@ -337,14 +374,13 @@ export class OrderCheckoutComponent implements OnInit {
 
   private confirmDelivery() {
     const delivery: Delivery = {
-      // TODO
-      client: 'new client',
+      client: this.auth,
       createdAt: this.order.createdAt,
       order: this.order,
       status: 'requested',
       statusHistory: [{
         status: 'requested',
-        user: this.user,
+        createdBy: this.user ?? this.auth,
         createdAt: this.order.createdAt
       }],
       user: this.user,
@@ -354,13 +390,6 @@ export class OrderCheckoutComponent implements OnInit {
   }
 
   private confirmTableOrder() {
-    this.order.status = 'cooking'
-    this.order.progress = '50%'
-    this.order.statusHistory.push({
-      status: 'cooking',
-      user: this.user,
-      createdAt: getCurrentUnixTime(),
-    })
     this.store.dispatch(ItemActions.createTableOrder({ order: this.order }))
   }
 

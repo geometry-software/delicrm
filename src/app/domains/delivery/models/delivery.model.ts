@@ -1,3 +1,4 @@
+import { Auth } from '../../../auth/models/auth.model'
 import { Order } from '../../orders/models/order.model'
 import { User } from '../../users/models/user.model'
 
@@ -6,7 +7,7 @@ export type Delivery = {
   createdAt: number
   order: Order
   user: User
-  client: any
+  client: Auth
   deliveryInfo: DeliveryInfo
   status: DeliveryStatus
   statusHistory: DeliveryStatusHistory[]
@@ -21,8 +22,8 @@ export type DeliveryInfo = {
 export type DeliveryStatus = 'requested' | 'confirmed' | 'canceled'
 
 export type DeliveryStatusHistory = {
-  user: User
   status: DeliveryStatus
+  createdBy: User | Auth
   createdAt: number
 }
 

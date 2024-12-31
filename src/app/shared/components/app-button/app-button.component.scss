@@ -15,6 +15,7 @@ button {
 button:disabled {
   min-width: 100%;
   background-color: #ddd !important;
+  border: 3px solid #ddd;
   color: white !important;
   border: none;
   cursor: not-allowed;
@@ -71,6 +72,7 @@ button.active:focus {
 .save:disabled:hover {
   background-color: #ddd !important;
   color: white !important;
+  border: 3px solid #ddd;
 }
 
 .save:hover {

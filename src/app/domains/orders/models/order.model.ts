@@ -1,3 +1,4 @@
+import { Auth } from '../../../auth/models/auth.model'
 import { Recipe } from '../../recipe/models/recipe.model'
 import { User } from '../../users/models/user.model'
 
@@ -15,8 +16,8 @@ export type Order = {
 }
 
 export type OrderStatusHistory = {
-  user: User
   status: OrderStatus
+  createdBy: User | Auth
   createdAt: number
 }
 
@@ -34,6 +35,7 @@ export type OrderItem = {
 export type OrderCategory = {
   type: OrderType
   delivery?: OrderDelivery
+  client?: string
   table?: number
 }
 
@@ -65,12 +67,11 @@ export type OrderPrice = {
 export type OrderDelivery = {
   id?: string
   time?: string
-  name?: string
   phone?: string
   address?: string
   payment?: string
   change?: string
-  comments?: string
+  comment?: string
 }
 
 export type OrderStatusResponse = {

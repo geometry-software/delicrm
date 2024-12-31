@@ -27,6 +27,7 @@ export class MenuEffects implements OnInitEffects {
 
   private readonly checkOutUrl = MenuConstants.checkOutUrl
   private readonly ordersUrl = MenuConstants.ordersUrl
+  private readonly deliveryUrl = MenuConstants.deliveryUrl
 
   updateUserStatus = createEffect(() =>
     this.actions.pipe(
@@ -57,7 +58,7 @@ export class MenuEffects implements OnInitEffects {
     this.actions.pipe(
       ofType(ItemActions.createDeliveryOrder),
       switchMap(({ delivery }) => this.deliveryService.create(delivery).pipe(
-        map(id => ItemActions.createOrderSuccess({ id })),
+        map(id => ItemActions.checkoutOrderSuccess({ id, checkout: 'delivery' })),
         catchError(() => this.handleError())
       )))
   )
@@ -67,14 +68,17 @@ export class MenuEffects implements OnInitEffects {
       ofType(ItemActions.createTableOrder),
       switchMap(({ order }) => this.orderService.create(order).pipe(
         tap((id) => this.router.navigate([this.ordersUrl, id])),
-        map(id => ItemActions.createOrderSuccess({ id })),
+        map(id => ItemActions.checkoutOrderSuccess({ id, checkout: 'order' })),
         catchError(() => this.handleError())
       )))
   )
 
   createOrderSuccess = createEffect(() =>
     this.actions.pipe(
-      ofType(ItemActions.createOrderSuccess),
+      ofType(ItemActions.checkoutOrderSuccess),
+      tap(({ checkout, id }) => checkout === 'order'
+        ? this.router.navigate([this.ordersUrl, id])
+        : this.router.navigate([this.deliveryUrl])),
       tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loaded)))
     , { dispatch: false }
   )

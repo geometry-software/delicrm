@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core'
 import { catchError, filter, map, switchMap, tap } from 'rxjs/operators'
 import { AuthService } from '../../services/auth.service'
-import { adminFormGroup, AdminFormProps } from '../../models/admin.form'
+import { adminFormGroup, AdminFormProps, adminLoginFormGroup } from '../../models/admin.form'
 import { showFieldErrors } from '../../../shared/utils/form-error-handling'
 import { AuthConstants } from '../../models/auth.constants'
 import { RestaurantFormComponent } from '../../../domains/admin/components/restaurant-form/restaurant-form.component'
@@ -33,6 +33,10 @@ export class LoginComponent {
     private destroyRef: DestroyRef
   ) { }
 
+  form = adminLoginFormGroup
+  formProps = AdminFormProps
+  isAdminLoginLoading: boolean
+
   readonly googleIconPath = AuthConstants.googleIconPath
   readonly adminCollectionId = AuthConstants.adminCollectionId
   readonly restaurantFormComponentConfig = SharedConstants.formComponentConfig
@@ -63,11 +67,25 @@ export class LoginComponent {
     ).subscribe(v => console.log(v))
   }
 
-  loginAdmin() {
-    this.authService.loginAdmin(
-      this.adminForm.value[AdminFormProps.email],
-      this.adminForm.value[AdminFormProps.password]
-    )
+  async submitAdminLoginForm() {
+    this.isAdminLoginLoading = true
+
+    if (this.form.valid) {
+      this.authService.loginAdmin(this.form.value[AdminFormProps.email], this.form.value[AdminFormProps.password]).pipe(
+        catchError((e) => {
+          console.log(e);
+
+          this.isAdminLoginLoading = false
+          return []
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe((v) => {
+        console.log(v);
+
+        this.isAdminLoginLoading = false
+        this.authService.checkAdminRegistration.next()
+      })
+    }
   }
 
   registerRestaurant() {

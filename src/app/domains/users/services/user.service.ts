@@ -60,11 +60,9 @@ export class UserService {
   // private readonly authCollection = AuthConstants.collectionName
   // private readonly authCollectionId = AuthConstants.authCollectionId
 
-  readonly appUser = this.appUserSubject.asObservable().pipe(
-    tap(console.warn)
-  )
+  readonly appUser = this.appUserSubject.asObservable()
   readonly appAuth = this.appAuthSubject.asObservable().pipe(
-    tap(console.warn)
+    tap(v => console.log(v))
   )
 
   initUser() {
@@ -75,6 +73,7 @@ export class UserService {
           switchMap(user => user
             ? of(this.appUserSubject.next(user))
             : this.authService.getAuth(firebaseUser.uid).pipe(
+              tap(v => console.log(v)),
               switchMap(auth => auth
                 ? of(this.appAuthSubject.next(auth))
                 : of(null)))),

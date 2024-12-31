@@ -72,7 +72,8 @@ export class AuthService {
   }
 
   loginAdmin(email: string, password: string) {
-    return this.angularFireAuth.signInWithEmailAndPassword(email, password)
+    return from(this.angularFireAuth.signOut()).pipe(
+      switchMap(() => from(this.angularFireAuth.signInWithEmailAndPassword(email, password))))
   }
 
   signUpAdmin(admin) {

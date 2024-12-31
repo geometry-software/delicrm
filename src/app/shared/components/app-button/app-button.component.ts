@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
+import { FormControl } from '@angular/forms'
+import { switchMap } from 'rxjs'
 
 @Component({
   selector: 'app-button',
@@ -26,5 +28,11 @@ export class AppButtonComponent {
   @Output()
   submit = new EventEmitter()
 
-  constructor() {}
+  constructor() { }
+
+  q = new FormControl()
+
+  qq() {
+
+  }
 }

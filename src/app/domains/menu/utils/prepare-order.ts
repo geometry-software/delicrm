@@ -1,4 +1,4 @@
-import { Order, OrderProgress } from "../../orders/models/order.model";
+import { Order } from "../../orders/models/order.model";
 import { getCurrentUnixTime } from "../../../shared/utils/format-unix-time";
 
 export const prepareOrder = (main: any[], alacarte) => {
@@ -20,15 +20,6 @@ export const prepareOrder = (main: any[], alacarte) => {
         })),
         alacarte,
         createdAt,
-        // TODO
-        // USER
-        // statusHistory: [
-        //     {
-        //         createdAt,
-        //         user,
-        //         status: "delivery"
-        //     }
-        // ],
         statusHistory: [],
         category: {
             type: 'table',

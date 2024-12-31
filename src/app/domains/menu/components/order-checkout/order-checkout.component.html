@@ -57,9 +57,8 @@
   <form [formGroup]="form" (ngSubmit)="submitOrderDetails()" autocomplete="off">
     <div class="card mt-[20px] ">
       <app-title title="Order details" [subtitle]="'choose required option to finalize the order'" />
-      <br>
 
-      <mat-radio-group *ngIf="isServiceUser" class="radio-group" (change)="chooseOrderType($event.value)">
+      <mat-radio-group *ngIf="user" class="radio-group" (change)="chooseOrderType($event.value)">
         <mat-radio-button value="table" checked="true"> Table </mat-radio-button>
         <mat-radio-button value="delivery"> Delivery </mat-radio-button>
         <!-- TODO -->
@@ -71,6 +70,8 @@
       </mat-radio-group>
 
       <ng-container [ngSwitch]="order.category.type">
+
+        <!-- TABLE -->
         <ng-container *ngSwitchCase="'table'">
           <mat-form-field [hideRequiredMarker]="true">
             <mat-label>Table number</mat-label>
@@ -80,6 +81,8 @@
             </mat-error>
           </mat-form-field>
         </ng-container>
+
+        <!-- TAKEAWAY -->
         <ng-container *ngSwitchCase="'takeaway'">
           <mat-form-field [hideRequiredMarker]="true">
             <mat-label>Name</mat-label>
@@ -89,8 +92,9 @@
             </mat-error>
           </mat-form-field>
         </ng-container>
+
+        <!-- DELIVERY -->
         <ng-container *ngSwitchCase="'delivery'">
-          <br>
 
           <!-- TODO -->
           <!-- <mat-form-field *ngIf="isOldClient" appearance="outline" style="margin-top: 10px">
@@ -131,17 +135,16 @@
           </mat-form-field>
 
           <div class="section">Payment type</div>
-          <mat-radio-group class="radio-group" formControlName="payment" (change)="chooseCash($event.value)">
-            <mat-radio-button value="cash"> Cash </mat-radio-button>
-            <mat-radio-button value="card"> Card </mat-radio-button>
+          <mat-radio-group class="radio-group" formControlName="payment" (change)="updatePaymentType($event.value)">
+            <mat-radio-button [value]="PaymentType.Cash"> Cash </mat-radio-button>
+            <mat-radio-button [value]="PaymentType.Card"> Card </mat-radio-button>
           </mat-radio-group>
 
           <ng-container *ngIf="isCash">
-            <div class="section">Payment type</div>
-            <div class="title">Bill nomination</div>
+            <div class="section">Bill type</div>
             <mat-radio-group class="radio-group" formControlName="change">
-              <mat-radio-button [checked]="'Exact value'" *ngFor="let item of changeTypes">
-                <span>{{ item }}</span>
+              <mat-radio-button [value]="item" *ngFor="let item of changeTypes">
+                {{ item }}
               </mat-radio-button>
             </mat-radio-group>
           </ng-container>
@@ -161,6 +164,7 @@
             </mat-radio-button>
           </mat-radio-group>
         </ng-container>
+
       </ng-container>
 
       <mat-form-field>

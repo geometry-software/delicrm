@@ -11,6 +11,7 @@ import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
 import { combineListControls } from '../../../../shared/utils/combine-list-controls'
 import { Sort } from '@angular/material/sort'
 import { SortRequest } from '../../../../shared/repository/repository.models'
+import { Delivery } from '../../models/delivery.model'
 
 
 @Component({
@@ -67,4 +68,9 @@ export class DeliveryListComponent {
       .subscribe(([pagination, size, sort, status]) =>
         this.store.dispatch(ItemActions.getItems({ request: { pagination, size, sort, status } })))
   }
+
+  showDetail(delivery: Delivery) {
+    console.log(delivery);
+  }
+
 }

@@ -19,11 +19,10 @@
     [matSortDirection]="defaultSortControlValue.direction" [matSortActive]="defaultSortControlValue.active"
     (matSortChange)="changeSort($event)">
     <ng-container matColumnDef="user">
-      <mat-header-cell *matHeaderCellDef> Client </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <div class="table-link">
-          <!-- <div class="table-link" (click)="showDetail(element)"> -->
-          {{ element.category.delivery?.name }}
+        <div class="table-link" (click)="showDetail(element)">
+          {{ element.user.name ?? element.client.extra.name }}
         </div>
       </mat-cell>
     </ng-container>

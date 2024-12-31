@@ -14,7 +14,6 @@ import { AppAddressComponent } from './components/app-address/app-address.compon
 import { AppLayoutToolbarComponent } from './components/app-layout-toolbar/app-layout-toolbar.component'
 import { AppPaginationComponent } from './components/app-pagination/app-pagination.component'
 import { AppTableLinkComponent } from './components/app-table-link/app-table-link.component'
-import { AppSaveButtonComponent } from './components/app-save-button/app-save-button.component'
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker'
 import { AppFormattedDailyMenuComponent } from './components/app-formatted-daily-menu/app-formatted-daily-menu.component'
 import { AppInfoComponent } from './components/app-info/app-info.component'
@@ -35,7 +34,6 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
     AppLayoutToolbarComponent,
     AppPaginationComponent,
     AppTableLinkComponent,
-    AppSaveButtonComponent,
     AppInfoComponent,
     AppTitleComponent,
     AppTitleItemComponent,
@@ -61,7 +59,6 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
     AppLayoutToolbarComponent,
     AppPaginationComponent,
     AppTableLinkComponent,
-    AppSaveButtonComponent,
     NgxMaterialTimepickerModule,
     AppFormattedDailyMenuComponent
   ],

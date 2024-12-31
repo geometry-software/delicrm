@@ -4,4 +4,5 @@ export abstract class MenuConstants {
   static readonly dailyMenuLabel = 'Daily Menu'
   static readonly checkOutUrl = '/menu/checkout'
   static readonly ordersUrl = '/orders'
+  static readonly deliveryUrl = '/delivery'
 }

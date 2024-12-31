@@ -3,6 +3,7 @@ import { LoadingStatus } from '../../../shared/models/loading-status'
 import { Order } from '../../orders/models/order.model'
 import { MenuConstants } from '../utils/menu.constants'
 import { Delivery } from '../../delivery/models/delivery.model'
+import { Checkout } from '../models/checkout'
 
 export const MenuActions = createActionGroup({
   source: MenuConstants.storeFeatureKey,
@@ -14,6 +15,6 @@ export const MenuActions = createActionGroup({
     'Set Order Success': props<{ order: Order }>(),
     'Create Delivery Order': props<{ delivery: Delivery }>(),
     'Create Table Order': props<{ order: Order }>(),
-    'Create Order Success': props<{ id: string }>(),
+    'Checkout Order Success': props<{ id: string, checkout: Checkout }>(),
   },
 })

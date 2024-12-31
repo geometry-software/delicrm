@@ -12,6 +12,28 @@
     </div>
     <br>
 
+    <form [formGroup]="form" (ngSubmit)="submitAdminLoginForm()">
+      <mat-form-field [hideRequiredMarker]="true">
+        <mat-label> Email </mat-label>
+        <input matInput [formControlName]="formProps.email" />
+        <mat-error *ngIf="showFieldErrors(form, formProps.email) as error">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field [hideRequiredMarker]="true">
+        <mat-label> Password </mat-label>
+        <input matInput [formControlName]="formProps.password" />
+        <mat-error *ngIf="showFieldErrors(form, formProps.password) as error">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+
+      <app-button actionType="save" width="full" type="submit" [disabled]="isAdminLoginLoading"
+        [title]="isAdminLoginLoading ? 'Processing ..' : 'Login admin'" />
+
+    </form>
+
     <h4>Hey, {{ name }}!</h4>
     <h5>Account will be reviewed</h5>
     <p style="margin: 10px 0">Contact in cafe since 10am or call us</p>

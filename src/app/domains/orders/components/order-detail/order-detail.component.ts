@@ -95,7 +95,7 @@ export class OrderDetailComponent implements OnInit {
       const history: OrderStatusHistory = {
         status,
         createdAt: getCurrentUnixTime(),
-        user: this.user,
+        createdBy: this.user,
       }
       let progress: OrderProgress = orderStatusProgress[status]
       const statusHistory = [...this.order.statusHistory]
@@ -110,7 +110,8 @@ export class OrderDetailComponent implements OnInit {
   }
 
   getUser(status: OrderStatus) {
-    return this.order.statusHistory.find((el) => el.status === status).user.name
+    return 'user name'
+    // return this.order.statusHistory.find((el) => el.status === status).createdBy.name
   }
 
   getTotal(total: number) {

@@ -78,7 +78,9 @@
       </span>
     </form>
 
-    <app-save-button [form]="form" [loading]="(loadingState | async) === LoadingStatus.Loading"
-      (submit)="submit($event)" />
+    <app-button actionType="save" width="full" type="submit"
+      [disabled]="(loadingState | async) === LoadingStatus.Loading"
+      [title]="(loadingState | async) === LoadingStatus.Loading ? 'Saving ..' : 'Save recipe '" />
+
   </div>
 </div>
