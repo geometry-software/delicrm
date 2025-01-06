@@ -10,11 +10,9 @@ button {
 }
 
 :host {
-  position: sticky;
-  // z-index: 2;
+  // position: sticky;
   bottom: 0;
 
-  // background: #f1f1f1;
   mat-select {
     width: 60px;
     text-align: center;

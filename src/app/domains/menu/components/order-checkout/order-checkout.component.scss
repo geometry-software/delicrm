@@ -16,6 +16,10 @@
   .checkout-container ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
     background-color: #57aaf7;
   }
+
+  .checkout-container {
+    padding: 3px;
+  }
 }
 
 .no-plates {
@@ -62,15 +66,6 @@
   text-align: left;
   margin-top: 5px;
   text-align: center;
-}
-
-.delivery-time {
-  margin-left: 10px;
-  height: 20px;
-  border-radius: 6px;
-  padding: 5px;
-  border: 1px solid #bbb;
-  background: transparent;
 }
 
 .topping-item-name {

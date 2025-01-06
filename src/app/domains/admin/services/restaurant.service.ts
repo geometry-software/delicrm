@@ -19,8 +19,12 @@ export class RestaurantService {
     return this.repositoryService.setDocument(this.collection, item, this.infoDocument)
   }
 
-  updateRestaurant(item: Restaurant) {
+  updateRestaurantInfo(item: Restaurant) {
     return this.repositoryService.updateDocument(this.collection, item, this.infoDocument)
+  }
+
+  getRestaurantInfo() {
+    return this.repositoryService.getDocumentById(this.collection, this.infoDocument)
   }
 
   updateDailyMenu(menu: DailyMenu) {

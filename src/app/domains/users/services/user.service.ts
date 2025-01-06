@@ -9,6 +9,9 @@ import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
 import { User, UserRole } from '../models/user.model'
 import { UserConstants } from '../models/user.constants'
 import { SortRequest } from '../../../shared/repository/repository.models'
+import { SignalService } from '../../../shared/services/signal.service'
+import { LoadingStatus } from '../../../shared/models/loading-status'
+import { NotificationService } from '../../../shared/services/notification.service'
 
 @Injectable({
   providedIn: 'root'
@@ -17,14 +20,16 @@ export class UserService {
 
   constructor(
     private repositoryService: RepositoryService<User, AuthStatus>,
-    private authService: AuthService
+    private authService: AuthService,
+    private signalService: SignalService,
+    private notificationService: NotificationService,
   ) {
     // this.createDumpUsers()
-    this.initUser()
+    this.initAuthSession()
   }
 
-  appUserSubject = new BehaviorSubject<User>(null)
-  appAuthSubject = new BehaviorSubject<Auth>(null)
+  readonly appUserSubject = new BehaviorSubject<User>(null)
+  readonly appAuthSubject = new BehaviorSubject<Auth>(null)
 
   createDumpUsers() {
     const arr: User[] = []
@@ -57,32 +62,30 @@ export class UserService {
   }
 
   private readonly collection = UserConstants.collectionName
-  // private readonly authCollection = AuthConstants.collectionName
-  // private readonly authCollectionId = AuthConstants.authCollectionId
 
   readonly appUser = this.appUserSubject.asObservable()
   readonly appAuth = this.appAuthSubject.asObservable().pipe(
     tap(v => console.log(v))
   )
 
-  initUser() {
+  initAuthSession() {
     this.authService.firebaseUser.pipe(
       first(),
+      tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loading)),
       switchMap(firebaseUser => firebaseUser?.uid
         ? this.repositoryService.getDocumentById(this.collection, firebaseUser.uid).pipe(
           switchMap(user => user
             ? of(this.appUserSubject.next(user))
             : this.authService.getAuth(firebaseUser.uid).pipe(
-              tap(v => console.log(v)),
               switchMap(auth => auth
                 ? of(this.appAuthSubject.next(auth))
-                : of(null)))),
-          catchError(error => {
-            console.warn(error);
-
-            return []
-          }))
-        : this.authService.signUpAnonymously())
+                : of(null)),
+              catchError(error => this.handleAuthError(error)))),
+          catchError(error => this.handleAuthError(error)))
+        : this.authService.signUpAnonymously().pipe(
+          tap(auth => this.appAuthSubject.next(auth)))),
+      tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loaded)),
+      catchError(error => this.handleAuthError(error))
     ).subscribe()
   }
 
@@ -154,6 +157,13 @@ export class UserService {
 
   updateStatus(status: AuthStatus, id: string) {
     return this.repositoryService.updateDocument(this.collection, { status }, id)
+  }
+
+  private handleAuthError(error: Error) {
+    this.notificationService.error(error)
+    this.signalService.setLoadingStatus(LoadingStatus.NotLoaded)
+    console.error(error)
+    return []
   }
 
 }

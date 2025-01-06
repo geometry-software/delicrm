@@ -1,5 +1,5 @@
 import { MatDrawerMode } from '@angular/material/sidenav'
-import { UserRole } from '../../domains/users/models/user.model'
+import { UserLanguage, UserRole } from '../../domains/users/models/user.model'
 
 export interface MenuOption {
   title?: string
@@ -13,4 +13,9 @@ export interface ResponsiveLayout {
   matDrawerMode?: MatDrawerMode
   matToolbarRowButtonMargin?: string
   menuListContainerMargin?: string
+}
+
+export type UserLanguageItem = {
+  value: UserLanguage,
+  viewValue: string
 }

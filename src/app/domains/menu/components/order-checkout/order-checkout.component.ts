@@ -25,6 +25,7 @@ import { showFieldErrors } from '../../../../shared/utils/form-error-handling'
 import { tableZeroNumberValidator } from '../../utils/table-zero-number-validator'
 import { Auth } from '../../../../auth/models/auth.model'
 import { PaymentType } from '../../models/checkout'
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker'
 
 @Component({
   selector: 'app-order-checkout',
@@ -54,7 +55,9 @@ export class OrderCheckoutComponent implements OnInit {
   readonly alaCarteLabel = MenuConstants.alaCarteLabel
 
   readonly LoadingStatus = LoadingStatus
-  readonly loadingStatus = this.store.select(loadingStatus)
+  readonly loadingStatus = this.store.select(loadingStatus).pipe(
+    tap(value => console.log(value))
+  )
   readonly showFieldErrors = showFieldErrors
 
   order: Order
@@ -129,6 +132,11 @@ export class OrderCheckoutComponent implements OnInit {
           this.order.category.type = 'delivery'
           this.order.category.delivery = {}
           this.chooseOrderType('delivery')
+          this.form.patchValue({
+            name: this.auth.name,
+            address: this.auth.deliveryInfo.address,
+            phone: this.auth.deliveryInfo.phone
+          })
         }
       }
     })
@@ -209,16 +217,14 @@ export class OrderCheckoutComponent implements OnInit {
   }
 
   setDeliveryTime(event: string) {
-    console.log(this.order);
-
     this.order.category.delivery.time = event
   }
 
   updateTime(time: OrderDeliveryTime) {
-    console.log(time);
-
     this.deliveryTime = time
-    if (time === 'now') this.order.category.delivery.time = 'now'
+    if (time === 'now') {
+      this.order.category.delivery.time = 'now'
+    }
   }
 
   displayFn(item): string {
@@ -273,6 +279,7 @@ export class OrderCheckoutComponent implements OnInit {
         break
     }
     this.order.category.type = type
+    this.form.markAsUntouched()
     this.form.updateValueAndValidity()
   }
 
@@ -281,15 +288,13 @@ export class OrderCheckoutComponent implements OnInit {
     if (!this.hasSkippedStarter && !this.hasSkippedDrink && this.form.valid) {
       this.formatOrder()
       // debug
-      console.log(this.order);
-      // if (this.user) {
-      //   this.confirmTableOrder()
-      // } else {
-      //   this.confirmDelivery()
-      // }
+      // console.log(this.order);
+      if (this.user) {
+        this.confirmTableOrder()
+      } else {
+        this.confirmDelivery()
+      }
     } else {
-      console.log(this.form);
-
       this.hightlightValidation()
     }
   }
@@ -297,7 +302,6 @@ export class OrderCheckoutComponent implements OnInit {
   private formatOrder() {
     switch (this.order.category.type) {
       case 'delivery':
-        console.log(this.order);
         this.order.category.delivery = {
           time: this.order.category?.delivery?.time ?? 'now',
           ...this.form.value,
@@ -384,7 +388,7 @@ export class OrderCheckoutComponent implements OnInit {
         createdAt: this.order.createdAt
       }],
       user: this.user,
-      deliveryInfo: this.user.auth.deliveryInfo
+      deliveryInfo: this.auth?.deliveryInfo
     }
     this.store.dispatch(ItemActions.createDeliveryOrder({ delivery }))
   }

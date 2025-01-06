@@ -9,7 +9,7 @@
         <mat-form-field>
           <input type="text" matInput [formControlName]="i" [placeholder]="'Sopa ' + (i + 1)"
             [matAutocomplete]="autoStarter" />
-          <mat-autocomplete #autoStarter="matAutocomplete" [displayWith]="displayFn">
+          <mat-autocomplete requireSelection #autoStarter="matAutocomplete" [displayWith]="displayFn">
             <mat-option *ngFor="let option of filteredStarterOptions[i] | async" [value]="option">
               {{ option.name }}
             </mat-option>
@@ -23,7 +23,7 @@
         <mat-form-field>
           <input type="text" matInput [formControlName]="i" [placeholder]="'Juice ' + (i + 1)"
             [matAutocomplete]="autoDrink" />
-          <mat-autocomplete #autoDrink="matAutocomplete" [displayWith]="displayFn">
+          <mat-autocomplete requireSelection #autoDrink="matAutocomplete" [displayWith]="displayFn">
             <mat-option *ngFor="let option of filteredDrinkOptions[i] | async" [value]="option">
               {{ option.name }}
             </mat-option>
@@ -35,7 +35,7 @@
 
       <mat-form-field>
         <input type="text" matInput formControlName="salad" placeholder="Salad" [matAutocomplete]="autoSalad" />
-        <mat-autocomplete #autoSalad="matAutocomplete" [displayWith]="displayFn">
+        <mat-autocomplete requireSelection #autoSalad="matAutocomplete" [displayWith]="displayFn">
           <mat-option *ngFor="let option of filteredSaladOptions | async" [value]="option">
             {{ option.name }}
           </mat-option>
@@ -44,7 +44,7 @@
 
       <mat-form-field>
         <input type="text" matInput formControlName="rice" placeholder="Rice" [matAutocomplete]="autoRice" />
-        <mat-autocomplete #autoRice="matAutocomplete" [displayWith]="displayFn">
+        <mat-autocomplete requireSelection #autoRice="matAutocomplete" [displayWith]="displayFn">
           <mat-option *ngFor="let option of filteredRiceOptions | async" [value]="option">
             {{ option.name }}
           </mat-option>
@@ -53,7 +53,7 @@
 
       <mat-form-field>
         <input type="text" matInput formControlName="garnish" placeholder="Garnish" [matAutocomplete]="autoGarnish" />
-        <mat-autocomplete #autoGarnish="matAutocomplete" [displayWith]="displayFn">
+        <mat-autocomplete requireSelection #autoGarnish="matAutocomplete" [displayWith]="displayFn">
           <mat-option *ngFor="let option of filteredGarnishOptions | async" [value]="option">
             {{ option.name }}
           </mat-option>
@@ -62,7 +62,7 @@
 
       <mat-form-field>
         <input type="text" matInput formControlName="dessert" placeholder="Dessert" [matAutocomplete]="autoDessert" />
-        <mat-autocomplete #autoDessert="matAutocomplete" [displayWith]="displayFn">
+        <mat-autocomplete requireSelection #autoDessert="matAutocomplete" [displayWith]="displayFn">
           <mat-option *ngFor="let option of filteredDessertOptions | async" [value]="option">
             {{ option.name }}
           </mat-option>

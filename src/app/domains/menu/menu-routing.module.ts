@@ -19,7 +19,7 @@ const routes: Routes = [
         component: OrderCheckoutComponent,
       },
       {
-        path: 'client-order/:id',
+        path: 'order/:id',
         component: ClientOrderComponent,
       },
     ],

@@ -2,7 +2,7 @@ import { Component, ViewChild, OnInit, Signal, ChangeDetectorRef, ChangeDetectio
 import { MatDrawer } from '@angular/material/sidenav'
 import { userMenuOptions, authMenuOptions } from '../../models/menu-options'
 import { TranslateService } from '@ngx-translate/core'
-import { ResponsiveLayout } from '../../models/navbar.model'
+import { ResponsiveLayout, UserLanguageItem } from '../../models/navbar.model'
 import { UserService } from '../../../domains/users/services/user.service'
 import { SignalService } from '../../../shared/services/signal.service'
 import { UserLanguage } from '../../../domains/users/models/user.model'
@@ -33,6 +33,12 @@ export class NavbarComponent implements OnInit {
 
   @ViewChild('drawer') drawer: MatDrawer
   responsiveLayout: ResponsiveLayout = {}
+
+  languageOptions: UserLanguageItem[] = [
+    { value: 'en', viewValue: 'English' },
+    { value: 'es', viewValue: 'Español' },
+    { value: 'pt', viewValue: 'Português' }
+  ]
 
   hasAppAuth: boolean
   hasNewDelivery: boolean

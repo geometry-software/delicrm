@@ -17,7 +17,11 @@ import { loadingStatus } from '../../store/admin.selectors'
   selector: 'app-menu-form',
   templateUrl: './menu-form.component.html',
   styleUrls: ['./menu-form.component.scss'],
-  animations: [fadeOutDownOnLeaveAnimation(), fadeInDownOnEnterAnimation(), fadeInUpOnEnterAnimation()],
+  animations: [
+    fadeOutDownOnLeaveAnimation(),
+    fadeInDownOnEnterAnimation(),
+    fadeInUpOnEnterAnimation()
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MenuFormComponent implements OnInit {
@@ -127,7 +131,7 @@ export class MenuFormComponent implements OnInit {
     for (let i = 0; i < this.startersAmount; i++) {
       this.filteredStarterOptions[i] = this.getStarters().at(i).valueChanges.pipe(
         startWith<string | Recipe>(''),
-        map(value => (typeof value === 'string' ? value : value.name)),
+        map(value => (typeof value === 'string' ? value : value?.name)),
         map(name => name
           ? this.starterList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
           : this.starterList.slice()
@@ -137,7 +141,7 @@ export class MenuFormComponent implements OnInit {
     for (let i = 0; i < this.drinksAmount; i++) {
       this.filteredDrinkOptions[i] = this.getDrinks().at(i).valueChanges.pipe(
         startWith<string | Recipe>(''),
-        map(value => (typeof value === 'string' ? value : value.name)),
+        map(value => (typeof value === 'string' ? value : value?.name)),
         map(name => name
           ? this.drinkList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
           : this.drinkList.slice()
@@ -146,7 +150,7 @@ export class MenuFormComponent implements OnInit {
     }
     this.filteredSaladOptions = this.menuForm.get('salad').valueChanges.pipe(
       startWith(''),
-      map(value => (typeof value === 'string' ? value : value.name)),
+      map(value => (typeof value === 'string' ? value : value?.name)),
       map(name => name
         ? this.saladList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
         : this.saladList.slice()
@@ -154,7 +158,7 @@ export class MenuFormComponent implements OnInit {
     )
     this.filteredRiceOptions = this.menuForm.get('rice').valueChanges.pipe(
       startWith(''),
-      map(value => (typeof value === 'string' ? value : value.name)),
+      map(value => (typeof value === 'string' ? value : value?.name)),
       map(name => name
         ? this.riceList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
         : this.riceList.slice()
@@ -162,7 +166,7 @@ export class MenuFormComponent implements OnInit {
     )
     this.filteredGarnishOptions = this.menuForm.get('garnish').valueChanges.pipe(
       startWith(''),
-      map(value => (typeof value === 'string' ? value : value.name)),
+      map(value => (typeof value === 'string' ? value : value?.name)),
       map(name => name
         ? this.garnishList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
         : this.garnishList.slice()
@@ -170,7 +174,7 @@ export class MenuFormComponent implements OnInit {
     )
     this.filteredDessertOptions = this.menuForm.get('dessert').valueChanges.pipe(
       startWith(''),
-      map(value => (typeof value === 'string' ? value : value.name)),
+      map(value => (typeof value === 'string' ? value : value?.name)),
       map(name => name
         ? this.dessertList.filter((option) => option.name.toLowerCase().includes(name.toLowerCase()))
         : this.dessertList.slice()

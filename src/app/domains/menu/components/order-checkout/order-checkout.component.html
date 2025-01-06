@@ -158,8 +158,8 @@
             <mat-radio-button value="delayed" (change)="updateTime($event.value)">
               <span>Choose a time</span>
               <ng-container *ngIf="deliveryTime === 'delayed'">
-                <input class="delivery-time" [ngxTimepicker]="picker" />
-                <ngx-material-timepicker #picker (timeSet)="setDeliveryTime($event)"></ngx-material-timepicker>
+                <input [ngxTimepicker]="timepicker" />
+                <ngx-material-timepicker #timepicker (timeSet)="setDeliveryTime($event)"></ngx-material-timepicker>
               </ng-container>
             </mat-radio-button>
           </mat-radio-group>
@@ -185,11 +185,9 @@
     <div class="card mt-[20px] mb-[10px]">
 
       <app-title title="Total" [subtitle]="total" />
-
-      <hr><br>
-      <app-title-item title="Order price" [value]="orderPrice" />
+      <app-title-item title="Menu del dia price" [value]="orderPrice" />
       <app-title-item title="Delivery price" [value]="deliveryPrice" />
-      <app-title-item title="Ala Carte price" [value]="alacartePrice" />
+      <app-title-item margin="0" title="Ala Carte price" [value]="alacartePrice" />
 
       <div *ngIf="hasClientDataError" class="validation-error-message" [@fadeInUpOnEnter]>
         Verify customer data again

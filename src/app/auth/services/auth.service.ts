@@ -31,7 +31,7 @@ export class AuthService {
   readonly firebaseUser = this.angularFireAuth.user.pipe(
     // TODO. check why invoked multiple times
     shareReplay(1),
-    tap(v => console.log(v))
+    // tap(v => console.log(v))
   )
 
   readonly isAdminEmailVerified = this.firebaseUser.pipe(
@@ -50,25 +50,27 @@ export class AuthService {
 
   linkWithGoogle() {
     return this.firebaseUser.pipe(
-      tap(v => console.log(v)),
       switchMap(user => from(user.linkWithPopup(new GoogleAuthProvider())).pipe(
-        tap(v => console.log(v)),
         switchMap(user => this.repositoryService.updateDocument(
           this.collection,
-          { extra: mapExtraData(user) },
+          {
+            extra: mapExtraData(user),
+            name: user.user.displayName,
+          },
           user.user.uid).pipe(
             catchError(v => {
-              console.log(v);
+              console.error(v);
               return of(v)
             })
-          ))
-      ))
-    )
+          )))))
   }
 
   signUpAnonymously() {
     return from(this.angularFireAuth.signInAnonymously()).pipe(
-      switchMap(user => this.repositoryService.setDocument(this.collection, mapAuth(user.user), user.user.uid)))
+      switchMap(user => this.repositoryService.setDocument(this.collection, mapAuth(user.user), user.user.uid).pipe(
+        map(() => mapAuth(user.user))
+      ))
+    )
   }
 
   loginAdmin(email: string, password: string) {
@@ -93,6 +95,10 @@ export class AuthService {
 
   deleteAdminAuth() {
     return this.repositoryService.deleteDocument(this.collection, this.adminCollectionId)
+  }
+
+  updateAuth(id: string, data: Partial<Auth>) {
+    return this.repositoryService.updateDocument(this.collection, data, id)
   }
 
   sendEmailVerification() {

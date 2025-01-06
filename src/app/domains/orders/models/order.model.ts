@@ -65,10 +65,10 @@ export type OrderPrice = {
 }
 
 export type OrderDelivery = {
-  id?: string
   time?: string
   phone?: string
   address?: string
+  name?: string
   payment?: string
   change?: string
   comment?: string

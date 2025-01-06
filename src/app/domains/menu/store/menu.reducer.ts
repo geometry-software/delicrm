@@ -15,4 +15,8 @@ export const reducer = createReducer<State>(
     ...state,
     order
   })),
+  on(ItemActions.setItemsLoadingStatus, (state, { status }) => ({
+    ...state,
+    loadingStatus: status
+  })),
 )

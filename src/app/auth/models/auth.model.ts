@@ -6,11 +6,11 @@ export type Auth = {
   createdAt: number
   status: AuthStatus
   deliveryInfo: DeliveryInfo
+  name: string | null
   extra: ExtraData | null
 }
 
 export type ExtraData = {
-  name: string
   email: string
   avatar: string
   locale: string

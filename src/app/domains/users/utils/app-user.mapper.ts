@@ -6,7 +6,7 @@ export const mapAppUser = (auth: Auth, role: UserRole): User => ({
     auth,
     role,
     locale: auth.extra.locale,
-    name: auth.extra.name,
+    name: auth.name,
     avatar: auth.extra.avatar,
     status: auth.status,
     email: auth.extra.email,

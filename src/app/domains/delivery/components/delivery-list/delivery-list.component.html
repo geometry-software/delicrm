@@ -22,7 +22,7 @@
       <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <div class="table-link" (click)="showDetail(element)">
-          {{ element.user.name ?? element.client.extra.name }}
+          {{ element.order.category.delivery.name }}
         </div>
       </mat-cell>
     </ng-container>
@@ -30,8 +30,8 @@
     <ng-container matColumnDef="plates">
       <mat-header-cell *matHeaderCellDef> Plates </mat-header-cell>
       <mat-cell *matCellDef="let element" class="plates">
-        <li *ngFor="let item of element.plates; let i = index">
-          {{ item.plate.name }}
+        <li *ngFor="let item of element.order.main; let i = index">
+          {{ item.name }}
         </li>
       </mat-cell>
     </ng-container>

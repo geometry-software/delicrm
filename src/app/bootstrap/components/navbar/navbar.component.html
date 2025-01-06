@@ -13,16 +13,8 @@
       <mat-icon class="lang-icon">language</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="changeLanguage('pt')">
-        <span>portugués</span>
-      </button>
-      <mat-divider></mat-divider>
-      <button mat-menu-item (click)="changeLanguage('es')">
-        <span>español</span>
-      </button>
-      <mat-divider></mat-divider>
-      <button mat-menu-item (click)="changeLanguage('en')">
-        <span>English</span>
+      <button *ngFor="let item of languageOptions" mat-menu-item (click)="changeLanguage(item.value)">
+        <span>{{item.viewValue}}</span>
       </button>
     </mat-menu>
   </mat-toolbar-row>

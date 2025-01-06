@@ -14,7 +14,6 @@ export type Delivery = {
 }
 
 export type DeliveryInfo = {
-  name: string
   phone: string
   address: string
 }

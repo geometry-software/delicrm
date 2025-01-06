@@ -17,8 +17,8 @@ export const mapAuth = (user, extra: ExtraData = null): Auth => ({
     createdAt: getCurrentUnixTime(),
     providerId: 'anonymous',
     status: 'requested',
+    name: null,
     deliveryInfo: {
-        name: '',
         phone: '',
         address: ''
     },
@@ -27,7 +27,6 @@ export const mapAuth = (user, extra: ExtraData = null): Auth => ({
 
 export const mapExtraData = (user): ExtraData => ({
     email: user.email,
-    name: user.displayName,
     avatar: user.photoURL,
     locale: AuthConstants.defaultLocale
 })
