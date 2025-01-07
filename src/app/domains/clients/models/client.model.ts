@@ -1,14 +1,13 @@
-export interface Client {
-  authId: string
-  name: string
-  createdAt: number
-  status: ClientStatus
-  orders: Array<string>
-}
+import { AuthStatus } from "../../../auth/models/auth.model"
 
-export interface ClientStatusTotalResponse {
+export interface ClientStatusResponse {
+  requested: number
   active: number
   blocked: number
 }
 
-export type ClientStatus = 'active' | 'blocked' 
+export const clientsTabIndexByStatus: Record<AuthStatus, number> = {
+  active: 0,
+  requested: 1,
+  blocked: 2
+}

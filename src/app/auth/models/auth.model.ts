@@ -23,6 +23,6 @@ export type AuthStatusTotalResponse = {
   blocked: number
 }
 
-export type AuthStatus = 'requested' | 'blocked' | 'confirmed'
+export type AuthStatus = 'requested' | 'blocked' | 'active'
 
 export type AuthProvider = 'google' | 'firebase' | 'anonymous'

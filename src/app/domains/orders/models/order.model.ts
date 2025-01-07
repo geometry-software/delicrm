@@ -51,17 +51,25 @@ export const orderStatusProgress: Record<OrderStatus, string> = {
   canceled: '100%',
 }
 
+export const ordersTabIndexByStatus: Record<OrderStatus, number> = {
+  requested: 0,
+  cooking: 0,
+  delivery: 1,
+  paid: 2,
+  canceled: 3,
+}
+
 export type OrderStatusBar = {
   status: OrderStatus,
   progress: OrderProgress
 }
 
 export type OrderPrice = {
-  currency: string
   total: number
   order: number
   delivery: number
   alacarte: number
+  currency: string
 }
 
 export type OrderDelivery = {

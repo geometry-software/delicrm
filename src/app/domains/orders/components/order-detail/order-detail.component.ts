@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar'
 import { fadeInOnEnterAnimation } from 'angular-animations'
 import { ORDER_STATUS_COLOR, ORDER_STATUS_ICON, ORDER_STATUS_TRANSLATE } from '../../models/order.model'
 import { PrintService } from '../../../../shared/services/print.service'
-import { catchError, delay, filter, firstValueFrom, map, of, switchMap, tap } from 'rxjs'
+import { catchError, combineLatest, delay, filter, firstValueFrom, map, of, switchMap, tap } from 'rxjs'
 import { Order, OrderStatus, OrderProgress, OrderStatusHistory, OrderStatusBar, orderStatusProgress } from '../../models/order.model'
 import { UserService } from '../../../users/services/user.service'
 import { getCurrentUnixTime, getFullTimeFromUnix } from '../../../../shared/utils/format-unix-time'
@@ -54,6 +54,27 @@ export class OrderDetailComponent implements OnInit {
   orderNotFound: boolean
   orderStatusBar: OrderStatusBar
   status: OrderStatus
+
+  get printButton() {
+    return this.orderStatusBar.status === 'paid' || this.orderStatusBar.status === 'canceled'
+  }
+
+  get orderTitle() {
+    const type = this.order.category.type
+    switch (type) {
+      case 'table':
+        return 'Table ' + this.order.category.table
+        break;
+      case 'delivery':
+        return 'Delivery'
+      case 'takeaway':
+        return 'Takeaway'
+    }
+  }
+
+  get comment() {
+    return this.order.comment || '-'
+  }
 
   ngOnInit() {
     this.initData()
@@ -109,51 +130,43 @@ export class OrderDetailComponent implements OnInit {
     })
   }
 
-  getUser(status: OrderStatus) {
-    return 'user name'
-    // return this.order.statusHistory.find((el) => el.status === status).createdBy.name
+  getUser() {
+    return this.user.name
   }
 
   getTotal(total: number) {
     return total + ' $'
   }
 
-  getComment(comment: string) {
-    return comment || '-'
-  }
-
-  getPrintButton(status: OrderStatus) {
-    return status === 'paid' || status === 'canceled'
-  }
-
   private async initData() {
-    this.user = await firstValueFrom(this.userService.appUser)
-    this.route.params.pipe(
-      map(value => value['id']),
-      switchMap(id => this.store.select(getItemById(id)).pipe(
-        map(order => ({ order, id }))
-      )),
+    combineLatest([
+      this.userService.appUser,
+      this.route.params.pipe(
+        map(value => value['id']),
+        switchMap(id => this.store.select(getItemById(id)).pipe(
+          map(order => ({ order, id }))
+        ))),
+    ]).pipe(
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(async ({ order, id }) => {
+    ).subscribe(async ([user, { order, id }]) => {
+      this.user = user
       if (order) {
         this.order = order
       } else {
-        await this.requestOrder(id)
+        this.order = await this.requestOrder(id)
       }
       this.orderId = id
       this.orderStatusBar = {
-        progress: this.order?.progress,
-        status: this.order?.status
+        progress: this.order.progress,
+        status: this.order.status
       }
-      // debug
-      console.log(this.order);
       this.cdr.markForCheck()
     })
   }
 
   private async requestOrder(id: string) {
     this.store.dispatch(ItemActions.getItem({ id }))
-    this.order = await firstValueFrom(this.store.select(getLoadingStatus).pipe(
+    return await firstValueFrom(this.store.select(getLoadingStatus).pipe(
       filter(value => value === LoadingStatus.Loaded),
       delay(100),
       switchMap(() => this.store.select(getItem).pipe(
@@ -168,7 +181,8 @@ export class OrderDetailComponent implements OnInit {
 
   private onOrderStatusUpdated() {
     this.store.select(statusBar).pipe(
-      filter(Boolean)
+      filter(Boolean),
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(value => {
       this.orderStatusBar = value
       this.cdr.markForCheck()

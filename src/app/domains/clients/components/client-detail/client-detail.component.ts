@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
-import { ClientConstants } from '../../utils/client.constants'
+import { ClientConstants } from '../../models/client.constants'
 import { FormControl } from '@angular/forms'
 import { map, Observable, switchMap, tap } from 'rxjs'
 import { Store } from '@ngrx/store'
@@ -20,7 +20,7 @@ export class ClientDetailComponent implements OnInit {
 
   user = this.route.params.pipe(
     map(value => value['id']),
-    switchMap(id => this.store.select(getItem(id)))
+    // switchMap(id => this.store.select(getItem(id)))
   )
 
   ngOnInit() {

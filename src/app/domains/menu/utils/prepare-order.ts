@@ -1,22 +1,23 @@
 import { Order } from "../../orders/models/order.model";
 import { getCurrentUnixTime } from "../../../shared/utils/format-unix-time";
+import { Extras, MenuItem, Restaurant } from "../../admin/models/restaurant";
 
-export const prepareOrder = (main: any[], alacarte) => {
+export const prepareOrder = (main: MenuItem[], alacarte: MenuItem[], extras: Extras, restaurant: Restaurant) => {
     const createdAt = getCurrentUnixTime()
     const orderPrice = main.map((a) => a.price).reduce((a, b) => a + b, 0)
     const alacartePrice = alacarte.map((a) => a.price).reduce((a, b) => a + b, 0)
-    const deliveryPrice = 5
+    const deliveryPrice = restaurant.delivery
     const total = orderPrice + alacartePrice + deliveryPrice
     const order: Order = {
         main: main.map(plate => ({
             plate,
             name: plate.name,
-            starter: { name: null, id: null },
-            drink: { name: null, id: null },
-            garnish: { name: null, id: null },
-            rice: { name: null, id: null },
-            salad: { name: null, id: null },
-            dessert: { name: null, id: null }
+            starter: null,
+            drink: null,
+            garnish: extras.garnish,
+            rice: extras.rice,
+            salad: extras.salad,
+            dessert: extras.dessert
         })),
         alacarte,
         createdAt,
@@ -25,11 +26,11 @@ export const prepareOrder = (main: any[], alacarte) => {
             type: 'table',
         },
         price: {
-            currency: '$',
             delivery: deliveryPrice,
             order: orderPrice,
             alacarte: alacartePrice,
-            total
+            total,
+            currency: restaurant.currency
         },
         comment: '',
         progress: '0%',

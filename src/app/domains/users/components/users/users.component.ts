@@ -1,25 +1,21 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
 import { MatTabChangeEvent } from '@angular/material/tabs'
-import { Observable, shareReplay, tap, filter, of, map, combineLatest } from 'rxjs'
+import { filter, tap } from 'rxjs'
 import { Store } from '@ngrx/store'
 import { UserActions } from '../../store/user.actions'
-import { isStatusUpdated, getItemsData, getItemsLoadingStatus, getListLabels, getRequestStatus } from '../../store/user.selectors'
+import { getListLabels, getItems, getLoadingStatus, getPaginationResponse, getStatus } from '../../store/user.selectors'
 import { UserConstants } from '../../models/user.constants'
-import { FormControl } from '@angular/forms'
-import { Sort } from '@angular/material/sort'
-// import { combineListControls } from '../../utils/combine-list-controls'
+import { UserActions as ItemActions } from '../../store/user.actions'
 import { MatDialog } from '@angular/material/dialog'
-import { UserDetailComponent } from '../user-detail/user-detail.component'
-import { SignalService } from '../../../../shared/services/signal.service'
-import { PaginationRequest } from '../../../../shared/models/pagination.model'
-// import { SizeRequest } from '../../../../shared/repository/repository.models'
-import { AuthStatus } from '../../../../auth/models/auth.model'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
-import { SharedConstants } from '../../../../shared/utils/shared.constants'
 import { UserStatusComponent } from '../user-status/users-status.component'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { Sort } from '@angular/material/sort'
+import { SortRequest } from '../../../../shared/repository/repository.models'
 import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
+import { FormControl } from '@angular/forms'
+import { combineListControls } from '../../../../shared/utils/combine-list-controls'
+import { usersTabIndexByStatus } from '../../models/user.model'
 
 @Component({
   selector: 'app-users',
@@ -36,71 +32,47 @@ export class UsersComponent implements OnInit {
   ) { }
 
   readonly LoadingStatus = LoadingStatus
-  readonly defaultFirstPageRequest = UserConstants.defaultFirstPageRequest
-  readonly defaultOrderControl = UserConstants.defaultOrderControlValue
+  readonly defaultSortControlValue = UserConstants.defaultPageRequest.sort
   readonly tableColumns = UserConstants.tableColumns
-  readonly userStatusFormComponentConfig = SharedConstants.formComponentConfig
 
-  readonly userList = combineLatest([
-    this.store.select(getItemsData),
-    this.store.select(getRequestStatus)
-  ]).pipe(
-    tap(() => (this.statusList = UserConstants.statusList)),
-    tap(([, status]) => (this.statusList = this.statusList.filter((el) => el !== status))),
-    shareReplay(1),
-    map(([data,]) => data.data)
-  )
+  readonly orderList = this.store.select(getItems)
   readonly listLabels = this.store.select(getListLabels)
-  readonly loadingStatus = this.store.select(getItemsLoadingStatus)
+  readonly loadingStatus = this.store.select(getLoadingStatus)
+  readonly paginationPayload = this.store.select(getPaginationResponse)
+  readonly itemStatus = this.store.select(getStatus)
 
-  statusList = UserConstants.statusList
-  updatedStatus: AuthStatus
-  selectedTabIndex: number
+  readonly paginationControl = new FormControl(UserConstants.defaultPageRequest.pagination)
+  readonly sizeControl = new FormControl(UserConstants.defaultPageRequest.size)
+  readonly sortControl = new FormControl(this.defaultSortControlValue)
+
+  selectedTabIndex: number = 0
 
   ngOnInit() {
-    this.onSwitchTabAfterUpdate()
+    this.loadData()
   }
 
-  // setSignals() {
-  //   this.signalService.setToolbarTitle(this.route.snapshot.data['title'])
-  //   this.signalService.setLayoutType(this.route.snapshot.data['type'])
-  // }
-
-  changeUserList(event: MatTabChangeEvent) {
-    // this.store.dispatch(UserActions.getItems({
-    //   request: {
-    //     pagination: this.defaultFirstPageRequest.pagination,
-    //     size: this.defaultFirstPageRequest.size,
-    //     status: getStatusByLabel(event),
-    //     order: this.defaultFirstPageRequest.order
-    //   }
-    // }))
+  changeTab(event: MatTabChangeEvent) {
+    this.store.dispatch(ItemActions.getItems({
+      request: {
+        pagination: this.paginationControl.value,
+        size: this.sizeControl.value,
+        status: getStatusByLabel(event),
+        sort: this.defaultSortControlValue
+      }
+    }))
   }
 
-  onSwitchTabAfterUpdate() {
-    this.store
-      .select(isStatusUpdated)
+  changeSort(sort: Sort) {
+    this.sortControl.setValue(sort as SortRequest)
+  }
+
+  loadData() {
+    combineListControls(this.paginationControl, this.sizeControl, this.sortControl, this.itemStatus)
       .pipe(
-        filter(Boolean),
-        tap(() => {
-          switch (this.updatedStatus) {
-            case 'requested':
-              this.selectedTabIndex = 0
-              break
-            case 'confirmed':
-              this.selectedTabIndex = 1
-              break
-            case 'blocked':
-              this.selectedTabIndex = 2
-              break
-          }
-        }),
-        takeUntilDestroyed(this.destroyRef))
-      .subscribe()
-  }
-
-  openUserDetail(id: string) {
-
+        takeUntilDestroyed(this.destroyRef),
+        tap(value => this.selectedTabIndex = usersTabIndexByStatus[value[3]])
+      ).subscribe(([pagination, size, sort, status]) =>
+        this.store.dispatch(ItemActions.getItems({ request: { pagination, size, sort, status } })))
   }
 
   openStatusForm(data) {
@@ -111,6 +83,7 @@ export class UsersComponent implements OnInit {
       data
     }).afterClosed().pipe(
       filter(Boolean),
+      filter(status => status !== data.status),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(status => this.store.dispatch(UserActions.updateUserStatus({ status, id: data.id })))
   }

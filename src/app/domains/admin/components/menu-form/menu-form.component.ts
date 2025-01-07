@@ -12,6 +12,7 @@ import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { Store } from '@ngrx/store'
 import { AdminActions as ItemActions } from '../../store/admin.actions'
 import { loadingStatus } from '../../store/admin.selectors'
+import { DailyMenu } from '../../models/restaurant'
 
 @Component({
   selector: 'app-menu-form',
@@ -68,7 +69,13 @@ export class MenuFormComponent implements OnInit {
 
   hasStartersValidationError: boolean
 
-  dailyMenu: any = {}
+  dailyMenu: DailyMenu = {
+    open: false,
+    extras: null,
+    main: null,
+    createdAt: null,
+    orders: null
+  }
 
   adminList: Array<any>
   chefList: Array<any>
@@ -200,7 +207,7 @@ export class MenuFormComponent implements OnInit {
   choosePlates(stepper: MatStepper) {
     if (this.chosenPlates.length) {
       stepper.next()
-      this.dailyMenu.extra = this.menuForm.value
+      this.dailyMenu.extras = this.menuForm.value
       this.dailyMenu.main = this.chosenPlates.map(el => el.item)
     }
   }

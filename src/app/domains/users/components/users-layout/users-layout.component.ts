@@ -1,10 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
-import { FormControl } from '@angular/forms'
-import { EMPTY, Observable, debounceTime, tap } from 'rxjs'
-import { Store, select } from '@ngrx/store'
-import { getItemId, getLayoutLoading } from '../../store/user.selectors'
-import { UserActions as ItemActions } from '../../store/user.actions'
-import { UserConstants } from '../../models/user.constants'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
 
 @Component({
   selector: 'app-users-layout',
@@ -12,33 +6,4 @@ import { UserConstants } from '../../models/user.constants'
   styleUrls: ['./users-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UsersLayoutComponent implements OnInit {
-
-  constructor(private store: Store) { }
-
-  readonly itemId = this.store.pipe(select(getItemId))
-  readonly layoutLoading = EMPTY
-  readonly searchControl = new FormControl()
-  readonly backTitle = UserConstants.paginationTitle
-  readonly searchPlaceholder = UserConstants.searchPlaceholder
-  readonly defaultSearchKey = UserConstants.defaultSearchKey
-  readonly defaultFirstPageRequest = UserConstants.defaultFirstPageRequest
-
-  ngOnInit(): void {
-    this.searchControl.valueChanges
-      .pipe(
-        debounceTime(500),
-        tap(value => value
-          ? this.store.dispatch(
-            ItemActions.getItemsBySearchQuery({
-              request: {
-                key: this.defaultSearchKey,
-                value,
-              },
-            }))
-          : this.store.dispatch(ItemActions.getItems({ request: this.defaultFirstPageRequest }))
-        )
-      )
-      .subscribe()
-  }
-}
+export class UsersLayoutComponent { }

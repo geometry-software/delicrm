@@ -122,11 +122,11 @@ export class UserService {
   getTotalLabels() {
     return combineLatest([
       this.getTotalByStatus('requested'),
-      this.getTotalByStatus('confirmed'),
+      this.getTotalByStatus('active'),
       this.getTotalByStatus('blocked')
     ]).pipe(
-      map(([requested, confirmed, blocked]) => ({
-        requested, confirmed, blocked
+      map(([requested, active, blocked]) => ({
+        requested, active, blocked
       }))
     )
   }

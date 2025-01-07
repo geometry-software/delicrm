@@ -20,6 +20,12 @@ export type DeliveryInfo = {
 
 export type DeliveryStatus = 'requested' | 'confirmed' | 'canceled'
 
+export const deliveryTabIndexByStatus: Record<DeliveryStatus, number> = {
+  requested: 0,
+  confirmed: 0,
+  canceled: 1
+}
+
 export type DeliveryStatusHistory = {
   status: DeliveryStatus
   createdBy: User | Auth

@@ -9,7 +9,7 @@ export abstract class OrderConstants {
   static readonly defaultSearchKey = 'name'
   static readonly paginationTitle = 'orders'
   static readonly labelCooking = 'Cooking'
-  static readonly labelDelivery = 'In delivery'
+  static readonly labelDelivery = 'Delivery'
   static readonly labelPaid = 'Paid'
   static readonly labelCanceled = 'Canceled'
   static readonly paginationSize = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20]

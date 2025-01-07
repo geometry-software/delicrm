@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects'
-import { map, switchMap, tap, catchError, of, delay } from 'rxjs'
+import { map, switchMap, tap, catchError, of, withLatestFrom, combineLatest } from 'rxjs'
 import { MenuActions as ItemActions } from './menu.actions'
 import { Router } from '@angular/router'
 import { Action, Store } from '@ngrx/store'
@@ -15,6 +15,7 @@ import { AuthService } from '../../../auth/services/auth.service'
 import { Auth } from '../../../auth/models/auth.model'
 import { UserService } from '../../users/services/user.service'
 import { Delivery } from '../../delivery/models/delivery.model'
+import { getExtras, getRestaurantInfo } from './menu.selectors'
 
 @Injectable()
 export class MenuEffects implements OnInitEffects {
@@ -39,10 +40,13 @@ export class MenuEffects implements OnInitEffects {
     this.actions.pipe(
       ofType(ItemActions.initDailyMenu),
       tap(() => this.setLoading()),
-      switchMap(() => this.restaurantService.getDailyMenu().pipe(
-        map((menu) => {
+      switchMap(() => combineLatest([
+        this.restaurantService.getDailyMenu(),
+        this.restaurantService.getRestaurantInfo()
+      ]).pipe(
+        map(([menu, restaurant]) => {
           this.setLoaded()
-          return ItemActions.initDailyMenuSuccess({ menu })
+          return ItemActions.initDailyMenuSuccess({ menu, restaurant })
         }),
         catchError(() => this.handleError()))))
   )
@@ -50,8 +54,12 @@ export class MenuEffects implements OnInitEffects {
   setOrder = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.setOrder),
+      withLatestFrom(
+        this.store.select(getExtras),
+        this.store.select(getRestaurantInfo)
+      ),
       tap(() => this.router.navigate([this.checkOutUrl])),
-      map(({ main, alacarte }) => prepareOrder(main, alacarte)),
+      map(([{ main, alacarte }, extra, restaurant]) => prepareOrder(main, alacarte, extra, restaurant)),
       map(order => ItemActions.setOrderSuccess({ order })))
   )
 

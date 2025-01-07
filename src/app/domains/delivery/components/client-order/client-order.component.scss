@@ -1,0 +1,32 @@
+.devider {
+  border-top: 1px solid #ccc;
+  margin: 10px 0;
+}
+
+.name-title {
+  font-size: 2em;
+  color: #555;
+  text-align: center;
+}
+
+.item-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.item {
+  &__title {
+    padding-left: 10px;
+    color: #555;
+    font-size: 1.4em;
+    font-weight: 500;
+  }
+
+  &__price {
+    color: #555;
+    font-size: 1.2em;
+    font-weight: 500;
+  }
+}

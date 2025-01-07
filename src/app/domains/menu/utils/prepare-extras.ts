@@ -1,11 +1,11 @@
 import { cloneDeep } from "lodash";
 
-export const prepareExtras = (menu: any) => {
+export const prepareExtras = (menu) => {
     if (!menu) {
         return
     }
-    const extra = cloneDeep(menu.extra)
-    extra.drinks.push({ name: 'without drink', id: 'w/o' })
-    extra.starters.push({ name: 'without starter', id: 'w/o' })
-    return extra
+    const extras = cloneDeep(menu.extras)
+    extras.drinks.push({ name: 'without drink', id: 'w/o' })
+    extras.starters.push({ name: 'without starter', id: 'w/o' })
+    return extras
 }

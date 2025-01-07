@@ -1,11 +1,9 @@
-import { AuthStatus } from '../../../auth/models/auth.model'
-import { PaginationRequest } from '../../../shared/models/pagination.model'
-import { RepositoryRequest, SortRequest } from '../../../shared/repository/repository.models'
-import { User } from './user.model'
+import { Auth, AuthStatus } from '../../../auth/models/auth.model'
+import { RepositoryRequest } from '../../../shared/repository/repository.models'
 
-export abstract class UserConstants {
-  static readonly storeFeatureKey = 'USERS'
-  static readonly collectionName = 'Users'
+export abstract class ClientConstants {
+  static readonly storeFeatureKey = 'CLIENTS'
+  static readonly collectionName = 'Auth'
   static readonly defaultCreateStatus = 'active'
   static readonly defaultTableSort = 'createdAt'
   static readonly defaultSearchKey = 'name'
@@ -16,15 +14,15 @@ export abstract class UserConstants {
   static readonly labelBlocked = 'Blocked'
 
   static readonly paginationSize = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20]
-  static readonly moduleUrl = '/users'
-  static readonly tableColumns = ['name', 'email', 'status']
+  static readonly moduleUrl = '/clients'
+  static readonly tableColumns = ['name', 'status']
   static readonly statusList: AuthStatus[] = ['active', 'requested', 'blocked']
   static readonly disableSort = true
   static readonly searchPlaceholder = 'RECIPES.PAGE.LIST.TABLE.SEARCH'
   static readonly deleteTitle = 'RECIPES.PAGE.DETAIL.DELETE_TITLE'
   static readonly backToListButton = 'RECIPES.NAVBAR'
   static readonly defaultRequestStatus = 'active'
-  static readonly defaultPageRequest: RepositoryRequest<User, AuthStatus> = {
+  static readonly defaultPageRequest: RepositoryRequest<Auth, AuthStatus> = {
     pagination: {
       query: 'first',
       item: null,
@@ -33,5 +31,4 @@ export abstract class UserConstants {
     size: 10,
     status: this.defaultRequestStatus,
   }
-
 }

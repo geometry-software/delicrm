@@ -3,14 +3,16 @@ import { OrderActions as ItemActions } from '../../store/order.actions'
 import { OrderConstants } from '../../models/order.constants'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { Store } from '@ngrx/store'
+import { tap } from 'rxjs'
+import { Sort } from '@angular/material/sort'
 import { getItems, getListLabels, getLoadingStatus, getPaginationResponse, getStatus } from '../../store/order.selectors'
 import { MatTabChangeEvent } from '@angular/material/tabs'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormControl } from '@angular/forms'
 import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
 import { combineListControls } from '../../../../shared/utils/combine-list-controls'
-import { Sort } from '@angular/material/sort'
 import { SortRequest } from '../../../../shared/repository/repository.models'
+import { ordersTabIndexByStatus } from '../../models/order.model'
 
 @Component({
   selector: 'app-order-list',
@@ -39,7 +41,7 @@ export class OrderListComponent implements OnInit {
   readonly sizeControl = new FormControl(OrderConstants.defaultPageRequest.size)
   readonly sortControl = new FormControl(this.defaultSortControlValue)
 
-  selectedTabIndex: number
+  selectedTabIndex: number = 0
 
   ngOnInit() {
     this.loadData()
@@ -62,8 +64,10 @@ export class OrderListComponent implements OnInit {
 
   loadData() {
     combineListControls(this.paginationControl, this.sizeControl, this.sortControl, this.itemStatus)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(([pagination, size, sort, status]) =>
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        tap(value => this.selectedTabIndex = ordersTabIndexByStatus[value[3]])
+      ).subscribe(([pagination, size, sort, status]) =>
         this.store.dispatch(ItemActions.getItems({ request: { pagination, size, sort, status } })))
   }
 

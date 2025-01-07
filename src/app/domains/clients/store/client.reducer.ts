@@ -5,107 +5,24 @@ import { LoadingStatus } from '../../../shared/models/loading-status'
 
 export const reducer = createReducer<State>(
   initialState,
-  // on(ItemActions.getItems, (state) => ({
-  //   ...state,
-  //   itemsLoadingStatus: LoadingStatus.Loading,
-  //   items: {
-  //     data: state.items?.data,
-  //     total: state.items?.total,
-  //     current: state.items?.data?.length,
-  //     size: state.items?.size,
-  //     error: null,
-  //   },
-  // })),
-  // on(ItemActions.getItemsBySearchQuery, (state) => ({
-  //   ...state,
-  //   items: {
-  //     data: state.items?.data,
-  //     total: state.items?.total,
-  //     current: state.items?.data?.length,
-  //     size: state.items?.size,
-  //     error: null,
-  //   },
-  // })),
-  // on(ItemActions.getItemsSuccess, (state, { items, total, query, size, listLabelAmount }) => {
-  //   const { responseTotal, current } = getAmountCurrentItems(query, state, items.length, size ?? state.items?.size)
-  //   return {
-  //     ...state,
-  //     itemsLoadingStatus: LoadingStatus.Loaded,
-  //     listResponseType: query,
-  //     items: {
-  //       data: items,
-  //       total: responseTotal,
-  //       current: current,
-  //       size: size ?? state.items.size,
-  //       error: null,
-  //     },
-  //     listLabelAmount,
-  //     resetRequest: false,
-  //     itemId: null,
-  //   }
-  // }),
-  // on(ItemActions.getUsersTotalAmount, (state) => ({
-  //   ...state,
-  //   items: {
-  //     data: null,
-  //     loading: true,
-  //     total: state.items?.total,
-  //     current: state.items?.data?.length,
-  //     size: state.items?.size,
-  //     error: null,
-  //   },
-  // })),
-  // on(ItemActions.updateUserStatus, (state) => ({
-  //   ...state,
-  //   isStatusUpdated: false,
-  // })),
-  // on(ItemActions.updateUserStatusSuccess, (state) => ({
-  //   ...state,
-  //   isStatusUpdated: true,
-  // })),
-  // on(ItemActions.getUsersTotalAmountSuccess, (state, { response }) => ({
-  //   ...state,
-  //   items: {
-  //     loading: false,
-  //     data: state.items?.data,
-  //     total: state.items?.total,
-  //     current: state.items?.data?.length,
-  //     size: state.items?.size,
-  //     error: null,
-  //   },
-  //   listLabelAmount: response,
-  // })),
-  on(ItemActions.getItem, (state, { id }) => ({
+  on(ItemActions.getItemsSuccess, (state, { items, size }) => ({
     ...state,
-    itemId: id,
-    item: {
-      data: null,
-      loading: true,
-    },
+    items,
+    size
+  })),
+  on(ItemActions.setItemsLoadingStatus, (state, { status }) => ({
+    ...state,
+    itemsLoadingStatus: status
+  })),
+  on(ItemActions.setItemsAmountByStatus, (state, { amount, status }) => ({
+    ...state,
+    itemsAmountByStatus: amount,
+    status
   })),
   on(ItemActions.getItemSuccess, (state, { item }) => ({
     ...state,
     item: {
       data: item,
-      loading: false,
     },
-  })),
-  on(ItemActions.createItem, (state) => ({
-    ...state,
-    item: {
-      data: state.item?.data,
-      loading: true,
-    },
-  })),
-  on(ItemActions.updateItem, (state) => ({
-    ...state,
-    item: {
-      data: state.item?.data,
-      loading: true,
-    },
-  })),
-  on(ItemActions.resetRequestToTheFirstPage, (state) => ({
-    ...state,
-    resetRequest: true,
   }))
 )

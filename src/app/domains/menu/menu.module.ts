@@ -5,7 +5,7 @@ import { DailyMenuComponent } from './components/daily-menu/daily-menu.component
 import { SharedModule } from '../../shared/shared.module'
 import { OrderCheckoutComponent } from './components/order-checkout/order-checkout.component'
 import { MenuLayoutComponent } from './components/menu-layout/menu-layout.component'
-import { ClientOrderComponent } from './components/client-order/client-order.component'
+import { ClientOrderComponent } from '../delivery/components/client-order/client-order.component'
 import { MenuConstants } from './utils/menu.constants'
 import { MenuEffects } from './store/menu.effects'
 import { reducer } from './store/menu.reducer'
@@ -18,7 +18,7 @@ import { EffectsModule } from '@ngrx/effects'
     PlateDetailComponent,
     DailyMenuComponent,
     OrderCheckoutComponent,
-    ClientOrderComponent
+    // ClientOrderComponent
   ],
   imports: [
     SharedModule,

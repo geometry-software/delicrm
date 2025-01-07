@@ -1,11 +1,8 @@
 <ng-container *ngIf="order; else orderNotFoundTemplate">
-  <div [@fadeInOnEnter]>
+  <div class="p-[4px]" [@fadeInOnEnter]>
     <div class="card">
-      <ng-container [ngSwitch]="order.category.type">
-        <h1 *ngSwitchCase="'delivery'">Delivery</h1>
-        <h1 *ngSwitchCase="'table'">Table {{ order.category.table }}</h1>
-        <h1 *ngSwitchCase="'takeaway'">Takeaway</h1>
-      </ng-container>
+      <app-title [title]="orderTitle" />
+
       <div class="flex justify-between items-center">
         <div class="progress">
           <div [style.width]="orderStatusBar.progress" [style.background]="statusColor[orderStatusBar.status]">
@@ -14,7 +11,7 @@
           </div>
         </div>
         <div class="flex gap-2">
-          <ng-container *ngIf="getPrintButton(order.status); else statusActionButton">
+          <ng-container *ngIf="printButton; else statusActionButton">
             <app-button [title]="printButtonTitle" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
               icon="print" (click)="print()" />
           </ng-container>
@@ -31,26 +28,25 @@
             <app-title-item title="Starter" [value]="item.starter.name " />
             <app-title-item title="Drink" [value]="item.drink.name " />
 
-            <!-- TODO            
-            <div *ngIf="item.salad.name == 'NA'">
+            <div *ngIf="!item.salad.id">
               <strong>- without salad</strong>
             </div>
-            <div *ngIf="item.garnish?.name == 'NA'">
+            <div *ngIf="!item.garnish.id">
               <strong>- without garnish</strong>
             </div>
-            <div *ngIf="item.rice?.name == 'NA'">
+            <div *ngIf="!item.rice.id">
               <strong>- without rice</strong>
             </div>
-            <div *ngIf="item.dessert?.name == 'NA'">
+            <div *ngIf="!item.dessert.id">
               <strong>- without dessert</strong>
-            </div> -->
+            </div>
           </div>
         </li>
       </ol>
     </div>
 
     <div class="card mt-[20px]">
-      <h1>Order details</h1>
+      <app-title title="Order details" />
 
       <!--       TODO
       <ng-container *ngIf="order.category.type === 'delivery' || order.category.type === 'takeaway'">
@@ -80,7 +76,7 @@
       -->
 
       <app-title-item title="Created at" [value]="getFullTimeFromUnix(order.createdAt)" />
-      <app-title-item title="Created by" [value]="getUser(order.status)" margin="0" />
+      <app-title-item title="Created by" [value]="getUser()" margin="0" />
 
       <!-- TODO
       <ng-container *ngIf="isOrderClosed">
@@ -90,9 +86,9 @@
     </div>
 
     <div class="card mt-[20px]">
-      <h1>Summary</h1>
+      <app-title title="Summary" />
 
-      <app-title-item title="Comment" [value]="getComment(order.comment)" />
+      <app-title-item title="Comment" [value]="comment" />
       <app-title-item title="Total" [value]="getTotal(order.price.total)" margin="0" />
     </div>
   </div>

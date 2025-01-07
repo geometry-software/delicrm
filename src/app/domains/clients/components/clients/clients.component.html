@@ -1,46 +1,36 @@
-<div class="py-[4px] h-[5px] w-full">
-  <mat-progress-bar mode="indeterminate" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></mat-progress-bar>
-</div>
-
 <div class="relative">
   <div class="table-loading-shade" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></div>
-
-  <mat-tab-group [@.disabled]="true" (selectedTabChange)="changeUserList($event)" [(selectedIndex)]="selectedTabIndex">
-    <ng-container *ngIf="(userList | async) as data">
-      <mat-tab [label]="(listLabels | async).active">
-        <ng-container *ngTemplateOutlet="userTable; context: { data  }"></ng-container>
-      </mat-tab>
-      <mat-tab [label]="(listLabels | async).blocked">
-        <ng-container *ngTemplateOutlet="userTable; context: { data  }"></ng-container>
-      </mat-tab>
-    </ng-container>
+  <mat-tab-group *ngIf="{ list: orderList | async, label: listLabels | async } as data" [@.disabled]="true"
+    (selectedTabChange)="changeTab($event)" [(selectedIndex)]="selectedTabIndex">
+    <mat-tab [label]="data.label.active">
+      <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
+    </mat-tab>
+    <mat-tab [label]="data.label.requested">
+      <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
+    </mat-tab>
+    <mat-tab [label]="data.label.blocked">
+      <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
+    </mat-tab>
   </mat-tab-group>
 </div>
 
-<ng-template #userTable let-data="data">
-  <mat-table [dataSource]="data">
+<ng-template #table let-data="data">
+  <mat-table mat-table [dataSource]="data" matSort matSortDisableClear
+    [matSortDirection]="defaultSortControlValue.direction" [matSortActive]="defaultSortControlValue.active"
+    (matSortChange)="changeSort($event)">
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <div class="table-link" [routerLink]="['/users', element.id]">
-          {{ element.name }}
+        <div class="table-link" [routerLink]="['order', element.id]">
+          {{ element.name ?? 'No name' }}
         </div>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <span class="text-ellipsis">
-          {{ element.auth.email }}
-        </span>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="status">
       <mat-header-cell *matHeaderCellDef class="flex justify-center"> Status </mat-header-cell>
       <mat-cell *matCellDef="let element" class="flex justify-center">
-        <button mat-icon-button (click)="openStatusForm(element)">
+        <button mat-icon-button (click)="updateStatus(element)">
           <mat-icon>badge</mat-icon>
         </button>
       </mat-cell>
@@ -50,3 +40,6 @@
     <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
   </mat-table>
 </ng-template>
+
+<app-pagination [paginationControl]="paginationControl" [sizeControl]="sizeControl"
+  [paginationPayload]="paginationPayload | async" [loadingStatus]="loadingStatus | async" />

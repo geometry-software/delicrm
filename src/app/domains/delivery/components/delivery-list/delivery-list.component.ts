@@ -3,6 +3,7 @@ import { DeliveryActions as ItemActions } from '../../store/delivery.actions'
 import { DeliveryConstants } from '../../models/delivery.constants'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { Store } from '@ngrx/store'
+import { tap } from 'rxjs'
 import { getItems, getListLabels, getLoadingStatus, getPaginationResponse, getStatus } from '../../store/delivery.selectors'
 import { MatTabChangeEvent } from '@angular/material/tabs'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
@@ -11,8 +12,7 @@ import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
 import { combineListControls } from '../../../../shared/utils/combine-list-controls'
 import { Sort } from '@angular/material/sort'
 import { SortRequest } from '../../../../shared/repository/repository.models'
-import { Delivery } from '../../models/delivery.model'
-
+import { Delivery, deliveryTabIndexByStatus } from '../../models/delivery.model'
 
 @Component({
   selector: 'app-delivery-list',
@@ -41,7 +41,7 @@ export class DeliveryListComponent {
   readonly sizeControl = new FormControl(DeliveryConstants.defaultPageRequest.size)
   readonly sortControl = new FormControl(this.defaultSortControlValue)
 
-  selectedTabIndex: number
+  selectedTabIndex: number = 0
 
   ngOnInit() {
     this.loadData()
@@ -64,13 +64,11 @@ export class DeliveryListComponent {
 
   loadData() {
     combineListControls(this.paginationControl, this.sizeControl, this.sortControl, this.itemStatus)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(([pagination, size, sort, status]) =>
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        tap(value => this.selectedTabIndex = deliveryTabIndexByStatus[value[3]])
+      ).subscribe(([pagination, size, sort, status]) =>
         this.store.dispatch(ItemActions.getItems({ request: { pagination, size, sort, status } })))
-  }
-
-  showDetail(delivery: Delivery) {
-    console.log(delivery);
   }
 
 }

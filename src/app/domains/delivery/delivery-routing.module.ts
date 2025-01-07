@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router'
 import { DeliveryListComponent } from './components/delivery-list/delivery-list.component'
 import { DeliveryLayoutComponent } from './components/delivery-layout/delivery-layout.component'
 import { DeliveryDetailComponent } from './components/delivery-detail/delivery-detail.component'
+import { ClientOrderComponent } from './components/client-order/client-order.component'
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
       {
         path: ':id',
         component: DeliveryDetailComponent,
+      },
+      {
+        path: 'order/:id',
+        component: ClientOrderComponent,
       },
     ],
   },

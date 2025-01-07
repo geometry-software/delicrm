@@ -1,8 +1,8 @@
-<div class="order-container" *ngIf="item">
+<div class="p-[3px]" *ngIf="delivery">
   <div class="name-title">
     <div>Thanks for your order,
       <br>
-      {{ item.order.category.delivery.name}}!
+      {{ delivery.order.category.delivery.name}}!
     </div>
   </div>
 
@@ -11,7 +11,7 @@
   </div>
 
   <div class="card">
-    <div *ngFor="let item of item.order.main; let i = index">
+    <div *ngFor="let item of delivery.order.main; let i = index; let last = last">
       <div class="item-card" [@pulseOnEnter]>
         <div class="flex items-center">
           <img [src]="setProteinImage(item.plate.protein)" width="30px" height="30px" />
@@ -19,20 +19,19 @@
             {{ item.plate.name }}
           </div>
         </div>
-        <div class="item__price">{{ item.plate.price }} {{currency}}</div>
+        <div class="item__price">{{ item.plate.price }} {{ delivery.order.price.currency }}</div>
       </div>
+      <div class="devider" *ngIf="!last"></div>
     </div>
   </div>
 
   <div class="card mt-[20px]">
-    <app-title-item title="Address" [value]=" item?.order.category.delivery.address " />
-    <app-title-item title="Phone" [value]=" item?.order.category.delivery.phone " />
-    <app-title-item title="Delivery time" [value]="getDeliveryTime()" />
+    <app-title-item title="Address" [value]=" delivery?.order.category.delivery.address " />
+    <app-title-item title="Phone" [value]=" delivery?.order.category.delivery.phone " />
+    <app-title-item margin="0" title="Delivery time" [value]="deliveryTime" />
   </div>
 
   <div class="card mt-[20px]">
-    <h2>Total</h2>
-    <h3>{{ item.order.price.total }} {{currency}}</h3>
+    <app-title margin="0" title="Total" [subtitle]="total" />
   </div>
-  <!-- <br /> -->
 </div>

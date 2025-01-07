@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
 import { setProteinImage } from '../../utils/protein-image'
+import { DailyMenu } from '../../../domains/admin/models/restaurant'
 
 @Component({
   selector: 'app-formatted-daily-menu',
@@ -10,7 +11,7 @@ import { setProteinImage } from '../../utils/protein-image'
 export class AppFormattedDailyMenuComponent {
 
   @Input()
-  dailyMenu: any
+  dailyMenu: DailyMenu
 
   @Input()
   isAddAvailable: boolean

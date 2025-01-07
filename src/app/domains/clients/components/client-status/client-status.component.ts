@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core'
-import { ClientConstants } from '../../utils/client.constants'
+import { ClientConstants } from '../../models/client.constants'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
-import { ClientStatus } from '../../models/client.model'
+import { AuthStatus } from '../../../../auth/models/auth.model'
 
 @Component({
   selector: 'app-client-status',
@@ -15,7 +15,7 @@ export class ClientStatusComponent implements OnInit {
     private dialogRef: MatDialogRef<ClientStatusComponent>,
     @Inject(MAT_DIALOG_DATA) private dialogData: any) { }
 
-  currentStatus: ClientStatus
+  currentStatus: AuthStatus
   statusList = ClientConstants.statusList
 
   ngOnInit(): void {

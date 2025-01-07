@@ -16,7 +16,7 @@ import { User } from '../../../users/models/user.model'
 import { UserService } from '../../../users/services/user.service'
 import { MenuConstants } from '../../utils/menu.constants'
 import { Store } from '@ngrx/store'
-import { getExtra, getOrder, loadingStatus } from '../../store/menu.selectors'
+import { getExtras, getOrder, loadingStatus } from '../../store/menu.selectors'
 import { Router } from '@angular/router'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Delivery } from '../../../delivery/models/delivery.model'
@@ -26,6 +26,8 @@ import { tableZeroNumberValidator } from '../../utils/table-zero-number-validato
 import { Auth } from '../../../../auth/models/auth.model'
 import { PaymentType } from '../../models/checkout'
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker'
+import { Extras } from '../../../admin/models/restaurant'
+import { RestaurantService } from '../../../admin/services/restaurant.service'
 
 @Component({
   selector: 'app-order-checkout',
@@ -55,18 +57,17 @@ export class OrderCheckoutComponent implements OnInit {
   readonly alaCarteLabel = MenuConstants.alaCarteLabel
 
   readonly LoadingStatus = LoadingStatus
-  readonly loadingStatus = this.store.select(loadingStatus).pipe(
-    tap(value => console.log(value))
-  )
+  readonly loadingStatus = this.store.select(loadingStatus)
   readonly showFieldErrors = showFieldErrors
 
   order: Order
-  extra: any
+  extras: Extras
 
   hasDelivery: boolean
   deliveryTime: OrderDeliveryTime = 'now'
   isCash: boolean
   changeTypes: Array<string> = ['Exact value', '10', '20', '50', '100']
+  currency: string
 
   form: FormGroup = this.formBuilder.group({
     table: [null, [Validators.required, tableZeroNumberValidator()]],
@@ -93,19 +94,19 @@ export class OrderCheckoutComponent implements OnInit {
   readonly PaymentType = PaymentType
 
   get total() {
-    return this.order.price.total + ' ' + this.order.price.currency
+    return this.order.price.total + ' ' + this.currency
   }
 
   get deliveryPrice() {
-    return this.order.price.delivery + ' ' + this.order.price.currency
+    return this.order.price.delivery + ' ' + this.currency
   }
 
   get orderPrice() {
-    return this.order.price.order + ' ' + this.order.price.currency
+    return this.order.price.order + ' ' + this.currency
   }
 
   get alacartePrice() {
-    return this.order.price.alacarte + ' ' + this.order.price.currency
+    return this.order.price.alacarte + ' ' + this.currency
   }
 
   ngOnInit() {
@@ -115,17 +116,18 @@ export class OrderCheckoutComponent implements OnInit {
   initData() {
     combineLatest([
       this.store.select(getOrder),
-      this.store.select(getExtra),
+      this.store.select(getExtras),
       this.userService.appUser,
-      this.userService.appAuth,
+      this.userService.appAuth
     ]).pipe(
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(([order, extra, user, auth]) => {
+    ).subscribe(([order, extras, user, auth]) => {
       if (!order) {
         this.router.navigate(['/menu'])
       } else {
         this.order = cloneDeep(order)
-        this.extra = extra
+        this.extras = extras
+        this.currency = order.price.currency
         this.user = user
         if (!this.user) {
           this.auth = auth
@@ -138,6 +140,7 @@ export class OrderCheckoutComponent implements OnInit {
             phone: this.auth.deliveryInfo.phone
           })
         }
+        this.cdr.markForCheck()
       }
     })
   }

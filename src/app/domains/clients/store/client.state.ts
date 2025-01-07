@@ -1,39 +1,36 @@
-import { createReducer, on } from '@ngrx/store'
-import { ClientActions as ItemActions } from './client.actions'
-import { RepositoryRequesEntity, RepositoryResponseList } from '../../../shared/repository/repository.models'
-import { AuthStatus } from '../../../auth/models/auth.model'
+import { RepositoryRequesEntity, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { Client, ClientStatusTotalResponse } from '../models/client.model'
+import { Auth, AuthStatus } from '../../../auth/models/auth.model'
+import { ClientStatusResponse } from '../models/client.model'
 
 export interface State {
-  items: RepositoryResponseList<Client>
+  query: RepositoryRequestListQuery,
+  items: RepositoryResponseList<Auth>
   itemsLoadingStatus: LoadingStatus
-  item: RepositoryRequesEntity<Client>
+  item: RepositoryRequesEntity<Auth>
   itemId: string
-  listResponseType: any
-  resetRequest: boolean
-  requestStatus: AuthStatus
-  listLabelAmount: ClientStatusTotalResponse
-  isStatusUpdated: boolean
+  status: AuthStatus
+  itemsAmountByStatus: ClientStatusResponse
+  size: number
 }
 
 export const initialState: State = {
+  query: 'first',
   itemId: null,
   items: {
     data: [],
     total: 0,
-    current: 0,
+    current: 0
   },
   itemsLoadingStatus: LoadingStatus.NotLoaded,
   item: {
     data: null,
   },
-  listResponseType: null,
-  resetRequest: null,
-  listLabelAmount: {
+  status: 'active',
+  itemsAmountByStatus: {
+    requested: 0,
     active: 0,
-    blocked: 0,
+    blocked: 0
   },
-  isStatusUpdated: null,
-  requestStatus: null,
+  size: null,
 }

@@ -7,7 +7,7 @@
       <div class="section">Starter</div>
 
       <mat-radio-group class="radio-group" (change)="chooseStarter($event.value, i)">
-        <mat-radio-button *ngFor="let starter of extra.starters" [value]="starter" [disabled]="starter.eightySix"
+        <mat-radio-button *ngFor="let starter of extras.starters" [value]="starter" [disabled]="starter.eightySix"
           [style.text-decoration]="starter.eightySix ? 'line-through' : 'none'">
           {{ starter.name }}
         </mat-radio-button>
@@ -16,7 +16,7 @@
       <div class="section">Drink</div>
 
       <mat-radio-group class="radio-group" (change)="chooseDrink($event.value, i)">
-        <mat-radio-button *ngFor="let drink of extra.drinks" [value]="drink" [disabled]="drink.eightySix"
+        <mat-radio-button *ngFor="let drink of extras.drinks" [value]="drink" [disabled]="drink.eightySix"
           [style.text-decoration]="drink.eightySix ? 'line-through' : 'none'">
           {{ drink.name }}
         </mat-radio-button>
@@ -24,31 +24,31 @@
 
       <div class="section">Side dishes</div>
 
-      <mat-checkbox [checked]="!extra.garnish.eightySix" (change)="chooseSideDish(extra.garnish, i)"
-        [disabled]="extra.garnish.eightySix">
-        <span [style.text-decoration]="extra.garnish.eightySix ? 'line-through' : 'none'">
-          {{ extra.garnish.name }}
+      <mat-checkbox [checked]="!extras.garnish.eightySix" (change)="chooseSideDish(extras.garnish, i)"
+        [disabled]="extras.garnish.eightySix">
+        <span [style.text-decoration]="extras.garnish.eightySix ? 'line-through' : 'none'">
+          {{ extras.garnish.name }}
         </span>
       </mat-checkbox>
       <br />
-      <mat-checkbox [checked]="!extra.rice.eightySix" (change)="chooseSideDish(extra.rice, i)"
-        [disabled]="extra.rice.eightySix">
-        <span [style.text-decoration]="extra.rice.eightySix ? 'line-through' : 'none'">
-          {{ extra.rice.name }}
+      <mat-checkbox [checked]="!extras.rice.eightySix" (change)="chooseSideDish(extras.rice, i)"
+        [disabled]="extras.rice.eightySix">
+        <span [style.text-decoration]="extras.rice.eightySix ? 'line-through' : 'none'">
+          {{ extras.rice.name }}
         </span>
       </mat-checkbox>
       <br />
-      <mat-checkbox [checked]="!extra.salad.eightySix" (change)="chooseSideDish(extra.salad, i)"
-        [disabled]="extra.salad.eightySix">
-        <span [style.text-decoration]="extra.salad.eightySix ? 'line-through' : 'none'">
-          {{ extra.salad.name }}
+      <mat-checkbox [checked]="!extras.salad.eightySix" (change)="chooseSideDish(extras.salad, i)"
+        [disabled]="extras.salad.eightySix">
+        <span [style.text-decoration]="extras.salad.eightySix ? 'line-through' : 'none'">
+          {{ extras.salad.name }}
         </span>
       </mat-checkbox>
       <br />
-      <mat-checkbox [checked]="!extra.dessert.eightySix" (change)="chooseSideDish(extra.dessert, i)"
-        [disabled]="extra.dessert.eightySix">
-        <span [style.text-decoration]="extra.dessert.eightySix ? 'line-through' : 'none'">
-          {{ extra.dessert.name }}
+      <mat-checkbox [checked]="!extras.dessert.eightySix" (change)="chooseSideDish(extras.dessert, i)"
+        [disabled]="extras.dessert.eightySix">
+        <span [style.text-decoration]="extras.dessert.eightySix ? 'line-through' : 'none'">
+          {{ extras.dessert.name }}
         </span>
       </mat-checkbox>
     </div>

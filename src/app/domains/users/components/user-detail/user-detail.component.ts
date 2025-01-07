@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { map, switchMap } from 'rxjs'
+import { map, Observable, switchMap } from 'rxjs'
 import { Store } from '@ngrx/store'
 import { getItem } from '../../store/user.selectors'
 import { ActivatedRoute } from '@angular/router'
@@ -13,10 +13,11 @@ export class UserDetailComponent implements OnInit {
 
   constructor(private store: Store, private route: ActivatedRoute) { }
 
-  user = this.route.params.pipe(
-    map(value => value['id']),
-    switchMap(id => this.store.select(getItem(id)))
-  )
+  // user = this.route.params.pipe(
+  //   map(value => value['id']),
+  //   switchMap(id => this.store.select(getItem(id)))
+  // )
+  user: Observable<any>
 
   ngOnInit() {
     // this.user = 

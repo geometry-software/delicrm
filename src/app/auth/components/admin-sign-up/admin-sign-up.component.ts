@@ -27,16 +27,13 @@ export class AdminSignUpComponent {
     this.isLoading = true
     if (this.form.valid) {
       this.authService.signUpAdmin(this.form.value).pipe(
-        catchError((e) => {
-          console.log(e);
-
+        catchError(error => {
+          console.error(error);
           this.isLoading = false
           return []
         }),
         takeUntilDestroyed(this.destroyRef)
-      ).subscribe((v) => {
-        console.log(v);
-
+      ).subscribe(() => {
         this.isLoading = false
         this.authService.checkAdminRegistration.next()
       })

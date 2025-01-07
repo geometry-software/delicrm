@@ -12,10 +12,7 @@ import { RestaurantLoadingStatus } from '../../models/loading-status'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { UserService } from '../../../domains/users/services/user.service'
 import { SharedConstants } from '../../../shared/utils/shared.constants'
-import { Restaurant } from '../../../domains/admin/models/restaurant'
 import { RestaurantConstants } from '../../../domains/admin/models/restaurant.constants'
-import { mapExtraData } from '../../models/auth.mapper'
-// import { mapGoogleData } from '../../models/auth.mapper'
 
 @Component({
   selector: 'app-login',
@@ -40,13 +37,9 @@ export class LoginComponent {
   readonly googleIconPath = AuthConstants.googleIconPath
   readonly adminCollectionId = AuthConstants.adminCollectionId
   readonly restaurantFormComponentConfig = SharedConstants.formComponentConfig
-  readonly defaultCurrency = RestaurantConstants.defaultCurrency
   readonly adminForm = adminFormGroup
   readonly adminFormProps = AdminFormProps
-  readonly isAdminUser = this.authService.isAdminUser.pipe(
-    // tap(console.error)
-  )
-  // readonly authUser = this.authService.firebaseAuthUser
+  readonly isAdminUser = this.authService.isAdminUser
   readonly adminEmailWasVerified = this.authService.isAdminEmailVerified
   readonly RestaurantLoadingStatus = RestaurantLoadingStatus
   readonly restaurantRegisterStatus = new BehaviorSubject(RestaurantLoadingStatus.NotRegistered)
@@ -62,26 +55,21 @@ export class LoginComponent {
 
   loginUser() {
     this.authService.linkWithGoogle().pipe(
-      tap(v => console.log(v)),
-
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(v => console.log(v))
   }
 
   async submitAdminLoginForm() {
     this.isAdminLoginLoading = true
-
     if (this.form.valid) {
       this.authService.loginAdmin(this.form.value[AdminFormProps.email], this.form.value[AdminFormProps.password]).pipe(
-        catchError((e) => {
-          console.log(e);
-
+        catchError(error => {
+          console.error(error);
           this.isAdminLoginLoading = false
           return []
         }),
         takeUntilDestroyed(this.destroyRef)
-      ).subscribe((v) => {
-        console.log(v);
-
+      ).subscribe(() => {
         this.isAdminLoginLoading = false
         this.authService.checkAdminRegistration.next()
       })
@@ -93,13 +81,11 @@ export class LoginComponent {
       .afterClosed().pipe(
         filter(Boolean),
         tap(() => this.restaurantRegisterStatus.next(RestaurantLoadingStatus.Registering)),
-        // map((value: Restaurant) => ({ ...value, currency: this.defaultCurrency })),
         switchMap(value => this.userService.createAdminUser(this.adminCollectionId).pipe(
           switchMap(() => this.restaurantService.createRestaurant(value).pipe(
             switchMap(() => this.authService.deleteAdminAuth().pipe(
               tap(() => this.restaurantRegisterStatus.next(RestaurantLoadingStatus.RegisterSuccess)),
-              catchError(error => this.handleRegisterRestaurantError(error))
-            )),
+              catchError(error => this.handleRegisterRestaurantError(error)))),
             catchError(error => this.handleRegisterRestaurantError(error)))),
           catchError(error => this.handleRegisterRestaurantError(error)))),
         takeUntilDestroyed(this.destroyRef))
