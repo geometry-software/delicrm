@@ -18,7 +18,6 @@ export class DeliveryService {
 
   private readonly collection = DeliveryConstants.collectionName
 
-
   create(delivery: Delivery) {
     return this.repositoryService.createDocument(this.collection, delivery)
   }

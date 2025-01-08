@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core'
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
-import { Observable, combineLatest, tap } from 'rxjs'
+import { Observable, combineLatest } from 'rxjs'
 import { cloneDeep } from 'lodash'
 import {
   zoomOutUpOnLeaveAnimation,
@@ -9,14 +9,14 @@ import {
   fadeInUpOnEnterAnimation,
   fadeInOnEnterAnimation,
 } from 'angular-animations'
-import { OrderDeliveryTime, Order, OrderType, OrderProgress } from '../../../orders/models/order.model'
+import { OrderDeliveryTime, Order, OrderType } from '../../../orders/models/order.model'
 import { MenuActions as ItemActions } from '../../store/menu.actions'
 import { Recipe } from '../../../recipe/models/recipe.model'
 import { User } from '../../../users/models/user.model'
 import { UserService } from '../../../users/services/user.service'
 import { MenuConstants } from '../../utils/menu.constants'
 import { Store } from '@ngrx/store'
-import { getExtras, getOrder, loadingStatus } from '../../store/menu.selectors'
+import { getCurrency, getExtras, getOrder, loadingStatus } from '../../store/menu.selectors'
 import { Router } from '@angular/router'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Delivery } from '../../../delivery/models/delivery.model'
@@ -25,9 +25,7 @@ import { showFieldErrors } from '../../../../shared/utils/form-error-handling'
 import { tableZeroNumberValidator } from '../../utils/table-zero-number-validator'
 import { Auth } from '../../../../auth/models/auth.model'
 import { PaymentType } from '../../models/checkout'
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker'
 import { Extras } from '../../../admin/models/restaurant'
-import { RestaurantService } from '../../../admin/services/restaurant.service'
 
 @Component({
   selector: 'app-order-checkout',
@@ -117,17 +115,18 @@ export class OrderCheckoutComponent implements OnInit {
     combineLatest([
       this.store.select(getOrder),
       this.store.select(getExtras),
+      this.store.select(getCurrency),
       this.userService.appUser,
       this.userService.appAuth
     ]).pipe(
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(([order, extras, user, auth]) => {
-      if (!order) {
+    ).subscribe(([order, extras, currency, user, auth]) => {
+      if (!order || !currency) {
         this.router.navigate(['/menu'])
       } else {
         this.order = cloneDeep(order)
         this.extras = extras
-        this.currency = order.price.currency
+        this.currency = currency
         this.user = user
         if (!this.user) {
           this.auth = auth

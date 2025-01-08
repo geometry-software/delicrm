@@ -8,7 +8,6 @@ import { RecipeLayoutComponent } from './components/recipe-layout/recipe-layout.
 import { StoreModule } from '@ngrx/store'
 import { RecipeConstants } from './models/recipe.constants'
 import { reducer } from './store/recipe.reducer'
-import { RecipeEntityService } from './services/recipe.service'
 import { EffectsModule } from '@ngrx/effects'
 import { RecipeEffects } from './store/recipe.effects'
 
@@ -24,7 +23,6 @@ import { RecipeEffects } from './store/recipe.effects'
     RecipeRoutingModule,
     StoreModule.forFeature(RecipeConstants.storeFeatureKey, reducer),
     EffectsModule.forFeature([RecipeEffects]),
-  ],
-  providers: [RecipeEntityService],
+  ]
 })
 export class RecipeModule { }

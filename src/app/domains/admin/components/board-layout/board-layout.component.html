@@ -2,15 +2,15 @@
   <div class="flex gap-2 justify-evenly">
     <app-button [disabled]="(loadingStatus | async) === LoadingStatus.Loading" [title]="buttonTitleUpdate"
       [actionType]="'back'" [icon]="'edit'" [url]="'form'"></app-button>
-    <app-button [disabled]="(loadingStatus | async) === LoadingStatus.Loading" [title]="buttonTitleClean"
-      [actionType]="'back'" [icon]="'cleaning_services'"></app-button>
+    <app-button [disabled]="disabledClearMenu | async" [title]="buttonTitleClean" [actionType]="'back'"
+      [icon]="'cleaning_services'" (click)="clearMenu()"></app-button>
   </div>
   <div class="divider"></div>
   <div class="flex gap-2 justify-evenly">
     <app-button [disabled]="(loadingStatus | async) === LoadingStatus.Loading" [title]="buttonTitleDownload"
       [actionType]="'back'" [icon]="'image'" (click)="printMenu()"></app-button>
     <app-button [disabled]="(loadingStatus | async) === LoadingStatus.Loading" [title]="buttonTitleConf"
-      [actionType]="'back'" [icon]="'settings'"></app-button>
+      [actionType]="'back'" [icon]="'settings'" (click)="updateRestaurant()"></app-button>
   </div>
 </div>
 

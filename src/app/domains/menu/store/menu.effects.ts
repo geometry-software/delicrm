@@ -16,6 +16,7 @@ import { Auth } from '../../../auth/models/auth.model'
 import { UserService } from '../../users/services/user.service'
 import { Delivery } from '../../delivery/models/delivery.model'
 import { getExtras, getRestaurantInfo } from './menu.selectors'
+import { CheckoutOrder } from '../models/checkout'
 
 @Injectable()
 export class MenuEffects implements OnInitEffects {
@@ -78,10 +79,12 @@ export class MenuEffects implements OnInitEffects {
     this.actions.pipe(
       ofType(ItemActions.createTableOrder),
       tap(() => this.setLoading()),
-      switchMap(({ order }) => this.orderService.create(order).pipe(
-        map(id => ItemActions.checkoutOrderSuccess({ id, checkout: 'order' })),
-        catchError(() => this.handleError())
-      )))
+      switchMap(({ order }) => this.restaurantService.getCheckOutOrders().pipe(
+        switchMap((orders) => this.orderService.create(order).pipe(
+          switchMap(id => this.updateCheckoutOrders(orders, order.price.total, id).pipe(
+            map(() => ItemActions.checkoutOrderSuccess({ id, checkout: 'order' })),
+            catchError(() => this.handleError())
+          )))))))
   )
 
   createOrderSuccess = createEffect(() =>
@@ -128,6 +131,13 @@ export class MenuEffects implements OnInitEffects {
         }
       })
     )
+  }
+
+  private updateCheckoutOrders(orders: CheckoutOrder[], total: number, id: string) {
+    const updatedOrders = [...orders, { id, total }]
+    console.log(updatedOrders);
+
+    return this.restaurantService.updateDailyMenuOrders(updatedOrders)
   }
 
   private setLoading() {

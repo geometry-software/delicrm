@@ -1,15 +1,18 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core'
+import { ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { Router, Scroll } from '@angular/router'
-import { AdminService } from '../../services/admin.service'
-import { distinctUntilChanged, filter, map, tap } from 'rxjs'
+import { combineLatest, filter, map, switchMap, tap } from 'rxjs'
+import { isEqual } from 'lodash'
 import { Store } from '@ngrx/store'
-import { AdminActions as ItemActions } from '../../store/admin.actions'
-import { SignalService } from '../../../../shared/services/signal.service'
+import { AdminActions, AdminActions as ItemActions } from '../../store/admin.actions'
 import { AppConfirmationDialogComponent } from '../../../../shared/components/app-confirmation-dialog/app-confirmation-dialog.component'
 import { RestaurantService } from '../../services/restaurant.service'
-import { loadingStatus } from '../../store/admin.selectors'
+import { getRestaurantInfo, loadingStatus } from '../../store/admin.selectors'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
+import { RestaurantFormComponent } from '../restaurant-form/restaurant-form.component'
+import { SharedConstants } from '../../../../shared/utils/shared.constants'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { SignalService } from '../../../../shared/services/signal.service'
 
 @Component({
   selector: 'app-board-layout',
@@ -17,6 +20,17 @@ import { LoadingStatus } from '../../../../shared/models/loading-status'
   styleUrls: ['./board-layout.component.scss'],
 })
 export class BoardLayoutComponent implements OnInit {
+
+  constructor(
+    private matDialog: MatDialog,
+    private router: Router,
+    private restaurantService: RestaurantService,
+    private store: Store,
+    private cdr: ChangeDetectorRef,
+    private signalService: SignalService,
+    private destroyRef: DestroyRef
+  ) { }
+
   readonly buttonTitleUpdate = 'Update'
   readonly buttonTitleClean = 'Clean'
   readonly buttonTitleDownload = 'Download'
@@ -27,29 +41,18 @@ export class BoardLayoutComponent implements OnInit {
   readonly buttonTitleAdditional = 'Additional'
   readonly buttonTitleMenu = 'Daily menu'
 
-  readonly imageRoute = '/admin/board'
-  readonly formRoute = '/admin/board/form'
+  readonly imageRoute = '/admin'
+  readonly formRoute = '/admin/form'
+  readonly LoadingStatus = LoadingStatus
+  readonly formComponentConfig = SharedConstants.formComponentConfig
+  readonly loadingStatus = this.store.select(loadingStatus)
+  readonly disabledClearMenu = combineLatest([
+    this.loadingStatus,
+    this.restaurantService.getDailyMenu().pipe(map(value => value.open)),
+    // this.store.select(getRestaurantInfo).pipe
+  ]).pipe(map(([loading, open]) => (loading === LoadingStatus.Loading) || !open))
+
   currentRoute: string
-
-  constructor(
-    private dialog: MatDialog,
-    private router: Router,
-    private signalService: SignalService,
-    private adminService: AdminService,
-    private restaurantService: RestaurantService,
-    private store: Store,
-    private cdr: ChangeDetectorRef,
-  ) { }
-
-  LoadingStatus = LoadingStatus
-
-  readonly loadingStatus = this.store.select(loadingStatus).pipe(
-    // tap((v) => console.log(v)),
-    // filter(value => value === LoadingStatus.Loading),
-    // tap((v) => console.log(v)),
-    // map(v => v ? true : false),
-    // tap((v) => console.log(v))
-  )
 
   ngOnInit() {
     this.getCurrentRoute()
@@ -58,7 +61,7 @@ export class BoardLayoutComponent implements OnInit {
   getCurrentRoute() {
     this.router.events.pipe(
       filter((value: Scroll) => !!value.routerEvent?.url),
-      tap((value: Scroll) => {
+      tap(value => {
         this.currentRoute = value.routerEvent.url
         this.cdr.markForCheck()
       })
@@ -66,34 +69,35 @@ export class BoardLayoutComponent implements OnInit {
   }
 
   printMenu() {
-    console.log(1);
-
     this.store.dispatch(ItemActions.printMenu())
   }
 
   clearMenu() {
-    let dialog = this.dialog.open(AppConfirmationDialogComponent, {
-      width: 'auto',
-      height: 'auto',
+    this.matDialog.open(AppConfirmationDialogComponent, {
+      ...this.formComponentConfig,
       data: {
-        type: 'delete-menu',
-      },
-    })
-    dialog.afterClosed().subscribe((res) => {
-      if (res) {
-        // this.menuList.closedAt = new Date()
-        // this.menuList.amountOfPlate = this.menuList.plates.map((a) => a.plato.amount).reduce((a, b) => a + b, 0)
-        // this.menuList.amountOfOrders = this.menuList.orders.length
-        // this.menuList.amountOfCash = this.menuList.orders.map((a) => a.totalPrice).reduce((a, b) => a + b, 0)
-        // this.menuList.amountOfBank = 0
-        // this.adminService.createDocument([]).then((res) => {
-        //   this.adminService.clearDailyMenu().then(() => { })
-        // })
-
-        this.restaurantService.clearDailyMenu()
-
+        title: 'Clear menu',
+        subtitle: 'Are you sure you want to clear the menu?',
       }
-    })
+    }).afterClosed().pipe(
+      filter(Boolean),
+      tap(() => this.store.dispatch(AdminActions.closeShift())),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe()
+  }
+
+  updateRestaurant() {
+    this.signalService.setLoadingStatus(LoadingStatus.Loading)
+    this.store.select(getRestaurantInfo).pipe(
+      tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loaded)),
+      switchMap(info => this.matDialog.open(RestaurantFormComponent,
+        { ...this.formComponentConfig, data: info }
+      ).afterClosed().pipe(
+        filter(Boolean),
+        filter(restaurant => !isEqual(info, restaurant)),
+        tap(restaurant => this.store.dispatch(AdminActions.updateRestaurant({ restaurant }))))),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe()
   }
 
 }

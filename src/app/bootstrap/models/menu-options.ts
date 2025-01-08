@@ -22,13 +22,13 @@ export const userMenuOptions: Array<MenuOption> = [
   {
     title: 'Table',
     icon: 'content_paste',
-    link: 'admin/board',
+    link: 'admin',
     roles: ['admin'],
   },
   {
     title: 'Cash box',
     icon: 'payments',
-    link: 'admin/cash-desk',
+    link: 'shifts/report',
     roles: ['admin'],
   },
   {

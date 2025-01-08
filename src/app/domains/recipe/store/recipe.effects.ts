@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects'
-import { catchError, map, of, switchMap, tap, withLatestFrom } from 'rxjs'
+import { catchError, map, of, switchMap, tap } from 'rxjs'
 import { RecipeActions as ItemActions } from './recipe.actions'
 import { RecipeEntityService } from '../services/recipe.service'
 import { Router } from '@angular/router'
 import { RecipeConstants } from '../models/recipe.constants'
-import { formatRequest } from '../../../shared/utils/format-request'
-import { Action, Store } from '@ngrx/store'
-import { getItemsPageAmount, getResetRequestToTheFirstPage } from './recipe.selectors'
+import { Action } from '@ngrx/store'
 import { ConfirmationService } from '../../../shared/services/confirmation.service'
 import { SignalService } from '../../../shared/services/signal.service'
 import { LoadingStatus } from '../../../shared/models/loading-status'
@@ -19,7 +17,6 @@ export class RecipeEffects implements OnInitEffects {
   constructor(
     private router: Router,
     private actions: Actions,
-    private store: Store,
     private entityService: RecipeEntityService,
     private confirmationService: ConfirmationService,
     private signalService: SignalService

@@ -2,16 +2,22 @@ import { Injectable } from '@angular/core'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { DailyMenu, Restaurant } from '../models/restaurant'
 import { RestaurantConstants } from '../models/restaurant.constants'
-import { Observable } from 'rxjs'
+import { Observable, map, switchMap } from 'rxjs'
+import { ShiftSummary } from '../models/shift'
+import { ShiftConstants } from '../models/shift.constants'
+import { CheckoutOrder } from '../../menu/models/checkout'
 
 @Injectable({
   providedIn: 'root'
 })
 export class RestaurantService {
 
-  constructor(private repositoryService: RepositoryService) { }
+  constructor(
+    private repositoryService: RepositoryService
+  ) { }
 
   private readonly collection = RestaurantConstants.collectionName
+  private readonly shiftCollection = ShiftConstants.collectionName
   private readonly infoDocument = RestaurantConstants.infoDocument
   private readonly menuDocument = RestaurantConstants.menuDocument
 
@@ -23,7 +29,7 @@ export class RestaurantService {
     return this.repositoryService.updateDocument(this.collection, item, this.infoDocument)
   }
 
-  getRestaurantInfo() {
+  getRestaurantInfo(): Observable<Restaurant> {
     return this.repositoryService.getDocumentById(this.collection, this.infoDocument)
   }
 
@@ -31,12 +37,24 @@ export class RestaurantService {
     return this.repositoryService.setDocument(this.collection, menu, this.menuDocument)
   }
 
-  clearDailyMenu() {
-    return this.repositoryService.updateDocument(this.collection, { open: false }, this.menuDocument)
+  updateDailyMenuOrders(orders: CheckoutOrder[]) {
+    return this.repositoryService.updateDocument(this.collection, { orders }, this.menuDocument)
   }
 
   getDailyMenu(): Observable<DailyMenu> {
     return this.repositoryService.getDocumentById(this.collection, this.menuDocument)
+  }
+
+  getCheckOutOrders() {
+    return this.repositoryService.getDocumentById(this.collection, this.menuDocument).pipe(
+      map(menu => menu.orders)
+    )
+  }
+
+  closeShift(shift: ShiftSummary) {
+    return this.repositoryService.createDocument(this.shiftCollection, shift).pipe(
+      switchMap(() => this.repositoryService.updateDocument(this.collection, { open: false }, this.menuDocument))
+    )
   }
 
 }

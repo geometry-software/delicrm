@@ -12,7 +12,6 @@ import { RestaurantLoadingStatus } from '../../models/loading-status'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { UserService } from '../../../domains/users/services/user.service'
 import { SharedConstants } from '../../../shared/utils/shared.constants'
-import { RestaurantConstants } from '../../../domains/admin/models/restaurant.constants'
 
 @Component({
   selector: 'app-login',
@@ -63,8 +62,7 @@ export class LoginComponent {
     this.isAdminLoginLoading = true
     if (this.form.valid) {
       this.authService.loginAdmin(this.form.value[AdminFormProps.email], this.form.value[AdminFormProps.password]).pipe(
-        catchError(error => {
-          console.error(error);
+        catchError(() => {
           this.isAdminLoginLoading = false
           return []
         }),

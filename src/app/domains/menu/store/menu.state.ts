@@ -1,7 +1,7 @@
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { DailyMenu, Extras, MenuItem, Restaurant } from '../../admin/models/restaurant'
+import { DailyMenu, Extras, Restaurant } from '../../admin/models/restaurant'
 import { Order } from '../../orders/models/order.model'
-import { Recipe } from '../../recipe/models/recipe.model'
+import { CheckoutOrder } from '../models/checkout'
 
 export interface State {
   open: boolean
@@ -9,6 +9,7 @@ export interface State {
   extras: Extras
   restaurant: Restaurant
   order: Order
+  orders: CheckoutOrder[]
   loadingStatus: LoadingStatus
 }
 
@@ -18,5 +19,6 @@ export const initialState: State = {
   extras: null,
   restaurant: null,
   order: null,
+  orders: null,
   loadingStatus: LoadingStatus.NotLoaded
 }

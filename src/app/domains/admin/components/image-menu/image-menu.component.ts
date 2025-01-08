@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core'
 import { saveAs } from 'file-saver'
 import * as moment from 'moment'
-import { Observable, catchError, filter, shareReplay, tap } from 'rxjs'
+import { Observable, catchError, filter, shareReplay, tap, map } from 'rxjs'
 import domtoimage from 'dom-to-image'
 import { Store } from '@ngrx/store'
-import { printMenu } from '../../store/admin.selectors'
+import { getRestaurantInfo, printMenu } from '../../store/admin.selectors'
 import { AdminActions as ItemActions } from '../../store/admin.actions'
 import { RestaurantService } from '../../services/restaurant.service'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
@@ -26,6 +26,10 @@ export class ImageMenuComponent implements OnInit {
   readonly commonImg = 'assets/dish.png'
   readonly today = moment(new Date()).locale('es').format('dddd DD MMMM')
   readonly domtoimage = domtoimage
+
+  readonly currency = this.store.select(getRestaurantInfo).pipe(
+    map(restaurant => restaurant.currency)
+  )
 
   constructor(
     private restaurantService: RestaurantService,

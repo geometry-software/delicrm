@@ -1,19 +1,16 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store'
-import { ClientConstants } from '../models/client.constants'
-import { State } from './client.state'
+import { State } from './shift.state'
+import { ShiftConstants } from '../models/shift.constants'
 
-const storeFeatureKey: string = ClientConstants.storeFeatureKey
-const paginationTitle: string = ClientConstants.paginationTitle
-const paginationSize: Array<number> = ClientConstants.paginationSize
-const labelRequested: string = ClientConstants.labelRequested
-const labelActive: string = ClientConstants.labelActive
-const labelBlocked: string = ClientConstants.labelBlocked
+const storeFeatureKey = ShiftConstants.storeFeatureKey
+const paginationTitle = ShiftConstants.paginationTitle
+const paginationSize = ShiftConstants.paginationSize
 
 export const getState = createFeatureSelector<State>(storeFeatureKey)
 export const getItems = createSelector(getState, (state) => state.items.data)
 export const getSize = createSelector(getState, (state) => state.size)
+export const getItemById = (id: string) => createSelector(getItems, (items) => items.find(el => el.id === id))
 export const getItem = createSelector(getState, (state) => state.item.data)
-export const getItemById = (id: string) => createSelector(getItems, (items) => items.find(el => el.authId === id))
 export const getPaginationItem = createSelector(getItems, (state) => ({
   first: state?.length ? [...state][0] : null,
   last: state?.length ? [...state].pop() : null,
@@ -33,10 +30,4 @@ export const getPaginationResponse = createSelector(getPaginationItem, getCurren
     title: paginationTitle,
     sizeList: paginationSize,
   },
-}))
-export const itemsAmountByStatus = createSelector(getState, (state) => state.itemsAmountByStatus)
-export const getListLabels = createSelector(itemsAmountByStatus, (status) => ({
-  requested: labelRequested + ' (' + status.requested + ')',
-  active: labelActive + ' (' + status.active + ')',
-  blocked: labelBlocked + ' (' + status.blocked + ')',
 }))

@@ -28,6 +28,11 @@ export const routes: Routes = [
         canActivate: [],
       },
       {
+        path: 'shifts',
+        loadChildren: () => import('../domains/admin/admin.module').then((m) => m.AdminModule),
+        canActivate: [],
+      },
+      {
         path: 'menu',
         loadChildren: () => import('../domains/menu/menu.module').then((m) => m.WaiterModule),
         canActivate: [],

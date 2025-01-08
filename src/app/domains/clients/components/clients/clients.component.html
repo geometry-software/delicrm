@@ -21,7 +21,7 @@
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <div class="table-link" [routerLink]="['order', element.id]">
+        <div class="table-link" [routerLink]="['/clients', element.id]">
           {{ element.name ?? 'No name' }}
         </div>
       </mat-cell>

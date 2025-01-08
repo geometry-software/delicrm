@@ -9,5 +9,7 @@ export const loadingStatus = createSelector(getState, (state) => state.loadingSt
 export const isRestaurantOpen = createSelector(getState, (state) => state.open)
 export const getMenu = createSelector(getState, (state) => state.menu)
 export const getExtras = createSelector(getState, (state) => state.extras)
+export const getOrders = createSelector(getState, (state) => state.orders)
 export const getOrder = createSelector(getState, (state) => state.order)
 export const getRestaurantInfo = createSelector(getState, (state) => state.restaurant)
+export const getCurrency = createSelector(getRestaurantInfo, (state) => state?.currency)

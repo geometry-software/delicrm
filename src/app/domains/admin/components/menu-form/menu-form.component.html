@@ -90,7 +90,7 @@
   </mat-step>
   <mat-step [stepControl]="plateForm" label="Confirm">
     <ng-container *ngIf="dailyMenu.main">
-      <app-formatted-daily-menu [dailyMenu]="dailyMenu"> </app-formatted-daily-menu>
+      <app-formatted-daily-menu [dailyMenu]="dailyMenu" currency="" />
       <br />
       <app-button [title]="!(isLoading | async) ? 'Update menu and open a service' : 'Loading ..'"
         [disabled]="(isLoading | async)" actionType="save" [width]="'full'" (click)="createDailyMenu()"></app-button>

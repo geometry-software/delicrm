@@ -31,7 +31,7 @@ export class MenuFormComponent implements OnInit {
     private signalService: SignalService,
     private formBuilder: FormBuilder,
     private recipeEntityService: RecipeEntityService,
-    private store: Store,
+    private store: Store
   ) { }
 
   private readonly startersAmount = RestaurantConstants.startersAmount
@@ -223,7 +223,7 @@ export class MenuFormComponent implements OnInit {
   createDailyMenu() {
     this.dailyMenu.open = true
     this.dailyMenu.createdAt = getCurrentUnixTime()
-    this.dailyMenu.orders = new Array()
+    this.dailyMenu.orders = []
     this.store.dispatch(ItemActions.createDailyMenu({ menu: this.dailyMenu }))
   }
 

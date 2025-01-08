@@ -1,5 +1,6 @@
-import { Order } from "../../orders/models/order.model"
+import { CheckoutOrder } from "../../menu/models/checkout"
 import { Recipe } from "../../recipe/models/recipe.model"
+import { ShiftStatus } from "./shift"
 
 export type Restaurant = {
     name: string
@@ -16,7 +17,7 @@ export type DailyMenu = {
     extras: Extras
     open: boolean
     createdAt: number
-    orders: Array<Order>
+    orders: Array<CheckoutOrder>
 }
 
 export type Extras = {

@@ -8,9 +8,9 @@ import { Recipe } from '../../../recipe/models/recipe.model'
 import { setProteinImage } from '../../../../shared/utils/protein-image'
 import { MenuConstants } from '../../utils/menu.constants'
 import { Store } from '@ngrx/store'
-import { getMenu, isRestaurantOpen, loadingStatus } from '../../store/menu.selectors'
+import { getCurrency, getMenu, isRestaurantOpen, loadingStatus } from '../../store/menu.selectors'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
-import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
+import { MenuItem } from '../../../admin/models/restaurant'
 
 @Component({
   selector: 'app-daily-menu',
@@ -34,14 +34,17 @@ export class DailyMenuComponent {
   readonly dailyMenuLabel = MenuConstants.dailyMenuLabel
   readonly alaCarteLabel = MenuConstants.alaCarteLabel
 
+  readonly chosenDailyMenuItems = []
+  readonly chosenAlaCarteItems = []
+
+  readonly currency = this.store.select(getCurrency)
+
   menuTableArray = new Array()
   barTableArray = new Array()
 
-  alaCarteList: Array<Recipe & { isRemoved: boolean }>
+  alaCarteList: Array<MenuItem>
   plateOrder: Order
   plateList
-  readonly chosenDailyMenuItems = []
-  readonly chosenAlaCarteItems = []
   dishAmount: number = 0
   isMenuUpdated: boolean
   hasNoOrder: boolean

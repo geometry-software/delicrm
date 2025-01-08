@@ -1,6 +1,5 @@
 import { createReducer, on } from '@ngrx/store'
 import { AdminActions as ItemActions } from './admin.actions'
-import { LoadingStatus } from '../../../shared/models/loading-status'
 import { initialState, State } from './admin.state'
 
 export const reducer = createReducer<State>(
@@ -14,6 +13,10 @@ export const reducer = createReducer<State>(
     print: true,
   })),
   on(ItemActions.printMenuSuccess, (state) => ({
+    ...state,
+    print: false,
+  })),
+  on(ItemActions.setRestaurantInfo, (state, { restaurant }) => ({
     ...state,
     print: false,
   }))

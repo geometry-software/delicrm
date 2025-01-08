@@ -16,6 +16,9 @@ export class AppFormattedDailyMenuComponent {
   @Input()
   isAddAvailable: boolean
 
+  @Input()
+  currency: string
+
   @Output()
   openDetail = new EventEmitter()
 

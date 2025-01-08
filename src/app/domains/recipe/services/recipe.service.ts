@@ -6,8 +6,9 @@ import { RepositoryService } from '../../../shared/repository/repository.service
 import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
 import { SortRequest } from '../../../shared/repository/repository.models'
 
-
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class RecipeEntityService {
 
   readonly collection = RecipeConstants.collectionName

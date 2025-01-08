@@ -6,10 +6,10 @@ import { SharedModule } from '../../../../shared/shared.module'
 
 @Component({
   selector: 'restaurant-form',
-  standalone: true,
-  imports: [SharedModule],
   templateUrl: './restaurant-form.component.html',
   styleUrls: ['./restaurant-form.component.scss'],
+  standalone: true,
+  imports: [SharedModule]
 })
 export class RestaurantFormComponent implements OnInit {
 
@@ -23,7 +23,9 @@ export class RestaurantFormComponent implements OnInit {
   showFieldErrors = showFieldErrors
 
   ngOnInit(): void {
-    // 
+    if (this.dialogData) {
+      this.form.patchValue(this.dialogData)
+    }
   }
 
   confirm() {

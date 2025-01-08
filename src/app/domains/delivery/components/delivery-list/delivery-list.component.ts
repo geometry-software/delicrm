@@ -12,7 +12,7 @@ import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
 import { combineListControls } from '../../../../shared/utils/combine-list-controls'
 import { Sort } from '@angular/material/sort'
 import { SortRequest } from '../../../../shared/repository/repository.models'
-import { Delivery, deliveryTabIndexByStatus } from '../../models/delivery.model'
+import { deliveryTabIndexByStatus } from '../../models/delivery.model'
 
 @Component({
   selector: 'app-delivery-list',
