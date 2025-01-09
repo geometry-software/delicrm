@@ -4,6 +4,7 @@ import { MenuFormComponent } from './components/menu-form/menu-form.component'
 import { CashDeskComponent } from './components/cash-desk/cash-desk.component'
 import { BoardLayoutComponent } from './components/board-layout/board-layout.component'
 import { ImageMenuComponent } from './components/image-menu/image-menu.component'
+import { ShiftReportComponent } from './components/shift-report/shift-report.component'
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
         path: 'report',
         component: CashDeskComponent,
         data: { title: 'RECIPES.PAGE.LIST.TOOLBAR' },
+      },
+      {
+        path: 'report/:id',
+        component: ShiftReportComponent
       },
       {
         path: 'form',

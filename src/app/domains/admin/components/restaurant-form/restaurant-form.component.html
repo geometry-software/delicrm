@@ -36,6 +36,14 @@
   </mat-form-field>
 
   <mat-form-field [hideRequiredMarker]="true">
+    <mat-label> Web </mat-label>
+    <input matInput [formControlName]="formProps.web" />
+    <mat-error *ngIf="showFieldErrors(form, formProps.web) as error">
+      {{ error }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field [hideRequiredMarker]="true">
     <mat-label> Currency </mat-label>
     <input matInput [formControlName]="formProps.currency" />
     <mat-error *ngIf="showFieldErrors(form, formProps.currency) as error">
@@ -62,13 +70,9 @@
     </mat-form-field>
   </div>
 
-  <div class="buttons-grid">
-    <button mat-button type="button" color="primary" (click)="close()">
-      Cancel
-    </button>
-    <button mat-raised-button color="primary" class="mr-[5px]" type="submit" (click)="confirm()">
-      Register
-    </button>
+  <div class="form-actions">
+    <app-button title="Cancel" actionType="back" (submit)="close()"></app-button>
+    <app-button title="Register" actionType="save" (submit)="confirm()"></app-button>
   </div>
 
 </form>

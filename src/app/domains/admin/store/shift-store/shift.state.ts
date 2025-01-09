@@ -1,12 +1,12 @@
-import { RepositoryRequesEntity, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
-import { LoadingStatus } from '../../../shared/models/loading-status'
-import { ShiftStatus, ShiftSummary } from '../models/shift'
+import { RepositoryRequesEntity, RepositoryRequestListQuery, RepositoryResponseList } from '../../../../shared/repository/repository.models'
+import { LoadingStatus } from '../../../../shared/models/loading-status'
+import { ShiftStatus, Shift } from '../../models/shift'
 
 export interface State {
   query: RepositoryRequestListQuery,
-  items: RepositoryResponseList<ShiftSummary>
+  items: RepositoryResponseList<Shift>
   itemsLoadingStatus: LoadingStatus
-  item: RepositoryRequesEntity<ShiftSummary>
+  item: RepositoryRequesEntity<Shift>
   itemId: string
   status: ShiftStatus
   size: number

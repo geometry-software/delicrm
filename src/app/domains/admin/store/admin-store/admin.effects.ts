@@ -3,15 +3,14 @@ import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects'
 import { catchError, delay, map, of, switchMap, tap } from 'rxjs'
 import { AdminActions as ItemActions } from './admin.actions'
 import { Router } from '@angular/router'
-import { AdminConstants } from '../models/admin.constants'
 import { Action, Store } from '@ngrx/store'
-import { RestaurantService } from '../services/restaurant.service'
-import { SignalService } from '../../../shared/services/signal.service'
-import { LoadingStatus } from '../../../shared/models/loading-status'
-import { RepositoryRequestQuery } from '../../../shared/repository/repository.models'
-import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
-import { CheckoutOrder } from '../../menu/models/checkout'
-import { ShiftSummary } from '../models/shift'
+import { RestaurantService } from '../../services/restaurant.service'
+import { SignalService } from '../../../../shared/services/signal.service'
+import { LoadingStatus } from '../../../../shared/models/loading-status'
+import { RepositoryRequestQuery } from '../../../../shared/repository/repository.models'
+import { calculateShiftSummary } from '../../utils/calculate-shift-summary'
+import { AdminConstants } from '../../models/admin.constants'
+import { ShiftService } from '../../services/shift.service'
 
 @Injectable()
 export class AdminEffects implements OnInitEffects {
@@ -21,6 +20,7 @@ export class AdminEffects implements OnInitEffects {
     private actions: Actions,
     private store: Store,
     private restaurantService: RestaurantService,
+    private shiftService: ShiftService,
     private signalService: SignalService
   ) { }
 
@@ -32,19 +32,6 @@ export class AdminEffects implements OnInitEffects {
     return ItemActions.getRestaurantInfo()
   }
 
-  createDailyMenu = createEffect(() =>
-    this.actions.pipe(
-      ofType(ItemActions.createDailyMenu),
-      tap(() => this.setLoading()),
-      switchMap(({ menu }) => this.restaurantService.updateDailyMenu(menu).pipe(
-        tap(() => {
-          this.setLoaded()
-          this.router.navigate(['admin/board'])
-        }),
-        catchError(error => this.handleError(error, 'create')))))
-    , { dispatch: false }
-  )
-
   getRestaurantInfo = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.getRestaurantInfo),
@@ -55,7 +42,38 @@ export class AdminEffects implements OnInitEffects {
           return ItemActions.setRestaurantInfo({ restaurant })
         }),
         catchError(error => this.handleError(error, 'create')))))
-    , { dispatch: false }
+  )
+
+  setRestaurantInfo = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.setRestaurantInfo),
+      tap(() => this.setLoading()),
+      map(() => ItemActions.getDailyMenu()))
+  )
+
+  getDailyMenu = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.getDailyMenu),
+      tap(() => this.setLoading()),
+      switchMap(() => this.restaurantService.getDailyMenu().pipe(
+        map(menu => {
+          this.setLoaded()
+          return ItemActions.setDailyMenu({ menu })
+        }),
+        catchError(error => this.handleError(error, 'create')))))
+  )
+
+  createDailyMenu = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.createDailyMenu),
+      tap(() => this.setLoading()),
+      switchMap(({ menu }) => this.restaurantService.updateDailyMenu(menu).pipe(
+        map(() => {
+          this.setLoaded()
+          this.router.navigate(['admin'])
+          return ItemActions.getDailyMenu()
+        }),
+        catchError(error => this.handleError(error, 'create')))))
   )
 
   closeShift = createEffect(() =>
@@ -63,18 +81,18 @@ export class AdminEffects implements OnInitEffects {
       ofType(ItemActions.closeShift),
       tap(() => this.setLoading()),
       switchMap(() => this.restaurantService.getDailyMenu().pipe(
-        map(({ orders, createdAt }) => this.calculateShiftOrders(orders, createdAt)),
-        switchMap(shift => this.restaurantService.closeShift(shift).pipe(
-          map(() => ItemActions.closeShiftSuccess())
+        map(({ orders, createdAt }) => calculateShiftSummary(orders, createdAt)),
+        switchMap(shift => this.restaurantService.cleanDailyMenu().pipe(
+          switchMap(() => this.shiftService.create(shift).pipe(
+            map(id => {
+              this.setLoaded()
+              this.router.navigate(['/shifts/report', id])
+              return ItemActions.closeShiftSuccess()
+            })
+          ))
         )),
-        catchError(error => this.handleError(error, 'create')))))
-  )
-
-  closeShiftSuccess = createEffect(() =>
-    this.actions.pipe(
-      ofType(ItemActions.closeShiftSuccess),
-      tap(() => this.setLoaded()))
-    , { dispatch: false }
+        catchError(error => this.handleError(error, 'create')))),
+      catchError(error => this.handleError(error, 'create')))
   )
 
   updateRestaurant = createEffect(() =>
@@ -82,9 +100,11 @@ export class AdminEffects implements OnInitEffects {
       ofType(ItemActions.updateRestaurant),
       tap(() => this.setLoading()),
       switchMap(({ restaurant }) => this.restaurantService.updateRestaurantInfo(restaurant).pipe(
-        tap(() => this.setLoaded()),
+        map(() => {
+          this.setLoaded()
+          return ItemActions.getRestaurantInfo()
+        }),
         catchError(error => this.handleError(error, 'create')))))
-    , { dispatch: false }
   )
 
   printMenu = createEffect(() =>
@@ -116,14 +136,6 @@ export class AdminEffects implements OnInitEffects {
   private setLoaded() {
     this.signalService.setLoadingStatus(LoadingStatus.Loaded)
     this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.Loaded }))
-  }
-
-  private calculateShiftOrders(orders: CheckoutOrder[], createdAt: number): ShiftSummary {
-    const totalPrice = orders.map(el => el.total).reduce((sum, total) => sum + total, 0)
-    const totalOrders = orders.length
-    const averageOrder = totalPrice / totalOrders
-    const ids = orders.map(el => el.id)
-    return { totalPrice, totalOrders, averageOrder, createdAt, closedAt: getCurrentUnixTime(), orders: ids, status: 'active' }
   }
 
 }

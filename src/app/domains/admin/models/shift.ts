@@ -1,4 +1,4 @@
-export type ShiftSummary = {
+export type Shift = {
     id?: string
     totalPrice: number
     totalOrders: number

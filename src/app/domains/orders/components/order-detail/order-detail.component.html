@@ -1,7 +1,7 @@
 <ng-container *ngIf="order; else orderNotFoundTemplate">
   <div class="p-[4px]" [@fadeInOnEnter]>
     <div class="card">
-      <app-title [title]="orderTitle" />
+      <app-title [title]="orderTitle" [subtitle]="order.category.client" />
 
       <div class="flex justify-between items-center">
         <div class="progress">

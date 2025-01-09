@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store'
 import { State } from './shift.state'
-import { ShiftConstants } from '../models/shift.constants'
+import { ShiftConstants } from '../../models/shift.constants'
 
 const storeFeatureKey = ShiftConstants.storeFeatureKey
 const paginationTitle = ShiftConstants.paginationTitle

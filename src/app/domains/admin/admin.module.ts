@@ -7,20 +7,22 @@ import { BoardLayoutComponent } from './components/board-layout/board-layout.com
 import { StoreModule } from '@ngrx/store'
 import { EffectsModule } from '@ngrx/effects'
 import { AdminConstants } from './models/admin.constants'
-import { AdminEffects } from './store/admin.effects'
-import { reducer } from './store/admin.reducer'
+import { AdminEffects } from './store/admin-store/admin.effects'
+import { reducer } from './store/admin-store/admin.reducer'
 import { ImageMenuComponent } from './components/image-menu/image-menu.component'
-import { ShiftEffects } from './shift-store/shift.effects'
+import { ShiftEffects } from './store/shift-store/shift.effects'
 import { ShiftConstants } from './models/shift.constants'
-import { shiftReducer } from './shift-store/shift.reducer'
+import { shiftReducer } from './store/shift-store/shift.reducer'
 import { ShiftService } from './services/shift.service'
+import { ShiftReportComponent } from './components/shift-report/shift-report.component'
 
 @NgModule({
   declarations: [
     BoardLayoutComponent,
     MenuFormComponent,
     ImageMenuComponent,
-    CashDeskComponent
+    CashDeskComponent,
+    ShiftReportComponent
   ],
   imports: [
     SharedModule,

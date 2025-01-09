@@ -1,5 +1,5 @@
 import { RepositoryRequest } from "../../../shared/repository/repository.models"
-import { ShiftStatus, ShiftSummary } from "./shift"
+import { ShiftStatus, Shift } from "./shift"
 
 export abstract class ShiftConstants {
   static readonly collectionName = 'Shifts'
@@ -19,7 +19,7 @@ export abstract class ShiftConstants {
   static readonly searchPlaceholder = 'RECIPES.PAGE.LIST.TABLE.SEARCH'
   static readonly deleteTitle = 'RECIPES.PAGE.DETAIL.DELETE_TITLE'
   static readonly backToListButton = 'RECIPES.NAVBAR'
-  static readonly defaultPageRequest: RepositoryRequest<ShiftSummary, ShiftStatus> = {
+  static readonly defaultPageRequest: RepositoryRequest<Shift, ShiftStatus> = {
     pagination: {
       query: 'first',
       item: null,

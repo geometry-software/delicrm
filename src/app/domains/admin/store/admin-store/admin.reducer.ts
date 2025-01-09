@@ -18,6 +18,14 @@ export const reducer = createReducer<State>(
   })),
   on(ItemActions.setRestaurantInfo, (state, { restaurant }) => ({
     ...state,
-    print: false,
+    restaurant,
+  })),
+  on(ItemActions.setDailyMenu, (state, { menu }) => ({
+    ...state,
+    menu,
+  })),
+  on(ItemActions.closeShiftSuccess, (state) => ({
+    ...state,
+    menu: null
   }))
 )

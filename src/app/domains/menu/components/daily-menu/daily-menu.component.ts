@@ -23,7 +23,7 @@ import { MenuItem } from '../../../admin/models/restaurant'
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DailyMenuComponent {
+export class DailyMenuComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
@@ -36,8 +36,6 @@ export class DailyMenuComponent {
 
   readonly chosenDailyMenuItems = []
   readonly chosenAlaCarteItems = []
-
-  readonly currency = this.store.select(getCurrency)
 
   menuTableArray = new Array()
   barTableArray = new Array()
@@ -59,10 +57,14 @@ export class DailyMenuComponent {
   readonly setProteinImage = setProteinImage
 
   readonly LoadingStatus = LoadingStatus
+  readonly dailyMenu = this.store.select(getMenu)
+  readonly isRestaurantOpen = this.store.select(isRestaurantOpen)
+  readonly loadingStatus = this.store.select(loadingStatus)
+  readonly currency = this.store.select(getCurrency)
 
-  dailyMenu = this.store.select(getMenu)
-  isRestaurantOpen = this.store.select(isRestaurantOpen)
-  loadingStatus = this.store.select(loadingStatus)
+  ngOnInit(): void {
+    this.store.dispatch(ItemActions.initDailyMenu())
+  }
 
   addItem(item) {
     this.emptyOrderError = false

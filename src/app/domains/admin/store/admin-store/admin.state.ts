@@ -1,14 +1,16 @@
-import { LoadingStatus } from '../../../shared/models/loading-status'
-import { Restaurant } from '../models/restaurant'
+import { LoadingStatus } from '../../../../shared/models/loading-status'
+import { DailyMenu, Restaurant } from '../../models/restaurant'
 
 export interface State {
   print: boolean,
   loadingStatus: LoadingStatus
   restaurant: Restaurant
+  menu: DailyMenu
 }
 
 export const initialState: State = {
   print: false,
   loadingStatus: LoadingStatus.NotLoaded,
-  restaurant: null
+  restaurant: null,
+  menu: null
 }

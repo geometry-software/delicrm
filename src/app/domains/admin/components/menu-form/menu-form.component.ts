@@ -10,8 +10,8 @@ import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 import { RestaurantConstants } from '../../models/restaurant.constants'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { Store } from '@ngrx/store'
-import { AdminActions as ItemActions } from '../../store/admin.actions'
-import { loadingStatus } from '../../store/admin.selectors'
+import { AdminActions as ItemActions } from '../../store/admin-store/admin.actions'
+import { loadingStatus } from '../../store/admin-store/admin.selectors'
 import { DailyMenu } from '../../models/restaurant'
 
 @Component({

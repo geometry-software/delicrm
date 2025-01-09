@@ -1,29 +1,28 @@
 <div class="sm:flex gap-1" *ngIf="currentRoute === imageRoute">
   <div class="flex gap-2 justify-evenly">
     <app-button [disabled]="(loadingStatus | async) === LoadingStatus.Loading" [title]="buttonTitleUpdate"
-      [actionType]="'back'" [icon]="'edit'" [url]="'form'"></app-button>
-    <app-button [disabled]="disabledClearMenu | async" [title]="buttonTitleClean" [actionType]="'back'"
-      [icon]="'cleaning_services'" (click)="clearMenu()"></app-button>
+      [actionType]="'back'" [icon]="'edit'" [url]="'form'" />
+    <app-button [disabled]="disabledMenu | async" [title]="buttonTitleClean" [actionType]="'back'"
+      [icon]="'cleaning_services'" (click)="clearMenu()" />
   </div>
   <div class="divider"></div>
   <div class="flex gap-2 justify-evenly">
-    <app-button [disabled]="(loadingStatus | async) === LoadingStatus.Loading" [title]="buttonTitleDownload"
-      [actionType]="'back'" [icon]="'image'" (click)="printMenu()"></app-button>
+    <app-button [disabled]="disabledMenu | async" [title]="buttonTitleDownload" [actionType]="'back'" [icon]="'image'"
+      (click)="printMenu()" />
     <app-button [disabled]="(loadingStatus | async) === LoadingStatus.Loading" [title]="buttonTitleConf"
-      [actionType]="'back'" [icon]="'settings'" (click)="updateRestaurant()"></app-button>
+      [actionType]="'back'" [icon]="'settings'" (click)="updateRestaurant()" />
   </div>
 </div>
 
 <div class="sm:flex gap-1" *ngIf="currentRoute === formRoute">
   <div class="flex gap-2 justify-evenly">
-    <app-button [title]="buttonTitleBack" [actionType]="'back'" [icon]="'arrow_back'"
-      [url]="'/admin/board'"></app-button>
-    <app-button [title]="buttonTitleRebuild" [actionType]="'back'" [icon]="'refresh'"></app-button>
+    <app-button [title]="buttonTitleBack" [actionType]="'back'" [icon]="'arrow_back'" [url]="'/admin/board'" />
+    <app-button [title]="buttonTitleRebuild" [actionType]="'back'" [icon]="'refresh'" />
   </div>
   <div class="divider"></div>
   <div class="flex gap-2 justify-evenly">
-    <app-button [title]="buttonTitleAdditional" [actionType]="'back'" [icon]="'local_drink'"></app-button>
-    <app-button [title]="buttonTitleMenu" [actionType]="'back'" [icon]="'restaurant'"></app-button>
+    <app-button [title]="buttonTitleAdditional" [actionType]="'back'" [icon]="'local_drink'" />
+    <app-button [title]="buttonTitleMenu" [actionType]="'back'" [icon]="'restaurant'" />
   </div>
 </div>
 

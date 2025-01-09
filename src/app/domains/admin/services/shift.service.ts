@@ -3,19 +3,19 @@ import { RepositoryService } from '../../../shared/repository/repository.service
 import { SortRequest } from '../../../shared/repository/repository.models'
 import { combineLatest, map } from 'rxjs'
 import { ShiftConstants } from '../models/shift.constants'
-import { ShiftStatus, ShiftSummary } from '../models/shift'
+import { ShiftStatus, Shift } from '../models/shift'
 
 @Injectable()
 export class ShiftService {
 
   constructor(
-    private repositoryService: RepositoryService<ShiftSummary, ShiftStatus>
+    private repositoryService: RepositoryService<Shift, ShiftStatus>
   ) { }
 
   private readonly collection = ShiftConstants.collectionName
 
-  create(ShiftSummary: ShiftSummary) {
-    return this.repositoryService.createDocument(this.collection, ShiftSummary)
+  create(shift: Shift) {
+    return this.repositoryService.createDocument(this.collection, shift)
   }
 
   getAll() {
@@ -52,11 +52,11 @@ export class ShiftService {
     return this.repositoryService.getAllDocumentsByIncludesQuery(this.collection, property, value)
   }
 
-  set(item: ShiftSummary, id: string) {
+  set(item: Shift, id: string) {
     return this.repositoryService.setDocument(this.collection, item, id)
   }
 
-  update(item: ShiftSummary, id: string) {
+  update(item: Shift, id: string) {
     return this.repositoryService.updateDocument(this.collection, item, id)
   }
 

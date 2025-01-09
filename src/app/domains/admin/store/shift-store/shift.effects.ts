@@ -13,12 +13,12 @@ import {
 import { ShiftActions as ItemActions } from './shift.actions'
 import { Store } from '@ngrx/store'
 import { getCurrent, getSize, getTotal } from './shift.selectors'
-import { compareItemsRequestStateSize, formatRequest } from '../../../shared/utils/format-request'
-import { LoadingStatus } from '../../../shared/models/loading-status'
-import { SignalService } from '../../../shared/services/signal.service'
-import { formatResponseList } from '../../../shared/repository/repository.utils'
-import { NotificationService } from '../../../shared/services/notification.service'
-import { ShiftService } from '../services/shift.service'
+import { compareItemsRequestStateSize, formatRequest } from '../../../../shared/utils/format-request'
+import { LoadingStatus } from '../../../../shared/models/loading-status'
+import { SignalService } from '../../../../shared/services/signal.service'
+import { formatResponseList } from '../../../../shared/repository/repository.utils'
+import { NotificationService } from '../../../../shared/services/notification.service'
+import { ShiftService } from '../../services/shift.service'
 
 @Injectable()
 export class ShiftEffects {

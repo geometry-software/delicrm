@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core'
-import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects'
+import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { map, switchMap, tap, catchError, of, withLatestFrom, combineLatest } from 'rxjs'
 import { MenuActions as ItemActions } from './menu.actions'
 import { Router } from '@angular/router'
-import { Action, Store } from '@ngrx/store'
+import { Store } from '@ngrx/store'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { SignalService } from '../../../shared/services/signal.service'
 import { RestaurantService } from '../../admin/services/restaurant.service'
@@ -19,7 +19,7 @@ import { getExtras, getRestaurantInfo } from './menu.selectors'
 import { CheckoutOrder } from '../models/checkout'
 
 @Injectable()
-export class MenuEffects implements OnInitEffects {
+export class MenuEffects {
 
   constructor(
     private router: Router,
@@ -96,10 +96,6 @@ export class MenuEffects implements OnInitEffects {
       tap(() => this.setLoaded()))
     , { dispatch: false }
   )
-
-  ngrxOnInitEffects(): Action {
-    return ItemActions.initDailyMenu()
-  }
 
   private handleError() {
     this.signalService.setLoadingStatus(LoadingStatus.LoadingFailed)

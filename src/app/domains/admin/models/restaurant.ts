@@ -1,12 +1,12 @@
 import { CheckoutOrder } from "../../menu/models/checkout"
 import { Recipe } from "../../recipe/models/recipe.model"
-import { ShiftStatus } from "./shift"
 
 export type Restaurant = {
     name: string
     address: string
     description: string
     phone: string
+    web: string
     delivery: number
     discount: number
     currency: string

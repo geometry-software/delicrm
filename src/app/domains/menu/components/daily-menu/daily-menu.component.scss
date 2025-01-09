@@ -39,6 +39,7 @@
 ::ng-deep .mat-mdc-standard-chip .mdc-evolution-chip__text-label {
   color: white !important;
 }
+
 ::ng-deep .mat-mdc-standard-chip.mdc-evolution-chip--with-trailing-action .mdc-evolution-chip__icon--trailing {
   color: white !important;
 }
@@ -60,7 +61,7 @@ mat-row.mat-row.ng-star-inserted {
 .close-title {
   text-align: center;
   font-size: 1.2em;
-  color: #555;
+  color: #777;
   text-transform: uppercase;
   font-weight: 500;
   margin-top: 10px;
@@ -88,16 +89,19 @@ mat-row.mat-row.ng-star-inserted {
     padding-left: 10px;
     cursor: pointer;
   }
+
   &__title {
     color: #555;
     font-size: 1.4em;
     font-weight: 500;
   }
+
   &__price {
     color: #555;
     font-size: 1.2em;
     font-weight: 500;
   }
+
   &__history {
     color: #888;
   }

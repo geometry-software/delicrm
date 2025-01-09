@@ -73,15 +73,15 @@
     </div>
     <div *ngIf="responsiveLayout.isDesktop"
       style="height: calc(100vh - 20vh); width: 300px; margin-bottom: 100px; margin-right: 20px">
-      <div
-        style="background-color: #badffb; border-radius: 50px; height: 25vh; margin-bottom: 20px; padding: 20px; overflow: auto">
-        <h3>In delivery now</h3>
-        <h4>3</h4>
-        <h3>In cooking now</h3>
-        <h4>5</h4>
+      <div class="stats">
+        <app-title title="Stats" />
+        <app-title-item title="New Deliveries" value="1" />
+        <app-title-item title="New clients" value="0" />
         <!-- <button mat-flat-button color="primary">theme color</button> -->
       </div>
-      <h2 style="border-bottom: 3px solid #555; width: fit-content">Ads</h2>
+      <div class="pie-chart">
+        <canvas id="pie-chart"></canvas>
+      </div>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>

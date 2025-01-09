@@ -7,8 +7,7 @@
     <ng-container matColumnDef="date">
       <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <div class="table-link">
-          <!-- <div class="table-link" [routerLink]="['order', element.id]"> -->
+        <div class="table-link" [routerLink]="['/shifts/report', element.id]">
           {{ getDateFromUnix(element.closedAt) }}
         </div>
       </mat-cell>
@@ -24,7 +23,7 @@
     <ng-container matColumnDef="total">
       <mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        {{ element.totalPrice }}
+        {{ element.totalPrice }} {{ currency | async }}
       </mat-cell>
     </ng-container>
 

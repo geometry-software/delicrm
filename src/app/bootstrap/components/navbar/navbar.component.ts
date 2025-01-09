@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Signal, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core'
+import { Component, ViewChild, OnInit, Signal, ChangeDetectorRef, ChangeDetectionStrategy, AfterViewInit } from '@angular/core'
 import { MatDrawer } from '@angular/material/sidenav'
 import { userMenuOptions, authMenuOptions } from '../../models/menu-options'
 import { TranslateService } from '@ngx-translate/core'
@@ -9,6 +9,7 @@ import { UserLanguage } from '../../../domains/users/models/user.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { combineLatest, map, shareReplay, tap } from 'rxjs'
 import { toObservable } from '@angular/core/rxjs-interop'
+import { Chart, ChartItem } from 'chart.js/auto';
 
 @Component({
   selector: 'app-navbar',
@@ -16,7 +17,7 @@ import { toObservable } from '@angular/core/rxjs-interop'
   styleUrls: ['./navbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, AfterViewInit {
 
   constructor(
     private userService: UserService,
@@ -59,6 +60,38 @@ export class NavbarComponent implements OnInit {
     this.checkClient()
     this.updateScreenSize()
     this.initTranslate()
+  }
+
+  ngAfterViewInit(): void {
+    this.initCharts()
+  }
+
+  initCharts() {
+    const data = [
+      { year: 2010, count: 10 },
+      { year: 2011, count: 20 },
+      { year: 2012, count: 15 },
+      { year: 2013, count: 25 },
+      { year: 2014, count: 22 },
+      { year: 2015, count: 30 },
+      { year: 2016, count: 28 },
+    ];
+
+    new Chart(
+      document.getElementById('pie-chart') as ChartItem,
+      {
+        type: 'pie',
+        data: {
+          labels: data.map(row => row.year),
+          datasets: [
+            {
+              label: ' by year',
+              data: data.map(row => row.count)
+            }
+          ]
+        }
+      }
+    );
   }
 
   initTranslate() {
