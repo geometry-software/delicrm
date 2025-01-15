@@ -3,6 +3,10 @@
 }
 
 .item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   &__main-dish {
     padding-left: 10px;
     transition: all 0.2s ease-in-out;

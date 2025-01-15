@@ -56,7 +56,7 @@
 
     <ng-container matColumnDef="price">
       <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.price?.total }} currency</mat-cell>
+      <mat-cell *matCellDef="let element"> {{ element.price?.total }} {{ currency | async }}</mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="tableColumns; sticky: true"></mat-header-row>

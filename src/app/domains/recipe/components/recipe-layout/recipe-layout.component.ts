@@ -3,8 +3,9 @@ import { FormControl } from '@angular/forms'
 import { RecipeConstants } from '../../models/recipe.constants'
 import { EMPTY, Observable, debounceTime, of, tap } from 'rxjs'
 import { Store, select } from '@ngrx/store'
-import { getItemId } from '../../store/recipe.selectors'
+// import { getItemId } from '../../store/recipe.selectors'
 import { RecipeActions as ItemActions } from '../../store/recipe.actions'
+import { getItemId } from '../../store/recipe.selectors'
 
 @Component({
   selector: 'app-recipe-layout',
@@ -17,7 +18,7 @@ export class RecipeLayoutComponent implements OnInit {
   readonly store: Store = inject(Store)
 
   // Selectors
-  itemId: Observable<string> = this.store.pipe(select(getItemId))
+  itemId: Observable<string> = this.store.select(getItemId)
   // layoutLoading: Observable<boolean> = this.store.pipe(select(getLayoutLoading))
   layoutLoading = of(null)
   // .pipe(tap(value => console.log(value)))
@@ -29,23 +30,21 @@ export class RecipeLayoutComponent implements OnInit {
   readonly backToListButton = RecipeConstants.backToListButton
   readonly searchPlaceholder = RecipeConstants.searchPlaceholder
   readonly defaultSearchKey = RecipeConstants.defaultSearchKey
-  readonly defaultFirstPageRequest = RecipeConstants.defaultFirstPageRequest
+  readonly defaultPageRequest = RecipeConstants.defaultPageRequest
 
   ngOnInit(): void {
     this.searchControl.valueChanges
       .pipe(
         debounceTime(500),
-        tap(value =>
-          value
-            ? this.store.dispatch(
-              ItemActions.getItemsBySearchQuery({
-                request: {
-                  key: this.defaultSearchKey,
-                  value,
-                },
-              })
-            )
-            : this.store.dispatch(ItemActions.getItems({ request: this.defaultFirstPageRequest }))
+        tap(value => value
+          ? this.store.dispatch(
+            ItemActions.getItemsBySearchQuery({
+              request: {
+                key: this.defaultSearchKey,
+                value,
+              },
+            }))
+          : this.store.dispatch(ItemActions.getItems({ request: this.defaultPageRequest }))
         )
       )
       .subscribe()

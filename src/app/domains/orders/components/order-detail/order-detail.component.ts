@@ -5,18 +5,19 @@ import { MatSnackBar } from '@angular/material/snack-bar'
 import { fadeInOnEnterAnimation } from 'angular-animations'
 import { ORDER_STATUS_COLOR, ORDER_STATUS_ICON, ORDER_STATUS_TRANSLATE } from '../../models/order.model'
 import { PrintService } from '../../../../shared/services/print.service'
-import { catchError, combineLatest, delay, filter, firstValueFrom, map, of, switchMap, tap } from 'rxjs'
+import { catchError, combineLatest, delay, filter, firstValueFrom, map, shareReplay, switchMap, tap } from 'rxjs'
 import { Order, OrderStatus, OrderProgress, OrderStatusHistory, OrderStatusBar, orderStatusProgress } from '../../models/order.model'
 import { UserService } from '../../../users/services/user.service'
 import { getCurrentUnixTime, getFullTimeFromUnix } from '../../../../shared/utils/format-unix-time'
 import { Store } from '@ngrx/store'
-import { getItem, getItemById, getLoadingStatus, statusBar } from '../../store/order.selectors'
+import { getCurrency, getItem, getItemById, getLoadingStatus, statusBar } from '../../store/order.selectors'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { User } from '../../../users/models/user.model'
 import { OrderActions as ItemActions } from '../../store/order.actions'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { OrderStatusComponent } from '../order-status/order-status.component'
 import { defaultErrorHandler } from '../../../../shared/utils/default-error-handler'
+import { isNaN } from 'lodash'
 
 @Component({
   selector: 'app-order-detail',
@@ -45,10 +46,11 @@ export class OrderDetailComponent implements OnInit {
   readonly getFullTimeFromUnix = getFullTimeFromUnix
   readonly orderTranslate = ORDER_STATUS_TRANSLATE
 
-  readonly loadingStatus = this.store.select(getLoadingStatus)
+  readonly loadingStatus = this.store.select(getLoadingStatus).pipe(shareReplay(1))
   readonly LoadingStatus = LoadingStatus
 
   order: Order
+  currency: string
   user: User
   orderId: string
   orderNotFound: boolean
@@ -60,11 +62,11 @@ export class OrderDetailComponent implements OnInit {
   }
 
   get orderTitle() {
+    // TODO use obj[key]
     const type = this.order.category.type
     switch (type) {
       case 'table':
-        return 'Table ' + this.order.category.table
-        break;
+        return 'Table'
       case 'delivery':
         return 'Delivery'
       case 'takeaway':
@@ -76,9 +78,17 @@ export class OrderDetailComponent implements OnInit {
     return this.order.comment || '-'
   }
 
+  get emptyOrder() {
+    return isNaN(this.order)
+  }
+
   ngOnInit() {
     this.initData()
     this.onOrderStatusUpdated()
+  }
+
+  get orderDetail() {
+    return this.order.category.client ?? 'number ' + this.order.category.table
   }
 
   copyAddress(): void {
@@ -135,12 +145,13 @@ export class OrderDetailComponent implements OnInit {
   }
 
   getTotal(total: number) {
-    return total + ' $'
+    return total + ' ' + this.currency
   }
 
   private async initData() {
     combineLatest([
       this.userService.appUser,
+      this.store.select(getCurrency),
       this.route.params.pipe(
         map(value => value['id']),
         switchMap(id => this.store.select(getItemById(id)).pipe(
@@ -148,19 +159,18 @@ export class OrderDetailComponent implements OnInit {
         ))),
     ]).pipe(
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(async ([user, { order, id }]) => {
+    ).subscribe(async ([user, currency, { order, id }]) => {
       this.user = user
       if (order) {
         this.order = order
       } else {
         this.order = await this.requestOrder(id)
       }
-      console.log(this.order);
-
       this.orderId = id
+      this.currency = currency
       this.orderStatusBar = {
-        progress: this.order.progress,
-        status: this.order.status
+        progress: this.order?.progress,
+        status: this.order?.status
       }
       this.cdr.markForCheck()
     })
@@ -172,7 +182,7 @@ export class OrderDetailComponent implements OnInit {
       filter(value => value === LoadingStatus.Loaded),
       delay(100),
       switchMap(() => this.store.select(getItem).pipe(
-        tap((order) => {
+        tap(order => {
           if (!order) {
             this.orderNotFound = true
           }

@@ -4,6 +4,10 @@ import { State, initialState } from './order.state'
 
 export const reducer = createReducer<State>(
   initialState,
+  on(ItemActions.setRestaurantInfo, (state, { restaurant }) => ({
+    ...state,
+    restaurant,
+  })),
   on(ItemActions.getItemsSuccess, (state, { items, size }) => ({
     ...state,
     items,

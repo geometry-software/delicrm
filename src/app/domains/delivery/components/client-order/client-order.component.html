@@ -1,37 +1,49 @@
-<div class="p-[3px]" *ngIf="delivery">
-  <div class="name-title">
-    <div>Thanks for your order,
-      <br>
-      {{ delivery.order.category.delivery.name}}!
-    </div>
-  </div>
-
-  <div class="text-center my-[30px]">
-    <img src="/assets/images/done.png" width="150px" height="150px" />
-  </div>
-
-  <div class="card">
-    <div *ngFor="let item of delivery.order.main; let i = index; let last = last">
-      <div class="item-card" [@pulseOnEnter]>
-        <div class="flex items-center">
-          <img [src]="setProteinImage(item.plate.protein)" width="30px" height="30px" />
-          <div class="item__title">
-            {{ item.plate.name }}
+<ng-container class="p-[3px]" *ngIf="{ auth: auth | async, user: user | async, delivery: delivery | async } as data">
+  <ng-container *ngIf="data.delivery && (data.auth || data.user)">
+    <ng-container *ngIf="data.auth; else userActions">
+      <div class="card mb-[20px]" [@fadeInOnEnter]>
+        <div class="name-title">
+          <div>Thanks for your order,
+            <br>
+            {{ data.delivery.order.category.delivery.name }}!
           </div>
         </div>
-        <div class="item__price">{{ item.plate.price }} {{ delivery.order.price.currency }}</div>
+        <div class="text-center my-[30px]">
+          <img src="/assets/images/done.png" width="150px" height="150px" />
+        </div>
       </div>
-      <div class="devider" *ngIf="!last"></div>
+    </ng-container>
+    <ng-template #userActions>
+      <div class="user-actions">
+        <app-button [title]="'back'" actionType="back" [icon]="'arrow_back'" [url]="'/delivery'"></app-button>
+        <app-button [title]="'Update'" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
+          icon="arrow_forward" (click)="update()" />
+      </div>
+    </ng-template>
+
+    <div class="card">
+      <div *ngFor="let item of data.delivery.order.main; let i = index; let last = last">
+        <div class="item-card" [@pulseOnEnter]>
+          <div class="flex items-center">
+            <img [src]="setProteinImage(item.plate.protein)" width="30px" height="30px" />
+            <div class="item__title">
+              {{ item.plate.name }}
+            </div>
+          </div>
+          <div class="item__price">{{ item.plate.price }} {{ data.delivery.order.price.currency }}</div>
+        </div>
+        <div class="divider" *ngIf="!last"></div>
+      </div>
     </div>
-  </div>
 
-  <div class="card mt-[20px]">
-    <app-title-item title="Address" [value]=" delivery?.order.category.delivery.address " />
-    <app-title-item title="Phone" [value]=" delivery?.order.category.delivery.phone " />
-    <app-title-item margin="0" title="Delivery time" [value]="deliveryTime" />
-  </div>
+    <div class="card mt-[20px]">
+      <app-title-item title="Address" [value]="data.delivery?.order.category.delivery.address " />
+      <app-title-item title="Phone" [value]="data.delivery?.order.category.delivery.phone " />
+      <app-title-item margin="0" title="Delivery time" [value]="getDeliveryTime(data.delivery.order)" />
+    </div>
 
-  <div class="card mt-[20px]">
-    <app-title margin="0" title="Total" [subtitle]="total" />
-  </div>
-</div>
+    <div class="card mt-[20px] mb-[10px]">
+      <app-title margin="0" title="Total" [subtitle]="getTotal(data.delivery.order)" />
+    </div>
+  </ng-container>
+</ng-container>

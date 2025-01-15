@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Actions, createEffect, ofType } from '@ngrx/effects'
+import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects'
 import {
   catchError,
   combineLatest,
@@ -11,7 +11,7 @@ import {
   withLatestFrom,
 } from 'rxjs'
 import { OrderActions as ItemActions } from './order.actions'
-import { Store } from '@ngrx/store'
+import { Action, Store } from '@ngrx/store'
 import { getCurrent, getSize, getTotal } from './order.selectors'
 import { OrderService } from '../services/order.service'
 import { compareItemsRequestStateSize, formatRequest } from '../../../shared/utils/format-request'
@@ -19,18 +19,37 @@ import { LoadingStatus } from '../../../shared/models/loading-status'
 import { OrderConstants } from '../models/order.constants'
 import { SignalService } from '../../../shared/services/signal.service'
 import { formatResponseList } from '../../../shared/repository/repository.utils'
+import { RestaurantService } from '../../admin/services/restaurant.service'
+import { RepositoryRequestQuery } from '../../../shared/repository/repository.models'
 
 @Injectable()
-export class OrderEffects {
+export class OrderEffects implements OnInitEffects {
 
   constructor(
     private actions: Actions,
     private store: Store,
     private orderService: OrderService,
+    private restaurantService: RestaurantService,
     private signalService: SignalService
   ) { }
 
   readonly moduleUrl = OrderConstants.moduleUrl
+
+  ngrxOnInitEffects(): Action {
+    return ItemActions.getRestaurantInfo()
+  }
+
+  getRestaurantInfo = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.getRestaurantInfo),
+      tap(() => this.handleLoadingRequest()),
+      switchMap(() => this.restaurantService.getRestaurantInfo().pipe(
+        map(restaurant => {
+          this.handleLoadedRequest()
+          return ItemActions.setRestaurantInfo({ restaurant })
+        }),
+        catchError(error => this.handleError(error, 'create')))))
+  )
 
   updateOrderStatus = createEffect(() =>
     this.actions.pipe(
@@ -42,10 +61,7 @@ export class OrderEffects {
             this.handleLoadedRequest()
             return ItemActions.updateOrderStatusSuccess({ statusBar: { progress, status } })
           }),
-          catchError(error => of(
-            ItemActions.notifyError({ error, query: 'edit' }),
-            ItemActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed })
-          )))))
+          catchError(error => this.handleError(error, 'edit')))))
   )
 
   getItem = createEffect(() =>
@@ -58,7 +74,7 @@ export class OrderEffects {
             this.handleLoadedRequest()
             return ItemActions.getItemSuccess({ item })
           }),
-          catchError(error => of(ItemActions.notifyError({ error, query: 'detail' })))
+          catchError(error => this.handleError(error, 'detail'))
         )))
   )
 
@@ -73,6 +89,7 @@ export class OrderEffects {
       ),
       switchMap(([{ request }, current, total, stateSize]) => {
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
+        console.log(formatRequest(request, stateSize));
         switch (query) {
           case 'first':
             return combineLatest([
@@ -90,7 +107,7 @@ export class OrderEffects {
                   ItemActions.setItemsAmountByStatus({ status, amount })
                 ]
               ),
-              catchError(error => of(ItemActions.notifyError({ error, query })))
+              catchError(error => this.handleError(error, 'all'))
             )
           case 'next':
             return this.orderService
@@ -98,7 +115,7 @@ export class OrderEffects {
               .pipe(
                 tap(() => this.handleLoadedRequest()),
                 map(items => ItemActions.getItemsSuccess({ items: formatResponseList(query, items, total, current) })),
-                catchError(error => of(ItemActions.notifyError({ error, query })))
+                catchError(error => this.handleError(error, 'all'))
               )
           case 'previous':
             return this.orderService
@@ -106,7 +123,7 @@ export class OrderEffects {
               .pipe(
                 tap(() => this.handleLoadedRequest()),
                 map(items => ItemActions.getItemsSuccess({ items: formatResponseList(query, items, total, current) })),
-                catchError(error => of(ItemActions.notifyError({ error, query })))
+                catchError(error => this.handleError(error, 'all'))
               )
           default: return EMPTY
         }
@@ -121,6 +138,12 @@ export class OrderEffects {
     // switchMap(() => of(this.notificationService.notifyError()))
     { dispatch: false }
   )
+
+  private handleError(error, type: RepositoryRequestQuery) {
+    this.signalService.setLoadingStatus(LoadingStatus.LoadingFailed)
+    this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed }))
+    return of(ItemActions.notifyError({ error, errorType: type }))
+  }
 
   private handleLoadingRequest() {
     this.signalService.setLoadingStatus(LoadingStatus.Loading)

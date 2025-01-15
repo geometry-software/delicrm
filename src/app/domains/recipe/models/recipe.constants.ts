@@ -1,7 +1,5 @@
-import { PaginationRequest } from '../../../shared/models/pagination.model'
-import { RepositoryRequest, SortRequest } from '../../../shared/repository/repository.models'
+import { RepositoryRequest } from '../../../shared/repository/repository.models'
 import { Recipe, RecipeStatus } from './recipe.model'
-import { Sort } from '@angular/material/sort'
 
 export abstract class RecipeConstants {
   static readonly storeFeatureKey = 'RECIPES'
@@ -12,25 +10,19 @@ export abstract class RecipeConstants {
   static readonly paginationTitle = 'recipes'
   static readonly paginationSize = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   static readonly moduleUrl = '/recipes'
-  static readonly tableColumns = ['name', 'type', 'price']
+  static readonly tableColumns = ['name', 'type']
   static readonly disableSort = false
   static readonly searchPlaceholder = 'RECIPES.PAGE.LIST.TABLE.SEARCH'
   static readonly deleteTitle = 'RECIPES.PAGE.DETAIL.DELETE_TITLE'
   static readonly backToListButton = 'RECIPES.NAVBAR'
-  static readonly defaultPaginationControlValue: PaginationRequest<Recipe> = {
-    query: 'first',
-    item: null,
-  }
-  static readonly defaultSizeControlValue = 10
-  static readonly defaultOrderControlValue: SortRequest = {
-    active: 'createdAt',
-    direction: 'desc',
-  }
   static readonly defaultRequestStatus = 'active'
-  static readonly defaultFirstPageRequest: RepositoryRequest<Recipe, RecipeStatus> = {
-    pagination: this.defaultPaginationControlValue,
-    sort: RecipeConstants.defaultOrderControlValue,
-    size: this.defaultSizeControlValue,
+  static readonly defaultPageRequest: RepositoryRequest<Recipe, RecipeStatus> = {
+    pagination: {
+      query: 'first',
+      item: null,
+    },
+    sort: { active: 'createdAt', direction: 'desc' },
+    size: 10,
     status: this.defaultRequestStatus,
   }
 }

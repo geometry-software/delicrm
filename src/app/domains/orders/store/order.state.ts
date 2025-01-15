@@ -1,8 +1,10 @@
 import { RepositoryRequesEntity, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { Order, OrderStatus, OrderStatusBar, OrderStatusResponse } from '../models/order.model'
+import { Restaurant } from '../../admin/models/restaurant'
 
 export interface State {
+  restaurant: Restaurant
   query: RepositoryRequestListQuery,
   items: RepositoryResponseList<Order>
   itemsLoadingStatus: LoadingStatus
@@ -15,6 +17,7 @@ export interface State {
 }
 
 export const initialState: State = {
+  restaurant: null,
   query: 'first',
   itemId: null,
   items: {

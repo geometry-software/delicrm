@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core'
-// import { Order, DeliveryStatus } from '../../orders/models/order.model'
 import { RepositoryService } from '../../../shared/repository/repository.service'
-import { MenuConstants } from '../../menu/utils/menu.constants'
-import { Delivery, DeliveryStatus, DeliveryStatusHistory } from '../models/delivery.model'
+import { Delivery, DeliveryStatus } from '../models/delivery.model'
 import { DeliveryConstants } from '../models/delivery.constants'
 import { SortRequest } from '../../../shared/repository/repository.models'
 import { combineLatest, map } from 'rxjs'
@@ -70,8 +68,8 @@ export class DeliveryService {
     return this.repositoryService.updateDocument(this.collection, item, id)
   }
 
-  updateStatus(id: string, status: DeliveryStatus, statusHistory: DeliveryStatusHistory[]) {
-    return this.repositoryService.updateDocument(this.collection, { status, statusHistory }, id)
+  updateStatus(id: string, status: DeliveryStatus) {
+    return this.repositoryService.updateDocument(this.collection, { status }, id)
   }
 
 }

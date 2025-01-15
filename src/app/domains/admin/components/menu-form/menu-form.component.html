@@ -76,7 +76,7 @@
 
   <mat-step label="Add main dishes">
     <form [formGroup]="plateForm" (ngSubmit)="choosePlates(stepper)">
-      <h5>Main dishes</h5>
+      <div class="section">Main dishes</div>
 
       <div class="flex items-center" *ngFor="let item of plateList; let i = index">
         <mat-checkbox [checked]="item.isAdded" (change)="addPlate(item)">
@@ -90,7 +90,7 @@
   </mat-step>
   <mat-step [stepControl]="plateForm" label="Confirm">
     <ng-container *ngIf="dailyMenu.main">
-      <app-formatted-daily-menu [dailyMenu]="dailyMenu" currency="" />
+      <app-formatted-daily-menu [dailyMenu]="dailyMenu" [currency]="currency | async" />
       <br />
       <app-button [title]="!(isLoading | async) ? 'Update menu and open a service' : 'Loading ..'"
         [disabled]="(isLoading | async)" actionType="save" [width]="'full'" (click)="createDailyMenu()"></app-button>

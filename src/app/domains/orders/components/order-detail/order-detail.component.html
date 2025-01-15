@@ -1,7 +1,14 @@
-<ng-container *ngIf="order; else orderNotFoundTemplate">
-  <div class="p-[4px]" [@fadeInOnEnter]>
+<div *ngIf="order; else orderNotFoundTemplate" class="p-[3px]">
+  <div class="order-actions">
+    <app-button [title]="'back'" actionType="back" [icon]="'arrow_back'" [url]="'/orders'"></app-button>
+    <app-button [title]="statusButtonTitle" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
+      icon="arrow_forward" (click)="update()" />
+    <app-button [title]="printButtonTitle" [disabled]="(loadingStatus | async) === LoadingStatus.Loading" icon="print"
+      (click)="print()" />
+  </div>
+  <div [@fadeInOnEnter]>
     <div class="card">
-      <app-title [title]="orderTitle" [subtitle]="order.category.client" />
+      <app-title [title]="orderTitle" [subtitle]="orderDetail" />
 
       <div class="flex justify-between items-center">
         <div class="progress">
@@ -10,16 +17,9 @@
             {{ orderTranslate[orderStatusBar.status] }}
           </div>
         </div>
-        <div class="flex gap-2">
-          <ng-container *ngIf="printButton; else statusActionButton">
-            <app-button [title]="printButtonTitle" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
-              icon="print" (click)="print()" />
-          </ng-container>
-          <ng-template #statusActionButton>
-            <app-button [title]="statusButtonTitle" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
-              icon="arrow_forward" (click)="update()" />
-          </ng-template>
-        </div>
+        <!-- <div class="flex gap-2">
+
+        </div> -->
       </div>
       <ol>
         <li *ngFor="let item of order.main">
@@ -92,9 +92,12 @@
       <app-title-item title="Total" [value]="getTotal(order.price.total)" margin="0" />
     </div>
   </div>
-</ng-container>
+</div>
+
 <ng-template #orderNotFoundTemplate>
-  <div class="validation-error-message" *ngIf="orderNotFound">
-    Order id: {{orderId }} was not found
+  <div class="validation-error-message" *ngIf="emptyOrder">
+    <ng-container *ngIf="orderNotFound">
+      Order id: {{ orderId }} was not found
+    </ng-container>
   </div>
 </ng-template>

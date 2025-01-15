@@ -35,6 +35,7 @@ export const getPaginationResponse = createSelector(getPaginationItem, getCurren
     sizeList: paginationSize,
   },
 }))
+export const getCurrency = createSelector(getState, (state) => state?.restaurant?.currency)
 export const itemsAmountByStatus = createSelector(getState, (state) => state.itemsAmountByStatus)
 export const statusBar = createSelector(getState, (state) => state.statusBar)
 export const getListLabels = createSelector(itemsAmountByStatus, (status) => ({

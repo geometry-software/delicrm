@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, catchError, combineLatest, concat, filter, first, from, map, of, shareReplay, Subject, switchMap, tap } from 'rxjs'
+import { BehaviorSubject, catchError, combineLatest, concat, filter, first, from, map, of, switchMap, tap } from 'rxjs'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { AuthStatus, Auth } from '../../../auth/models/auth.model'
 import { mapAppUser } from '../utils/app-user.mapper'
 import { AuthService } from '../../../auth/services/auth.service'
-import { AuthConstants } from '../../../auth/models/auth.constants'
-import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
 import { User, UserRole } from '../models/user.model'
 import { UserConstants } from '../models/user.constants'
 import { SortRequest } from '../../../shared/repository/repository.models'
@@ -24,49 +22,17 @@ export class UserService {
     private signalService: SignalService,
     private notificationService: NotificationService,
   ) {
-    // this.createDumpUsers()
     this.initAuthSession()
-  }
-
-  readonly appUserSubject = new BehaviorSubject<User>(null)
-  readonly appAuthSubject = new BehaviorSubject<Auth>(null)
-
-  createDumpUsers() {
-    const arr: User[] = []
-    const userAmount = 9
-    for (let index = 0; index < userAmount; index++) {
-      // arr.push({
-      //   auth: {
-      //     authId: `${index + 1}`,
-      //     // avatar: '',
-      //     createdAt: getCurrentUnixTime(),
-      //     // email: 'mail@mail.com',
-      //     // displayName: 'User',
-      //     providerId: 'google',
-      //     deliveryInfo: {} as any,
-      //     status: 'requested',
-      //     // locale: 'pt'
-      //   },
-      //   name: `User ${index + 1}`,
-      //   role: 'waiter',
-      //   createdAt: getCurrentUnixTime(),
-      //   locale: 'pt',
-      //   status: 'requested',
-      // })
-    }
-    from(arr).subscribe(user => {
-      const item = user as any
-      console.log(item);
-      this.repositoryService.createDocument(this.collection, item)
-    })
   }
 
   private readonly collection = UserConstants.collectionName
 
-  readonly appUser = this.appUserSubject.asObservable()
-  readonly appAuth = this.appAuthSubject.asObservable().pipe(
-    tap(v => console.log(v))
+  readonly appUserSubject = new BehaviorSubject<User>(null)
+  readonly appAuthSubject = new BehaviorSubject<Auth>(null)
+  readonly appUser = this.appUserSubject.asObservable().pipe(
+    // tap(v => console.log(v))
   )
+  readonly appAuth = this.appAuthSubject.asObservable()
 
   initAuthSession() {
     this.authService.firebaseUser.pipe(
@@ -135,11 +101,11 @@ export class UserService {
     return this.repositoryService.getFirstPage<AuthStatus>(this.collection, order, size, status)
   }
 
-  getNextPage<V>(order: SortRequest, size: number, status: AuthStatus, value: number) {
+  getNextPage(order: SortRequest, size: number, status: AuthStatus, value: number) {
     return this.repositoryService.getNextPage(this.collection, order, size, value, status)
   }
 
-  getPreviousPage<V>(order: SortRequest, size: number, status: AuthStatus, value: number) {
+  getPreviousPage(order: SortRequest, size: number, status: AuthStatus, value: number) {
     return this.repositoryService.getPreviousPage(this.collection, order, size, value, status)
   }
 

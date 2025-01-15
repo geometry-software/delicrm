@@ -11,10 +11,10 @@ import { ORDER_STATUS_COLOR, ORDER_STATUS_TRANSLATE, OrderStatus } from '../../.
   styleUrls: ['./delivery-status.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OrderStatusComponent implements OnInit {
+export class DeliveryStatusComponent implements OnInit {
 
   constructor(
-    private dialogRef: MatDialogRef<OrderStatusComponent>,
+    private dialogRef: MatDialogRef<DeliveryStatusComponent>,
     @Inject(MAT_DIALOG_DATA) private dialogData: any
   ) { }
 
@@ -27,7 +27,7 @@ export class OrderStatusComponent implements OnInit {
     this.currentStatus = this.dialogData.status
   }
 
-  confirm(status: OrderStatus) {
+  confirm(status: DeliveryStatus) {
     this.dialogRef.close(status)
   }
 

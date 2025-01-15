@@ -1,75 +1,65 @@
-<div class="host-overflow">
+<div *ngIf="userData | async as user" class="p-[3px]">
+  <div class="card">
+    <app-title title="Auth details" />
 
-  <ng-container *ngIf="userData">
-    <div class="section-card">
-      <h2>User profile</h2>
+    <app-title-item title="Provider" [value]="user.auth.providerId" />
+    <app-title-item title="Email" [value]="user.auth.extra.email " />
+    <app-title-item margin="0" title="Auth method" value="Information for log data is obtained from Firebase AngularFireAuth and maintained within the Firebase
+      AngularFirestoreCollection with READ and WRITE access for users confirmed by the application administrator or
+      other responsible person." />
+  </div>
+  <br>
 
-      <form [formGroup]="clientForm" (ngSubmit)="updateClientData(clientForm)">
-        <mat-form-field>
-          <mat-label> Name</mat-label>
-          <input matInput type="text" formControlName="name" />
-        </mat-form-field>
+  <div class="card">
+    <app-title title="User profile" />
 
-        <app-button actionType="save" type="submit" [title]="!isLoaded ? ' Update' : 'Updating ..'" width="full" />
-      </form>
-    </div>
+    <form [formGroup]="clientForm" (ngSubmit)="updateClientData(clientForm)">
+      <mat-form-field>
+        <mat-label> Name</mat-label>
+        <input matInput type="text" formControlName="name" />
+      </mat-form-field>
 
-    <div class="section-card">
-      <h2>Auth</h2>
+      <app-button actionType="save" type="submit" [title]="!isLoaded ? ' Update' : 'Updating ..'" width="full" />
+    </form>
+  </div>
 
-      <h3>Provider</h3>
-      <h4 class="text-ellipsis">{{ userData.provider }}</h4>
-
-      <h3>Email</h3>
-      <h4 class="text-ellipsis">{{ userData.email }}</h4>
-
-      <h3>Info</h3>
-      <h4>
-        Information for log data is obtained from Firebase AngularFireAuth and maintained within the Firebase
-        AngularFirestoreCollection with READ and WRITE access for users confirmed by the application administrator or
-        other responsible person.
-      </h4>
-    </div>
-
-    <br />
-    <mat-card *ngIf="isClient">
-      <mat-tab-group>
-        <mat-tab label="Dirección">
-          <br />
-          <div class="item-title" style="margin-bottom: 5px">Edit delivery address</div>
+  <br />
+  <mat-card *ngIf="isClient">
+    <mat-tab-group>
+      <mat-tab label="Dirección">
+        <br />
+        <div class="item-title" style="margin-bottom: 5px">Edit delivery address</div>
 
 
-        </mat-tab>
-        <mat-tab label="Historial">
-          <br />
-          <div class="item-title">Order history</div>
+      </mat-tab>
+      <mat-tab label="Historial">
+        <br />
+        <div class="item-title">Order history</div>
 
-          <mat-table [dataSource]="datasource" style="background-color: transparent">
-            <ng-container matColumnDef="date">
-              <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                <a [routerLink]="['/orderdetail', element.id, 'client']">
-                  {{ element.switchMap.toDate() | date : 'MMMM d, y' }}
-                </a>
-              </mat-cell>
-            </ng-container>
+        <mat-table [dataSource]="datasource" style="background-color: transparent">
+          <ng-container matColumnDef="date">
+            <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <a [routerLink]="['/orderdetail', element.id, 'client']">
+                {{ element.switchMap.toDate() | date : 'MMMM d, y' }}
+              </a>
+            </mat-cell>
+          </ng-container>
 
-            <ng-container matColumnDef="price">
-              <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                {{ element.totalPrice | number }}
-              </mat-cell>
-            </ng-container>
+          <ng-container matColumnDef="price">
+            <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.totalPrice | number }}
+            </mat-cell>
+          </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-          </mat-table>
-        </mat-tab>
-      </mat-tab-group>
-    </mat-card>
-  </ng-container>
-
-  <button mat-stroked-button (click)="logout()" class="exit-button">Exit app</button>
-  <div class="version">version updated {{ versionBuildDate }}</div>
-
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+        </mat-table>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
 </div>
+
+<button mat-stroked-button (click)="logout()" class="exit-button">Exit app</button>
+<div class="version">version updated {{ versionBuildDate }}</div>

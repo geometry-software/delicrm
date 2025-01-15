@@ -1,6 +1,4 @@
-import { Observable } from 'rxjs'
 import { PaginationRequest } from '../models/pagination.model'
-import { Sort } from '@angular/material/sort'
 
 export type RepositoryEntity = {
   id?: string

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, ViewChild } from '@angular/core'
 import { MatSort, Sort } from '@angular/material/sort'
-import { EMPTY, Observable, shareReplay, tap } from 'rxjs'
+import { EMPTY, Observable, of } from 'rxjs'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Store } from '@ngrx/store'
 import { Recipe } from '../../models/recipe.model'
@@ -8,13 +8,14 @@ import { PLATE_TYPE_TRANSLATE, RecipeConstants } from '../../models/recipe.const
 import { RecipeActions as ItemActions } from '../../store/recipe.actions'
 import { getItems, getPaginationResponse } from '../../store/recipe.selectors'
 import { FormControl } from '@angular/forms'
-import { PaginationRequest, PaginationResponse } from '../../../../shared/models/pagination.model'
+import { PaginationResponse } from '../../../../shared/models/pagination.model'
 import { SharedConstants } from '../../../../shared/utils/shared.constants'
 import { SignalService } from '../../../../shared/services/signal.service'
-// import { combineListControls } from '../../utils/combine-list-controls'
-// import { SizeRequest } from '../../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { combineListControls } from '../../../../shared/utils/combine-list-controls'
+import { OrderConstants } from '../../../orders/models/order.constants'
+import { RepositoryEntityStatus, SortRequest } from '../../../../shared/repository/repository.models'
 
 @Component({
   selector: 'app-recipe-list',
@@ -34,10 +35,8 @@ export class RecipeListComponent implements OnInit {
 
   readonly LoadingStatus = LoadingStatus
   readonly loadingStatus = this.signalService.getLoadingStatus
-
-  // Selectors
   readonly dataList: Observable<Recipe[]> = this.store.select(getItems)
-  // readonly downloadState: Observable<boolean> = this.store.select(getItemsLoadingState).pipe(shareReplay(1))
+  // TODO
   readonly downloadState = EMPTY
   readonly paginationPayload: Observable<PaginationResponse<Recipe>> = this.store.select(getPaginationResponse)
 
@@ -46,39 +45,33 @@ export class RecipeListComponent implements OnInit {
   @ViewChild(MatSort, { static: false }) sort: MatSort
 
   // Constants
-  readonly defaultPaginationControlValue = RecipeConstants.defaultPaginationControlValue
-  readonly defaultSizeControlValue = RecipeConstants.defaultSizeControlValue
   readonly tableColumns = RecipeConstants.tableColumns
   readonly moduleUrl = RecipeConstants.moduleUrl
-  readonly defaultOrderControlValue = RecipeConstants.defaultOrderControlValue
   readonly tableLoadingOpacity = SharedConstants.tableLoadingOpacity
   readonly defaultRequestStatus = RecipeConstants.defaultRequestStatus
   readonly defaultTableSort = RecipeConstants.defaultTableSort
   readonly disableSort = RecipeConstants.disableSort
+  readonly defaultSortControlValue = OrderConstants.defaultPageRequest.sort
 
-  // Controls
-  paginationControl: FormControl<PaginationRequest<Recipe>> = new FormControl(this.defaultPaginationControlValue)
-  sizeControl: FormControl<number> = new FormControl(this.defaultSizeControlValue)
-  orderControl: FormControl<Sort> = new FormControl(this.defaultOrderControlValue)
+  readonly paginationControl = new FormControl(OrderConstants.defaultPageRequest.pagination)
+  readonly sizeControl = new FormControl(OrderConstants.defaultPageRequest.size)
+  readonly sortControl = new FormControl(this.defaultSortControlValue)
 
   ngOnInit() {
     this.initData()
     this.setSignals()
   }
 
+  changeSort(sort: Sort) {
+    this.sortControl.setValue(sort as SortRequest)
+  }
+
   initData() {
-    // combineListControls(this.paginationControl, this.sizeControl, this.orderControl, this.store)
-    //   .pipe(takeUntilDestroyed(this.destroyRef))
-    //   .subscribe(([pagination, size, order]) =>
-    //     this.store.dispatch(
-    //       ItemActions.getItems({
-    //         request: {
-    //           pagination: pagination,
-    //           size: size,
-    //           status: this.defaultRequestStatus,
-    //           order: order,
-    //         },
-    //       })))
+    combineListControls(this.paginationControl, this.sizeControl, this.sortControl, of(this.defaultRequestStatus))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe(([pagination, size, sort, status]) =>
+        this.store.dispatch(ItemActions.getItems({ request: { pagination, size, sort, status: status as RepositoryEntityStatus } })))
   }
 
   setSignals() {
@@ -89,4 +82,5 @@ export class RecipeListComponent implements OnInit {
   redirectToDetail(id: string) {
     this.router.navigate([`/${this.moduleUrl}` + `/${id}`])
   }
+
 }

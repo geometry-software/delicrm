@@ -58,7 +58,7 @@ export const userMenuOptions: Array<MenuOption> = [
   {
     title: 'Profile',
     icon: 'app_settings_alt',
-    link: 'profile',
+    link: 'auth/profile',
     roles: ['admin', 'delivery', 'waiter'],
   },
 ]

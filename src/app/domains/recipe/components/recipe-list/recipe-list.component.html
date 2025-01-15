@@ -1,7 +1,7 @@
 <div class="table-loading-shade" *ngIf="loadingStatus() === LoadingStatus.Loading"></div>
 
-<mat-table [dataSource]="dataList | async" matSort matSortActive="createdAt"
-  (matSortChange)="orderControl.setValue($event)">
+<mat-table [dataSource]="dataList | async" matSort [matSortDirection]="defaultSortControlValue.direction"
+  [matSortActive]="defaultSortControlValue.active" (matSortChange)="changeSort($event)">
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef mat-sort-header>
       {{ 'RECIPES.PAGE.LIST.TABLE.NAME' | translate }}
@@ -19,15 +19,6 @@
     </mat-header-cell>
     <mat-cell *matCellDef="let element">
       {{ plateTypeTranslate[element.type] | translate }}
-    </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="price">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>
-      {{ 'RECIPES.PAGE.LIST.TABLE.PRICE' | translate }}
-    </mat-header-cell>
-    <mat-cell *matCellDef="let element">
-      <span *ngIf="element.price"> {{ element.price || '-' }}</span>
     </mat-cell>
   </ng-container>
 

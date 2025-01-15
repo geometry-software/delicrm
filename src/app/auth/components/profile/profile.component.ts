@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
 import { FormGroup, Validators, FormBuilder } from '@angular/forms'
 import { MatTableDataSource } from '@angular/material/table'
 import { AuthService } from '../../services/auth.service'
+import { UserService } from '../../../domains/users/services/user.service'
+import { filter, switchMap, tap } from 'rxjs'
 
 @Component({
   selector: 'app-profile',
@@ -14,9 +16,15 @@ export class ProfileComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
+    private userService: UserService,
   ) { }
 
-  userData
+  userData = this.userService.appUser.pipe(
+    tap(v => console.log(v)),
+    filter(Boolean),
+    switchMap(user => this.userService.getById(user.auth.authId)),
+    tap(v => console.log(v))
+  )
   userId: string
   isClient: boolean
   isEmployee: boolean

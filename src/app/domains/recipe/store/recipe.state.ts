@@ -1,19 +1,20 @@
-import { createReducer, on } from '@ngrx/store'
 import { Recipe } from '../models/recipe.model'
-import { RecipeActions as ItemActions } from './recipe.actions'
-import { RepositoryRequesEntity, RepositoryResponseList } from '../../../shared/repository/repository.models'
+import { RepositoryRequesEntity, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 
 export interface State {
+  query: RepositoryRequestListQuery,
+  items: RepositoryResponseList<Recipe>
   item: RepositoryRequesEntity<Recipe>
   itemId: string
-  items: RepositoryResponseList<Recipe>
   loadingStatus: LoadingStatus
   listResponseType: any
   resetRequest: boolean
+  size: number
 }
 
 export const initialState: State = {
+  query: 'first',
   item: {
     data: null,
   },
@@ -26,4 +27,5 @@ export const initialState: State = {
   loadingStatus: LoadingStatus.NotLoaded,
   listResponseType: null,
   resetRequest: null,
+  size: null
 }

@@ -48,3 +48,10 @@ h2 {
   font-weight: 400;
   font-size: 0.8em !important;
 }
+
+.order-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}

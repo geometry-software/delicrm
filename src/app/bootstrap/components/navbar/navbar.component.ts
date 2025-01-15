@@ -28,9 +28,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
 
   readonly authMenuOptions = authMenuOptions
   readonly userMenuOptions = userMenuOptions
-  readonly appUser = this.userService.appUser.pipe(
-    tap(v => console.log(v))
-  )
+  readonly appUser = this.userService.appUser
 
   @ViewChild('drawer') drawer: MatDrawer
   responsiveLayout: ResponsiveLayout = {}

@@ -34,15 +34,15 @@ export class DeliveryEffects {
 
   readonly moduleUrl = DeliveryConstants.moduleUrl
 
-  updateOrderStatus = createEffect(() =>
+  updateDeliveryStatus = createEffect(() =>
     this.actions.pipe(
-      ofType(ItemActions.updateOrderStatus),
+      ofType(ItemActions.updateDeliveryStatus),
       tap(() => this.handleLoadingRequest()),
-      switchMap(({ id, status, statusHistory }) =>
-        this.deliveryService.updateStatus(id, status, statusHistory).pipe(
+      switchMap(({ id, status }) =>
+        this.deliveryService.updateStatus(id, status).pipe(
           map(() => {
             this.handleLoadedRequest()
-            return ItemActions.updateOrderStatusSuccess({ status })
+            return ItemActions.updateDeliveryStatusSuccess({ status })
           }),
           catchError(error => of(
             ItemActions.notifyError({ error }),

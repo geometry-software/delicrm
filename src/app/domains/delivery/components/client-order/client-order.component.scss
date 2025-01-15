@@ -1,10 +1,10 @@
-.devider {
+.divider {
   border-top: 1px solid #ccc;
   margin: 10px 0;
 }
 
 .name-title {
-  font-size: 2em;
+  font-size: 1.5em;
   color: #555;
   text-align: center;
 }
@@ -29,4 +29,11 @@
     font-size: 1.2em;
     font-weight: 500;
   }
+}
+
+.user-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
 }

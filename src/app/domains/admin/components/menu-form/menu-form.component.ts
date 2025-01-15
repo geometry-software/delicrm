@@ -11,8 +11,10 @@ import { RestaurantConstants } from '../../models/restaurant.constants'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { Store } from '@ngrx/store'
 import { AdminActions as ItemActions } from '../../store/admin-store/admin.actions'
-import { loadingStatus } from '../../store/admin-store/admin.selectors'
-import { DailyMenu } from '../../models/restaurant'
+import { getCurrency, loadingStatus } from '../../store/admin-store/admin.selectors'
+import { DailyMenu, MenuItem } from '../../models/restaurant'
+
+type MenuFormItem = MenuItem & { isAdded?: boolean }
 
 @Component({
   selector: 'app-menu-form',
@@ -48,11 +50,12 @@ export class MenuFormComponent implements OnInit {
     filter(value => value === LoadingStatus.Loading),
     map(Boolean)
   )
+  readonly currency = this.store.select(getCurrency)
 
   menuForm: FormGroup
   plateForm: FormGroup
 
-  plateList: Array<Recipe & { isAdded?: boolean }>
+  plateList: Array<MenuFormItem>
   starterList: Array<Recipe>
   drinkList: Array<Recipe>
   barList: Array<Recipe>
@@ -61,7 +64,7 @@ export class MenuFormComponent implements OnInit {
   riceList: Array<Recipe>
   garnishList: Array<Recipe>
 
-  chosenPlates = []
+  chosenPlates: Array<MenuItem & { isAdded: boolean }> = []
 
   barSource
   barSourceColumns = ['name', 'price', 'remove']
@@ -197,7 +200,7 @@ export class MenuFormComponent implements OnInit {
     // TODO
   }
 
-  addExtras(form, stepper: MatStepper) {
+  addExtras(form: FormGroup, stepper: MatStepper) {
     this.hasStartersValidationError = false
     if (form.valid) {
       stepper.next()
@@ -208,15 +211,16 @@ export class MenuFormComponent implements OnInit {
     if (this.chosenPlates.length) {
       stepper.next()
       this.dailyMenu.extras = this.menuForm.value
-      this.dailyMenu.main = this.chosenPlates.map(el => el.item)
+      this.dailyMenu.main = this.chosenPlates
     }
   }
 
-  addPlate(item) {
-    if (item.isAdded) {
+  addPlate(item: MenuFormItem) {
+    const isPlateAdded = this.chosenPlates.map(el => el.id).includes(item.id)
+    if (isPlateAdded) {
       this.chosenPlates = this.chosenPlates.filter(el => el.id !== item.id)
     } else {
-      this.chosenPlates.push({ item, isAdded: true })
+      this.chosenPlates.push({ ...item, isAdded: true })
     }
   }
 

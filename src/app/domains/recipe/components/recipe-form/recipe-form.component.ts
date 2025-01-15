@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, } from '@angular/core'
 import { Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { AngularFireStorageReference } from '@angular/fire/compat/storage'
@@ -7,17 +7,20 @@ import { Recipe, RecipeCourse } from '../../models/recipe.model'
 import { Store } from '@ngrx/store'
 import { getItem, getLoadingStatus } from '../../store/recipe.selectors'
 import { RecipeActions as ItemActions } from '../../store/recipe.actions'
-import { filter, map, switchMap, tap } from 'rxjs'
+import { filter, tap } from 'rxjs'
 import { FileStorageService } from '../../../../shared/services/file-storage.service'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
-import { showFieldErrors } from '../../../../shared/utils/form-error-handling'
+import { highlightInvalidFields, showFieldErrors } from '../../../../shared/utils/form-error-handling'
 import { recipeFormGroup, RecipeFormProps } from '../../models/recipe.form'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { fadeInOnEnterAnimation } from 'angular-animations'
 
 @Component({
   selector: 'app-recipe-form',
   templateUrl: './recipe-form.component.html',
   styleUrls: ['./recipe-form.component.scss'],
+  animations: [fadeInOnEnterAnimation()],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeFormComponent implements OnInit {
@@ -26,20 +29,18 @@ export class RecipeFormComponent implements OnInit {
     private store: Store,
     private route: ActivatedRoute,
     private fileStorageService: FileStorageService,
-    private signalService: SignalService
+    private signalService: SignalService,
+    private destroyRef: DestroyRef,
+    private cdr: ChangeDetectorRef
   ) { }
 
   readonly LoadingStatus = LoadingStatus
   readonly loadingState = this.store.select(getLoadingStatus)
-  readonly getItem = this.route.params.pipe(
-    map(value => value['id']),
-    filter(Boolean),
-    switchMap(id => this.store.select(getItem(id)))
-  )
 
   recipeTosave: Recipe | undefined
   isEditForm: boolean | undefined
   itemId: string | undefined
+  isFormDataLoaded: boolean | undefined
   hasPrice: boolean | undefined
   hasProtein: boolean | undefined
   imgURL: string | undefined
@@ -62,25 +63,34 @@ export class RecipeFormComponent implements OnInit {
   }
 
   initForm() {
-    if (this.route.snapshot.routeConfig.path.includes('edit')) {
+    if (!this.route.snapshot.routeConfig.path.includes('create')) {
       this.itemId = this.route.snapshot.params['id']
       this.isEditForm = true
+      console.log(this.itemId);
+
       this.store.dispatch(ItemActions.getItem({ id: this.itemId }))
-      this.store.select(getItem(this.itemId))
+      this.store.select(getItem)
         .pipe(
+          filter(Boolean),
+          takeUntilDestroyed(this.destroyRef),
           tap(value => {
             console.log(value)
-
             this.form.patchValue(value, { onlySelf: true })
-            if (value?.price) this.hasPrice = true
+            if (value?.price) {
+              this.hasPrice = true
+            }
+            this.isFormDataLoaded = true
+            this.cdr.markForCheck()
           })
-        )
-        .subscribe()
+        ).subscribe()
       // TODO: history of orders for exact recipe
       // this.dao.getDocument(this.itemId).subscribe(value => {
       //   this.form.patchValue(value, { onlySelf: true })
       //   if (value?.price) this.hasPrice = true
       // })
+    } else {
+      this.isFormDataLoaded = true
+      this.cdr.markForCheck()
     }
   }
 
@@ -90,7 +100,6 @@ export class RecipeFormComponent implements OnInit {
   }
 
   changeType(event: RecipeCourse) {
-    console.log(event)
     if (event === 'main') {
       this.hasPrice = true
       this.hasProtein = true
@@ -118,14 +127,9 @@ export class RecipeFormComponent implements OnInit {
     if (form.valid) {
       !this.isEditForm
         ? this.store.dispatch(ItemActions.createItem({ item: form.value }))
-        : this.store.dispatch(
-          ItemActions.updateItem({ item: form.value, id: this.itemId })
-        )
-    }
-    // else highlightInvalidFields(form)
+        : this.store.dispatch(ItemActions.updateItem({ item: form.value, id: this.itemId }))
+    } else highlightInvalidFields(form)
   }
-
-  getErrorMessage = {} as any
 
   updateImg(event) {
     this.fileName = event.target.files[0].name
@@ -134,22 +138,21 @@ export class RecipeFormComponent implements OnInit {
   }
 
   uploadFile() {
-    // TODO: check image upload and rewrite in declarative style
     this.isUploadingImg = true
     const uploadLink = this.fileStorageService.getFileLink(this.fileName)
-    const uploadCtrl = this.fileStorageService.saveFile(
+    this.fileStorageService.saveFile(
       this.fileName,
       this.fileImg
-    )
-    uploadCtrl.percentageChanges()
-      .subscribe((percentage) => {
-        this.uploadProgress = Math.round(percentage)
-        if (this.uploadProgress == 100) {
-          this.showUploadButton = false
-          this.isUploadingImg = false
-          this.isUploadedImg = true
-        }
-      })
+    ).percentageChanges().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((percentage) => {
+      this.uploadProgress = Math.round(percentage)
+      if (this.uploadProgress == 100) {
+        this.showUploadButton = false
+        this.isUploadingImg = false
+        this.isUploadedImg = true
+      }
+    })
     uploadLink.getDownloadURL().subscribe((URL) => this.form.controls[RecipeFormProps.imgURL].setValue(URL))
   }
 }
