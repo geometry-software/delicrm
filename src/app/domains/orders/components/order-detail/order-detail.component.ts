@@ -1,16 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { MatDialog } from '@angular/material/dialog'
-import { MatSnackBar } from '@angular/material/snack-bar'
 import { fadeInOnEnterAnimation } from 'angular-animations'
 import { ORDER_STATUS_COLOR, ORDER_STATUS_ICON, ORDER_STATUS_TRANSLATE } from '../../models/order.model'
 import { PrintService } from '../../../../shared/services/print.service'
-import { catchError, combineLatest, delay, filter, firstValueFrom, map, shareReplay, switchMap, tap } from 'rxjs'
+import { catchError, combineLatest, debounceTime, delay, distinctUntilChanged, filter, firstValueFrom, map, shareReplay, switchMap, tap } from 'rxjs'
 import { Order, OrderStatus, OrderProgress, OrderStatusHistory, OrderStatusBar, orderStatusProgress } from '../../models/order.model'
 import { UserService } from '../../../users/services/user.service'
 import { getCurrentUnixTime, getFullTimeFromUnix } from '../../../../shared/utils/format-unix-time'
 import { Store } from '@ngrx/store'
-import { getCurrency, getItem, getItemById, getLoadingStatus, statusBar } from '../../store/order.selectors'
+import { getCurrency, getItem, getItemById, getItemLoadingStatus, getItemsLoadingStatus, statusBar } from '../../store/order.selectors'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { User } from '../../../users/models/user.model'
 import { OrderActions as ItemActions } from '../../store/order.actions'
@@ -30,7 +29,6 @@ export class OrderDetailComponent implements OnInit {
 
   constructor(
     private printService: PrintService,
-    private snackBar: MatSnackBar,
     private userService: UserService,
     private route: ActivatedRoute,
     private store: Store,
@@ -46,7 +44,7 @@ export class OrderDetailComponent implements OnInit {
   readonly getFullTimeFromUnix = getFullTimeFromUnix
   readonly orderTranslate = ORDER_STATUS_TRANSLATE
 
-  readonly loadingStatus = this.store.select(getLoadingStatus).pipe(shareReplay(1))
+  readonly loadingStatus = this.store.select(getItemsLoadingStatus).pipe(shareReplay(1))
   readonly LoadingStatus = LoadingStatus
 
   order: Order
@@ -56,10 +54,6 @@ export class OrderDetailComponent implements OnInit {
   orderNotFound: boolean
   orderStatusBar: OrderStatusBar
   status: OrderStatus
-
-  get printButton() {
-    return this.orderStatusBar.status === 'paid' || this.orderStatusBar.status === 'canceled'
-  }
 
   get orderTitle() {
     // TODO use obj[key]
@@ -88,23 +82,14 @@ export class OrderDetailComponent implements OnInit {
   }
 
   get orderDetail() {
-    return this.order.category.client ?? 'number ' + this.order.category.table
-  }
-
-  copyAddress(): void {
-    navigator.clipboard.writeText(this.order.category.delivery.address)
-      .then(() => this.openSnackBar('Dirección fue copiado'))
-  }
-
-  copyPhone(): void {
-    navigator.clipboard.writeText(this.order.category.delivery.phone)
-      .then(() => this.openSnackBar('Teléfono fue copiado'))
-  }
-
-  openSnackBar(message: string): void {
-    this.snackBar.open(message, '', {
-      duration: 2000,
-    })
+    switch (this.order.category.type) {
+      case 'table':
+        return 'number ' + this.order.category.table
+      case 'delivery':
+        return this.order.category.delivery.deliveryInfo.name
+      case 'takeaway':
+        return this.order.category.clientName
+    }
   }
 
   print() {
@@ -114,35 +99,30 @@ export class OrderDetailComponent implements OnInit {
   update() {
     this.dialog.open(OrderStatusComponent, {
       width: '300px',
-      // TODO
-      // maxWidth: '300px',
       height: 'auto',
       autoFocus: false,
       data: this.order
     }).afterClosed().pipe(
       filter(Boolean),
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe((status) => {
-      const history: OrderStatusHistory = {
-        status,
-        createdAt: getCurrentUnixTime(),
-        createdBy: this.user,
-      }
-      let progress: OrderProgress = orderStatusProgress[status]
-      const statusHistory = [...this.order.statusHistory]
-      statusHistory.push(history)
+    ).subscribe(status =>
       this.store.dispatch(ItemActions.updateOrderStatus({
         id: this.orderId,
         status,
-        statusHistory,
-        progress
+        progress: orderStatusProgress[status]
       }))
-    })
+    )
   }
 
-  getUser() {
-    return this.user.name
-  }
+  // TODO make order history by status changes
+  // const history: OrderStatusHistory = {
+  //   status,
+  //   createdAt: getCurrentUnixTime(),
+  //   createdBy: this.user,
+  // }
+  // const statusHistory = [...this.order.statusHistory]
+  // statusHistory.push(history)
+
 
   getTotal(total: number) {
     return total + ' ' + this.currency
@@ -150,8 +130,8 @@ export class OrderDetailComponent implements OnInit {
 
   private async initData() {
     combineLatest([
-      this.userService.appUser,
-      this.store.select(getCurrency),
+      this.userService.appUser.pipe(filter(Boolean)),
+      this.store.select(getCurrency).pipe(filter(Boolean)),
       this.route.params.pipe(
         map(value => value['id']),
         switchMap(id => this.store.select(getItemById(id)).pipe(
@@ -178,9 +158,10 @@ export class OrderDetailComponent implements OnInit {
 
   private async requestOrder(id: string) {
     this.store.dispatch(ItemActions.getItem({ id }))
-    return await firstValueFrom(this.store.select(getLoadingStatus).pipe(
+    return await firstValueFrom(this.store.select(getItemLoadingStatus).pipe(
       filter(value => value === LoadingStatus.Loaded),
-      delay(100),
+      distinctUntilChanged(),
+      debounceTime(100),
       switchMap(() => this.store.select(getItem).pipe(
         tap(order => {
           if (!order) {

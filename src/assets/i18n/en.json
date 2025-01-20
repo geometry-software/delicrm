@@ -7,6 +7,12 @@
     "SAVING": "Saving ..",
     "INFO": "Info"
   },
+  "TIMESTAMP": {
+    "CREATED_AT": "Created at",
+    "CREATED_BY": "Created by",
+    "CLOSED_AT": "Closed at",
+    "CLOSED_BY": "Closed by"
+  },
   "FORM": {
     "ENTER_PLATE_NAME": "Enter plate name",
     "RECIPE_DESCRIPTION": "Recipe description",
@@ -61,7 +67,58 @@
       }
     }
   },
-
+  "ORDERS": {
+    "NAVBAR": "Orders",
+    "PAGE": {
+      "LIST": {
+        "TAB": {
+          "DINING": "Dining",
+          "DELIVERY": "Delivery",
+          "CLOSED": "Closed"
+        },
+        "TOOLBAR": "Order list",
+        "CLIENT": "Name",
+        "WAITER": "Description",
+        "PRICE": "Type",
+        "FOOTER-TITLE": "orders"
+      },
+      "DETAIL": {
+        "TAB": {
+          "DINING": "Dining",
+          "DELIVERY": "Delivery",
+          "CLOSED": "Closed"
+        },
+        "NO_SALAD": "without salad",
+        "NO_GARNISH": "without garnish",
+        "NO_RICE": "without rice",
+        "NO_DESSERT": "without dessert",
+        "CLIENT": "Name",
+        "WAITER": "Description",
+        "PRICE": "Type",
+        "FOOTER-TITLE": "orders"
+      }
+    }
+  },
+  "DELIVERY": {
+    "NAVBAR": "Delivery",
+    "PAGE": {
+      "LIST": {
+        "TAB": {
+          "REQUESTED": "Requested",
+          "CONFIRMED": "Confirmed",
+          "ACCEPTED": "Accepted",
+          "ONTHEWAY": "On the way",
+          "RECEIVED": "Received",
+          "CLOSED": "Closed"
+        },
+        "TOOLBAR": "Order list",
+        "CLIENT": "Name",
+        "WAITER": "Description",
+        "PRICE": "Type",
+        "FOOTER-TITLE": "deliveries"
+      }
+    }
+  },
   "EXPENSES": {
     "NAVBAR": "Expenses",
     "PAGE": {

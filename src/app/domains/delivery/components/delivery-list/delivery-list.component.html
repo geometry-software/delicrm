@@ -1,14 +1,23 @@
 <div class="relative">
   <div class="table-loading-shade" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></div>
-  <mat-tab-group *ngIf="{ list: orderList | async, label: listLabels | async } as data" [@.disabled]="true"
+  <mat-tab-group *ngIf="{ list: orderList | async, label: listLabels | async} as data" [@.disabled]="true"
     (selectedTabChange)="changeTab($event)" [(selectedIndex)]="selectedTabIndex">
-    <mat-tab [label]="data.label.requested">
+    <mat-tab [label]="data.label.requested | tabLabel">
       <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
     </mat-tab>
-    <mat-tab [label]="data.label.confirmed">
+    <mat-tab [label]="data.label.confirmed | tabLabel">
       <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
     </mat-tab>
-    <mat-tab [label]="data.label.canceled">
+    <mat-tab [label]="data.label.accepted | tabLabel">
+      <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
+    </mat-tab>
+    <mat-tab [label]="data.label.ontheway | tabLabel">
+      <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
+    </mat-tab>
+    <mat-tab [label]="data.label.received | tabLabel">
+      <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
+    </mat-tab>
+    <mat-tab [label]="data.label.closed | tabLabel">
       <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
     </mat-tab>
   </mat-tab-group>
@@ -18,11 +27,11 @@
   <mat-table mat-table [dataSource]="data" matSort matSortDisableClear
     [matSortDirection]="defaultSortControlValue.direction" [matSortActive]="defaultSortControlValue.active"
     (matSortChange)="changeSort($event)">
-    <ng-container matColumnDef="user">
+    <ng-container matColumnDef="client">
       <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <div class="table-link" [routerLink]="['/delivery', element.id]">
-          {{ element.order.category.delivery.name }}
+          {{ element.deliveryInfo.name }}
         </div>
       </mat-cell>
     </ng-container>

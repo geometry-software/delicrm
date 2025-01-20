@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { map, switchMap, tap, catchError, of, withLatestFrom, combineLatest } from 'rxjs'
+import { map, switchMap, tap, catchError, of, withLatestFrom, combineLatest, first } from 'rxjs'
 import { MenuActions as ItemActions } from './menu.actions'
 import { Router } from '@angular/router'
 import { Store } from '@ngrx/store'
@@ -14,9 +14,11 @@ import { prepareOrder } from '../utils/prepare-order'
 import { AuthService } from '../../../auth/services/auth.service'
 import { Auth } from '../../../auth/models/auth.model'
 import { UserService } from '../../users/services/user.service'
-import { Delivery } from '../../delivery/models/delivery.model'
+import { DeliveryInfo } from '../../delivery/models/delivery.model'
 import { getExtras, getRestaurantInfo } from './menu.selectors'
 import { CheckoutOrder } from '../models/checkout'
+import { NotificationService } from '../../../shared/services/notification.service'
+import { cloneDeep } from 'lodash'
 
 @Injectable()
 export class MenuEffects {
@@ -30,7 +32,8 @@ export class MenuEffects {
     private userService: UserService,
     private orderService: OrderService,
     private restaurantService: RestaurantService,
-    private signalService: SignalService
+    private signalService: SignalService,
+    private notificationService: NotificationService
   ) { }
 
   private readonly checkOutUrl = MenuConstants.checkOutUrl
@@ -49,7 +52,7 @@ export class MenuEffects {
           this.setLoaded()
           return ItemActions.initDailyMenuSuccess({ menu, restaurant })
         }),
-        catchError(() => this.handleError()))))
+        catchError(error => this.handleError(error)))))
   )
 
   setOrder = createEffect(() =>
@@ -57,34 +60,53 @@ export class MenuEffects {
       ofType(ItemActions.setOrder),
       withLatestFrom(
         this.store.select(getExtras),
-        this.store.select(getRestaurantInfo)
+        this.store.select(getRestaurantInfo),
+        this.userService.appUser.pipe(map(user => user ? true : false))
       ),
       tap(() => this.router.navigate([this.checkOutUrl])),
-      map(([{ main, alacarte }, extra, restaurant]) => prepareOrder(main, alacarte, extra, restaurant)),
+      map(([{ main, alacarte }, extra, restaurant, isCreatedByUser]) => prepareOrder(main, alacarte, extra, restaurant, isCreatedByUser)),
       map(order => ItemActions.setOrderSuccess({ order })))
+  )
+
+  checkoutOrder = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.checkoutOrder),
+      tap(() => this.setLoading()),
+      map(({ order }) => !order.isCreatedByUser
+        ? ItemActions.createClientDeliveryOrder({ delivery: order.category.delivery })
+        : ItemActions.createUserOrder({ order })))
   )
 
   createDeliveryOrder = createEffect(() =>
     this.actions.pipe(
-      ofType(ItemActions.createDeliveryOrder),
-      tap(() => this.setLoading()),
-      switchMap(({ delivery }) => this.updateAuth(delivery).pipe(
+      ofType(ItemActions.createClientDeliveryOrder),
+      switchMap(({ delivery }) => this.updateAuth(delivery.deliveryInfo).pipe(
         switchMap(() => this.deliveryService.create(delivery).pipe(
           map(id => ItemActions.checkoutOrderSuccess({ id, checkout: 'delivery' })),
-          catchError(() => this.handleError())
-        )))))
+          catchError(error => this.handleError(error)))),
+        catchError(error => this.handleError(error)),
+      )))
   )
 
-  createTableOrder = createEffect(() =>
+  createUserOrder = createEffect(() =>
     this.actions.pipe(
-      ofType(ItemActions.createTableOrder),
-      tap(() => this.setLoading()),
+      ofType(ItemActions.createUserOrder),
       switchMap(({ order }) => this.restaurantService.getCheckOutOrders().pipe(
-        switchMap((orders) => this.orderService.create(order).pipe(
-          switchMap(id => this.updateCheckoutOrders(orders, order.price.total, id).pipe(
-            map(() => ItemActions.checkoutOrderSuccess({ id, checkout: 'order' })),
-            catchError(() => this.handleError())
-          )))))))
+        switchMap(orders => this.orderService.create(order).pipe(
+          switchMap(id => this.restaurantService.updateDailyMenuOrders([...orders, { id, total: order.price.total }]).pipe(
+            map(() => order.category.type === 'delivery'
+              ? ItemActions.createUserDelivery({ delivery: cloneDeep({ ...order.category.delivery, orderId: id }) })
+              : ItemActions.checkoutOrderSuccess({ id, checkout: 'order' })))),
+          catchError(error => this.handleError(error)))),
+        catchError(error => this.handleError(error)))))
+  )
+
+  createUserDelivery = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.createUserDelivery),
+      switchMap(({ delivery }) => this.deliveryService.create(delivery).pipe(
+        map(() => ItemActions.checkoutOrderSuccess({ id: delivery.orderId, checkout: 'order' })),
+        catchError(error => this.handleError(error)))))
   )
 
   createOrderSuccess = createEffect(() =>
@@ -97,27 +119,29 @@ export class MenuEffects {
     , { dispatch: false }
   )
 
-  private handleError() {
+  private handleError(error: Error) {
+    this.notificationService.error(error)
     this.signalService.setLoadingStatus(LoadingStatus.LoadingFailed)
     this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed }))
     return []
   }
 
-  private updateAuth(delivery: Delivery) {
+  private updateAuth(info: DeliveryInfo) {
     return this.userService.appAuth.pipe(
-      map(auth => {
-        const currentAuthName = auth?.name
-        const currentAuthAddress = auth?.deliveryInfo.address
-        const currentAuthPhone = auth?.deliveryInfo.phone
-        const newAuthName = delivery.order.category.delivery.name
-        const newAuthAddress = delivery.order.category.delivery.address
-        const newAuthPhone = delivery.order.category.delivery.phone
+      first(),
+      switchMap(auth => {
+        const currentAuthName = auth.name
+        const currentAuthAddress = auth.authDelivery.address
+        const currentAuthPhone = auth.authDelivery.phone
+        const newAuthName = info.name
+        const newAuthAddress = info.address
+        const newAuthPhone = info.phone
         if (currentAuthName !== newAuthName || currentAuthAddress !== newAuthAddress || currentAuthPhone !== newAuthPhone) {
           const updatedAuth: Partial<Auth> = {
             name: newAuthName,
-            deliveryInfo: {
+            authDelivery: {
               address: newAuthAddress,
-              phone: newAuthPhone
+              phone: newAuthPhone,
             }
           }
           this.userService.appAuthSubject.next({ ...auth, ...updatedAuth })
@@ -131,8 +155,6 @@ export class MenuEffects {
 
   private updateCheckoutOrders(orders: CheckoutOrder[], total: number, id: string) {
     const updatedOrders = [...orders, { id, total }]
-    console.log(updatedOrders);
-
     return this.restaurantService.updateDailyMenuOrders(updatedOrders)
   }
 

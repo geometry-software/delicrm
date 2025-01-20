@@ -22,6 +22,7 @@ import { AppTitleItemComponent } from './components/app-title-item/app-title-ite
 import { NotificationService } from './services/notification.service'
 import { ConfirmationService } from './services/confirmation.service'
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
+import { TabLabelPipe } from './pipes/tab-label.pipe'
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
     AppInfoComponent,
     AppTitleComponent,
     AppTitleItemComponent,
-    AppFormattedDailyMenuComponent
+    AppFormattedDailyMenuComponent,
+    TabLabelPipe
   ],
   exports: [
     MaterialModule,
@@ -60,7 +62,8 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
     AppPaginationComponent,
     AppTableLinkComponent,
     NgxMaterialTimepickerModule,
-    AppFormattedDailyMenuComponent
+    AppFormattedDailyMenuComponent,
+    TabLabelPipe
   ],
   imports: [
     MaterialModule,

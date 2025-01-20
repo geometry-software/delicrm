@@ -1,14 +1,12 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, ViewChild } from '@angular/core'
 import { MatSort, Sort } from '@angular/material/sort'
-import { EMPTY, Observable, of } from 'rxjs'
+import { of } from 'rxjs'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Store } from '@ngrx/store'
-import { Recipe } from '../../models/recipe.model'
 import { PLATE_TYPE_TRANSLATE, RecipeConstants } from '../../models/recipe.constants'
 import { RecipeActions as ItemActions } from '../../store/recipe.actions'
-import { getItems, getPaginationResponse } from '../../store/recipe.selectors'
+import { getItems, getLoadingStatus, getPaginationResponse, getQuery, getSize } from '../../store/recipe.selectors'
 import { FormControl } from '@angular/forms'
-import { PaginationResponse } from '../../../../shared/models/pagination.model'
 import { SharedConstants } from '../../../../shared/utils/shared.constants'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
@@ -35,12 +33,12 @@ export class RecipeListComponent implements OnInit {
 
   readonly LoadingStatus = LoadingStatus
   readonly loadingStatus = this.signalService.getLoadingStatus
-  readonly dataList: Observable<Recipe[]> = this.store.select(getItems)
-  // TODO
-  readonly downloadState = EMPTY
-  readonly paginationPayload: Observable<PaginationResponse<Recipe>> = this.store.select(getPaginationResponse)
+  readonly dataList = this.store.select(getItems)
+  readonly query = this.store.select(getQuery)
+  readonly customQuerySize = this.store.select(getSize)
+  readonly downloadState = this.store.select(getLoadingStatus)
+  readonly paginationPayload = this.store.select(getPaginationResponse)
 
-  // Other properties
   readonly plateTypeTranslate = PLATE_TYPE_TRANSLATE
   @ViewChild(MatSort, { static: false }) sort: MatSort
 

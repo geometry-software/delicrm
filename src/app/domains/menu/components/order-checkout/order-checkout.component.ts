@@ -9,23 +9,24 @@ import {
   fadeInUpOnEnterAnimation,
   fadeInOnEnterAnimation,
 } from 'angular-animations'
-import { OrderDeliveryTime, Order, OrderType } from '../../../orders/models/order.model'
-import { MenuActions as ItemActions } from '../../store/menu.actions'
+import { Order, OrderType } from '../../../orders/models/order.model'
 import { Recipe } from '../../../recipe/models/recipe.model'
-import { User } from '../../../users/models/user.model'
+import { MenuActions as ItemActions, MenuActions } from '../../store/menu.actions'
 import { UserService } from '../../../users/services/user.service'
 import { MenuConstants } from '../../utils/menu.constants'
 import { Store } from '@ngrx/store'
 import { getCurrency, getExtras, getOrder, loadingStatus } from '../../store/menu.selectors'
 import { Router } from '@angular/router'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { Delivery } from '../../../delivery/models/delivery.model'
+import { Delivery, DeliveryTime } from '../../../delivery/models/delivery.model'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { showFieldErrors } from '../../../../shared/utils/form-error-handling'
 import { tableZeroNumberValidator } from '../../utils/table-zero-number-validator'
 import { Auth } from '../../../../auth/models/auth.model'
 import { PaymentType } from '../../models/checkout'
 import { Extras } from '../../../admin/models/restaurant'
+import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
+import { User } from '../../../users/models/user.model'
 
 @Component({
   selector: 'app-order-checkout',
@@ -57,13 +58,16 @@ export class OrderCheckoutComponent implements OnInit {
   readonly LoadingStatus = LoadingStatus
   readonly loadingStatus = this.store.select(loadingStatus)
   readonly showFieldErrors = showFieldErrors
+  readonly PaymentType = PaymentType
 
   order: Order
+  delivery: Delivery
   extras: Extras
 
   hasDelivery: boolean
-  deliveryTime: OrderDeliveryTime = 'now'
-  isCash: boolean
+  deliveryTime: DeliveryTime = 'now'
+  delayedTime: string = ''
+  paymentType = PaymentType.Card
   changeTypes: Array<string> = ['Exact value', '10', '20', '50', '100']
   currency: string
 
@@ -86,10 +90,8 @@ export class OrderCheckoutComponent implements OnInit {
   hasTableNumberError: boolean
   hasTakeAwayError: boolean
 
-  user: User
+  appUser: User
   auth: Auth
-
-  readonly PaymentType = PaymentType
 
   get total() {
     return this.order.price.total + ' ' + this.currency
@@ -127,16 +129,15 @@ export class OrderCheckoutComponent implements OnInit {
         this.order = cloneDeep(order)
         this.extras = extras
         this.currency = currency
-        this.user = user
-        if (!this.user) {
+        this.appUser = user
+        if (!this.appUser) {
           this.auth = auth
           this.order.category.type = 'delivery'
-          this.order.category.delivery = {}
           this.chooseOrderType('delivery')
           this.form.patchValue({
             name: this.auth.name,
-            address: this.auth.deliveryInfo.address,
-            phone: this.auth.deliveryInfo.phone
+            address: this.auth.authDelivery.address,
+            phone: this.auth.authDelivery.phone
           })
         }
         this.cdr.markForCheck()
@@ -145,11 +146,10 @@ export class OrderCheckoutComponent implements OnInit {
   }
 
   updatePaymentType(type: PaymentType) {
-    if (type == PaymentType.Cash) {
-      this.isCash = true
+    this.paymentType = type
+    if (type === PaymentType.Cash) {
       this.form.get('change').setValidators([Validators.required])
     } else {
-      this.isCash = false
       this.form.get('change').setValidators([])
       this.form.get('change').setValue(null)
     }
@@ -183,50 +183,47 @@ export class OrderCheckoutComponent implements OnInit {
     }
   }
 
-  chooseSideDish(event: Recipe, i) {
+  chooseSideDish(event: Recipe, index: number) {
     const name = event.name
     const id = event.id
     switch (event.type) {
       case 'salad':
-        if (this.order.main[i].salad.id !== id) {
-          this.order.main[i].salad = { id, name }
+        if (this.order.main[index].salad.id !== id) {
+          this.order.main[index].salad = { id, name }
         } else {
-          this.order.main[i].salad.id = null
+          this.order.main[index].salad.id = null
         }
         break;
       case 'rice':
-        if (this.order.main[i].rice.id !== id) {
-          this.order.main[i].rice = { id, name }
+        if (this.order.main[index].rice.id !== id) {
+          this.order.main[index].rice = { id, name }
         } else {
-          this.order.main[i].rice.id = null
+          this.order.main[index].rice.id = null
         }
         break;
       case 'garnish':
-        if (this.order.main[i].garnish.id !== id) {
-          this.order.main[i].garnish = { id, name }
+        if (this.order.main[index].garnish.id !== id) {
+          this.order.main[index].garnish = { id, name }
         } else {
-          this.order.main[i].garnish.id = null
+          this.order.main[index].garnish.id = null
         }
         break;
       case 'dessert':
-        if (this.order.main[i].dessert.id !== id) {
-          this.order.main[i].dessert = { id, name }
+        if (this.order.main[index].dessert.id !== id) {
+          this.order.main[index].dessert = { id, name }
         } else {
-          this.order.main[i].dessert.id = null
+          this.order.main[index].dessert.id = null
         }
         break;
     }
   }
 
   setDeliveryTime(event: string) {
-    this.order.category.delivery.time = event
+    this.delayedTime = event
   }
 
-  updateTime(time: OrderDeliveryTime) {
+  updateTime(time: DeliveryTime) {
     this.deliveryTime = time
-    if (time === 'now') {
-      this.order.category.delivery.time = 'now'
-    }
   }
 
   displayFn(item): string {
@@ -263,20 +260,17 @@ export class OrderCheckoutComponent implements OnInit {
         this.form.addControl('payment', new FormControl(this.PaymentType.Card, Validators.required))
         this.form.addControl('change', new FormControl(null))
         this.form.addControl('comment', new FormControl(null))
-        this.order.category.delivery = {}
         this.order.category.table = null
         break
       case 'table':
         this.removeAllFormControls()
         this.form.addControl('table', new FormControl(null, [Validators.required, tableZeroNumberValidator()]))
         this.form.addControl('comment', new FormControl(null))
-        this.order.category.delivery = null
         break
       case 'takeaway':
         this.removeAllFormControls()
         this.form.addControl('name', new FormControl(null, Validators.required))
         this.form.addControl('comment', new FormControl(null))
-        this.order.category.delivery = null
         this.order.category.table = null
         break
     }
@@ -289,50 +283,25 @@ export class OrderCheckoutComponent implements OnInit {
     this.resetValidation()
     if (!this.hasSkippedStarter && !this.hasSkippedDrink && this.form.valid) {
       this.formatOrder()
-      // debug
-      // console.log(this.order);
-      if (this.user) {
-        this.confirmTableOrder()
-      } else {
-        this.confirmDelivery()
-      }
+      this.store.dispatch(MenuActions.checkoutOrder({ order: this.order }))
     } else {
       this.hightlightValidation()
     }
   }
 
   private formatOrder() {
+    this.order.createdAt = getCurrentUnixTime()
+    this.order.createdBy = this.appUser ? this.appUser : null
     switch (this.order.category.type) {
       case 'delivery':
-        this.order.category.delivery = {
-          time: this.order.category?.delivery?.time ?? 'now',
-          ...this.form.value,
-        }
-        this.order.category.client = this.form.value.name
+        this.formatDeliveryOrder()
         break
       case 'table':
-        this.order.category.table = this.form.value.table
+        this.formatTableOrder()
         break
       case 'takeaway':
-        this.order.category.client = this.form.value.name
+        this.formatTakeawayOrder()
         break
-    }
-    if (!this.user) {
-      this.order.status = 'requested'
-      this.order.progress = '0%'
-      this.order.statusHistory.push({
-        status: 'requested',
-        createdBy: this.auth,
-        createdAt: this.order.createdAt
-      })
-    } else {
-      this.order.status = 'cooking'
-      this.order.progress = '50%'
-      this.order.statusHistory.push({
-        status: 'cooking',
-        createdBy: this.user,
-        createdAt: this.order.createdAt
-      })
     }
   }
 
@@ -378,25 +347,42 @@ export class OrderCheckoutComponent implements OnInit {
     }
   }
 
-  private confirmDelivery() {
-    const delivery: Delivery = {
-      client: this.auth,
-      createdAt: this.order.createdAt,
-      order: this.order,
-      status: 'requested',
-      statusHistory: [{
-        status: 'requested',
-        createdBy: this.user ?? this.auth,
-        createdAt: this.order.createdAt
-      }],
-      user: this.user,
-      deliveryInfo: this.auth?.deliveryInfo
+  private formatTableOrder() {
+    this.order.category = {
+      table: null
     }
-    this.store.dispatch(ItemActions.createDeliveryOrder({ delivery }))
+    this.order.category.type = 'table'
+    this.order.category.table = this.form.value.table
   }
 
-  private confirmTableOrder() {
-    this.store.dispatch(ItemActions.createTableOrder({ order: this.order }))
+  private formatTakeawayOrder() {
+    this.order.category = {}
+    this.order.category.type = 'takeaway'
+    this.order.category.clientName = this.form.value.name
+  }
+
+  private formatDeliveryOrder() {
+    this.order.category = {
+      clientName: null,
+      table: null
+    }
+    this.order.category.type = 'delivery'
+    this.order.category.delivery = {
+      createdAt: getCurrentUnixTime(),
+      createdByUser: this.appUser ? this.appUser : null,
+      createdByClient: !this.appUser ? this.auth : null,
+      order: cloneDeep(this.order),
+      status: this.appUser ? 'confirmed' : 'requested',
+      deliveryInfo: {
+        name: this.form.value.name,
+        phone: this.form.value.phone,
+        address: this.form.value.address,
+        time: this.deliveryTime,
+        delayedTime: this.delayedTime,
+        payment: this.paymentType,
+        change: this.form.value.change,
+      }
+    }
   }
 
 }

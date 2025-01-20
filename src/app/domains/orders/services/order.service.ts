@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { combineLatest, map } from 'rxjs'
 import { OrderConstants } from '../models/order.constants'
 import { RepositoryService } from '../../../shared/repository/repository.service'
-import { Order, OrderProgress, OrderStatus, OrderStatusHistory } from '../models/order.model'
+import { Order, OrderProgress, OrderStatus } from '../models/order.model'
 import { SortRequest } from '../../../shared/repository/repository.models'
 
 @Injectable({
@@ -17,6 +17,8 @@ export class OrderService {
   private readonly collection = OrderConstants.collectionName
 
   create(order: Order) {
+    console.log(order);
+
     return this.repositoryService.createDocument(this.collection, order)
   }
 
@@ -34,13 +36,12 @@ export class OrderService {
 
   getTotalLabels() {
     return combineLatest([
-      this.getTotalByStatus('cooking'),
+      this.getTotalByStatus('dining'),
       this.getTotalByStatus('delivery'),
-      this.getTotalByStatus('paid'),
-      this.getTotalByStatus('canceled'),
+      this.getTotalByStatus('closed')
     ]).pipe(
-      map(([cooking, delivery, paid, canceled]) => ({
-        cooking, delivery, paid, canceled
+      map(([dining, delivery, closed]) => ({
+        dining, delivery, closed
       }))
     )
   }
@@ -69,8 +70,8 @@ export class OrderService {
     return this.repositoryService.updateDocument(this.collection, item, id)
   }
 
-  updateStatus(id: string, status: OrderStatus, statusHistory: OrderStatusHistory[], progress: OrderProgress) {
-    return this.repositoryService.updateDocument(this.collection, { status, statusHistory, progress }, id)
+  updateStatus(id: string, status: OrderStatus, progress: OrderProgress) {
+    return this.repositoryService.updateDocument(this.collection, { status, progress }, id)
   }
 
 }

@@ -17,9 +17,6 @@
             {{ orderTranslate[orderStatusBar.status] }}
           </div>
         </div>
-        <!-- <div class="flex gap-2">
-
-        </div> -->
       </div>
       <ol>
         <li *ngFor="let item of order.main">
@@ -29,16 +26,16 @@
             <app-title-item title="Drink" [value]="item.drink.name " />
 
             <div *ngIf="!item.salad.id">
-              <strong>- without salad</strong>
+              <strong>- {{ 'ORDERS.PAGE.DETAIL.NO_SALAD' | translate }} </strong>
             </div>
             <div *ngIf="!item.garnish.id">
-              <strong>- without garnish</strong>
+              <strong>- {{ 'ORDERS.PAGE.DETAIL.NO_GARNISH' | translate }}</strong>
             </div>
             <div *ngIf="!item.rice.id">
-              <strong>- without rice</strong>
+              <strong>- {{ 'ORDERS.PAGE.DETAIL.NO_RICE' | translate }}</strong>
             </div>
             <div *ngIf="!item.dessert.id">
-              <strong>- without dessert</strong>
+              <strong>- {{ 'ORDERS.PAGE.DETAIL.NO_DESSERT' | translate }}</strong>
             </div>
           </div>
         </li>
@@ -48,41 +45,10 @@
     <div class="card mt-[20px]">
       <app-title title="Order details" />
 
-      <!--       TODO
-      <ng-container *ngIf="order.category.type === 'delivery' || order.category.type === 'takeaway'">
-        <h3>Name</h3>
-        <h4>{{ order.category.delivery.name }}</h4>
-      </ng-container> 
-
-      <ng-container *ngIf="order.category.type === 'delivery'">
-
-        <h3>Address</h3>
-        <h4 class="table-link" (click)="copyAddress()">{{ order.category.delivery.address }}</h4>
-
-        <h3>Phone</h3>
-        <h4 class="table-link" (click)="copyPhone()">{{ order.category.delivery.phone }}</h4>
-
-        <h3>Payment</h3>
-        <h4>{{ order.category.delivery.payment }}</h4>
-
-        <ng-container *ngIf="order.category.delivery.change">
-          <h3>Change</h3>
-          <h4>{{ order.category.delivery.change }}</h4>
-        </ng-container>
-
-        <h3>Delivery time</h3>
-        <h4>{{ order.category.delivery.time === 'now' ? 'Now' : order.category.delivery.time }}</h4>
-      </ng-container>
-      -->
-
-      <app-title-item title="Created at" [value]="getFullTimeFromUnix(order.createdAt)" />
-      <app-title-item title="Created by" [value]="getUser()" margin="0" />
-
-      <!-- TODO
-      <ng-container *ngIf="isOrderClosed">
-        <h3>Closed at</h3>
-        <h3>Closed by</h3>
-      </ng-container> -->
+      <app-title-item title="TIMESTAMP.CREATED_AT" [value]="getFullTimeFromUnix(order.createdAt)" />
+      <app-title-item title="TIMESTAMP.CREATED_BY" [value]="this.order?.createdBy?.name" />
+      <app-title-item title="TIMESTAMP.CLOSED_AT" [value]="getFullTimeFromUnix(order.closedAt) ?? '-'" />
+      <app-title-item title="TIMESTAMP.CLOSED_BY" [value]="this.order?.closedBy?.name ?? '-' " margin="0" />
     </div>
 
     <div class="card mt-[20px]">

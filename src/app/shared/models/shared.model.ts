@@ -3,3 +3,8 @@ export interface ConfirmationModal {
   text?: string
   confirm?: string
 }
+
+export type TabLabel = {
+  title: string
+  amount: number
+}

@@ -40,6 +40,8 @@ export class RestaurantService {
   }
 
   updateDailyMenuOrders(orders: CheckoutOrder[]) {
+    console.log(orders);
+
     return this.repositoryService.updateDocument(this.collection, { orders }, this.menuDocument)
   }
 

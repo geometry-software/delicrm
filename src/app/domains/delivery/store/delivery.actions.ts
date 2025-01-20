@@ -2,7 +2,7 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store'
 import { RepositoryRequest, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { DeliveryConstants } from '../models/delivery.constants'
-import { Delivery, DeliveryStatus, DeliveryStatusHistory, DeliveryStatusResponse } from '../models/delivery.model'
+import { Delivery, DeliveryStatus, DeliveryStatusResponse } from '../models/delivery.model'
 
 export const DeliveryActions = createActionGroup({
   source: DeliveryConstants.storeFeatureKey,

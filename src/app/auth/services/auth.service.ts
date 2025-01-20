@@ -6,8 +6,8 @@ import { AdminSignUpLoadingStatus } from '../models/loading-status'
 import { AuthConstants } from '../models/auth.constants'
 import { RepositoryService } from '../../shared/repository/repository.service'
 import { Router } from '@angular/router'
-import { AuthStatus, Auth, ExtraData } from '../models/auth.model'
-import { mapAuth, mapExtraData } from '../models/auth.mapper'
+import { AuthStatus, Auth } from '../models/auth.model'
+import { mapAuth, mapUserRequest } from '../models/auth.mapper'
 // import { RestaurantConstants } from '../../domains/admin/models/restaurant.constants'
 
 @Injectable({
@@ -54,7 +54,7 @@ export class AuthService {
         switchMap(user => this.repositoryService.updateDocument(
           this.collection,
           {
-            extra: mapExtraData(user),
+            userRequest: mapUserRequest(user),
             name: user.user.displayName,
           },
           user.user.uid).pipe(
@@ -84,7 +84,7 @@ export class AuthService {
         switchMap(response => from(response.user.sendEmailVerification()).pipe(
           switchMap(() => this.repositoryService.setDocument(
             this.collection,
-            mapAuth(response.user, mapExtraData(response.user)),
+            mapAuth(response.user, mapUserRequest(response.user)),
             this.adminCollectionId
           )))))))
   }

@@ -1,19 +1,22 @@
-import { DeliveryInfo } from "../../domains/delivery/models/delivery.model"
-
 export type Auth = {
   providerId: AuthProvider
   authId: string
   createdAt: number
   status: AuthStatus
-  deliveryInfo: DeliveryInfo
+  authDelivery: AuthDelivery
   name: string | null
-  extra: ExtraData | null
+  locale: string
+  userRequest: UserRequest | null
 }
 
-export type ExtraData = {
+export type UserRequest = {
   email: string
   avatar: string
-  locale: string
+}
+
+export type AuthDelivery = {
+  phone: string
+  address: string
 }
 
 export type AuthStatusTotalResponse = {

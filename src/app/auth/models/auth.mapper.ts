@@ -1,6 +1,6 @@
 import { deleteField } from "firebase/firestore"
 import { getCurrentUnixTime } from "../../shared/utils/format-unix-time"
-import { Auth, ExtraData } from "./auth.model"
+import { Auth, UserRequest } from "./auth.model"
 import { AuthConstants } from "./auth.constants"
 
 export const setRestaurantAuth = () => ({
@@ -12,21 +12,21 @@ export const setRestaurantAuth = () => ({
     avatar: deleteField(),
 })
 
-export const mapAuth = (user, extra: ExtraData = null): Auth => ({
+export const mapAuth = (user, userRequest: UserRequest = null): Auth => ({
     authId: user.uid,
     createdAt: getCurrentUnixTime(),
     providerId: 'anonymous',
     status: 'requested',
     name: null,
-    deliveryInfo: {
+    authDelivery: {
         phone: '',
         address: ''
     },
-    extra
+    locale: AuthConstants.defaultLocale,
+    userRequest
 })
 
-export const mapExtraData = (user): ExtraData => ({
+export const mapUserRequest = (user): UserRequest => ({
     email: user.email,
-    avatar: user.photoURL,
-    locale: AuthConstants.defaultLocale
+    avatar: user.photoURL
 })

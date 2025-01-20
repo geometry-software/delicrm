@@ -5,11 +5,10 @@ import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { Store } from '@ngrx/store'
 import { tap } from 'rxjs'
 import { Sort } from '@angular/material/sort'
-import { getCurrency, getItems, getListLabels, getLoadingStatus, getPaginationResponse, getStatus } from '../../store/order.selectors'
+import { getCurrency, getItems, getListLabels, getItemsLoadingStatus, getPaginationResponse, getStatus } from '../../store/order.selectors'
 import { MatTabChangeEvent } from '@angular/material/tabs'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormControl } from '@angular/forms'
-import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
 import { combineListControls } from '../../../../shared/utils/combine-list-controls'
 import { SortRequest } from '../../../../shared/repository/repository.models'
 import { ordersTabIndexByStatus } from '../../models/order.model'
@@ -33,7 +32,7 @@ export class OrderListComponent implements OnInit {
 
   readonly orderList = this.store.select(getItems)
   readonly listLabels = this.store.select(getListLabels)
-  readonly loadingStatus = this.store.select(getLoadingStatus)
+  readonly loadingStatus = this.store.select(getItemsLoadingStatus)
   readonly paginationPayload = this.store.select(getPaginationResponse)
   readonly itemStatus = this.store.select(getStatus)
   readonly currency = this.store.select(getCurrency)
@@ -53,7 +52,7 @@ export class OrderListComponent implements OnInit {
       request: {
         pagination: this.paginationControl.value,
         size: this.sizeControl.value,
-        status: getStatusByLabel(event),
+        status: OrderConstants.statusList[event.index],
         sort: this.defaultSortControlValue
       }
     }))

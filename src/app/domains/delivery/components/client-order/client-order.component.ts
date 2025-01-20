@@ -14,6 +14,8 @@ import { Store } from '@ngrx/store'
 import { DeliveryActions as ItemActions } from '../../store/delivery.actions'
 import { getLoadingStatus } from '../../store/delivery.selectors'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
+import { Delivery } from '../../models/delivery.model'
+import { MatSnackBar } from '@angular/material/snack-bar'
 
 @Component({
   selector: 'app-client-order',
@@ -35,6 +37,7 @@ export class ClientOrderComponent {
     private userService: UserService,
     private dialog: MatDialog,
     private destroyRef: DestroyRef,
+    private snackBar: MatSnackBar,
     private store: Store
   ) { }
 
@@ -51,12 +54,29 @@ export class ClientOrderComponent {
   readonly loadingStatus = this.store.select(getLoadingStatus)
   readonly LoadingStatus = LoadingStatus
 
-  getDeliveryTime(order: Order) {
-    return order.category.delivery?.time !== 'now' ? order.category.delivery?.time : '30 min'
+  getDeliveryTime(delivery: Delivery) {
+    return delivery.deliveryInfo.time !== 'now' ? delivery.deliveryInfo.delayedTime : '30 min'
   }
 
   getTotal(order: Order) {
     return order.price.total + ' ' + order.price.currency
+  }
+
+  copyAddress(delivery: Delivery) {
+    navigator.clipboard.writeText(delivery.deliveryInfo.address)
+      .then(() => this.openSnackBar('Dirección fue copiado'))
+  }
+
+  copyPhone(delivery: Delivery) {
+    navigator.clipboard.writeText(delivery.deliveryInfo.phone)
+      .then(() => this.openSnackBar('Teléfono fue copiado'))
+  }
+
+
+  private openSnackBar(message: string) {
+    this.snackBar.open(message, '', {
+      duration: 2000,
+    })
   }
 
   update() {

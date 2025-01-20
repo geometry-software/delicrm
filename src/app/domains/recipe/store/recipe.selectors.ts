@@ -10,6 +10,7 @@ export const getState = createFeatureSelector<State>(storeFeatureKey)
 export const getItems = createSelector(getState, (state) => state.items.data)
 export const getSize = createSelector(getState, (state) => state.size)
 export const getItemId = createSelector(getState, (state) => state.itemId)
+export const getQuery = createSelector(getState, (state) => state.query)
 export const getItemById = (id: string) => createSelector(getItems, (items) => items.find(el => el.id === id))
 export const getItem = createSelector(getState, (state) => state.item.data)
 export const getPaginationItem = createSelector(getItems, (state) => ({

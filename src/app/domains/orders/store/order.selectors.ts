@@ -5,10 +5,9 @@ import { OrderConstants } from '../models/order.constants'
 const storeFeatureKey = OrderConstants.storeFeatureKey
 const paginationTitle = OrderConstants.paginationTitle
 const paginationSize = OrderConstants.paginationSize
-const labelCooking = OrderConstants.labelCooking
+const labelDining = OrderConstants.labelDining
 const labelDelivery = OrderConstants.labelDelivery
-const labelPaid = OrderConstants.labelPaid
-const labelCanceled = OrderConstants.labelCanceled
+const labelClosed = OrderConstants.labelClosed
 
 export const getState = createFeatureSelector<State>(storeFeatureKey)
 export const getItems = createSelector(getState, (state) => state.items.data)
@@ -19,7 +18,8 @@ export const getPaginationItem = createSelector(getItems, (state) => ({
   first: state?.length ? [...state][0] : null,
   last: state?.length ? [...state].pop() : null,
 }))
-export const getLoadingStatus = createSelector(getState, (state) => state.itemsLoadingStatus)
+export const getItemsLoadingStatus = createSelector(getState, (state) => state.itemsLoadingStatus)
+export const getItemLoadingStatus = createSelector(getState, (state) => state.itemLoadingStatus)
 export const getTotal = createSelector(getState, (state) => state.items.total)
 export const getCurrent = createSelector(getState, (state) => state.items.current)
 export const getStatus = createSelector(getState, (state) => state.status)
@@ -35,12 +35,11 @@ export const getPaginationResponse = createSelector(getPaginationItem, getCurren
     sizeList: paginationSize,
   },
 }))
-export const getCurrency = createSelector(getState, (state) => state?.restaurant?.currency)
+export const getCurrency = createSelector(getState, (state) => state.restaurant?.currency)
 export const itemsAmountByStatus = createSelector(getState, (state) => state.itemsAmountByStatus)
 export const statusBar = createSelector(getState, (state) => state.statusBar)
 export const getListLabels = createSelector(itemsAmountByStatus, (status) => ({
-  cooking: labelCooking + ' (' + status.cooking + ')',
-  delivery: labelDelivery + ' (' + status.delivery + ')',
-  paid: labelPaid + ' (' + status.paid + ')',
-  canceled: labelCanceled + ' (' + status.canceled + ')',
+  dining: { title: labelDining, amount: status.dining },
+  delivery: { title: labelDelivery, amount: status.delivery },
+  closed: { title: labelClosed, amount: status.closed },
 }))

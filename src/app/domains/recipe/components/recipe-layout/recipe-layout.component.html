@@ -1,4 +1,4 @@
 <app-layout-toolbar [searchControl]="searchControl" [url]="moduleUrl" [backTitle]="backTitle"
-  [backToListButton]="backToListButton" [searchPlaceholder]="searchPlaceholder" [id]="itemId | async"
-  [loadingStatus]="layoutLoading" (deleteItem)="deleteItem($event)"></app-layout-toolbar>
+  [backToListButton]="backToListButton" [searchPlaceholder]="searchPlaceholder"
+  (deleteItem)="deleteItem($event)"></app-layout-toolbar>
 <router-outlet></router-outlet>

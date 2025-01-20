@@ -9,6 +9,7 @@ export interface State {
   items: RepositoryResponseList<Order>
   itemsLoadingStatus: LoadingStatus
   item: RepositoryRequesEntity<Order>
+  itemLoadingStatus: LoadingStatus
   itemId: string
   status: OrderStatus
   itemsAmountByStatus: OrderStatusResponse
@@ -26,15 +27,15 @@ export const initialState: State = {
     current: 0
   },
   itemsLoadingStatus: LoadingStatus.NotLoaded,
+  itemLoadingStatus: LoadingStatus.NotLoaded,
   item: {
     data: null,
   },
-  status: 'cooking',
+  status: 'dining',
   itemsAmountByStatus: {
-    cooking: 0,
+    dining: 0,
     delivery: 0,
-    paid: 0,
-    canceled: 0,
+    closed: 0,
   },
   size: null,
   statusBar: null

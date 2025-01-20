@@ -1,18 +1,22 @@
 import { Auth } from '../../../auth/models/auth.model'
+import { Delivery } from '../../delivery/models/delivery.model'
 import { Recipe } from '../../recipe/models/recipe.model'
 import { User } from '../../users/models/user.model'
 
 export type Order = {
   id?: string
-  createdAt: number
   main: Array<OrderItem>
   alacarte: Array<Recipe>
   price: OrderPrice
-  category: OrderCategory
   progress: OrderProgress
   status: OrderStatus
-  statusHistory: Array<OrderStatusHistory>
   comment: string
+  category: OrderCategory
+  isCreatedByUser: boolean
+  createdAt?: number
+  createdBy?: User
+  closedAt?: number
+  closedBy?: User
 }
 
 export type OrderStatusHistory = {
@@ -33,30 +37,26 @@ export type OrderItem = {
 }
 
 export type OrderCategory = {
-  type: OrderType
-  delivery?: OrderDelivery
-  client?: string
+  type?: OrderType
+  clientName?: string
   table?: number
+  delivery?: Delivery
 }
 
-export type OrderStatus = 'requested' | 'cooking' | 'delivery' | 'paid' | 'canceled'
+export type OrderStatus = 'dining' | 'delivery' | 'closed'
 
 export type OrderProgress = '0%' | '50%' | '80%' | '100%'
 
 export const orderStatusProgress: Record<OrderStatus, string> = {
-  requested: '0%',
-  cooking: '50%',
-  delivery: '80%',
-  paid: '100%',
-  canceled: '100%',
+  dining: '50%',
+  delivery: '50%',
+  closed: '100%',
 }
 
 export const ordersTabIndexByStatus: Record<OrderStatus, number> = {
-  requested: 0,
-  cooking: 0,
+  dining: 0,
   delivery: 1,
-  paid: 2,
-  canceled: 3,
+  closed: 2,
 }
 
 export type OrderStatusBar = {
@@ -72,44 +72,28 @@ export type OrderPrice = {
   currency: string
 }
 
-export type OrderDelivery = {
-  time?: string
-  phone?: string
-  address?: string
-  name?: string
-  payment?: string
-  change?: string
-  comment?: string
-}
-
 export type OrderStatusResponse = {
-  cooking: number
+  dining: number
   delivery: number
-  paid: number
-  canceled: number
+  closed: number
 }
-
-export type OrderDeliveryTime = 'now' | 'delayed'
 
 export type OrderType = 'table' | 'delivery' | 'takeaway'
 
 export enum ORDER_STATUS_COLOR {
-  cooking = '#fdb16f',
+  dining = '#fdb16f',
   delivery = '#fcb1fe',
-  paid = '#19b7c6',
-  canceled = '#ff5c47',
+  closed = '#19b7c6',
 }
 
 export enum ORDER_STATUS_ICON {
-  cooking = 'skillet',
+  dining = 'skillet',
   delivery = 'directions_bike',
-  paid = 'attach_money',
-  canceled = 'delete_forever',
+  closed = 'attach_money',
 }
 
 export enum ORDER_STATUS_TRANSLATE {
-  cooking = 'Cooking',
+  dining = 'Dining',
   delivery = 'In Delivery',
-  paid = 'Paid',
-  canceled = 'Canceled',
+  closed = 'Closed',
 }

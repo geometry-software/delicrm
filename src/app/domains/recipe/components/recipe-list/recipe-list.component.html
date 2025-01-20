@@ -26,5 +26,21 @@
   <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
 </mat-table>
 
-<app-pagination [paginationControl]="paginationControl" [sizeControl]="sizeControl"
-  [paginationPayload]="paginationPayload | async" [loadingStatus]="downloadState | async"></app-pagination>
+<ng-container *ngIf="(query | async) !== 'custom'; else customTemplate">
+  <app-pagination [paginationControl]="paginationControl" [sizeControl]="sizeControl"
+    [paginationPayload]="paginationPayload | async" [loadingStatus]="downloadState | async"></app-pagination>
+</ng-container>
+
+<ng-template #customTemplate>
+  <ng-container *ngIf="customQuerySize | async as size">
+    <ng-container *ngIf="size; else noRecipes">
+
+      {{ size }} recipes
+    </ng-container>
+
+  </ng-container>
+</ng-template>
+<ng-template #noRecipes>
+  no recipes found
+
+</ng-template>

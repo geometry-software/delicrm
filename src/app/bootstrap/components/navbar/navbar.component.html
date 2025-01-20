@@ -71,8 +71,7 @@
         <router-outlet (activate)="onActivateRouter()"></router-outlet>
       </div>
     </div>
-    <div *ngIf="responsiveLayout.isDesktop"
-      style="height: calc(100vh - 20vh); width: 300px; margin-bottom: 100px; margin-right: 20px">
+    <div *ngIf="responsiveLayout.isDesktop" class="stats-container">
       <div class="stats">
         <app-title title="Stats" />
         <app-title-item title="New Deliveries" value="1" />

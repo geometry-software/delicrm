@@ -5,7 +5,7 @@
         <div class="name-title">
           <div>Thanks for your order,
             <br>
-            {{ data.delivery.order.category.delivery.name }}!
+            {{ data.delivery.createdByClient.name }}!
           </div>
         </div>
         <div class="text-center my-[30px]">
@@ -37,9 +37,22 @@
     </div>
 
     <div class="card mt-[20px]">
-      <app-title-item title="Address" [value]="data.delivery?.order.category.delivery.address " />
-      <app-title-item title="Phone" [value]="data.delivery?.order.category.delivery.phone " />
-      <app-title-item margin="0" title="Delivery time" [value]="getDeliveryTime(data.delivery.order)" />
+      <div class="flex justify-between">
+        <app-title-item title="Address" [value]="data.delivery.deliveryInfo.address " />
+        <button *ngIf="data.user" mat-icon-button (click)="copyAddress(data.delivery)" onclick="this.blur()">
+          <mat-icon class="menu-icon"> pin_drop </mat-icon>
+        </button>
+      </div>
+      <div class="flex justify-between">
+        <app-title-item title="Phone" [value]="data.delivery.deliveryInfo.phone " />
+        <button *ngIf="data.user" mat-icon-button (click)="copyPhone(data.delivery)" onclick="this.blur()">
+          <mat-icon class="menu-icon"> call </mat-icon>
+        </button>
+      </div>
+      <app-title-item title="Payment" [value]="data.delivery.deliveryInfo.payment" />
+      <app-title-item *ngIf="data.delivery.deliveryInfo.payment === 'cash'" title="Change"
+        [value]="data.delivery.deliveryInfo.change " />
+      <app-title-item margin="0" title="Delivery time" [value]="getDeliveryTime(data.delivery)" />
     </div>
 
     <div class="card mt-[20px] mb-[10px]">

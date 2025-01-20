@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core'
 import { FormControl } from '@angular/forms'
 import { RecipeConstants } from '../../models/recipe.constants'
-import { EMPTY, Observable, debounceTime, of, tap } from 'rxjs'
-import { Store, select } from '@ngrx/store'
-// import { getItemId } from '../../store/recipe.selectors'
+import { debounceTime, tap } from 'rxjs'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { Store } from '@ngrx/store'
 import { RecipeActions as ItemActions } from '../../store/recipe.actions'
-import { getItemId } from '../../store/recipe.selectors'
 
 @Component({
   selector: 'app-recipe-layout',
@@ -14,16 +13,12 @@ import { getItemId } from '../../store/recipe.selectors'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeLayoutComponent implements OnInit {
-  // DI
-  readonly store: Store = inject(Store)
 
-  // Selectors
-  itemId: Observable<string> = this.store.select(getItemId)
-  // layoutLoading: Observable<boolean> = this.store.pipe(select(getLayoutLoading))
-  layoutLoading = of(null)
-  // .pipe(tap(value => console.log(value)))
+  constructor(
+    private destroyRef: DestroyRef,
+    private store: Store
+  ) { }
 
-  // Other properties
   readonly searchControl = new FormControl()
   readonly moduleUrl = RecipeConstants.moduleUrl
   readonly backTitle = RecipeConstants.paginationTitle
@@ -45,9 +40,9 @@ export class RecipeLayoutComponent implements OnInit {
               },
             }))
           : this.store.dispatch(ItemActions.getItems({ request: this.defaultPageRequest }))
-        )
-      )
-      .subscribe()
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe()
   }
 
   deleteItem(id: string) {

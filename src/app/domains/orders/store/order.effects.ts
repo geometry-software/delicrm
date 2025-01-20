@@ -55,8 +55,8 @@ export class OrderEffects implements OnInitEffects {
     this.actions.pipe(
       ofType(ItemActions.updateOrderStatus),
       tap(() => this.handleLoadingRequest()),
-      switchMap(({ id, status, statusHistory, progress }) =>
-        this.orderService.updateStatus(id, status, statusHistory, progress).pipe(
+      switchMap(({ id, status, progress }) =>
+        this.orderService.updateStatus(id, status, progress).pipe(
           map(() => {
             this.handleLoadedRequest()
             return ItemActions.updateOrderStatusSuccess({ statusBar: { progress, status } })
@@ -67,15 +67,13 @@ export class OrderEffects implements OnInitEffects {
   getItem = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.getItem),
-      tap(() => this.handleLoadingRequest()),
-      switchMap(({ id }) =>
-        this.orderService.getById(id).pipe(
-          map(item => {
-            this.handleLoadedRequest()
-            return ItemActions.getItemSuccess({ item })
-          }),
-          catchError(error => this.handleError(error, 'detail'))
-        )))
+      tap(() => this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.Loading }))),
+      switchMap(({ id }) => this.orderService.getById(id).pipe(
+        map(item => {
+          this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.Loaded }))
+          return ItemActions.getItemSuccess({ item })
+        }),
+        catchError(error => this.handleError(error, 'detail')))))
   )
 
   getItems = createEffect(() =>
@@ -89,7 +87,6 @@ export class OrderEffects implements OnInitEffects {
       ),
       switchMap(([{ request }, current, total, stateSize]) => {
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
-        console.log(formatRequest(request, stateSize));
         switch (query) {
           case 'first':
             return combineLatest([
@@ -100,10 +97,7 @@ export class OrderEffects implements OnInitEffects {
               tap(() => this.handleLoadedRequest()),
               switchMap(([amount, items, total]) =>
                 [
-                  ItemActions.getItemsSuccess({
-                    items: formatResponseList(query, items, total, current, compareItemsRequestStateSize(size, stateSize)),
-                    size
-                  }),
+                  ItemActions.getItemsSuccess({ items: formatResponseList(query, items, total, current, compareItemsRequestStateSize(size, stateSize)), size }),
                   ItemActions.setItemsAmountByStatus({ status, amount })
                 ]
               ),

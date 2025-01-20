@@ -29,7 +29,10 @@ export const initialState: State = {
   itemsAmountByStatus: {
     requested: 0,
     confirmed: 0,
-    canceled: 0,
+    accepted: 0,
+    ontheway: 0,
+    received: 0,
+    closed: 0
   },
   size: null,
 }

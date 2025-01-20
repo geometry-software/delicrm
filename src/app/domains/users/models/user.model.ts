@@ -11,13 +11,6 @@ export type User = {
   status: AuthStatus
 }
 
-// export enum UserLoadingStatus {
-//   NotLoaded = 'NotLoaded',
-//   Loading = 'Loading',
-//   LoadingFailed = 'LoadingFailed',
-//   LoadingSuccess = 'LoadingSuccess'
-// }
-
 export const usersTabIndexByStatus: Record<AuthStatus, number> = {
   active: 0,
   requested: 1,

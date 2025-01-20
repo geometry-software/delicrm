@@ -14,8 +14,10 @@ export const MenuActions = createActionGroup({
     'Set Items Loading Status': props<{ status: LoadingStatus }>(),
     'Set Order': props<{ main: MenuItem[], alacarte: MenuItem[] }>(),
     'Set Order Success': props<{ order: Order }>(),
-    'Create Delivery Order': props<{ delivery: Delivery }>(),
-    'Create Table Order': props<{ order: Order }>(),
+    'Checkout Order': props<{ order: Order }>(),
+    'Create Client Delivery Order': props<{ delivery: Delivery }>(),
+    'Create User Order': props<{ order: Order }>(),
+    'Create User Delivery': props<{ delivery: Delivery }>(),
     'Checkout Order Success': props<{ id: string, checkout: Checkout }>(),
   },
 })

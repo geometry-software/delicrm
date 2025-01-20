@@ -3,6 +3,7 @@ import { Recipe, RecipeStatus } from '../models/recipe.model'
 import { RecipeConstants } from '../models/recipe.constants'
 import { FilterRequest, RepositoryRequestQuery, RepositoryRequest, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models';
 import { LoadingStatus } from '../../../shared/models/loading-status';
+import { OrderStatusResponse } from '../../orders/models/order.model';
 
 export const RecipeActions = createActionGroup({
   source: RecipeConstants.storeFeatureKey,
@@ -23,7 +24,6 @@ export const RecipeActions = createActionGroup({
     'Get Items By Search Query': props<{ request: FilterRequest }>(),
     // 'Get Items Success': props<{ items: Recipe[]; query: RepositoryRequestListQuery; total?: number; size?: number }>(),
     'Notify Error': props<{ error: Error; query: RepositoryRequestQuery }>(),
-    'Reset Request To The First Page': emptyProps(),
-    'Reset State': emptyProps(),
+    'Set Items Amount': props<{ amount: number }>(),
   },
 })

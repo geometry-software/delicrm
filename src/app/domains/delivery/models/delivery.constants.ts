@@ -4,21 +4,17 @@ import { Delivery, DeliveryStatus } from './delivery.model'
 export abstract class DeliveryConstants {
   static readonly storeFeatureKey = 'DELIVERY'
   static readonly collectionName = 'Deliveries'
-  static readonly defaultCreateStatus = 'active'
-  static readonly defaultTableSort = 'createdAt'
-  static readonly defaultSearchKey = 'name'
-  static readonly paginationTitle = 'orders'
-  static readonly labelRequested = 'Requested'
-  static readonly labelConfirmed = 'Confirmed'
-  static readonly labelCanceled = 'Canceled'
-  static readonly paginationSize = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20]
+  static readonly paginationTitle = 'DELIVERY.PAGE.LIST.FOOTER-TITLE'
+  static readonly labelRequested = 'DELIVERY.PAGE.LIST.TAB.REQUESTED'
+  static readonly labelConfirmed = 'DELIVERY.PAGE.LIST.TAB.CONFIRMED'
+  static readonly labelAccepted = 'DELIVERY.PAGE.LIST.TAB.ACCEPTED'
+  static readonly labelOntheway = 'DELIVERY.PAGE.LIST.TAB.ONTHEWAY'
+  static readonly labelReceived = 'DELIVERY.PAGE.LIST.TAB.RECEIVED'
+  static readonly labelClosed = 'DELIVERY.PAGE.LIST.TAB.CLOSED'
+  static readonly paginationSize = [5, 10, 20, 50, 100]
   static readonly moduleUrl = '/orders'
-  static readonly tableColumns = ['user', 'plates']
-  static readonly statusList: DeliveryStatus[] = ['requested', 'confirmed', 'canceled']
-  static readonly disableSort = true
-  static readonly searchPlaceholder = 'RECIPES.PAGE.LIST.TABLE.SEARCH'
-  static readonly deleteTitle = 'RECIPES.PAGE.DETAIL.DELETE_TITLE'
-  static readonly backToListButton = 'RECIPES.NAVBAR'
+  static readonly tableColumns = ['client', 'plates']
+  static readonly statusList: DeliveryStatus[] = ['requested', 'confirmed', 'accepted', 'ontheway', 'received', 'closed']
   static readonly defaultPageRequest: RepositoryRequest<Delivery, DeliveryStatus> = {
     pagination: {
       query: 'first',

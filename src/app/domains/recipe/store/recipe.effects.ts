@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects'
-import { catchError, EMPTY, map, of, switchMap, tap, withLatestFrom } from 'rxjs'
+import { catchError, combineLatest, EMPTY, map, of, switchMap, tap, withLatestFrom } from 'rxjs'
 import { RecipeActions as ItemActions } from './recipe.actions'
 import { RecipeEntityService } from '../services/recipe.service'
 import { Router } from '@angular/router'
@@ -11,7 +11,7 @@ import { SignalService } from '../../../shared/services/signal.service'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { recipeFormGroup } from '../models/recipe.form'
 import { getCurrent, getSize, getTotal } from './recipe.selectors'
-import { formatRequest } from '../../../shared/utils/format-request'
+import { compareItemsRequestStateSize, formatRequest } from '../../../shared/utils/format-request'
 import { formatResponseList } from '../../../shared/repository/repository.utils'
 
 @Injectable()
@@ -31,6 +31,10 @@ export class RecipeEffects implements OnInitEffects {
   readonly defaultCreateStatus = RecipeConstants.defaultCreateStatus
   readonly defaultFirstPageRequest = RecipeConstants.defaultPageRequest
   readonly form = recipeFormGroup
+
+  ngrxOnInitEffects(): Action {
+    return ItemActions.getItems({ request: this.defaultFirstPageRequest })
+  }
 
   createItem = createEffect(() =>
     this.actions.pipe(
@@ -65,8 +69,8 @@ export class RecipeEffects implements OnInitEffects {
           switchMap(() =>
             this.entityService.delete(id).pipe(
               tap(() => this.router.navigate([this.moduleUrl])),
-              catchError(error => this.handleError(error, 'edit'))))))),
-    { dispatch: false }
+              catchError(error => this.handleError(error, 'edit')))))))
+    , { dispatch: false }
   )
 
   getItem = createEffect(() =>
@@ -90,16 +94,22 @@ export class RecipeEffects implements OnInitEffects {
       ),
       switchMap(([{ request }, current, total, stateSize]) => {
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
-        console.log(formatRequest(request, stateSize));
-
         switch (query) {
           case 'first':
-            return this.entityService
-              .getFirstPage(sort, size, status)
-              .pipe(
-                tap(() => this.handleLoadedRequest()),
-                map(items => ItemActions.getItemsSuccess({ items: formatResponseList(query, items, total, current) })),
-                catchError(error => this.handleError(error, 'all')))
+            return combineLatest([
+              this.entityService.getFirstPage(sort, size, status),
+              this.entityService.getTotalByStatus(status),
+            ]).pipe(
+              tap(() => this.handleLoadedRequest()),
+              switchMap(([items, amount]) =>
+                [
+                  ItemActions.getItemsSuccess({
+                    items: formatResponseList(query, items, total, current, compareItemsRequestStateSize(size, stateSize)),
+                    size
+                  }),
+                  ItemActions.setItemsAmount({ amount })
+                ]),
+              catchError(error => this.handleError(error, 'all')))
           case 'next':
             return this.entityService
               .getNextPage(sort, size, status, item[sort.active])
@@ -116,27 +126,25 @@ export class RecipeEffects implements OnInitEffects {
                 catchError(error => this.handleError(error, 'all')))
           default: return EMPTY
         }
-      })
-    )
+      }))
   )
 
   getItemsBySearchQuery = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.getItemsBySearchQuery),
+      tap(() => this.handleLoadingRequest()),
       switchMap(({ request }) =>
         this.entityService.getAllByQuery(request.key, request.value).pipe(
-          map(items => ItemActions.getItemsSuccess({ items: formatResponseList('custom', items, items.length, items.length) })),
-          catchError(error => of(ItemActions.notifyError({ error, query: 'custom' })))
-        )
-      )
-    )
+          tap(() => this.handleLoadedRequest()),
+          map(items => ItemActions.getItemsSuccess({ items: formatResponseList('custom', items, items.length, items.length), size: items.length })),
+          catchError(error => of(ItemActions.notifyError({ error, query: 'custom' }))))))
   )
 
   getItemsSuccess = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.getItemsSuccess),
-      tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loaded))),
-    { dispatch: false }
+      tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loaded)))
+    , { dispatch: false }
   )
 
   notifyError = createEffect(() =>
@@ -163,7 +171,4 @@ export class RecipeEffects implements OnInitEffects {
     this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.Loaded }))
   }
 
-  ngrxOnInitEffects(): Action {
-    return ItemActions.getItems({ request: this.defaultFirstPageRequest });
-  }
 }

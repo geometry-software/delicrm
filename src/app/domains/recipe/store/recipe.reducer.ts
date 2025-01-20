@@ -19,4 +19,12 @@ export const reducer = createReducer<State>(
       data: item,
     },
   })),
+  on(ItemActions.getItemsBySearchQuery, (state, { request }) => ({
+    ...state,
+    query: 'custom'
+  })),
+  on(ItemActions.getItems, (state, { request }) => ({
+    ...state,
+    query: request.pagination.query
+  })),
 )

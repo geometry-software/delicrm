@@ -36,10 +36,13 @@ export class DeliveryService {
     return combineLatest([
       this.getTotalByStatus('requested'),
       this.getTotalByStatus('confirmed'),
-      this.getTotalByStatus('canceled'),
+      this.getTotalByStatus('accepted'),
+      this.getTotalByStatus('ontheway'),
+      this.getTotalByStatus('received'),
+      this.getTotalByStatus('closed'),
     ]).pipe(
-      map(([requested, confirmed, canceled]) => ({
-        requested, confirmed, canceled
+      map(([requested, confirmed, accepted, ontheway, received, closed]) => ({
+        requested, confirmed, accepted, ontheway, received, closed
       }))
     )
   }

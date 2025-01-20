@@ -23,7 +23,7 @@ mat-drawer,
 mat-drawer.mat-locked-open,
 mat-drawer.mat-closed.mat-locked-open-add-active {
   background-color: #ddd;
-  width: 210px !important;
+  width: 220px !important;
 }
 
 mat-drawer-container {
@@ -149,13 +149,6 @@ mat-drawer-container {
   font-weight: 500;
 }
 
-.router-outlet-container {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  background-color: #f1f1f1 !important;
-}
-
 // DESKTOP LAYOUT
 
 .mat-toolbar-desktop {
@@ -176,8 +169,23 @@ mat-drawer-container {
 
 .router-outlet-inner-desktop {
   margin: 30px;
-  overflow: auto;
+  overflow-y: auto;
   height: calc(100vh - 140px);
+}
+
+.router-outlet-container {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  min-width: calc(100vw - 500px);
+  background-color: #f1f1f1 !important;
+}
+
+.stats-container {
+  height: calc(100vh - 20vh);
+  width: 220px;
+  margin-bottom: 100px;
+  margin-right: 20px
 }
 
 .stats {

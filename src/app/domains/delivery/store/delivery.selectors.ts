@@ -7,7 +7,10 @@ const paginationTitle = DeliveryConstants.paginationTitle
 const paginationSize = DeliveryConstants.paginationSize
 const labelRequested = DeliveryConstants.labelRequested
 const labelConfirmed = DeliveryConstants.labelConfirmed
-const labelCanceled = DeliveryConstants.labelCanceled
+const labelaccepted = DeliveryConstants.labelAccepted
+const labelontheway = DeliveryConstants.labelOntheway
+const labelReceived = DeliveryConstants.labelReceived
+const labelClosed = DeliveryConstants.labelClosed
 
 export const getState = createFeatureSelector<State>(storeFeatureKey)
 export const getItems = createSelector(getState, (state) => state.items.data)
@@ -36,7 +39,10 @@ export const getPaginationResponse = createSelector(getPaginationItem, getCurren
 }))
 export const itemsAmountByStatus = createSelector(getState, (state) => state.itemsAmountByStatus)
 export const getListLabels = createSelector(itemsAmountByStatus, (status) => ({
-  requested: labelRequested + ' (' + status.requested + ')',
-  confirmed: labelConfirmed + ' (' + status.confirmed + ')',
-  canceled: labelCanceled + ' (' + status.canceled + ')',
+  requested: { title: labelRequested, amount: status.requested },
+  confirmed: { title: labelConfirmed, amount: status.confirmed },
+  accepted: { title: labelaccepted, amount: status.accepted },
+  ontheway: { title: labelontheway, amount: status.ontheway },
+  received: { title: labelReceived, amount: status.received },
+  closed: { title: labelClosed, amount: status.closed },
 }))

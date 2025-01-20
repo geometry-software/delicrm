@@ -58,14 +58,9 @@
     <div class="card mt-[20px] ">
       <app-title title="Order details" [subtitle]="'choose required option to finalize the order'" />
 
-      <mat-radio-group *ngIf="user" class="radio-group" (change)="chooseOrderType($event.value)">
+      <mat-radio-group *ngIf="appUser" class="radio-group" (change)="chooseOrderType($event.value)">
         <mat-radio-button value="table" checked="true"> Table </mat-radio-button>
         <mat-radio-button value="delivery"> Delivery </mat-radio-button>
-        <!-- TODO -->
-        <!-- <mat-checkbox *ngIf="order.category.type === 'delivery'" [(ngModel)]="isOldClient"
-          [ngModelOptions]="{ standalone: true }">
-          Is old client?
-        </mat-checkbox> -->
         <mat-radio-button value="takeaway"> Take away </mat-radio-button>
       </mat-radio-group>
 
@@ -95,6 +90,12 @@
 
         <!-- DELIVERY -->
         <ng-container *ngSwitchCase="'delivery'">
+
+          <!-- TODO -->
+          <!-- <mat-checkbox *ngIf="order.category.type === 'delivery'" [(ngModel)]="isOldClient"
+          [ngModelOptions]="{ standalone: true }">
+          Is old client?
+        </mat-checkbox> -->
 
           <!-- TODO -->
           <!-- <mat-form-field *ngIf="isOldClient" appearance="outline" style="margin-top: 10px">
@@ -140,7 +141,7 @@
             <mat-radio-button [value]="PaymentType.Card"> Card </mat-radio-button>
           </mat-radio-group>
 
-          <ng-container *ngIf="isCash">
+          <ng-container *ngIf="paymentType === PaymentType.Cash">
             <div class="section">Bill type</div>
             <mat-radio-group class="radio-group" formControlName="change">
               <mat-radio-button [value]="item" *ngFor="let item of changeTypes">
