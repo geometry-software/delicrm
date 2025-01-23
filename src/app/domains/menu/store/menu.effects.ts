@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { map, switchMap, tap, catchError, of, withLatestFrom, combineLatest, first } from 'rxjs'
+import { map, switchMap, tap, catchError, of, withLatestFrom, combineLatest, first, EMPTY } from 'rxjs'
 import { MenuActions as ItemActions } from './menu.actions'
 import { Router } from '@angular/router'
 import { Store } from '@ngrx/store'
@@ -61,7 +61,7 @@ export class MenuEffects {
       withLatestFrom(
         this.store.select(getExtras),
         this.store.select(getRestaurantInfo),
-        this.userService.appUser.pipe(map(user => user ? true : false))
+        this.userService.getUser().pipe(map(user => user ? true : false))
       ),
       tap(() => this.router.navigate([this.checkOutUrl])),
       map(([{ main, alacarte }, extra, restaurant, isCreatedByUser]) => prepareOrder(main, alacarte, extra, restaurant, isCreatedByUser)),
@@ -123,28 +123,26 @@ export class MenuEffects {
     this.notificationService.error(error)
     this.signalService.setLoadingStatus(LoadingStatus.LoadingFailed)
     this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed }))
-    return []
+    return EMPTY
   }
 
   private updateAuth(info: DeliveryInfo) {
-    return this.userService.appAuth.pipe(
+    return this.userService.getAuth().pipe(
       first(),
       switchMap(auth => {
         const currentAuthName = auth.name
-        const currentAuthAddress = auth.authDelivery.address
-        const currentAuthPhone = auth.authDelivery.phone
+        const currentAuthAddress = auth.address
+        const currentAuthPhone = auth.phone
         const newAuthName = info.name
         const newAuthAddress = info.address
         const newAuthPhone = info.phone
         if (currentAuthName !== newAuthName || currentAuthAddress !== newAuthAddress || currentAuthPhone !== newAuthPhone) {
           const updatedAuth: Partial<Auth> = {
             name: newAuthName,
-            authDelivery: {
-              address: newAuthAddress,
-              phone: newAuthPhone,
-            }
+            address: newAuthAddress,
+            phone: newAuthPhone,
           }
-          this.userService.appAuthSubject.next({ ...auth, ...updatedAuth })
+          this.userService.setAuth({ ...auth, ...updatedAuth })
           return this.authService.updateAuth(auth.authId, updatedAuth)
         } else {
           return of(null)

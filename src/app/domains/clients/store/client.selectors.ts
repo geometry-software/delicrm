@@ -2,12 +2,14 @@ import { createFeatureSelector, createSelector } from '@ngrx/store'
 import { ClientConstants } from '../models/client.constants'
 import { State } from './client.state'
 
-const storeFeatureKey: string = ClientConstants.storeFeatureKey
-const paginationTitle: string = ClientConstants.paginationTitle
-const paginationSize: Array<number> = ClientConstants.paginationSize
-const labelRequested: string = ClientConstants.labelRequested
-const labelActive: string = ClientConstants.labelActive
-const labelBlocked: string = ClientConstants.labelBlocked
+const storeFeatureKey = ClientConstants.storeFeatureKey
+const paginationTitle = ClientConstants.paginationTitle
+const paginationSize = ClientConstants.paginationSize
+
+const labelAuth = ClientConstants.labelAuth
+const labelRequested = ClientConstants.labelRequested
+const labelActive = ClientConstants.labelActive
+const labelBlocked = ClientConstants.labelBlocked
 
 export const getState = createFeatureSelector<State>(storeFeatureKey)
 export const getItems = createSelector(getState, (state) => state.items.data)
@@ -36,7 +38,8 @@ export const getPaginationResponse = createSelector(getPaginationItem, getCurren
 }))
 export const itemsAmountByStatus = createSelector(getState, (state) => state.itemsAmountByStatus)
 export const getListLabels = createSelector(itemsAmountByStatus, (status) => ({
-  requested: labelRequested + ' (' + status.requested + ')',
-  active: labelActive + ' (' + status.active + ')',
-  blocked: labelBlocked + ' (' + status.blocked + ')',
+  auth: { title: labelAuth, amount: status.auth },
+  requested: { title: labelRequested, amount: status.requested },
+  active: { title: labelActive, amount: status.active },
+  blocked: { title: labelBlocked, amount: status.blocked }
 }))

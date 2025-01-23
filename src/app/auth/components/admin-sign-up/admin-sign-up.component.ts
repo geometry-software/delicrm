@@ -3,7 +3,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AuthService } from '../../services/auth.service'
 import { adminFormGroup, AdminFormProps } from '../../models/admin.form'
 import { showFieldErrors } from '../../../shared/utils/form-error-handling'
-import { catchError, firstValueFrom } from 'rxjs'
+import { catchError, EMPTY, filter, map, tap } from 'rxjs'
+import { UserService } from '../../../domains/users/services/user.service'
 
 @Component({
   selector: 'app-admin-sign-up',
@@ -15,13 +16,17 @@ export class AdminSignUpComponent {
 
   constructor(
     private authService: AuthService,
+    private userService: UserService,
     private destroyRef: DestroyRef
   ) { }
 
   form = adminFormGroup
   formProps = AdminFormProps
   isLoading: boolean
-  showFieldErrors = showFieldErrors
+  readonly showFieldErrors = showFieldErrors
+  readonly hasUser = this.userService.getTotalByStatus('active').pipe(
+    map(value => Boolean(value))
+  )
 
   async submitForm() {
     this.isLoading = true
@@ -30,7 +35,7 @@ export class AdminSignUpComponent {
         catchError(error => {
           console.error(error);
           this.isLoading = false
-          return []
+          return EMPTY
         }),
         takeUntilDestroyed(this.destroyRef)
       ).subscribe(() => {

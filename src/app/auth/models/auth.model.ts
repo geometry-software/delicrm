@@ -1,31 +1,23 @@
 export type Auth = {
-  providerId: AuthProvider
   authId: string
   createdAt: number
   status: AuthStatus
-  authDelivery: AuthDelivery
-  name: string | null
   locale: string
-  userRequest: UserRequest | null
-}
-
-export type UserRequest = {
-  email: string
-  avatar: string
-}
-
-export type AuthDelivery = {
+  name: string
   phone: string
   address: string
+  email: string
+  avatar: string
+  deliveries: string[]
 }
 
-export type AuthStatusTotalResponse = {
+export type AuthStatusResponse = {
+  auth: number
   requested: number
-  client: number
-  employee: number
+  active: number
   blocked: number
 }
 
-export type AuthStatus = 'requested' | 'blocked' | 'active'
+export type AuthStatus = 'auth' | 'requested' | 'active' | 'blocked'
 
 export type AuthProvider = 'google' | 'firebase' | 'anonymous'

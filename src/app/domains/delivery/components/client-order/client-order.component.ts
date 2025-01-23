@@ -41,8 +41,8 @@ export class ClientOrderComponent {
     private store: Store
   ) { }
 
-  readonly auth = this.userService.appAuth
-  readonly user = this.userService.appUser
+  readonly auth = this.userService.getAuth()
+  readonly user = this.userService.getUser()
   readonly delivery = this.route.params.pipe(
     map(value => value['id']),
     // TODO

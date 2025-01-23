@@ -1,6 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
-import { showFieldErrors } from '../../../../shared/utils/form-error-handling'
+import { highlightInvalidFields, showFieldErrors } from '../../../../shared/utils/form-error-handling'
 import { RestaurantFormProps, restaurantFormGroup } from '../../models/restaurant.form'
 import { SharedModule } from '../../../../shared/shared.module'
 
@@ -9,13 +9,14 @@ import { SharedModule } from '../../../../shared/shared.module'
   templateUrl: './restaurant-form.component.html',
   styleUrls: ['./restaurant-form.component.scss'],
   standalone: true,
-  imports: [SharedModule]
+  imports: [SharedModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RestaurantFormComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<RestaurantFormComponent>,
-    @Inject(MAT_DIALOG_DATA) private dialogData: any
+    @Inject(MAT_DIALOG_DATA) public dialogData: any
   ) { }
 
   formProps = RestaurantFormProps
@@ -31,6 +32,8 @@ export class RestaurantFormComponent implements OnInit {
   confirm() {
     if (this.form.valid) {
       this.dialogRef.close(this.form.value)
+    } else {
+      highlightInvalidFields(this.form)
     }
   }
 

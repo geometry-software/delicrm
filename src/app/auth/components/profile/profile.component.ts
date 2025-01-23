@@ -19,10 +19,10 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
   ) { }
 
-  userData = this.userService.appUser.pipe(
+  userData = this.userService.getUser().pipe(
     tap(v => console.log(v)),
     filter(Boolean),
-    switchMap(user => this.userService.getById(user.auth.authId)),
+    switchMap(user => this.userService.getById(user.userId)),
     tap(v => console.log(v))
   )
   userId: string

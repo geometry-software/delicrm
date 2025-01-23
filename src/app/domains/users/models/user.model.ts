@@ -1,23 +1,25 @@
 import { AuthStatus, Auth } from '../../../auth/models/auth.model'
 
 export type User = {
-  auth: Auth
+  userId: string
+  status: AuthStatus
+  role: UserRole
+  locale: string
   name: string
   email: string
   avatar: string
-  role: UserRole
-  locale: string
   createdAt: number
-  status: AuthStatus
 }
 
 export const usersTabIndexByStatus: Record<AuthStatus, number> = {
-  active: 0,
+  auth: 0,
   requested: 1,
-  blocked: 2
+  active: 2,
+  blocked: 3
 }
 
 export type UserStatusResponse = {
+  auth: number
   requested: number
   active: number
   blocked: number

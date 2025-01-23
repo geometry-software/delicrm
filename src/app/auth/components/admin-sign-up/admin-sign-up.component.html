@@ -1,49 +1,44 @@
-<app-title [title]="'Admin registration'"
-  subtitle="This is an initial registration. Following email and password will be used as admin credentials" />
+<ng-container *ngIf="!(hasUser | async); else hasUserTemplate">
 
-<form [formGroup]="form" (ngSubmit)="submitForm()">
+  <app-title title="AUTH.ADMIN.FORM.TITLE" [subtitle]="'AUTH.ADMIN.FORM.SUBTITLE'" />
 
-  <mat-form-field [hideRequiredMarker]="true">
-    <mat-label> Name </mat-label>
-    <input matInput [formControlName]="formProps.name" />
-    <mat-error *ngIf="showFieldErrors(form, formProps.name) as error">
-      {{ error }}
-    </mat-error>
-  </mat-form-field>
+  <form [formGroup]="form" (ngSubmit)="submitForm()">
 
-  <mat-form-field [hideRequiredMarker]="true">
-    <mat-label> Email </mat-label>
-    <input matInput [formControlName]="formProps.email" />
-    <mat-error *ngIf="showFieldErrors(form, formProps.email) as error">
-      {{ error }}
-    </mat-error>
-  </mat-form-field>
+    <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> {{ 'AUTH.ADMIN.FORM.EMAIL' | translate }} </mat-label>
+      <input matInput [formControlName]="formProps.email" />
+      <mat-error *ngIf="showFieldErrors(form, formProps.email) as error">
+        {{ error | translate }}
+      </mat-error>
+    </mat-form-field>
 
-  <mat-form-field [hideRequiredMarker]="true">
-    <mat-label> Password </mat-label>
-    <input matInput [formControlName]="formProps.password" />
-    <mat-error *ngIf="showFieldErrors(form, formProps.password) as error">
-      {{ error }}
-    </mat-error>
-  </mat-form-field>
+    <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> {{ 'AUTH.ADMIN.FORM.PASSWORD' | translate }} </mat-label>
+      <input matInput [formControlName]="formProps.password" />
+      <mat-error *ngIf="showFieldErrors(form, formProps.password) as error">
+        {{ error | translate }}
+      </mat-error>
+    </mat-form-field>
 
-  <mat-form-field [hideRequiredMarker]="true">
-    <mat-label> Repeat password </mat-label>
-    <input matInput [formControlName]="formProps.repeatPassword" />
-    <mat-error *ngIf="showFieldErrors(form, formProps.repeatPassword) as error">
-      {{ error }}
-    </mat-error>
-  </mat-form-field>
+    <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> {{ 'AUTH.ADMIN.FORM.REPEAT_PASSWORD' | translate }} </mat-label>
+      <input matInput [formControlName]="formProps.repeatPassword" />
+      <mat-error *ngIf="showFieldErrors(form, formProps.repeatPassword) as error">
+        {{ error | translate }}
+      </mat-error>
+    </mat-form-field>
 
-  <div class="auth-desc">
-    App saves the user session with OAuth 2 and does not share personal data such as email, username and order history
-    with other services. OAuth 2 is an authorization structure that allows applications to gain limited access to user
-    accounts in an HTTPS service, like Facebook and Google. Delegates user authentication to the service that hosts
-    the user's account and authorizes third-party applications to access said user account.
-  </div>
+    <div class="auth-desc">
+      {{ 'AUTH.ADMIN.FORM.TERMS' | translate }}
+    </div>
 
-  <br>
-  <app-button actionType="save" width="full" type="submit" [disabled]="isLoading"
-    [title]="isLoading ? 'Registering ..' : 'Register admin'" />
+    <br>
+    <app-button actionType="save" width="full" type="submit" [disabled]="isLoading"
+      [title]="isLoading ? 'AUTH.ADMIN.FORM.BUTTON.LOADING' : 'AUTH.ADMIN.FORM.BUTTON.ACTION'" />
+  </form>
 
-</form>
+</ng-container>
+
+<ng-template #hasUserTemplate>
+  {{ 'AUTH.ADMIN.HAS_ADMIN_USER' | translate }}
+</ng-template>

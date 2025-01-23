@@ -1,68 +1,74 @@
 <ng-container *ngIf="!(isAdminUser | async)">
-  1
   <ng-container *ngIf="displayName | async as name">
-    <app-title [title]="'Employee registration'"
-      subtitle="This is an initial registration. Following account will be used later to login" />
+
+    <app-title title="AUTH.LOGIN.EMPLOYEE.TITLE" subtitle="AUTH.LOGIN.EMPLOYEE.TITLE" />
 
     <div class="action-bar">
       <button class="social-button" (click)="loginUser()">
         <img [src]="googleIconPath" width="40px" height="40px" />
-        Proceed with Google
+        {{ 'AUTH.LOGIN.EMPLOYEE.GOOGLE_BUTTON_TITLE' | translate }}
       </button>
     </div>
-    <br>
 
     <form [formGroup]="form" (ngSubmit)="submitAdminLoginForm()">
       <mat-form-field [hideRequiredMarker]="true">
-        <mat-label> Email </mat-label>
+        <mat-label> {{ 'AUTH.ADMIN.LOGIN.NAME' | translate }} </mat-label>
         <input matInput [formControlName]="formProps.email" />
         <mat-error *ngIf="showFieldErrors(form, formProps.email) as error">
-          {{ error }}
+          {{ error | translate }}
         </mat-error>
       </mat-form-field>
 
       <mat-form-field [hideRequiredMarker]="true">
-        <mat-label> Password </mat-label>
+        <mat-label> {{ 'AUTH.ADMIN.LOGIN.PASSWORD' | translate }} </mat-label>
         <input matInput [formControlName]="formProps.password" />
         <mat-error *ngIf="showFieldErrors(form, formProps.password) as error">
-          {{ error }}
+          {{ error | translate }}
         </mat-error>
       </mat-form-field>
 
       <app-button actionType="save" width="full" type="submit" [disabled]="isAdminLoginLoading"
-        [title]="isAdminLoginLoading ? 'Processing ..' : 'Login admin'" />
-
+        [title]="isAdminLoginLoading ?  'AUTH.ADMIN.LOGIN.BUTTON.LOADING' : 'AUTH.ADMIN.LOGIN.BUTTON.ACTION'" />
     </form>
 
-    <h4>Hey, {{ name }}!</h4>
-    <h5>Account will be reviewed</h5>
-    <p style="margin: 10px 0">Contact in cafe since 10am or call us</p>
-    <button mat-stroked-button class="login-button" routerLink="/auth/profile">See profile</button>
+    <!-- <h4>Hey, {{ name }}!</h4>
+    <h5>We call you as soon as account will be reviewed</h5>
+    <button mat-stroked-button class="login-button" routerLink="/auth/profile">See profile</button> -->
   </ng-container>
 </ng-container>
 
 <ng-container *ngIf="isAdminUser | async">
-  admin
   <ng-container
     *ngIf="(adminEmailWasVerified | async ) && (restaurantRegisterStatus | async) as status; else confirmedEmail">
-    email confirmed
-    <br>
-    <button mat-stroked-button type="button" (click)="registerRestaurant()">Register</button>
-    <br>
+    <app-title title='AUTH.ADMIN.EMAIL.CONFIRMED' />
+
+    <app-button title="AUTH.ADMIN.REGISTER_RESTAURANT.BUTTON" actionType="save" (submit)="registerRestaurant()" />
+
     <ng-container [ngSwitch]="status">
       <ng-container *ngSwitchCase="RestaurantLoadingStatus.Registering">
-        <div class="text-loading"> Registering .. </div>
+        <div class="text-loading">
+          {{ 'AUTH.ADMIN.REGISTER_RESTAURANT.LOADING' | translate }}
+        </div>
       </ng-container>
       <ng-container *ngSwitchCase="RestaurantLoadingStatus.RegisterSuccess">
-        <div style="color: teal"> Registered Successfully</div>
+        <div style="color: teal">
+          <app-button title="AUTH.ADMIN.EMAIL.BUTTON.UPDATE" (submit)="update()" />
+        </div>
       </ng-container>
       <ng-container *ngSwitchCase="RestaurantLoadingStatus.RegisterFailed">
-        <div style="color: tomato">Error: <br> {{ registerRestaurantErrorMessage }}</div>
+        <div style="color: tomato">
+          {{ 'AUTH.ADMIN.REGISTER_RESTAURANT.ERROR' | translate }}
+          <b>{{ registerRestaurantErrorMessage }}</b>
+        </div>
       </ng-container>
     </ng-container>
   </ng-container>
+
   <ng-template #confirmedEmail>
-    please confirm email
-    <button (click)="sendEmail()">resend</button>
+    <app-title title="AUTH.ADMIN.EMAIL.CONFIRM" />
+    <div class="flex gap-[10px]">
+      <app-button title="AUTH.ADMIN.EMAIL.BUTTON.UPDATE" (submit)="update()" />
+      <app-button title="AUTH.ADMIN.EMAIL.BUTTON.RESEND" actionType="save" (submit)="sendEmail()" />
+    </div>
   </ng-template>
 </ng-container>

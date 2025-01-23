@@ -10,6 +10,7 @@ import { LoadingStatus } from '../../../shared/models/loading-status'
 import { combineLatest, map, shareReplay, tap } from 'rxjs'
 import { toObservable } from '@angular/core/rxjs-interop'
 import { Chart, ChartItem } from 'chart.js/auto';
+import { RestaurantService } from '../../../domains/admin/services/restaurant.service'
 
 @Component({
   selector: 'app-navbar',
@@ -21,6 +22,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
 
   constructor(
     private userService: UserService,
+    private restaurantService: RestaurantService,
     private signalService: SignalService,
     private translate: TranslateService,
     private cdr: ChangeDetectorRef
@@ -28,7 +30,8 @@ export class NavbarComponent implements OnInit, AfterViewInit {
 
   readonly authMenuOptions = authMenuOptions
   readonly userMenuOptions = userMenuOptions
-  readonly appUser = this.userService.appUser
+  readonly appUser = this.userService.getUser()
+  readonly restaurantInfo = this.restaurantService.getRestaurantInfo()
 
   @ViewChild('drawer') drawer: MatDrawer
   responsiveLayout: ResponsiveLayout = {}
@@ -36,7 +39,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   languageOptions: UserLanguageItem[] = [
     { value: 'en', viewValue: 'English' },
     { value: 'es', viewValue: 'Español' },
-    { value: 'pt', viewValue: 'Português' }
+    // { value: 'pt', viewValue: 'Português' }
   ]
 
   hasAppAuth: boolean

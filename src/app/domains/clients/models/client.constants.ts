@@ -9,6 +9,7 @@ export abstract class ClientConstants {
   static readonly defaultSearchKey = 'name'
   static readonly paginationTitle = 'orders'
 
+  static readonly labelAuth = 'Auth'
   static readonly labelActive = 'Active'
   static readonly labelRequested = 'Requested'
   static readonly labelBlocked = 'Blocked'
@@ -16,7 +17,7 @@ export abstract class ClientConstants {
   static readonly paginationSize = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20]
   static readonly moduleUrl = '/clients'
   static readonly tableColumns = ['name', 'status']
-  static readonly statusList: AuthStatus[] = ['active', 'requested', 'blocked']
+  static readonly statusList: AuthStatus[] = ['auth', 'active', 'requested', 'blocked']
   static readonly disableSort = true
   static readonly searchPlaceholder = 'RECIPES.PAGE.LIST.TABLE.SEARCH'
   static readonly deleteTitle = 'RECIPES.PAGE.DETAIL.DELETE_TITLE'

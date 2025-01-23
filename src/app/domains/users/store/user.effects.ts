@@ -27,6 +27,7 @@ export class UserEffects {
     private actions: Actions,
     private store: Store,
     private userService: UserService,
+    // private authService: AuthService,
     private signalService: SignalService
   ) { }
 
@@ -80,6 +81,28 @@ export class UserEffects {
       ),
       switchMap(([{ request }, current, total, stateSize]) => {
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
+        console.log(formatRequest(request, stateSize));
+
+        // if (status === 'requested') {
+        //   return this.userService.getAllRequested().pipe(
+        //     tap(v => console.log(v)),
+        //     switchMap(items => [
+        //       ItemActions.getItemsSuccess({
+        //         items: formatResponseList(query, items, total, current, compareItemsRequestStateSize(size, stateSize)),
+        //         size
+        //       }),
+        //       ItemActions.setItemsAmountByStatus({
+        //         status, amount: {
+        //           auth: items.length,
+        //           requested: items.length,
+        //           active: 0,
+        //           blocked: 0
+        //         }
+        //       })
+        //     ]
+        //     ))
+        // }
+
         switch (query) {
           case 'first':
             return combineLatest([

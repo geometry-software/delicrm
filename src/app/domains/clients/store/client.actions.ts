@@ -1,9 +1,8 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
-import { ClientStatusResponse } from '../models/client.model'
 import { ClientConstants } from '../models/client.constants'
-import { FilterRequest, RepositoryRequestQuery, RepositoryRequest, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
+import { RepositoryRequestQuery, RepositoryRequest, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { Auth, AuthStatus } from '../../../auth/models/auth.model'
+import { Auth, AuthStatus, AuthStatusResponse } from '../../../auth/models/auth.model'
 
 export const ClientActions = createActionGroup({
   source: ClientConstants.storeFeatureKey,
@@ -17,7 +16,7 @@ export const ClientActions = createActionGroup({
     'Get Item': props<{ id: string }>(),
     'Get Item Success': props<{ item: Auth }>(),
     'Get Items Success': props<{ items: RepositoryResponseList<Auth>, size?: number }>(),
-    'Set Items Amount By Status': props<{ status: AuthStatus, amount: ClientStatusResponse }>(),
+    'Set Items Amount By Status': props<{ status: AuthStatus, amount: AuthStatusResponse }>(),
     'Notify Error': props<{ error: Error; query: RepositoryRequestQuery }>(),
   },
 })

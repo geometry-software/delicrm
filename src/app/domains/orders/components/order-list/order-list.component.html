@@ -47,7 +47,7 @@
     <ng-container matColumnDef="waiter">
       <mat-header-cell *matHeaderCellDef> Waiter </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        {{ element.createdBy.name }}
+        {{ element.createdBy?.name }}
       </mat-cell>
     </ng-container>
 

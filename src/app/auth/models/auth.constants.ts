@@ -9,4 +9,5 @@ export abstract class AuthConstants {
   static readonly firebaseProviderId = 'firebase'
   static readonly googleIconPath = './../../../../assets/images/auth/google.png'
   static readonly adminAvatarPath = './../../../../assets/images/admin.png'
+  static readonly adminDefaultName = 'Deli CRM'
 }

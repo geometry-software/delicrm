@@ -8,13 +8,36 @@
     "UPDATE_SUCCESS": "¡La imagen se ha actualizado correctamente! Guarda la receta.",
     "CHANGE_IMAGE": "Cambiar imagen",
     "UPLOAD_IMAGE_TO_SERVER": "Subir imagen al servidor",
-    "UPLOADING_IMAGE": "Subiendo imagen"
+    "UPLOADING_IMAGE": "Subiendo imagen",
+    "FIELD_ERROR_MESSAGE": {
+      "REQUIRED": "El campo es obligatorio",
+      "EMAIL": "El formato del correo electrónico no es válido",
+      "ZERO_TABLE_NUMBER": "La mesa no puede ser 0",
+      "DEFAULT": "Error"
+    }
   },
   "BUTTON": {
     "ADD": "Agregar",
     "SAVE": "Guardar",
     "EDIT": "Editar",
     "DELETE": "Eliminar"
+  },
+  "AUTH": {
+    "ADMIN": {
+      "FORM": {
+        "TITLE": "Registro de administrador",
+        "SUBTITLE": "Este es un registro inicial. El siguiente correo electrónico y contraseña serán utilizados como credenciales de administrador.",
+        "NAME": "Nombre",
+        "EMAIL": "Email",
+        "PASSWORD": "Contraseña",
+        "REPEAT_PASSWORD": "Repite contraseña",
+        "TERMS": "Esta aplicación mantiene la sesión del usuario con Firebase Authentication. Los datos personales, como el correo electrónico, el nombre de usuario, el historial de pedidos, etc., se guardan en Firebase Firestore y no se comparten sabiendas con ninguna otra aplicación. Firebase forma parte de Google Cloud Platform.",
+        "BUTTON": {
+          "ACTION": "Registrarse",
+          "LOADING": "Registro en proceso .."
+        }
+      }
+    }
   },
   "MISC": {
     "PLATE_TYPE": {

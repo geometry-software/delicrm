@@ -130,7 +130,7 @@ export class OrderDetailComponent implements OnInit {
 
   private async initData() {
     combineLatest([
-      this.userService.appUser.pipe(filter(Boolean)),
+      this.userService.getUser().pipe(filter(Boolean)),
       this.store.select(getCurrency).pipe(filter(Boolean)),
       this.route.params.pipe(
         map(value => value['id']),

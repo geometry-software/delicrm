@@ -78,7 +78,6 @@ export class RecipeEffects implements OnInitEffects {
       ofType(ItemActions.getItem),
       switchMap(({ id }) =>
         this.entityService.getById(id).pipe(
-          tap(console.warn),
           map(item => ItemActions.getItemSuccess({ item })),
           catchError(error => this.handleError(error, 'edit')))))
   )

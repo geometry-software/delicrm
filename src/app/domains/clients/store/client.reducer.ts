@@ -1,7 +1,6 @@
 import { createReducer, on } from '@ngrx/store'
 import { ClientActions as ItemActions } from './client.actions'
 import { State, initialState } from './client.state'
-import { LoadingStatus } from '../../../shared/models/loading-status'
 
 export const reducer = createReducer<State>(
   initialState,
@@ -9,10 +8,6 @@ export const reducer = createReducer<State>(
     ...state,
     items,
     size
-  })),
-  on(ItemActions.setItemsLoadingStatus, (state, { status }) => ({
-    ...state,
-    itemsLoadingStatus: status
   })),
   on(ItemActions.setItemsAmountByStatus, (state, { amount, status }) => ({
     ...state,

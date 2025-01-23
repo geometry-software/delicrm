@@ -118,8 +118,8 @@ export class OrderCheckoutComponent implements OnInit {
       this.store.select(getOrder),
       this.store.select(getExtras),
       this.store.select(getCurrency),
-      this.userService.appUser,
-      this.userService.appAuth
+      this.userService.getUser(),
+      this.userService.getAuth()
     ]).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(([order, extras, currency, user, auth]) => {
@@ -136,8 +136,8 @@ export class OrderCheckoutComponent implements OnInit {
           this.chooseOrderType('delivery')
           this.form.patchValue({
             name: this.auth.name,
-            address: this.auth.authDelivery.address,
-            phone: this.auth.authDelivery.phone
+            address: this.auth.address,
+            phone: this.auth.phone
           })
         }
         this.cdr.markForCheck()

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, catchError, combineLatest, concat, filter, first, from, map, of, switchMap, tap } from 'rxjs'
+import { BehaviorSubject, catchError, combineLatest, concat, EMPTY, filter, first, map, of, switchMap, tap } from 'rxjs'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { AuthStatus, Auth } from '../../../auth/models/auth.model'
-import { mapAppUser } from '../utils/app-user.mapper'
+import { mapAdminUser, mapRequestedUser, UserInfo } from '../utils/app-user.mapper'
 import { AuthService } from '../../../auth/services/auth.service'
 import { User, UserRole } from '../models/user.model'
 import { UserConstants } from '../models/user.constants'
@@ -10,6 +10,7 @@ import { SortRequest } from '../../../shared/repository/repository.models'
 import { SignalService } from '../../../shared/services/signal.service'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { NotificationService } from '../../../shared/services/notification.service'
+import { AuthConstants } from '../../../auth/models/auth.constants'
 
 @Injectable({
   providedIn: 'root'
@@ -26,13 +27,25 @@ export class UserService {
   }
 
   private readonly collection = UserConstants.collectionName
+  private readonly collectionAuth = AuthConstants.collectionName
+  private readonly appUserSubject = new BehaviorSubject<User>(null)
+  private readonly appAuthSubject = new BehaviorSubject<Auth>(null)
 
-  readonly appUserSubject = new BehaviorSubject<User>(null)
-  readonly appAuthSubject = new BehaviorSubject<Auth>(null)
-  readonly appUser = this.appUserSubject.asObservable().pipe(
-    // tap(v => console.log(v))
-  )
-  readonly appAuth = this.appAuthSubject.asObservable()
+  setUser(user: User) {
+    this.appUserSubject.next(user)
+  }
+
+  getUser() {
+    return this.appUserSubject.asObservable()
+  }
+
+  setAuth(auth: Auth) {
+    this.appAuthSubject.next(auth)
+  }
+
+  getAuth() {
+    return this.appAuthSubject.asObservable()
+  }
 
   initAuthSession() {
     this.authService.firebaseUser.pipe(
@@ -57,24 +70,30 @@ export class UserService {
 
   readonly isUserLoading = concat(
     of(true),
-    this.appUser.pipe(map(() => false))
+    this.getUser().pipe(map(() => false))
   )
 
-  createAdminUser(id: string) {
+  createAdminUser(id: string, name: string) {
     return this.authService.firebaseUser.pipe(
-      filter(user => user?.emailVerified),
-      switchMap(() => this.authService.getAuth(id).pipe(
-        tap(v => console.log(v)),
-        switchMap(auth => this.repositoryService.setDocument(this.collection, mapAppUser(auth, 'admin'), auth.authId)))))
+      filter(firebaseUser => firebaseUser?.emailVerified),
+      switchMap(firebaseUser => this.authService.getAuth(id).pipe(
+        map(auth => mapAdminUser(auth.authId, {
+          avatar: AuthConstants.adminAvatarPath,
+          email: firebaseUser.email,
+          locale: AuthConstants.defaultLocale,
+          name
+        })),
+        switchMap(user => this.repositoryService.setDocument(this.collection, user, user.userId).pipe(
+          map(() => user))))))
   }
 
-  create(user: Auth, role: UserRole) {
-    return this.repositoryService.setDocument(this.collection, mapAppUser(user, role), user.authId).pipe(
-      map(() => ({ id: user.authId, auth: user })))
+  createRequestedUser(auth: Auth, role: UserRole, info: UserInfo) {
+    return this.repositoryService.setDocument(this.collection, mapRequestedUser(auth.authId, role, info), auth.authId).pipe(
+      map(() => ({ id: auth.authId, auth })))
   }
 
   getAll() {
-    return this.repositoryService.getAllDocuments(this.collection)
+    return this.repositoryService.getAllDocuments(this.collectionAuth)
   }
 
   getById(id: string) {
@@ -87,12 +106,13 @@ export class UserService {
 
   getTotalLabels() {
     return combineLatest([
+      this.getTotalByStatus('auth'),
       this.getTotalByStatus('requested'),
       this.getTotalByStatus('active'),
       this.getTotalByStatus('blocked')
     ]).pipe(
-      map(([requested, active, blocked]) => ({
-        requested, active, blocked
+      map(([auth, requested, active, blocked]) => ({
+        auth, requested, active, blocked
       }))
     )
   }
@@ -129,7 +149,7 @@ export class UserService {
     this.notificationService.error(error)
     this.signalService.setLoadingStatus(LoadingStatus.NotLoaded)
     console.error(error)
-    return []
+    return EMPTY
   }
 
 }

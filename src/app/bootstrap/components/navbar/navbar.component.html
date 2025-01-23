@@ -59,7 +59,9 @@
             </div>
           </div>
         </ng-container>
-        <app-address></app-address>
+        <ng-container *ngIf="restaurantInfo | async as restaurant">
+          <app-address [restaurant]="restaurant"></app-address>
+        </ng-container>
       </ng-template>
     </div>
   </mat-drawer>
@@ -79,7 +81,7 @@
         <!-- <button mat-flat-button color="primary">theme color</button> -->
       </div>
       <div class="pie-chart">
-        <canvas id="pie-chart"></canvas>
+        <!-- <canvas id="pie-chart"></canvas> -->
       </div>
     </div>
   </mat-drawer-content>

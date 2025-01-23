@@ -14,15 +14,67 @@
     "CLOSED_BY": "Closed by"
   },
   "FORM": {
-    "ENTER_PLATE_NAME": "Enter plate name",
-    "RECIPE_DESCRIPTION": "Recipe description",
-    "PLATE_TYPE": "Plate type",
-    "PROTEIN_TYPE": "Protein type",
-    "PRICE": "Price",
-    "UPDATE_SUCCESS": "Image has been updated successfully! Save the recipe.",
-    "CHANGE_IMAGE": "Change image",
-    "UPLOAD_IMAGE_TO_SERVER": "Upload image to server",
-    "UPLOADING_IMAGE": "Uploading image"
+    "FIELD_ERROR_MESSAGE": {
+      "REQUIRED": "Field is required",
+      "EMAIL": "Email format is not valid",
+      "ZERO_TABLE_NUMBER": "Table could not be 0",
+      "DEFAULT": "Error"
+    }
+  },
+  "AUTH": {
+    "LAYOUT_LOADING": "Loading ..",
+    "ADMIN": {
+      "HAS_ADMIN_USER": "Admin has been already registered",
+      "FORM": {
+        "TITLE": "Admin registration",
+        "SUBTITLE": "This is an initial registration. Following email and password will be used as admin credentials.",
+        "EMAIL": "Email",
+        "PASSWORD": "Password",
+        "REPEAT_PASSWORD": "Repeat password",
+        "TERMS": "This app holds user session with Firebase Authentication. Personal data such as email, username, order history and etc. are stored in Firebase Firestore and aren't shared knowingly with any other apps. Firebase is part of Google Cloud Platform.",
+        "BUTTON": {
+          "ACTION": "Register",
+          "LOADING": "Registration in process .."
+        }
+      },
+      "LOGIN": {
+        "NAME": "Name",
+        "PASSWORD": "Password",
+        "BUTTON": {
+          "ACTION": "Login",
+          "LOADING": "Processing .."
+        }
+      },
+      "EMAIL": {
+        "CONFIRM": "Please confirm email to proceed a registration",
+        "CONFIRMED": "Email confirmed",
+        "BUTTON": {
+          "UPDATE": "Update",
+          "RESEND": "Resend email"
+        }
+      },
+      "REGISTER_RESTAURANT": {
+        "BUTTON": "Register restaurant",
+        "LOADING": " Registering ..",
+        "SUCCESS": "Registered Successfully",
+        "ERROR": "Error: "
+      }
+    },
+    "LOGIN": {
+      "EMPLOYEE": {
+        "TITLE": "Employee registration",
+        "SUBTITLE": "This is an initial registration. Following account will be used later to login.",
+        "GOOGLE_BUTTON_TITLE": "Proceed with Google",
+        "EMAIL": "Email",
+        "PASSWORD": "Password",
+        "REPEAT_PASSWORD": "Repeat password",
+        "TERMS": "This app holds user session with Firebase Authentication. Personal data such as email, username, order history and etc. are stored in Firebase Firestore and aren't shared knowingly with any other apps. Firebase is part of Google Cloud Platform.",
+        "BUTTON": {
+          "ACTION": "Register",
+          "LOADING": "Registration in process .."
+        }
+      }
+    }
   },
   "MISC": {
     "PLATE_TYPE": {
@@ -37,85 +89,115 @@
     },
     "SEARCH_PLACEHOLDER": "Buscar.."
   },
-  "DESCRIPTION_PLACEHOLDER": "Recipe description",
   "RECIPES": {
     "NAVBAR": "Recipes",
-    "PAGE": {
-      "LIST": {
-        "TOOLBAR": "Recipe list",
+    "TOOLBAR": {
+      "FORM": "Create recipe",
+      "LIST": "Create recipe"
+    },
+    "LIST": {
+      "NAME": "Name",
+      "DESCRIPTION": "Description",
+      "TYPE": "Type",
+      "PROTEIN": "Protein type",
+      "PRICE": "Price",
+      "IMAGE": "Image",
+      "TABLE": {
+        "SEARCH": "Search by name",
         "NAME": "Name",
-        "DESCRIPTION": "Description",
         "TYPE": "Type",
-        "PROTEIN": "Protein type",
-        "PRICE": "Price",
-        "IMAGE": "Image",
-        "TABLE": {
-          "SEARCH": "Search by name",
-          "NAME": "Name",
-          "TYPE": "Type",
-          "PRICE": "Price"
-        }
-      },
-      "CREATE": {
-        "TOOLBAR": "Create recipe"
-      },
-      "EDIT": {
-        "TOOLBAR": "Edit recipe"
-      },
-      "DETAIL": {
-        "TOOLBAR": "Recipe detail"
+        "PRICE": "Price"
+      }
+    },
+    "FORM": {
+      "ENTER_PLATE_NAME": "Enter plate name",
+      "RECIPE_DESCRIPTION": "Recipe description",
+      "PLATE_TYPE": "Plate type",
+      "PROTEIN_TYPE": "Protein type",
+      "PRICE": "Price",
+      "UPDATE_SUCCESS": "Image has been updated successfully! Save the recipe.",
+      "CHANGE_IMAGE": "Change image",
+      "UPLOAD_IMAGE_TO_SERVER": "Upload image to server",
+      "UPLOADING_IMAGE": "Uploading image",
+      "DESCRIPTION_PLACEHOLDER": "Recipe description",
+      "BUTTON": {
+        "ACTION": "Save recipe",
+        "LOADING": "Saving .."
       }
     }
   },
   "ORDERS": {
     "NAVBAR": "Orders",
-    "PAGE": {
-      "LIST": {
-        "TAB": {
-          "DINING": "Dining",
-          "DELIVERY": "Delivery",
-          "CLOSED": "Closed"
-        },
-        "TOOLBAR": "Order list",
-        "CLIENT": "Name",
-        "WAITER": "Description",
-        "PRICE": "Type",
-        "FOOTER-TITLE": "orders"
+    "LIST": {
+      "TAB": {
+        "DINING": "Dining",
+        "DELIVERY": "Delivery",
+        "CLOSED": "Closed"
       },
-      "DETAIL": {
-        "TAB": {
-          "DINING": "Dining",
-          "DELIVERY": "Delivery",
-          "CLOSED": "Closed"
-        },
-        "NO_SALAD": "without salad",
-        "NO_GARNISH": "without garnish",
-        "NO_RICE": "without rice",
-        "NO_DESSERT": "without dessert",
-        "CLIENT": "Name",
-        "WAITER": "Description",
-        "PRICE": "Type",
-        "FOOTER-TITLE": "orders"
-      }
+      "TOOLBAR": "Order list",
+      "CLIENT": "Name",
+      "WAITER": "Description",
+      "PRICE": "Type",
+      "FOOTER-TITLE": "orders"
+    },
+    "DETAIL": {
+      "TAB": {
+        "DINING": "Dining",
+        "DELIVERY": "Delivery",
+        "CLOSED": "Closed"
+      },
+      "NO_SALAD": "without salad",
+      "NO_GARNISH": "without garnish",
+      "NO_RICE": "without rice",
+      "NO_DESSERT": "without dessert",
+      "CLIENT": "Name",
+      "WAITER": "Description",
+      "PRICE": "Type",
+      "FOOTER-TITLE": "orders"
     }
   },
   "DELIVERY": {
     "NAVBAR": "Delivery",
-    "PAGE": {
-      "LIST": {
-        "TAB": {
-          "REQUESTED": "Requested",
-          "CONFIRMED": "Confirmed",
-          "ACCEPTED": "Accepted",
-          "ONTHEWAY": "On the way",
-          "RECEIVED": "Received",
-          "CLOSED": "Closed"
-        },
-        "TOOLBAR": "Order list",
-        "CLIENT": "Name",
-        "WAITER": "Description",
-        "PRICE": "Type",
-        "FOOTER-TITLE": "deliveries"
+    "LIST": {
+      "TAB": {
+        "REQUESTED": "Requested",
+        "CONFIRMED": "Confirmed",
+        "ACCEPTED": "Accepted",
+        "ONTHEWAY": "On the way",
+        "RECEIVED": "Received",
+        "CLOSED": "Closed"
+      },
+      "TOOLBAR": "Order list",
+      "CLIENT": "Name",
+      "WAITER": "Description",
+      "PRICE": "Type",
+      "FOOTER-TITLE": "deliveries"
+    }
+  },
+  "ADMIN": {
+    "NAVBAR": "Admin",
+    "RESTAURANT_FORM": {
+      "TITLE": {
+        "CREATE": "Register restaurant",
+        "EDIT": "Update restaurant"
+      },
+      "SUBTITLE": {
+        "CREATE": "Fill the form to proceed the registration.",
+        "EDIT": "Change restaurant info"
+      },
+      "NAME": "Name",
+      "DESCRIPTION": "Description",
+      "CONTACT": "Contact name",
+      "ADDRESS": "Address",
+      "PHONE": "Phone",
+      "WEB": "Web",
+      "CURRENCY": "Currency",
+      "DELIVERY": "Delivery amount",
+      "DISCOUNT": "Discount amount",
+      "BUTTON": {
+        "CANCEL": "Cancel",
+        "CREATE": "Register",
+        "EDIT": "Update"
       }
     }
   },

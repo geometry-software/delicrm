@@ -1,7 +1,6 @@
 import { RepositoryRequesEntity, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { Auth, AuthStatus } from '../../../auth/models/auth.model'
-import { ClientStatusResponse } from '../models/client.model'
+import { Auth, AuthStatus, AuthStatusResponse } from '../../../auth/models/auth.model'
 
 export interface State {
   query: RepositoryRequestListQuery,
@@ -10,7 +9,7 @@ export interface State {
   item: RepositoryRequesEntity<Auth>
   itemId: string
   status: AuthStatus
-  itemsAmountByStatus: ClientStatusResponse
+  itemsAmountByStatus: AuthStatusResponse
   size: number
 }
 
@@ -28,6 +27,7 @@ export const initialState: State = {
   },
   status: 'active',
   itemsAmountByStatus: {
+    auth: 0,
     requested: 0,
     active: 0,
     blocked: 0

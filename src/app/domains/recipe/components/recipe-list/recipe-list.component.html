@@ -4,7 +4,7 @@
   [matSortActive]="defaultSortControlValue.active" (matSortChange)="changeSort($event)">
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef mat-sort-header>
-      {{ 'RECIPES.PAGE.LIST.TABLE.NAME' | translate }}
+      {{ 'RECIPES.LIST.TABLE.NAME' | translate }}
     </mat-header-cell>
     <mat-cell *matCellDef="let element">
       <div class="table-link" (click)="redirectToDetail(element.id)">
@@ -15,7 +15,7 @@
 
   <ng-container matColumnDef="type">
     <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="disableSort">
-      {{ 'RECIPES.PAGE.LIST.TABLE.TYPE' | translate }}
+      {{ 'RECIPES.LIST.TABLE.TYPE' | translate }}
     </mat-header-cell>
     <mat-cell *matCellDef="let element">
       {{ plateTypeTranslate[element.type] | translate }}
@@ -34,13 +34,11 @@
 <ng-template #customTemplate>
   <ng-container *ngIf="customQuerySize | async as size">
     <ng-container *ngIf="size; else noRecipes">
-
       {{ size }} recipes
     </ng-container>
-
   </ng-container>
 </ng-template>
+
 <ng-template #noRecipes>
   no recipes found
-
 </ng-template>

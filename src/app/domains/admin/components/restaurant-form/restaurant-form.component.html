@@ -1,78 +1,87 @@
-<app-title [title]="'Register restaurant'" subtitle="Fill the form to proceed the registeration" />
+<app-title [title]="dialogData ? 'ADMIN.RESTAURANT_FORM.TITLE.EDIT' : 'ADMIN.RESTAURANT_FORM.TITLE.CREATE'"
+  [subtitle]="dialogData ? 'ADMIN.RESTAURANT_FORM.SUBTITLE.EDIT' : 'ADMIN.RESTAURANT_FORM.SUBTITLE.CREATE'" />
 <br>
 
 <form [formGroup]="form">
 
   <mat-form-field [hideRequiredMarker]="true">
-    <mat-label> Name </mat-label>
+    <mat-label> {{ 'ADMIN.RESTAURANT_FORM.NAME' | translate }} </mat-label>
     <input matInput [formControlName]="formProps.name" />
     <mat-error *ngIf="showFieldErrors(form, formProps.name) as error">
-      {{ error }}
+      {{ error | translate }}
     </mat-error>
   </mat-form-field>
 
   <mat-form-field [hideRequiredMarker]="true">
-    <mat-label> Description </mat-label>
-    <textarea matInput [formControlName]="formProps.description"></textarea>
+    <mat-label> {{ 'ADMIN.RESTAURANT_FORM.DESCRIPTION' | translate }} </mat-label>
+    <input matInput [formControlName]="formProps.description" />
     <mat-error *ngIf="showFieldErrors(form, formProps.description) as error">
-      {{ error }}
+      {{ error | translate }}
     </mat-error>
   </mat-form-field>
 
   <mat-form-field [hideRequiredMarker]="true">
-    <mat-label> Address </mat-label>
+    <mat-label> {{ 'ADMIN.RESTAURANT_FORM.CONTACT' | translate }} </mat-label>
+    <input matInput [formControlName]="formProps.contact" />
+    <mat-error *ngIf="showFieldErrors(form, formProps.contact) as error">
+      {{ error | translate }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label> {{ 'ADMIN.RESTAURANT_FORM.ADDRESS' | translate }} </mat-label>
     <input matInput [formControlName]="formProps.address" />
     <mat-error *ngIf="showFieldErrors(form, formProps.address) as error">
-      {{ error }}
+      {{ error | translate }}
     </mat-error>
   </mat-form-field>
 
   <mat-form-field [hideRequiredMarker]="true">
-    <mat-label> Phone </mat-label>
+    <mat-label> {{ 'ADMIN.RESTAURANT_FORM.PHONE' | translate }} </mat-label>
     <input matInput [formControlName]="formProps.phone" />
     <mat-error *ngIf="showFieldErrors(form, formProps.phone) as error">
-      {{ error }}
+      {{ error | translate }}
     </mat-error>
   </mat-form-field>
 
   <mat-form-field [hideRequiredMarker]="true">
-    <mat-label> Web </mat-label>
+    <mat-label> {{ 'ADMIN.RESTAURANT_FORM.WEB' | translate }} </mat-label>
     <input matInput [formControlName]="formProps.web" />
     <mat-error *ngIf="showFieldErrors(form, formProps.web) as error">
-      {{ error }}
+      {{ error | translate }}
     </mat-error>
   </mat-form-field>
 
   <mat-form-field [hideRequiredMarker]="true">
-    <mat-label> Currency </mat-label>
+    <mat-label> {{ 'ADMIN.RESTAURANT_FORM.CURRENCY' | translate }} </mat-label>
     <input matInput [formControlName]="formProps.currency" />
     <mat-error *ngIf="showFieldErrors(form, formProps.currency) as error">
-      {{ error }}
+      {{ error | translate }}
     </mat-error>
   </mat-form-field>
 
   <div class="amount-configurations">
-
     <mat-form-field [hideRequiredMarker]="true">
-      <mat-label> Delivery amount </mat-label>
+      <mat-label> {{ 'ADMIN.RESTAURANT_FORM.DELIVERY' | translate }} </mat-label>
       <input matInput [formControlName]="formProps.delivery" type="number" />
       <mat-error *ngIf="showFieldErrors(form, formProps.delivery) as error">
-        {{ error }}
+        {{ error | translate }}
       </mat-error>
     </mat-form-field>
 
     <mat-form-field [hideRequiredMarker]="true">
-      <mat-label> Discount amount </mat-label>
+      <mat-label> {{ 'ADMIN.RESTAURANT_FORM.DISCOUNT' | translate }} </mat-label>
       <input matInput [formControlName]="formProps.discount" type="number" />
       <mat-error *ngIf="showFieldErrors(form, formProps.name) as error">
-        {{ error }}
+        {{ error | translate }}
       </mat-error>
     </mat-form-field>
   </div>
 
   <div class="form-actions">
-    <app-button title="Cancel" actionType="back" (submit)="close()"></app-button>
-    <app-button title="Register" actionType="save" (submit)="confirm()"></app-button>
+    <app-button title="ADMIN.RESTAURANT_FORM.BUTTON.CANCEL" (submit)="close()" />
+    <app-button [title]="dialogData ? 'ADMIN.RESTAURANT_FORM.BUTTON.EDIT' : 'ADMIN.RESTAURANT_FORM.BUTTON.CREATE'"
+      actionType="save" (submit)="confirm()" />
   </div>
 
 </form>

@@ -30,6 +30,7 @@ export const initialState: State = {
   },
   status: 'active',
   itemsAmountByStatus: {
+    auth: 0,
     requested: 0,
     active: 0,
     blocked: 0

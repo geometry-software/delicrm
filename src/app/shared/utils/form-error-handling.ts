@@ -21,12 +21,12 @@ export const showFieldErrors = (form: FormGroup, name: string) => {
 
 const getErrorMessage = (control: AbstractControl): string => {
   if (control.hasError('required')) {
-    return 'Field is required'
+    return 'FORM.FIELD_ERROR_MESSAGE.REQUIRED'
   } else if (control.hasError('email')) {
-    return 'Email format is not valid'
+    return 'FORM.FIELD_ERROR_MESSAGE.EMAIL'
   } else if (control.hasError('tableZeroNumber')) {
-    return 'table could not be 0'
+    return 'FORM.FIELD_ERROR_MESSAGE.ZERO_TABLE_NUMBER'
   } else {
-    return 'Error'
+    return 'FORM.FIELD_ERROR_MESSAGE.DEFAULT'
   }
 }

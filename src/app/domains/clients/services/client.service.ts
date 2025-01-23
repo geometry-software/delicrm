@@ -28,12 +28,13 @@ export class ClientService {
 
   getTotalLabels() {
     return combineLatest([
+      this.getTotalByStatus('auth'),
       this.getTotalByStatus('active'),
       this.getTotalByStatus('requested'),
       this.getTotalByStatus('blocked'),
     ]).pipe(
-      map(([active, requested, blocked]) => ({
-        active, requested, blocked
+      map(([auth, active, requested, blocked]) => ({
+        auth, active, requested, blocked
       }))
     )
   }

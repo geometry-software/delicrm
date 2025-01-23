@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { Restaurant } from '../../../domains/admin/models/restaurant'
 
 @Component({
   selector: 'app-address',
@@ -6,4 +7,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core'
   styleUrls: ['./app-address.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppAddressComponent {}
+export class AppAddressComponent {
+
+  @Input()
+  restaurant: Restaurant | undefined
+
+}
