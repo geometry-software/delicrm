@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 import { AuthStatus } from '../../../../auth/models/auth.model'
 import { UserConstants } from '../../models/user.constants'
+import { FormControl } from '@angular/forms'
+import { UserRole, UserStatus } from '../../models/user.model'
 
 @Component({
   selector: 'app-user-status',
@@ -15,15 +17,26 @@ export class UserStatusComponent implements OnInit {
     private dialogRef: MatDialogRef<UserStatusComponent>,
     @Inject(MAT_DIALOG_DATA) private dialogData: any) { }
 
-  currentStatus: AuthStatus
-  statusList = UserConstants.statusList
+  readonly currentStatus = new FormControl<UserStatus>(null)
+  readonly currentRole = new FormControl<UserRole>(null)
+  readonly statusList = UserConstants.statusList.filter(el => el !== 'requested')
+  readonly roleList = UserConstants.roleList
 
   ngOnInit(): void {
-    this.currentStatus = this.dialogData.status
+    this.currentStatus.setValue(this.dialogData.status)
+    this.currentRole.setValue(this.dialogData.role)
   }
 
   confirm() {
-    this.dialogRef.close(this.currentStatus)
+    const response = {
+      status: this.currentStatus.value,
+      role: this.currentRole.value,
+    }
+    this.dialogRef.close(response)
+  }
+
+  isConfirmDisabled() {
+    return !this.currentStatus.value || !this.currentRole.value
   }
 
   close() {

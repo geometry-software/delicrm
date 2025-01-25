@@ -30,13 +30,13 @@
           </ng-container>
           <ng-container *ngSwitchCase="'delivery'">
             <div class="table-link flex items-center" [routerLink]="['/orders', element.id]">
-              <mat-icon class="table-icon ">shopping_basket</mat-icon>
+              <mat-icon class="table-icon ">directions_bike</mat-icon>
               <div class="table-item">{{ element?.delivery?.deliveryInfo.name }}</div>
             </div>
           </ng-container>
           <ng-container *ngSwitchCase="'takeaway'">
             <div class="table-link flex items-center" [routerLink]="['/orders', element.id]">
-              <mat-icon class="table-icon ">emoji_people</mat-icon>
+              <mat-icon class="table-icon ">shopping_basket</mat-icon>
               <div class="table-item">{{ element.category.clientName }}</div>
             </div>
           </ng-container>

@@ -19,6 +19,8 @@ import { ClientConstants } from '../models/client.constants'
 import { SignalService } from '../../../shared/services/signal.service'
 import { formatResponseList } from '../../../shared/repository/repository.utils'
 import { ClientService } from '../services/client.service'
+import { TranslateService } from '@ngx-translate/core'
+import { NotificationService } from '../../../shared/services/notification.service'
 
 @Injectable()
 export class ClientEffects {
@@ -27,6 +29,8 @@ export class ClientEffects {
     private actions: Actions,
     private store: Store,
     private clientService: ClientService,
+    private translateService: TranslateService,
+    private notificationService: NotificationService,
     private signalService: SignalService
   ) { }
 
@@ -55,6 +59,25 @@ export class ClientEffects {
       switchMap(() => of(ItemActions.getItems({ request: this.defaultFirstPageRequest }))))
   )
 
+  updateClient = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.updateClient),
+      tap(() => this.handleLoadingRequest()),
+      switchMap(({ id, name, address, phone }) => this.clientService.update(id, name, address, phone).pipe(
+        map(() => ItemActions.updateClientSuccess()))))
+  )
+
+  updateClientSuccess = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.updateClientSuccess),
+      tap(() => {
+        const message = this.translateService.instant('CLIENTS.FORM.UPDATE_CLIENT_SUCCESS')
+        this.notificationService.success(message)
+        this.handleLoadedRequest()
+      })),
+    { dispatch: false }
+  )
+
   getItem = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.getItem),
@@ -80,6 +103,8 @@ export class ClientEffects {
       ),
       switchMap(([{ request }, current, total, stateSize]) => {
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
+        console.log(status);
+
         switch (query) {
           case 'first':
             return combineLatest([

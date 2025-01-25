@@ -1,14 +1,14 @@
 <div class="relative">
   <div class="table-loading-shade" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></div>
-  <mat-tab-group *ngIf="{ list: orderList | async, label: listLabels | async } as data" [@.disabled]="true"
+  <mat-tab-group *ngIf="{ list: userList | async, label: listLabels | async } as data" [@.disabled]="true"
     (selectedTabChange)="changeTab($event)" [(selectedIndex)]="selectedTabIndex">
-    <mat-tab [label]="data.label.active">
+    <mat-tab [label]="data.label.active | tabLabel">
       <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
     </mat-tab>
-    <mat-tab [label]="data.label.requested">
+    <mat-tab [label]="data.label.requested | tabLabel">
       <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
     </mat-tab>
-    <mat-tab [label]="data.label.blocked">
+    <mat-tab [label]="data.label.blocked | tabLabel">
       <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
     </mat-tab>
   </mat-tab-group>
@@ -25,19 +25,19 @@
       </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+    <ng-container matColumnDef="role">
+      <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
       <mat-cell *matCellDef="let element">
         <span class="text-ellipsis">
-          {{ element.email }}
+          {{ element.role }}
         </span>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="status">
-      <mat-header-cell *matHeaderCellDef class="flex justify-center"> Status </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="flex justify-center"> </mat-header-cell>
       <mat-cell *matCellDef="let element" class="flex justify-center">
-        <button mat-icon-button (click)="openStatusForm(element)">
+        <button mat-icon-button (click)="openStatusForm(element)" onclick="this.blur()">
           <mat-icon>badge</mat-icon>
         </button>
       </mat-cell>

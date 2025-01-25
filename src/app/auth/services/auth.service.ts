@@ -8,6 +8,7 @@ import { RepositoryService } from '../../shared/repository/repository.service'
 import { Router } from '@angular/router'
 import { AuthStatus, Auth } from '../models/auth.model'
 import { mapAuth, mapRequested } from '../models/auth.mapper'
+import { SortRequest } from '../../shared/repository/repository.models'
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class AuthService {
   private readonly collection = AuthConstants.collectionName
   private readonly adminCollectionId = AuthConstants.adminCollectionId
   private readonly firebaseProviderId = AuthConstants.firebaseProviderId
-  private readonly isAdmin = (firebaseUser) =>
+  private readonly isFirebaseConfirmedUser = (firebaseUser) =>
     firebaseUser?.providerId === this.firebaseProviderId && !firebaseUser?.isAnonymous
 
   readonly checkAdminRegistration = new BehaviorSubject<void>(null)
@@ -33,10 +34,17 @@ export class AuthService {
   )
 
   readonly isAdminEmailVerified = this.firebaseUser.pipe(
-    map(value => value?.emailVerified && this.isAdmin(value)))
+    map(value => value?.emailVerified && this.isFirebaseConfirmedUser(value)))
 
   readonly isAdminUser = this.firebaseUser.pipe(
-    map(this.isAdmin)
+    map(this.isFirebaseConfirmedUser)
+  )
+
+  readonly isRequestedAuth = this.firebaseUser.pipe(
+    map(value => (value?.displayName && this.isFirebaseConfirmedUser(value))
+      ? value.displayName
+      : null
+    ),
   )
 
   readonly adminSignUpStatus = this.checkAdminRegistration.pipe(
@@ -51,28 +59,15 @@ export class AuthService {
   linkWithGoogle() {
     return from(this.angularFireAuth.signOut()).pipe(
       switchMap(() => from(this.angularFireAuth.signInWithPopup(new GoogleAuthProvider())).pipe(
-        tap(v => console.log(v)),
-        switchMap(() => EMPTY)
-        // switchMap(() => EMPTY)
-        // ,
-        // map(auth => mapRequested(user.user.uid)),
-        // switchMap(auth => this.repositoryService.setDocument(this.collection, auth, auth.authId))
+        map(auth => mapRequested(
+          auth.user.uid,
+          auth.user.email,
+          auth.user.displayName,
+          auth.user.photoURL,
+          AuthConstants.defaultLocale)),
+        switchMap(auth => this.repositoryService.setDocument(this.collection, auth, auth.authId))
       ))
     )
-    return this.firebaseUser.pipe(
-      switchMap(user => from(user.linkWithPopup(new GoogleAuthProvider())).pipe(
-        switchMap(user => this.repositoryService.updateDocument(
-          this.collection,
-          {
-            // authRequest: mapUserRequest(user),
-            // name: user.user.displayName,
-          },
-          user.user.uid).pipe(
-            catchError(v => {
-              console.error(v);
-              return of(v)
-            })
-          )))))
   }
 
   signUpAnonymously() {
@@ -96,12 +91,24 @@ export class AuthService {
           switchMap(() => this.repositoryService.setDocument(this.collection, mapAuth(response.user.uid), this.adminCollectionId)))))))
   }
 
+  getRequested(sort: SortRequest, size: number, status: AuthStatus) {
+    return this.repositoryService.getFirstPage(this.collection, sort, size, status)
+  }
+
+  getTotalByStatus(status: AuthStatus) {
+    return this.repositoryService.getCollectionSizeByStatus(this.collection, status)
+  }
+
   getAuth(id: string) {
     return this.repositoryService.getDocumentById(this.collection, id)
   }
 
   deleteAdminAuth() {
     return this.repositoryService.deleteDocument(this.collection, this.adminCollectionId)
+  }
+
+  deleteRequested(id: string) {
+    return this.repositoryService.deleteDocument(this.collection, id)
   }
 
   updateAuth(id: string, data: Partial<Auth>) {

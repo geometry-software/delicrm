@@ -19,6 +19,9 @@ import { SignalService } from '../../../shared/services/signal.service'
 import { getCurrent, getSize, getTotal } from './user.selectors'
 import { compareItemsRequestStateSize, formatRequest } from '../../../shared/utils/format-request'
 import { formatResponseList } from '../../../shared/repository/repository.utils'
+import { NotificationService } from '../../../shared/services/notification.service'
+import { TranslateService } from '@ngx-translate/core'
+import { AuthService } from '../../../auth/services/auth.service'
 
 @Injectable()
 export class UserEffects {
@@ -27,7 +30,9 @@ export class UserEffects {
     private actions: Actions,
     private store: Store,
     private userService: UserService,
-    // private authService: AuthService,
+    private authService: AuthService,
+    private notificationService: NotificationService,
+    private translateService: TranslateService,
     private signalService: SignalService
   ) { }
 
@@ -38,8 +43,18 @@ export class UserEffects {
     this.actions.pipe(
       ofType(ItemActions.updateUserStatus),
       tap(() => this.handleLoadingRequest()),
-      switchMap(({ id, status }) =>
-        this.userService.updateStatus(status, id).pipe(
+      switchMap(({ id, status, role, user }) => user
+        ? this.userService.set(user, id).pipe(
+          switchMap(() => this.authService.deleteRequested(id).pipe(
+            map(() => {
+              this.handleLoadedRequest()
+              return ItemActions.updateUserStatusSuccess()
+            }),
+            catchError(error => of(
+              ItemActions.notifyError({ error, query: 'edit' }),
+              ItemActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed })
+            )))))
+        : this.userService.updateStatus(id, status, role).pipe(
           map(() => {
             this.handleLoadedRequest()
             return ItemActions.updateUserStatusSuccess()
@@ -47,13 +62,33 @@ export class UserEffects {
           catchError(error => of(
             ItemActions.notifyError({ error, query: 'edit' }),
             ItemActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed })
-          )))))
+          )))
+      ))
   )
 
   updateUserStatusSuccess = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.updateUserStatusSuccess),
       switchMap(() => of(ItemActions.getItems({ request: this.defaultFirstPageRequest }))))
+  )
+
+  updateUserName = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.updateUserName),
+      tap(() => this.handleLoadingRequest()),
+      switchMap(({ name, id }) => this.userService.updateName(name, id).pipe(
+        map(() => ItemActions.updateUserNameSuccess()))))
+  )
+
+  updateUserNameSuccess = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.updateUserNameSuccess),
+      tap(() => {
+        const message = this.translateService.instant('USERS.FORM.CHANGE_NAME_SUCCESS')
+        this.notificationService.success(message)
+        this.handleLoadedRequest()
+      })),
+    { dispatch: false }
   )
 
   getItem = createEffect(() =>
@@ -76,69 +111,48 @@ export class UserEffects {
       tap(() => this.handleLoadingRequest()),
       withLatestFrom(
         this.store.select(getCurrent),
-        this.store.select(getTotal),
         this.store.select(getSize)
       ),
-      switchMap(([{ request }, current, total, stateSize]) => {
+      switchMap(([{ request }, current, stateSize]) => {
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
-        console.log(formatRequest(request, stateSize));
+        console.log(status);
 
-        // if (status === 'requested') {
-        //   return this.userService.getAllRequested().pipe(
-        //     tap(v => console.log(v)),
-        //     switchMap(items => [
-        //       ItemActions.getItemsSuccess({
-        //         items: formatResponseList(query, items, total, current, compareItemsRequestStateSize(size, stateSize)),
-        //         size
-        //       }),
-        //       ItemActions.setItemsAmountByStatus({
-        //         status, amount: {
-        //           auth: items.length,
-        //           requested: items.length,
-        //           active: 0,
-        //           blocked: 0
-        //         }
-        //       })
-        //     ]
-        //     ))
-        // }
-
-        switch (query) {
-          case 'first':
-            return combineLatest([
-              this.userService.getTotalLabels(),
-              this.userService.getFirstPage(sort, size, status),
-              this.userService.getTotalByStatus(status),
-            ]).pipe(
-              tap(() => this.handleLoadedRequest()),
-              switchMap(([amount, items, total]) =>
-                [
-                  ItemActions.getItemsSuccess({
-                    items: formatResponseList(query, items, total, current, compareItemsRequestStateSize(size, stateSize)),
-                    size
-                  }),
-                  ItemActions.setItemsAmountByStatus({ status, amount })
-                ]
-              ),
-              catchError(error => of(ItemActions.notifyError({ error, query })))
-            )
-          case 'next':
-            return this.userService
-              .getNextPage(sort, size, status, item[sort.active])
-              .pipe(
-                tap(() => this.handleLoadedRequest()),
-                map(items => ItemActions.getItemsSuccess({ items: formatResponseList(query, items, total, current) })),
-                catchError(error => of(ItemActions.notifyError({ error, query })))
-              )
-          case 'previous':
-            return this.userService
-              .getPreviousPage(sort, size, status, item[sort.active])
-              .pipe(
-                tap(() => this.handleLoadedRequest()),
-                map(items => ItemActions.getItemsSuccess({ items: formatResponseList(query, items, total, current) })),
-                catchError(error => of(ItemActions.notifyError({ error, query })))
-              )
-          default: return EMPTY
+        if (status === 'requested') {
+          return combineLatest([
+            this.userService.getTotalLabels(),
+            this.authService.getRequested(sort, size, status),
+            this.userService.getTotalByStatus(status),
+          ]).pipe(
+            tap(() => this.handleLoadedRequest()),
+            switchMap(([amount, items, total]) =>
+              [
+                ItemActions.getItemsSuccess({
+                  items: formatResponseList(query, items as any, total, current, compareItemsRequestStateSize(size, stateSize)),
+                  size
+                }),
+                ItemActions.setItemsAmountByStatus({ status, amount })
+              ]
+            ),
+            catchError(error => of(ItemActions.notifyError({ error, query })))
+          )
+        } else {
+          return combineLatest([
+            this.userService.getTotalLabels(),
+            this.userService.getFirstPage(sort, size, status),
+            this.userService.getTotalByStatus(status),
+          ]).pipe(
+            tap(() => this.handleLoadedRequest()),
+            switchMap(([amount, items, total]) =>
+              [
+                ItemActions.getItemsSuccess({
+                  items: formatResponseList(query, items, total, current, compareItemsRequestStateSize(size, stateSize)),
+                  size
+                }),
+                ItemActions.setItemsAmountByStatus({ status, amount })
+              ]
+            ),
+            catchError(error => of(ItemActions.notifyError({ error, query })))
+          )
         }
       }))
   )

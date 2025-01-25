@@ -20,7 +20,7 @@ export const getPaginationItem = createSelector(getItems, (state) => ({
   first: state?.length ? [...state][0] : null,
   last: state?.length ? [...state].pop() : null,
 }))
-export const getLoadingStatus = createSelector(getState, (state) => state.itemsLoadingStatus)
+export const getLoadingStatus = createSelector(getState, (state) => state.loadingStatus)
 export const getTotal = createSelector(getState, (state) => state.items.total)
 export const getCurrent = createSelector(getState, (state) => state.items.current)
 export const getStatus = createSelector(getState, (state) => state.status)

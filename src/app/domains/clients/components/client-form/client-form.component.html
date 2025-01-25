@@ -1,0 +1,40 @@
+<ng-container *ngIf="client | async as data">
+
+  <app-title title="CLIENTS.FORM.TITLE" />
+
+  <app-title-item title="CLIENTS.FORM.FIELDS.STATUS" [value]="data.status" />
+  <app-title-item title="CLIENTS.FORM.FIELDS.CREATED_AT" [value]="getDateFromUnix(data.createdAt)" />
+
+  <form [formGroup]="form">
+
+    <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> {{ 'CLIENTS.FORM.FIELDS.NAME' | translate }} </mat-label>
+      <input matInput formControlName="name" />
+      <mat-error *ngIf="showFieldErrors(form,'name') as error">
+        {{ error | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> {{ 'CLIENTS.FORM.FIELDS.ADDRESS' | translate }} </mat-label>
+      <input matInput formControlName="address" />
+      <mat-error *ngIf="showFieldErrors(form,'address') as error">
+        {{ error | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> {{ 'CLIENTS.FORM.FIELDS.PHONE' | translate }} </mat-label>
+      <input matInput formControlName="phone" />
+      <mat-error *ngIf="showFieldErrors(form,'phone') as error">
+        {{ error | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <app-button title="CLIENTS.FORM.BUTTON" actionType="save" width="full"
+        [disabled]="(loading | async) === LoadingStatus.Loading" (submit)="confirm()" />
+    </div>
+
+  </form>
+</ng-container>

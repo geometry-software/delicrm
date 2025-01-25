@@ -1,18 +1,18 @@
 
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
 import { FilterRequest, RepositoryRequestQuery, RepositoryRequest, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
-import { AuthStatus } from '../../../auth/models/auth.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { UserConstants } from '../models/user.constants'
-import { User, UserStatusResponse } from '../models/user.model'
+import { User, UserRole, UserStatus, UserStatusResponse } from '../models/user.model'
 
 export const UserActions = createActionGroup({
   source: UserConstants.storeFeatureKey,
   events: {
-    'Get Items': props<{ request: RepositoryRequest<User, AuthStatus> }>(),
+    'Get Items': props<{ request: RepositoryRequest<User, UserStatus> }>(),
     'Set Items Loading Status': props<{ status: LoadingStatus }>(),
-    'Create Item': props<{ item: User }>(),
-    'Update User Status': props<{ id: string, status: AuthStatus }>(),
+    'Update User Name': props<{ name: string, id: string }>(),
+    'Update User Name Success': emptyProps(),
+    'Update User Status': props<{ id: string, status: UserStatus, role: UserRole, user: User | null }>(),
     'Update User Status Failed': emptyProps(),
     'Update User Status Success': emptyProps(),
     'Create Item Success': props<{ response: any; total: number }>(),
@@ -23,7 +23,7 @@ export const UserActions = createActionGroup({
     'Get Items By Search Query': props<{ request: FilterRequest }>(),
     'Get Items Success': props<{ items: RepositoryResponseList<User>, size?: number }>(),
     'Notify Error': props<{ error: Error; query: RepositoryRequestQuery }>(),
-    'Set Items Amount By Status': props<{ status: AuthStatus, amount: UserStatusResponse }>(),
+    'Set Items Amount By Status': props<{ status: UserStatus, amount: UserStatusResponse }>(),
     'Reset Request To The First Page': emptyProps(),
     'Reset State': emptyProps(),
   },

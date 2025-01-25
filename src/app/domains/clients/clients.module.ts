@@ -7,16 +7,17 @@ import { reducer } from './store/client.reducer'
 import { EffectsModule } from '@ngrx/effects'
 import { ClientEffects } from './store/client.effects'
 import { ClientConstants } from './models/client.constants'
-import { ClientDetailComponent } from './components/client-detail/client-detail.component'
+// import { ClientDetailComponent } from './components/client-detail/client-detail.component'
 import { ClientStatusComponent } from './components/client-status/client-status.component'
 import { ClientsLayoutComponent } from './components/clients-layout/clients-layout.component'
 import { ClientService } from './services/client.service'
+import { ClientFormComponent } from './components/client-form/client-form.component'
 
 @NgModule({
   declarations: [
     ClientsLayoutComponent,
     ClientsComponent,
-    ClientDetailComponent,
+    ClientFormComponent,
     ClientStatusComponent
   ],
   imports: [

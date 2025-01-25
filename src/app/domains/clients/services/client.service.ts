@@ -59,8 +59,8 @@ export class ClientService {
     return this.repositoryService.setDocument(this.collection, item, id)
   }
 
-  update(item: Auth, id: string) {
-    return this.repositoryService.updateDocument(this.collection, item, id)
+  update(id: string, name: string, address: string, phone: string) {
+    return this.repositoryService.updateDocument(this.collection, { name, address, phone }, id)
   }
 
   updateStatus(id: string, status: AuthStatus) {

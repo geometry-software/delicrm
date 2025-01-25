@@ -2,7 +2,7 @@ import { AuthStatus, Auth } from '../../../auth/models/auth.model'
 
 export type User = {
   userId: string
-  status: AuthStatus
+  status: UserStatus
   role: UserRole
   locale: string
   name: string
@@ -11,20 +11,20 @@ export type User = {
   createdAt: number
 }
 
-export const usersTabIndexByStatus: Record<AuthStatus, number> = {
-  auth: 0,
+export const usersTabIndexByStatus: Record<UserStatus, number> = {
+  active: 0,
   requested: 1,
-  active: 2,
-  blocked: 3
+  blocked: 2
 }
 
 export type UserStatusResponse = {
-  auth: number
   requested: number
   active: number
   blocked: number
 }
 
+export type UserStatus = 'requested' | 'active' | 'blocked'
+
 export type UserLanguage = 'en' | 'es' | 'pt'
 
-export type UserRole = 'waiter' | 'delivery' | 'admin' | 'client'
+export type UserRole = 'waiter' | 'delivery' | 'admin'

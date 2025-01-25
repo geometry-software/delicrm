@@ -12,10 +12,11 @@ import { UserStatusComponent } from '../user-status/users-status.component'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Sort } from '@angular/material/sort'
 import { SortRequest } from '../../../../shared/repository/repository.models'
-import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
+// import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
 import { FormControl } from '@angular/forms'
 import { combineListControls } from '../../../../shared/utils/combine-list-controls'
-import { usersTabIndexByStatus } from '../../models/user.model'
+import { User, UserRole, usersTabIndexByStatus, UserStatus } from '../../models/user.model'
+import { Auth } from '../../../../auth/models/auth.model'
 
 @Component({
   selector: 'app-users',
@@ -35,7 +36,7 @@ export class UsersComponent implements OnInit {
   readonly defaultSortControlValue = UserConstants.defaultPageRequest.sort
   readonly tableColumns = UserConstants.tableColumns
 
-  readonly orderList = this.store.select(getItems)
+  readonly userList = this.store.select(getItems)
   readonly listLabels = this.store.select(getListLabels)
   readonly loadingStatus = this.store.select(getLoadingStatus)
   readonly paginationPayload = this.store.select(getPaginationResponse)
@@ -56,7 +57,7 @@ export class UsersComponent implements OnInit {
       request: {
         pagination: this.paginationControl.value,
         size: this.sizeControl.value,
-        status: getStatusByLabel(event),
+        status: UserConstants.statusList[event.index],
         sort: this.defaultSortControlValue
       }
     }))
@@ -83,9 +84,28 @@ export class UsersComponent implements OnInit {
       data
     }).afterClosed().pipe(
       filter(Boolean),
-      filter(status => status !== data.status),
+      filter(value => value.status !== data.status || value.role !== data.role),
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(status => this.store.dispatch(UserActions.updateUserStatus({ status, id: data.id })))
+    ).subscribe(value => this.store.dispatch(UserActions.updateUserStatus({
+      id: data.id,
+      status: value.status,
+      role: value.role,
+      user: this.mapUser(data.status === 'requested', data, value.role, value.status)
+    })))
+  }
+
+  mapUser(isNewUser: Boolean, auth: Auth, role: UserRole, status: UserStatus) {
+    const user: User = {
+      userId: auth.authId,
+      avatar: auth.avatar,
+      createdAt: auth.createdAt,
+      email: auth.email,
+      locale: auth.locale,
+      name: auth.name,
+      role,
+      status
+    }
+    return isNewUser ? user : null
   }
 
 }

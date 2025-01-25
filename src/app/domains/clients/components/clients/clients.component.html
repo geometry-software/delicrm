@@ -2,13 +2,10 @@
   <div class="table-loading-shade" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></div>
   <mat-tab-group *ngIf="{ list: orderList | async, label: listLabels | async } as data" [@.disabled]="true"
     (selectedTabChange)="changeTab($event)" [(selectedIndex)]="selectedTabIndex">
-    <mat-tab [label]="data.label.auth | tabLabel">
-      <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
-    </mat-tab>
     <mat-tab [label]="data.label.active | tabLabel">
       <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
     </mat-tab>
-    <mat-tab [label]="data.label.requested | tabLabel">
+    <mat-tab [label]="data.label.auth | tabLabel">
       <ng-container *ngTemplateOutlet="table; context: { data: data.list }"></ng-container>
     </mat-tab>
     <mat-tab [label]="data.label.blocked | tabLabel">

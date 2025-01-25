@@ -1,8 +1,9 @@
 import { AuthStatus } from "../../../auth/models/auth.model"
 
-export const clientsTabIndexByStatus: Record<AuthStatus, number> = {
-  auth: 0,
-  requested: 1,
-  active: 2,
-  blocked: 3
+export const clientsTabIndexByStatus: Record<ClientStatus, number> = {
+  active: 0,
+  auth: 1,
+  blocked: 2
 }
+
+export type ClientStatus = 'auth' | 'active' | 'blocked'

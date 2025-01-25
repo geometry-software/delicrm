@@ -1,12 +1,23 @@
-<app-title title="User status" subtitle="Choose user status." />
+<app-title title="USERS.MODAL.TITLE" subtitle="USERS.MODAL.SUBTITLE" />
 
-<mat-radio-group class="radio-group" [(ngModel)]="currentStatus">
+<app-title-item title="USERS.MODAL.STATUS_TITLE" margin="0" />
+<mat-radio-group class="radio-group" [formControl]="currentStatus">
   @for (status of statusList; track status) {
-  <mat-radio-button class="example-radio-button" [value]="status">{{status}}</mat-radio-button>
+  <mat-radio-button [value]="status">{{ status }}</mat-radio-button>
   }
 </mat-radio-group>
 
+<ng-container *ngIf="currentStatus.value === 'active'">
+  <app-title-item title="USERS.MODAL.ROLE_TITLE" margin="0" />
+  <mat-radio-group class="radio-group" [formControl]="currentRole">
+    @for (role of roleList; track role) {
+    <mat-radio-button [value]="role">{{ role }}</mat-radio-button>
+    }
+  </mat-radio-group>
+</ng-container>
+
 <div class="form-actions">
-  <app-button title="Close" actionType="back" (submit)="close()"></app-button>
-  <app-button title="Update" actionType="save" (submit)="confirm()"></app-button>
+  <app-button title="USERS.MODAL.BUTTON.CLOSE" actionType="back" (submit)="close()"></app-button>
+  <app-button title="USERS.MODAL.BUTTON.UPDATE" [disabled]="isConfirmDisabled()" actionType="save"
+    (submit)="confirm()"></app-button>
 </div>

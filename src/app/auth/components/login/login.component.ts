@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef } from '@angular/core'
 import { catchError, filter, map, switchMap, tap } from 'rxjs/operators'
 import { AuthService } from '../../services/auth.service'
 import { adminFormGroup, AdminFormProps, adminLoginFormGroup } from '../../models/admin.form'
@@ -7,7 +7,7 @@ import { AuthConstants } from '../../models/auth.constants'
 import { RestaurantFormComponent } from '../../../domains/admin/components/restaurant-form/restaurant-form.component'
 import { MatDialog } from '@angular/material/dialog'
 import { RestaurantService } from '../../../domains/admin/services/restaurant.service'
-import { BehaviorSubject, EMPTY, of } from 'rxjs'
+import { BehaviorSubject, EMPTY, Observable, of } from 'rxjs'
 import { RestaurantLoadingStatus } from '../../models/loading-status'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { UserService } from '../../../domains/users/services/user.service'
@@ -32,6 +32,7 @@ export class LoginComponent {
     private authService: AuthService,
     private userService: UserService,
     private matDialog: MatDialog,
+    private cdr: ChangeDetectorRef,
     private router: Router,
     private destroyRef: DestroyRef
   ) { }
@@ -45,11 +46,10 @@ export class LoginComponent {
   readonly adminForm = adminFormGroup
   readonly adminFormProps = AdminFormProps
   readonly isAdminUser = this.authService.isAdminUser
+  readonly isRequestedAuth = this.authService.isRequestedAuth
   readonly adminEmailWasVerified = this.authService.isAdminEmailVerified
   readonly RestaurantLoadingStatus = RestaurantLoadingStatus
   readonly restaurantRegisterStatus = new BehaviorSubject(RestaurantLoadingStatus.NotRegistered)
-  readonly displayName = this.authService.firebaseUser.pipe(
-    map(auth => auth?.displayName ?? 'user'))
   readonly showFieldErrors = showFieldErrors
 
   isAdminLoginLoading: boolean
@@ -58,7 +58,7 @@ export class LoginComponent {
   loginUser() {
     this.authService.linkWithGoogle().pipe(
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(v => console.log(v))
+    ).subscribe()
   }
 
   async submitAdminLoginForm() {
@@ -109,6 +109,11 @@ export class LoginComponent {
     this.notificationService.success(message)
     this.userService.setUser(user)
     this.router.navigate(['/admin'])
+  }
+
+  getNameTitle(name: string) {
+    const message = this.translateService.instant('AUTH.LOGIN.EMPLOYEE.HEY')
+    return message + ', ' + name
   }
 
   private handleRegisterRestaurantError(error) {

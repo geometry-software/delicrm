@@ -6,7 +6,7 @@ import { FormControl } from '@angular/forms'
 import { ShiftConstants } from '../../models/shift.constants'
 import { getItems, getLoadingStatus, getPaginationResponse, getStatus } from '../../store/shift-store/shift.selectors'
 import { MatTabChangeEvent } from '@angular/material/tabs'
-import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
+// import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
 import { Sort } from '@angular/material/sort'
 import { SortRequest } from '../../../../shared/repository/repository.models'
 import { combineListControls } from '../../../../shared/utils/combine-list-controls'
@@ -54,7 +54,7 @@ export class CashDeskComponent implements OnInit {
       request: {
         pagination: this.paginationControl.value,
         size: this.sizeControl.value,
-        status: getStatusByLabel(event),
+        status: ShiftConstants.statusList[event.index],
         sort: this.defaultSortControlValue
       }
     }))

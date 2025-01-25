@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, catchError, combineLatest, concat, EMPTY, filter, first, map, of, switchMap, tap } from 'rxjs'
 import { RepositoryService } from '../../../shared/repository/repository.service'
-import { AuthStatus, Auth } from '../../../auth/models/auth.model'
+import { Auth } from '../../../auth/models/auth.model'
 import { mapAdminUser, mapRequestedUser, UserInfo } from '../utils/app-user.mapper'
 import { AuthService } from '../../../auth/services/auth.service'
-import { User, UserRole } from '../models/user.model'
+import { User, UserRole, UserStatus } from '../models/user.model'
 import { UserConstants } from '../models/user.constants'
 import { SortRequest } from '../../../shared/repository/repository.models'
 import { SignalService } from '../../../shared/services/signal.service'
@@ -18,7 +18,7 @@ import { AuthConstants } from '../../../auth/models/auth.constants'
 export class UserService {
 
   constructor(
-    private repositoryService: RepositoryService<User, AuthStatus>,
+    private repositoryService: RepositoryService<User, UserStatus>,
     private authService: AuthService,
     private signalService: SignalService,
     private notificationService: NotificationService,
@@ -100,32 +100,31 @@ export class UserService {
     return this.repositoryService.getDocumentById(this.collection, id)
   }
 
-  getTotalByStatus(status: AuthStatus) {
+  getTotalByStatus(status: UserStatus) {
     return this.repositoryService.getCollectionSizeByStatus(this.collection, status)
   }
 
   getTotalLabels() {
     return combineLatest([
-      this.getTotalByStatus('auth'),
-      this.getTotalByStatus('requested'),
       this.getTotalByStatus('active'),
+      this.authService.getTotalByStatus('requested'),
       this.getTotalByStatus('blocked')
     ]).pipe(
-      map(([auth, requested, active, blocked]) => ({
-        auth, requested, active, blocked
+      map(([active, requested, blocked]) => ({
+        active, requested, blocked
       }))
     )
   }
 
-  getFirstPage(order: SortRequest, size: number, status: AuthStatus) {
-    return this.repositoryService.getFirstPage<AuthStatus>(this.collection, order, size, status)
+  getFirstPage(sort: SortRequest, size: number, status: UserStatus) {
+    return this.repositoryService.getFirstPage(this.collection, sort, size, status)
   }
 
-  getNextPage(order: SortRequest, size: number, status: AuthStatus, value: number) {
+  getNextPage(order: SortRequest, size: number, status: UserStatus, value: number) {
     return this.repositoryService.getNextPage(this.collection, order, size, value, status)
   }
 
-  getPreviousPage(order: SortRequest, size: number, status: AuthStatus, value: number) {
+  getPreviousPage(order: SortRequest, size: number, status: UserStatus, value: number) {
     return this.repositoryService.getPreviousPage(this.collection, order, size, value, status)
   }
 
@@ -137,12 +136,12 @@ export class UserService {
     return this.repositoryService.setDocument(this.collection, item, id)
   }
 
-  update(item: User, id: string) {
-    return this.repositoryService.updateDocument(this.collection, item, id)
+  updateName(name: string, id: string) {
+    return this.repositoryService.updateDocument(this.collection, { name }, id)
   }
 
-  updateStatus(status: AuthStatus, id: string) {
-    return this.repositoryService.updateDocument(this.collection, { status }, id)
+  updateStatus(id: string, status: UserStatus, role: UserRole) {
+    return this.repositoryService.updateDocument(this.collection, { status, role }, id)
   }
 
   private handleAuthError(error: Error) {

@@ -1,68 +1,76 @@
 <ng-container *ngIf="!(isAdminUser | async)">
-  <ng-container *ngIf="displayName | async as name">
+  <mat-tab-group [@.disabled]="true">
+    <mat-tab [label]="'AUTH.LOGIN.EMPLOYEE.TITLE' | translate">
+      <br>
+      <div class="action-bar">
+        <button class="social-button" (click)="loginUser()">
+          <img [src]="googleIconPath" width="40px" height="40px" />
+          {{ 'AUTH.LOGIN.EMPLOYEE.GOOGLE_BUTTON_TITLE' | translate }}
+        </button>
+      </div>
+    </mat-tab>
+    <mat-tab [label]="'AUTH.LOGIN.ADMIN.TITLE' | translate">
+      <br>
+      <form [formGroup]="form" (ngSubmit)="submitAdminLoginForm()">
+        <mat-form-field [hideRequiredMarker]="true">
+          <mat-label> {{ 'AUTH.LOGIN.ADMIN.NAME' | translate }} </mat-label>
+          <input matInput [formControlName]="formProps.email" />
+          <mat-error *ngIf="showFieldErrors(form, formProps.email) as error">
+            {{ error | translate }}
+          </mat-error>
+        </mat-form-field>
 
-    <app-title title="AUTH.LOGIN.EMPLOYEE.TITLE" subtitle="AUTH.LOGIN.EMPLOYEE.TITLE" />
+        <mat-form-field [hideRequiredMarker]="true">
+          <mat-label> {{ 'AUTH.LOGIN.ADMIN.PASSWORD' | translate }} </mat-label>
+          <input matInput [formControlName]="formProps.password" />
+          <mat-error *ngIf="showFieldErrors(form, formProps.password) as error">
+            {{ error | translate }}
+          </mat-error>
+        </mat-form-field>
 
-    <div class="action-bar">
-      <button class="social-button" (click)="loginUser()">
-        <img [src]="googleIconPath" width="40px" height="40px" />
-        {{ 'AUTH.LOGIN.EMPLOYEE.GOOGLE_BUTTON_TITLE' | translate }}
-      </button>
-    </div>
-
-    <form [formGroup]="form" (ngSubmit)="submitAdminLoginForm()">
-      <mat-form-field [hideRequiredMarker]="true">
-        <mat-label> {{ 'AUTH.ADMIN.LOGIN.NAME' | translate }} </mat-label>
-        <input matInput [formControlName]="formProps.email" />
-        <mat-error *ngIf="showFieldErrors(form, formProps.email) as error">
-          {{ error | translate }}
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field [hideRequiredMarker]="true">
-        <mat-label> {{ 'AUTH.ADMIN.LOGIN.PASSWORD' | translate }} </mat-label>
-        <input matInput [formControlName]="formProps.password" />
-        <mat-error *ngIf="showFieldErrors(form, formProps.password) as error">
-          {{ error | translate }}
-        </mat-error>
-      </mat-form-field>
-
-      <app-button actionType="save" width="full" type="submit" [disabled]="isAdminLoginLoading"
-        [title]="isAdminLoginLoading ?  'AUTH.ADMIN.LOGIN.BUTTON.LOADING' : 'AUTH.ADMIN.LOGIN.BUTTON.ACTION'" />
-    </form>
-
-    <!-- <h4>Hey, {{ name }}!</h4>
-    <h5>We call you as soon as account will be reviewed</h5>
-    <button mat-stroked-button class="login-button" routerLink="/auth/profile">See profile</button> -->
-  </ng-container>
+        <app-button actionType="save" width="full" type="submit" [disabled]="isAdminLoginLoading"
+          [title]="isAdminLoginLoading ?  'AUTH.LOGIN.ADMIN.BUTTON.LOADING' : 'AUTH.LOGIN.ADMIN.BUTTON.ACTION'" />
+      </form>
+    </mat-tab>
+  </mat-tab-group>
 </ng-container>
 
 <ng-container *ngIf="isAdminUser | async">
-  <ng-container
-    *ngIf="(adminEmailWasVerified | async ) && (restaurantRegisterStatus | async) as status; else confirmedEmail">
-    <app-title title='AUTH.ADMIN.EMAIL.CONFIRMED' />
 
-    <app-button title="AUTH.ADMIN.REGISTER_RESTAURANT.BUTTON" actionType="save" (submit)="registerRestaurant()" />
+  <ng-container *ngIf="isRequestedAuth | async as displayName; else adminTemplate">
+    <app-title [title]="getNameTitle(displayName)" subtitle="AUTH.LOGIN.EMPLOYEE.LOGIN_CONFIRMATION" />
+    <button mat-stroked-button class="login-button" routerLink="/auth/profile">
+      {{ 'AUTH.LOGIN.EMPLOYEE.PROFILE_BUTTON' | translate }}
+    </button>
+  </ng-container>
 
-    <ng-container [ngSwitch]="status">
-      <ng-container *ngSwitchCase="RestaurantLoadingStatus.Registering">
-        <div class="text-loading">
-          {{ 'AUTH.ADMIN.REGISTER_RESTAURANT.LOADING' | translate }}
-        </div>
-      </ng-container>
-      <ng-container *ngSwitchCase="RestaurantLoadingStatus.RegisterSuccess">
-        <div style="color: teal">
-          <app-button title="AUTH.ADMIN.EMAIL.BUTTON.UPDATE" (submit)="update()" />
-        </div>
-      </ng-container>
-      <ng-container *ngSwitchCase="RestaurantLoadingStatus.RegisterFailed">
-        <div style="color: tomato">
-          {{ 'AUTH.ADMIN.REGISTER_RESTAURANT.ERROR' | translate }}
-          <b>{{ registerRestaurantErrorMessage }}</b>
-        </div>
+  <ng-template #adminTemplate>
+    <ng-container
+      *ngIf="(adminEmailWasVerified | async ) && (restaurantRegisterStatus | async) as status; else confirmedEmail">
+      <app-title title='AUTH.ADMIN.EMAIL.CONFIRMED' />
+
+      <app-button title="AUTH.ADMIN.REGISTER_RESTAURANT.BUTTON" actionType="save" (submit)="registerRestaurant()" />
+
+      <ng-container [ngSwitch]="status">
+        <ng-container *ngSwitchCase="RestaurantLoadingStatus.Registering">
+          <div class="text-loading">
+            {{ 'AUTH.ADMIN.REGISTER_RESTAURANT.LOADING' | translate }}
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="RestaurantLoadingStatus.RegisterSuccess">
+          <div style="color: teal">
+            <app-button title="AUTH.ADMIN.EMAIL.BUTTON.UPDATE" (submit)="update()" />
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="RestaurantLoadingStatus.RegisterFailed">
+          <div style="color: tomato">
+            {{ 'AUTH.ADMIN.REGISTER_RESTAURANT.ERROR' | translate }}
+            <b>{{ registerRestaurantErrorMessage }}</b>
+          </div>
+        </ng-container>
       </ng-container>
     </ng-container>
-  </ng-container>
+  </ng-template>
 
   <ng-template #confirmedEmail>
     <app-title title="AUTH.ADMIN.EMAIL.CONFIRM" />

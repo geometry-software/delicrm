@@ -14,6 +14,15 @@ export const reducer = createReducer<State>(
     itemsAmountByStatus: amount,
     status
   })),
+  on(ItemActions.setItemsLoadingStatus, (state, { status }) => ({
+    ...state,
+    loadingStatus: status
+  })),
+  on(ItemActions.setItemsAmountByStatus, (state, { amount, status }) => ({
+    ...state,
+    itemsAmountByStatus: amount,
+    status
+  })),
   on(ItemActions.getItemSuccess, (state, { item }) => ({
     ...state,
     item: {

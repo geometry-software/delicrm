@@ -11,12 +11,13 @@ import { UsersLayoutComponent } from './components/users-layout/users-layout.com
 import { UserDetailComponent } from './components/user-detail/user-detail.component'
 import { UserStatusComponent } from './components/user-status/users-status.component'
 import { UserConstants } from './models/user.constants'
+import { UserFormComponent } from './components/user-form/user-form.component'
 
 @NgModule({
   declarations: [
     UsersLayoutComponent,
     UsersComponent,
-    UserDetailComponent,
+    UserFormComponent,
     UserStatusComponent
   ],
   imports: [

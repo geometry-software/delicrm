@@ -8,16 +8,18 @@ export const mapAuth = (authId: string): Auth => ({
     locale: AuthConstants.defaultLocale,
     status: 'auth',
     name: null,
-    phone: null,
-    address: null,
     email: null,
     avatar: null,
+    address: null,
+    phone: null,
     deliveries: []
 })
 
-export const mapRequested = (authId: string, locale: string, avatar: string): Auth => ({
+export const mapRequested = (authId: string, email: string, name: string, avatar: string, locale: string): Auth => ({
     ...mapAuth(authId),
     status: 'requested',
+    name,
+    email,
     locale,
     avatar
 })

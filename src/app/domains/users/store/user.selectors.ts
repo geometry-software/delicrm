@@ -3,7 +3,6 @@ import { UserConstants } from '../models/user.constants'
 import { State } from './user.state'
 
 const storeFeatureKey: string = UserConstants.storeFeatureKey
-const paginationTitle: string = UserConstants.paginationTitle
 const paginationSize: Array<number> = UserConstants.paginationSize
 const labelRequested: string = UserConstants.labelRequested
 const labelActive: string = UserConstants.labelActive
@@ -30,13 +29,12 @@ export const getPaginationResponse = createSelector(getPaginationItem, getCurren
   options: {
     current: current,
     total: total,
-    title: paginationTitle,
     sizeList: paginationSize,
   },
 }))
 export const itemsAmountByStatus = createSelector(getState, (state) => state.itemsAmountByStatus)
 export const getListLabels = createSelector(itemsAmountByStatus, (status) => ({
-  requested: labelRequested + ' (' + status.requested + ')',
-  active: labelActive + ' (' + status.active + ')',
-  blocked: labelBlocked + ' (' + status.blocked + ')',
+  requested: { title: labelRequested, amount: status.requested },
+  active: { title: labelActive, amount: status.active },
+  blocked: { title: labelBlocked, amount: status.blocked },
 }))

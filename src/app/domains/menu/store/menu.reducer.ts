@@ -9,9 +9,9 @@ export const reducer = createReducer<State>(
     ...state,
     menu,
     restaurant,
-    orders: menu.orders,
+    orders: menu?.orders,
     extras: prepareExtras(menu),
-    open: menu.open
+    open: menu?.open
   })),
   on(ItemActions.setOrderSuccess, (state, { order }) => ({
     ...state,

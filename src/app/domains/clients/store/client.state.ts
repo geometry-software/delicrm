@@ -5,7 +5,7 @@ import { Auth, AuthStatus, AuthStatusResponse } from '../../../auth/models/auth.
 export interface State {
   query: RepositoryRequestListQuery,
   items: RepositoryResponseList<Auth>
-  itemsLoadingStatus: LoadingStatus
+  loadingStatus: LoadingStatus
   item: RepositoryRequesEntity<Auth>
   itemId: string
   status: AuthStatus
@@ -21,7 +21,7 @@ export const initialState: State = {
     total: 0,
     current: 0
   },
-  itemsLoadingStatus: LoadingStatus.NotLoaded,
+  loadingStatus: LoadingStatus.NotLoaded,
   item: {
     data: null,
   },

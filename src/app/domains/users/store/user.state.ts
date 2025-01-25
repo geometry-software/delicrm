@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store'
 import { UserActions as ItemActions } from './user.actions'
-import { UserStatusResponse, User } from '../models/user.model'
+import { UserStatusResponse, User, UserStatus } from '../models/user.model'
 import { RepositoryRequesEntity, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { AuthStatus } from '../../../auth/models/auth.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
@@ -11,7 +11,7 @@ export interface State {
   itemsLoadingStatus: LoadingStatus
   item: RepositoryRequesEntity<User>
   itemId: string
-  status: AuthStatus
+  status: UserStatus
   itemsAmountByStatus: UserStatusResponse
   size: number
 }
@@ -30,7 +30,6 @@ export const initialState: State = {
   },
   status: 'active',
   itemsAmountByStatus: {
-    auth: 0,
     requested: 0,
     active: 0,
     blocked: 0

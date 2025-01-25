@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { ClientStatusComponent } from '../client-status/client-status.component'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
+// import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
 import { SortRequest } from '../../../../shared/repository/repository.models'
 import { combineListControls } from '../../../../shared/utils/combine-list-controls'
 import { clientsTabIndexByStatus } from '../../models/client.model'
@@ -56,7 +56,7 @@ export class ClientsComponent implements OnInit {
       request: {
         pagination: this.paginationControl.value,
         size: this.sizeControl.value,
-        status: getStatusByLabel(event),
+        status: ClientConstants.statusList[event.index],
         sort: this.defaultSortControlValue
       }
     }))

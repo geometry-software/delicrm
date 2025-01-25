@@ -11,12 +11,7 @@ import * as moment from 'moment'
 export class IndexComponent implements OnInit {
   today = moment(new Date()).locale('es').format('DD MMMM')
 
-  myIndex = 0
-
-  chefName = 'Ofelma'
-  chefIntro = 'chefIntro'
-
-  description = 'description'
+  imageIndex = 0
 
   constructor(private router: Router) { }
 
@@ -27,22 +22,18 @@ export class IndexComponent implements OnInit {
     }, 3000)
   }
 
-  redirectToMenu() {
-
-  }
-
   carousel() {
-    var i
-    var x = document.getElementsByClassName('mySlides') as HTMLCollectionOf<any>
+    let i, x = document.getElementsByClassName('mySlides') as HTMLCollectionOf<any>
     if (x.length > 0) {
       for (i = 0; i < x.length; i++) {
         x[i].style.display = 'none'
       }
-      this.myIndex++
-      if (this.myIndex > x.length) {
-        this.myIndex = 1
+      this.imageIndex++
+      if (this.imageIndex > x.length) {
+        this.imageIndex = 1
       }
-      x[this.myIndex - 1].style.display = 'block'
+      x[this.imageIndex - 1].style.display = 'block'
     }
   }
+
 }

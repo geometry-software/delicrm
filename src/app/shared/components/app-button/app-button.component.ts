@@ -22,7 +22,7 @@ export class AppButtonComponent {
   @Input()
   type: string = 'button'
   @Input()
-  width: string
+  width: 'full'
   @Input()
   background: string
   @Output()

@@ -37,14 +37,6 @@
           "LOADING": "Registration in process .."
         }
       },
-      "LOGIN": {
-        "NAME": "Name",
-        "PASSWORD": "Password",
-        "BUTTON": {
-          "ACTION": "Login",
-          "LOADING": "Processing .."
-        }
-      },
       "EMAIL": {
         "CONFIRM": "Please confirm email to proceed a registration",
         "CONFIRMED": "Email confirmed",
@@ -65,13 +57,17 @@
         "TITLE": "Employee registration",
         "SUBTITLE": "This is an initial registration. Following account will be used later to login.",
         "GOOGLE_BUTTON_TITLE": "Proceed with Google",
-        "EMAIL": "Email",
+        "HEY": "Hey",
+        "LOGIN_CONFIRMATION": "We call you as soon as account will be reviewed",
+        "PROFILE_BUTTON": "See profile"
+      },
+      "ADMIN": {
+        "TITLE": "Admin login",
+        "NAME": "Name",
         "PASSWORD": "Password",
-        "REPEAT_PASSWORD": "Repeat password",
-        "TERMS": "This app holds user session with Firebase Authentication. Personal data such as email, username, order history and etc. are stored in Firebase Firestore and aren't shared knowingly with any other apps. Firebase is part of Google Cloud Platform.",
         "BUTTON": {
-          "ACTION": "Register",
-          "LOADING": "Registration in process .."
+          "ACTION": "Login",
+          "LOADING": "Processing .."
         }
       }
     }
@@ -172,6 +168,86 @@
       "WAITER": "Description",
       "PRICE": "Type",
       "FOOTER-TITLE": "deliveries"
+    }
+  },
+  "USERS": {
+    "NAVBAR": "Users",
+    "LIST": {
+      "TAB": {
+        "REQUESTED": "Requested",
+        "CONFIRMED": "Confirmed",
+        "ACCEPTED": "Accepted",
+        "ONTHEWAY": "On the way",
+        "RECEIVED": "Received",
+        "CLOSED": "Closed"
+      },
+      "TOOLBAR": "Order list",
+      "CLIENT": "Name",
+      "WAITER": "Description",
+      "PRICE": "Type",
+      "FOOTER-TITLE": "deliveries"
+    },
+    "FORM": {
+      "TITLE": "User details",
+      "FIELDS": {
+        "NAME": "Name",
+        "EMAIL": "Email",
+        "ROLE": "Role",
+        "CREATED_AT": "Created at",
+        "STATUS": "Status"
+      },
+      "CHANGE_NAME_SUCCESS": "Name has been changed",
+      "BUTTON": "Change name"
+    },
+    "MODAL": {
+      "TITLE": "Update user",
+      "SUBTITLE": "Choose status and role.",
+      "STATUS_TITLE": "Current status",
+      "ROLE_TITLE": "Current role",
+      "BUTTON": {
+        "UPDATE": "Update",
+        "CLOSE": "Close"
+      }
+    }
+  },
+  "CLIENTS": {
+    "NAVBAR": "Clients",
+    "LIST": {
+      "TAB": {
+        "REQUESTED": "Requested",
+        "CONFIRMED": "Confirmed",
+        "ACCEPTED": "Accepted",
+        "ONTHEWAY": "On the way",
+        "RECEIVED": "Received",
+        "CLOSED": "Closed"
+      },
+      "TOOLBAR": "Order list",
+      "CLIENT": "Name",
+      "WAITER": "Description",
+      "PRICE": "Type",
+      "FOOTER-TITLE": "deliveries"
+    },
+    "FORM": {
+      "TITLE": "Client details",
+      "FIELDS": {
+        "NAME": "Name",
+        "ADDRESS": "Address",
+        "PHONE": "Phone",
+        "CREATED_AT": "Created at",
+        "STATUS": "Status"
+      },
+      "UPDATE_CLIENT_SUCCESS": "Client has been updated",
+      "BUTTON": "Update"
+    },
+    "MODAL": {
+      "TITLE": "Update user",
+      "SUBTITLE": "Choose status and role.",
+      "STATUS_TITLE": "Current status",
+      "ROLE_TITLE": "Current role",
+      "BUTTON": {
+        "UPDATE": "Update",
+        "CLOSE": "Close"
+      }
     }
   },
   "ADMIN": {

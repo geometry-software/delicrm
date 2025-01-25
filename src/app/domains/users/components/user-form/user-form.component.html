@@ -1,0 +1,29 @@
+<ng-container *ngIf="user | async as data">
+
+  <div class="flex justify-between">
+    <app-title title="USERS.FORM.TITLE" />
+    <img style="border-radius: 50%;" [src]="data.avatar" width="100px" height="100px" />
+  </div>
+
+  <app-title-item title="USERS.FORM.FIELDS.EMAIL" [value]="data.email" />
+  <app-title-item title="USERS.FORM.FIELDS.ROLE" [value]="data.role" />
+  <app-title-item title="USERS.FORM.FIELDS.STATUS" [value]="data.status" />
+  <app-title-item title="USERS.FORM.FIELDS.CREATED_AT" [value]="getDateFromUnix(data.createdAt)" />
+
+  <form [formGroup]="form">
+
+    <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> {{ 'USERS.FORM.FIELDS.NAME' | translate }} </mat-label>
+      <input matInput formControlName="name" />
+      <mat-error *ngIf="showFieldErrors(form,'name') as error">
+        {{ error | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <app-button title="USERS.FORM.BUTTON" actionType="save" width="full"
+        [disabled]="(loading | async) === LoadingStatus.Loading" (submit)="confirm()" />
+    </div>
+
+  </form>
+</ng-container>
