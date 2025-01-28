@@ -38,7 +38,8 @@
 <ng-container *ngIf="isAdminUser | async">
 
   <ng-container *ngIf="isRequestedAuth | async as displayName; else adminTemplate">
-    <app-title [title]="getNameTitle(displayName)" subtitle="AUTH.LOGIN.EMPLOYEE.LOGIN_CONFIRMATION" />
+    <app-title [title]="getNameTitle(displayName)" subtitle="AUTH.LOGIN.EMPLOYEE.LOGIN_CONFIRMATION"
+      [disableTranslateTitle]="true" />
     <button mat-stroked-button class="login-button" routerLink="/auth/profile">
       {{ 'AUTH.LOGIN.EMPLOYEE.PROFILE_BUTTON' | translate }}
     </button>

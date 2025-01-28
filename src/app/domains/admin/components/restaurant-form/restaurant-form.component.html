@@ -70,6 +70,15 @@
     </mat-form-field>
 
     <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> {{ 'ADMIN.RESTAURANT_FORM.OPEN_TIME' | translate }} </mat-label>
+      <input matInput [ngxTimepicker]="timepicker" [formControlName]="formProps.openTime" />
+      <ngx-material-timepicker #timepicker />
+      <mat-error *ngIf="showFieldErrors(form, formProps.openTime) as error">
+        {{ error | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field [hideRequiredMarker]="true">
       <mat-label> {{ 'ADMIN.RESTAURANT_FORM.DISCOUNT' | translate }} </mat-label>
       <input matInput [formControlName]="formProps.discount" type="number" />
       <mat-error *ngIf="showFieldErrors(form, formProps.name) as error">

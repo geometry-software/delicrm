@@ -1,99 +1,124 @@
-<br />
 <mat-stepper [linear]="true" #stepper *ngIf="isFormDataLoaded | async">
-  <mat-step [stepControl]="menuForm" label="Choose starters">
+  <mat-step [stepControl]="menuForm" [label]="'ADMIN.BOARD.FORM.TAB.STARTERS' | translate">
     <form [formGroup]="menuForm" (ngSubmit)="addExtras(menuForm, stepper)">
 
-      <div class="section">Starters</div>
-
+      <div class="section">{{ 'SHARED.DAILY_MENU.STARTERS' | translate }}</div>
       <div formArrayName="starters" *ngFor="let item of getStarters().controls; let i = index">
-        <mat-form-field>
-          <input type="text" matInput [formControlName]="i" [placeholder]="'Sopa ' + (i + 1)"
-            [matAutocomplete]="autoStarter" />
+        <mat-form-field [hideRequiredMarker]="true">
+          <mat-label> {{ getStartersLabel(i) }} </mat-label>
+          <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoStarter" />
           <mat-autocomplete requireSelection #autoStarter="matAutocomplete" [displayWith]="displayFn">
             <mat-option *ngFor="let option of filteredStarterOptions[i] | async" [value]="option">
               {{ option.name }}
             </mat-option>
           </mat-autocomplete>
+          <mat-error *ngIf="showFieldErrors(menuForm, 'starters', i) as error">
+            {{ error | translate }}
+          </mat-error>
         </mat-form-field>
       </div>
 
-      <div class="section">Drinks</div>
-
+      <div class="section">{{ 'SHARED.DAILY_MENU.DRINKS' | translate }}</div>
       <div formArrayName="drinks" *ngFor="let item of getDrinks().controls; let i = index">
-        <mat-form-field>
-          <input type="text" matInput [formControlName]="i" [placeholder]="'Juice ' + (i + 1)"
-            [matAutocomplete]="autoDrink" />
+        <mat-form-field [hideRequiredMarker]="true">
+          <mat-label> {{ getDrinksLabel(i) }} </mat-label>
+          <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoDrink" />
           <mat-autocomplete requireSelection #autoDrink="matAutocomplete" [displayWith]="displayFn">
             <mat-option *ngFor="let option of filteredDrinkOptions[i] | async" [value]="option">
               {{ option.name }}
             </mat-option>
           </mat-autocomplete>
+          <mat-error *ngIf="showFieldErrors(menuForm, 'drinks', i) as error">
+            {{ error | translate }}
+          </mat-error>
         </mat-form-field>
       </div>
 
-      <div class="section">Side dishes</div>
-
-      <mat-form-field>
-        <input type="text" matInput formControlName="salad" placeholder="Salad" [matAutocomplete]="autoSalad" />
+      <div class="section">{{ 'SHARED.DAILY_MENU.SIDE_DISHES' | translate }}</div>
+      <mat-form-field [hideRequiredMarker]="true">
+        <mat-label> {{ 'ADMIN.BOARD.FORM.LABEL.SALAD' | translate }} </mat-label>
+        <input type="text" matInput formControlName="salad" [matAutocomplete]="autoSalad" />
         <mat-autocomplete requireSelection #autoSalad="matAutocomplete" [displayWith]="displayFn">
           <mat-option *ngFor="let option of filteredSaladOptions | async" [value]="option">
             {{ option.name }}
           </mat-option>
         </mat-autocomplete>
+        <mat-error *ngIf="showFieldErrors(menuForm, 'salad') as error">
+          {{ error | translate }}
+        </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
-        <input type="text" matInput formControlName="rice" placeholder="Rice" [matAutocomplete]="autoRice" />
+      <mat-form-field [hideRequiredMarker]="true">
+        <mat-label>{{ 'ADMIN.BOARD.FORM.LABEL.RICE' | translate }}</mat-label>
+        <input type="text" matInput formControlName="rice" [matAutocomplete]="autoRice" />
         <mat-autocomplete requireSelection #autoRice="matAutocomplete" [displayWith]="displayFn">
           <mat-option *ngFor="let option of filteredRiceOptions | async" [value]="option">
             {{ option.name }}
           </mat-option>
         </mat-autocomplete>
+        <mat-error *ngIf="showFieldErrors(menuForm, 'rice') as error">
+          {{ error | translate }}
+        </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
-        <input type="text" matInput formControlName="garnish" placeholder="Garnish" [matAutocomplete]="autoGarnish" />
+      <mat-form-field [hideRequiredMarker]="true">
+        <mat-label> {{ 'ADMIN.BOARD.FORM.LABEL.GARNISH' | translate }} </mat-label>
+        <input type="text" matInput formControlName="garnish" [matAutocomplete]="autoGarnish" />
         <mat-autocomplete requireSelection #autoGarnish="matAutocomplete" [displayWith]="displayFn">
           <mat-option *ngFor="let option of filteredGarnishOptions | async" [value]="option">
             {{ option.name }}
           </mat-option>
         </mat-autocomplete>
+        <mat-error *ngIf="showFieldErrors(menuForm, 'garnish') as error">
+          {{ error | translate }}
+        </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
-        <input type="text" matInput formControlName="dessert" placeholder="Dessert" [matAutocomplete]="autoDessert" />
+      <mat-form-field [hideRequiredMarker]="true">
+        <mat-label> {{ 'ADMIN.BOARD.FORM.LABEL.STARTER' | translate }} </mat-label>
+        <input type="text" matInput formControlName="dessert" [matAutocomplete]="autoDessert" />
         <mat-autocomplete requireSelection #autoDessert="matAutocomplete" [displayWith]="displayFn">
           <mat-option *ngFor="let option of filteredDessertOptions | async" [value]="option">
             {{ option.name }}
           </mat-option>
         </mat-autocomplete>
+        <mat-error *ngIf="showFieldErrors(menuForm, 'dessert') as error">
+          {{ error | translate }}
+        </mat-error>
       </mat-form-field>
 
-      <div *ngIf="hasStartersValidationError" class="validation-error-message">Not all positions were chosen</div>
-      <app-button title="Add starters and drinks" type="submit" width="full"></app-button>
+      <div *ngIf="hasStartersValidationError" class="validation-error-message">
+        {{ 'ADMIN.BOARD.FORM.ALL_REQUIRED_VALIDATION' | translate }}
+      </div>
+      <app-button title="ADMIN.BOARD.FORM.BUTTON.CONTINUE" type="submit" width="full" />
     </form>
   </mat-step>
 
-  <mat-step label="Add main dishes">
+  <mat-step [label]="'ADMIN.BOARD.FORM.TAB.MAIN_DISHES' | translate">
     <form [formGroup]="plateForm" (ngSubmit)="choosePlates(stepper)">
-      <div class="section">Main dishes</div>
 
+      <div class="section">{{ 'SHARED.DAILY_MENU.MAIN_PLATES' | translate }}</div>
       <div class="flex items-center" *ngFor="let item of plateList; let i = index">
         <mat-checkbox [checked]="item.isAdded" (change)="addPlate(item)">
           <span class="main-dish">{{ item.name }}</span>
         </mat-checkbox>
       </div>
 
-      <div class="plates-result-amount">{{ chosenPlates.length }} plates</div>
-      <app-button title="Add main dishes" type="submit" width="full"></app-button>
+      <div class="plates-result-amount">
+        {{ chosenPlates.length }}
+        {{ 'ADMIN.BOARD.FORM.PLATES_AMOUNT' | translate }}
+      </div>
+      <app-button title="ADMIN.BOARD.FORM.BUTTON.VERIFY" type="submit" width="full" />
+
     </form>
   </mat-step>
-  <mat-step [stepControl]="plateForm" label="Confirm">
-    <ng-container *ngIf="dailyMenu.main">
-      <app-formatted-daily-menu [dailyMenu]="dailyMenu" [currency]="currency | async" />
-      <br />
-      <app-button [title]="!(isLoading | async) ? 'Update menu and open a service' : 'Loading ..'"
-        [disabled]="(isLoading | async)" actionType="save" [width]="'full'" (click)="createDailyMenu()"></app-button>
-    </ng-container>
+  <mat-step [stepControl]="plateForm" [label]="'ADMIN.BOARD.FORM.TAB.CONFIRM' | translate">
+
+    <app-formatted-daily-menu *ngIf="dailyMenu.main" [dailyMenu]="dailyMenu" [currency]="currency | async" />
+    <br />
+    <app-button
+      [title]="!(isLoading | async) ? 'ADMIN.BOARD.FORM.BUTTON.CONFIRM.ACTION' : 'ADMIN.BOARD.FORM.BUTTON.CONFIRM.LOADING'"
+      [disabled]="(isLoading | async)" actionType="save" width="full" (click)="createDailyMenu()" />
+
   </mat-step>
 </mat-stepper>

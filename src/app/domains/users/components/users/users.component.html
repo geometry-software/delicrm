@@ -17,7 +17,9 @@
 <ng-template #table let-data="data">
   <mat-table [dataSource]="data">
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        {{ 'USERS.LIST.TABLE.NAME' | translate }}
+      </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <div class="table-link" [routerLink]="['/users', element.id]">
           {{ element.name }}
@@ -26,7 +28,9 @@
     </ng-container>
 
     <ng-container matColumnDef="role">
-      <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        {{ 'USERS.LIST.TABLE.ROLE' | translate }}
+      </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <span class="text-ellipsis">
           {{ element.role }}

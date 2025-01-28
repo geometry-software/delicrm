@@ -3,7 +3,7 @@
   <input class="list-search-field" [placeholder]="'EXPENSES.PAGE.LIST.TABLE.SEARCH' | translate" />
 </div>
 
-<mat-table [dataSource]="dataSourceObs | async">
+<mat-table [dataSource]="dataSource | async">
   <ng-container matColumnDef="waiter">
     <mat-header-cell *matHeaderCellDef>
       {{ 'EXPENSES.PAGE.LIST.TABLE.WAITER' | translate }}
@@ -15,7 +15,7 @@
 
   <ng-container matColumnDef="createdAt">
     <mat-header-cell *matHeaderCellDef>
-      {{ 'EXPENSES.PAGE.LIST.TABLE.WAITER' | translate }}
+      {{ 'EXPENSES.PAGE.LIST.TABLE.TIME' | translate }}
     </mat-header-cell>
     <mat-cell *matCellDef="let element">
       {{ element.createdAt | date : 'MMMM d, h:mm a' }}

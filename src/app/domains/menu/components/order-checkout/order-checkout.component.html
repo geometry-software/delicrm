@@ -1,11 +1,12 @@
 <div class="checkout-container" *ngIf="order" [@fadeInOnEnter]>
-  <app-button routerLink="/menu" title="Back" width="full" />
+  <app-button routerLink="/menu" title="MENU.CHECKOUT.BACK_BUTTON" width="full" />
+
   <ng-container *ngFor="let plate of order.main; let i = index">
     <div class="card mt-[10px]">
-      <app-title [title]="getDishTitle(i, plate.name)" subtitle="choose starter, drink and sidedishes" />
+      <app-title [title]="getDishTitle(i, plate.name)" subtitle="MENU.CHECKOUT.DISH_SUBTITLE"
+        [disableTranslateTitle]="true" />
 
-      <div class="section">Starter</div>
-
+      <div class="section">{{ 'SHARED.DAILY_MENU.STARTERS' | translate }}</div>
       <mat-radio-group class="radio-group" (change)="chooseStarter($event.value, i)">
         <mat-radio-button *ngFor="let starter of extras.starters" [value]="starter" [disabled]="starter.eightySix"
           [style.text-decoration]="starter.eightySix ? 'line-through' : 'none'">
@@ -13,8 +14,7 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <div class="section">Drink</div>
-
+      <div class="section">{{ 'SHARED.DAILY_MENU.DRINKS' | translate }}</div>
       <mat-radio-group class="radio-group" (change)="chooseDrink($event.value, i)">
         <mat-radio-button *ngFor="let drink of extras.drinks" [value]="drink" [disabled]="drink.eightySix"
           [style.text-decoration]="drink.eightySix ? 'line-through' : 'none'">
@@ -22,8 +22,7 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <div class="section">Side dishes</div>
-
+      <div class="section">{{ 'SHARED.DAILY_MENU.SIDE_DISHES' | translate }}</div>
       <mat-checkbox [checked]="!extras.garnish.eightySix" (change)="chooseSideDish(extras.garnish, i)"
         [disabled]="extras.garnish.eightySix">
         <span [style.text-decoration]="extras.garnish.eightySix ? 'line-through' : 'none'">
@@ -56,12 +55,18 @@
 
   <form [formGroup]="form" (ngSubmit)="submitOrderDetails()" autocomplete="off">
     <div class="card mt-[20px] ">
-      <app-title title="Order details" [subtitle]="'choose required option to finalize the order'" />
+      <app-title title="MENU.CHECKOUT.ORDER_DETAILS.TITLE" subtitle="MENU.CHECKOUT.ORDER_DETAILS.SUBTITLE" />
 
       <mat-radio-group *ngIf="appUser" class="radio-group" (change)="chooseOrderType($event.value)">
-        <mat-radio-button value="table" checked="true"> Table </mat-radio-button>
-        <mat-radio-button value="delivery"> Delivery </mat-radio-button>
-        <mat-radio-button value="takeaway"> Take away </mat-radio-button>
+        <mat-radio-button value="table" checked="true">
+          {{ 'MENU.CHECKOUT.ORDER_DETAILS.TABLE.TITLE' | translate }}
+        </mat-radio-button>
+        <mat-radio-button value="delivery">
+          {{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.TITLE' | translate }}
+        </mat-radio-button>
+        <mat-radio-button value="takeaway">
+          {{ 'MENU.CHECKOUT.ORDER_DETAILS.TAKE_AWAY.TITLE' | translate }}
+        </mat-radio-button>
       </mat-radio-group>
 
       <ng-container [ngSwitch]="order.category.type">
@@ -69,10 +74,10 @@
         <!-- TABLE -->
         <ng-container *ngSwitchCase="'table'">
           <mat-form-field [hideRequiredMarker]="true">
-            <mat-label>Table number</mat-label>
+            <mat-label>{{ 'MENU.CHECKOUT.ORDER_DETAILS.TABLE.NUMBER' | translate }}</mat-label>
             <input matInput type="number" formControlName="table" />
             <mat-error *ngIf="showFieldErrors(form, 'table') as error">
-              {{ error }}
+              {{ error | translate }}
             </mat-error>
           </mat-form-field>
         </ng-container>
@@ -80,10 +85,10 @@
         <!-- TAKEAWAY -->
         <ng-container *ngSwitchCase="'takeaway'">
           <mat-form-field [hideRequiredMarker]="true">
-            <mat-label>Name</mat-label>
+            <mat-label>{{ 'MENU.CHECKOUT.ORDER_DETAILS.TAKE_AWAY.NAME' | translate }}</mat-label>
             <input matInput type="text" formControlName="name" />
             <mat-error *ngIf="showFieldErrors(form, 'name') as error">
-              {{ error }}
+              {{ error | translate }}
             </mat-error>
           </mat-form-field>
         </ng-container>
@@ -109,40 +114,40 @@
             </mat-autocomplete>
           </mat-form-field> -->
 
-          <div class="section">Delivery details</div>
+          <div class="section">{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.DETAILS' | translate }}</div>
 
-          <mat-form-field>
-            <mat-label>Nombre</mat-label>
+          <mat-form-field [hideRequiredMarker]="true">
+            <mat-label>{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.NAME' | translate }}</mat-label>
             <input matInput type="text" formControlName="name" />
             <mat-error *ngIf="showFieldErrors(form, 'name') as error">
-              {{ error }}
+              {{ error | translate }}
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field>
-            <mat-label>Dirección</mat-label>
+          <mat-form-field [hideRequiredMarker]="true">
+            <mat-label>{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.ADDRESS' | translate }}</mat-label>
             <input matInput type="text" formControlName="address" />
             <mat-error *ngIf="showFieldErrors(form, 'address') as error">
-              {{ error }}
+              {{ error | translate }}
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field>
-            <mat-label>Celular</mat-label>
+          <mat-form-field [hideRequiredMarker]="true">
+            <mat-label>{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.PHONE' | translate }}</mat-label>
             <input matInput type="text" formControlName="phone" />
             <mat-error *ngIf="showFieldErrors(form, 'phone') as error">
-              {{ error }}
+              {{ error | translate }}
             </mat-error>
           </mat-form-field>
 
-          <div class="section">Payment type</div>
+          <div class="section">{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.PAYMENT' | translate }}</div>
           <mat-radio-group class="radio-group" formControlName="payment" (change)="updatePaymentType($event.value)">
             <mat-radio-button [value]="PaymentType.Cash"> Cash </mat-radio-button>
             <mat-radio-button [value]="PaymentType.Card"> Card </mat-radio-button>
           </mat-radio-group>
 
           <ng-container *ngIf="paymentType === PaymentType.Cash">
-            <div class="section">Bill type</div>
+            <div class="section">{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.BILL_TYPE' | translate }}</div>
             <mat-radio-group class="radio-group" formControlName="change">
               <mat-radio-button [value]="item" *ngFor="let item of changeTypes">
                 {{ item }}
@@ -150,17 +155,19 @@
             </mat-radio-group>
           </ng-container>
 
-          <div class="section">Delivery hour</div>
+          <div class="section">{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.DELIVERY_TIME' | translate }}</div>
 
           <mat-radio-group class="radio-group" [value]="deliveryTime">
             <mat-radio-button value="now" (change)="updateTime($event.value)">
-              <span>Now</span>
+              <span>{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.NOW' | translate }}</span>
             </mat-radio-button>
             <mat-radio-button value="delayed" (change)="updateTime($event.value)">
-              <span>Choose a time</span>
+              <span>{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.CHOOSE_TIME' | translate }}</span>
               <ng-container *ngIf="deliveryTime === 'delayed'">
-                <input [ngxTimepicker]="timepicker" />
-                <ngx-material-timepicker #timepicker (timeSet)="setDeliveryTime($event)"></ngx-material-timepicker>
+                <mat-form-field [hideRequiredMarker]="true">
+                  <input matInput [ngxTimepicker]="timepicker" />
+                  <ngx-material-timepicker #timepicker (timeSet)="setDeliveryTime($event)" />
+                </mat-form-field>
               </ng-container>
             </mat-radio-button>
           </mat-radio-group>
@@ -168,8 +175,10 @@
 
       </ng-container>
 
+      <div class="section">{{ 'MENU.CHECKOUT.ORDER_DETAILS.COMMENT' | translate }}</div>
+
       <mat-form-field>
-        <mat-label>Comment</mat-label>
+        <mat-label>{{ 'MENU.CHECKOUT.ORDER_DETAILS.COMMENT' | translate }}</mat-label>
         <input matInput type="text" formControlName="comment" />
       </mat-form-field>
     </div>
@@ -185,32 +194,37 @@
 
     <div class="card mt-[20px] mb-[10px]">
 
-      <app-title title="Total" [subtitle]="total" />
-      <app-title-item title="Menu del dia price" [value]="orderPrice" />
-      <app-title-item title="Delivery price" [value]="deliveryPrice" />
-      <app-title-item margin="0" title="Ala Carte price" [value]="alacartePrice" />
+      <app-title title='MENU.CHECKOUT.TOTAL.TITLE' [subtitle]="total" [disableTranslateSubtitle]="true" />
+      <app-title-item title="MENU.CHECKOUT.TOTAL.MENU_PRICE" [value]="orderPrice" />
+      <app-title-item title="MENU.CHECKOUT.TOTAL.DELIVERY_PRICE" [value]="deliveryPrice" />
+      <app-title-item title="MENU.CHECKOUT.TOTAL.ALACARTE_PRICE" [value]="alacartePrice" margin="0" />
 
-      <div *ngIf="hasClientDataError" class="validation-error-message" [@fadeInUpOnEnter]>
-        Verify customer data again
-      </div>
-      <div *ngIf="hasPaymentTypeError" class="validation-error-message" [@fadeInUpOnEnter]>
-        Payment method missing
-      </div>
-      <div *ngIf="hasStarterError" class="validation-error-message" [@fadeInUpOnEnter]>
-        Starter is not chosen
-      </div>
-      <div *ngIf="hasDrinkError" class="validation-error-message" [@fadeInUpOnEnter]>
-        Drink is not chosen
-      </div>
-      <div *ngIf="hasTableNumberError" class="validation-error-message" [@fadeInUpOnEnter]>
-        Table number is missing
-      </div>
-      <div *ngIf="hasTakeAwayError" class="validation-error-message" [@fadeInUpOnEnter]>
-        Client name need to be added
-      </div>
     </div>
+
+    <div *ngIf="hasClientDataError" class="validation-error-message" [@fadeInUpOnEnter]>
+      {{ 'MENU.CHECKOUT.VALIDATION.CLIENT_DATA' | translate }}
+    </div>
+    <div *ngIf="hasPaymentTypeError" class="validation-error-message" [@fadeInUpOnEnter]>
+      {{ 'MENU.CHECKOUT.VALIDATION.PAYMENT_TYPE' | translate }}
+    </div>
+    <div *ngIf="hasBillTypeError" class="validation-error-message" [@fadeInUpOnEnter]>
+      {{ 'MENU.CHECKOUT.VALIDATION.BILL_TYPE' | translate }}
+    </div>
+    <div *ngIf="hasStarterError" class="validation-error-message" [@fadeInUpOnEnter]>
+      {{ 'MENU.CHECKOUT.VALIDATION.STARTER' | translate }}
+    </div>
+    <div *ngIf="hasDrinkError" class="validation-error-message" [@fadeInUpOnEnter]>
+      {{ 'MENU.CHECKOUT.VALIDATION.DRINK' | translate }}
+    </div>
+    <div *ngIf="hasTableNumberError" class="validation-error-message" [@fadeInUpOnEnter]>
+      {{ 'MENU.CHECKOUT.VALIDATION.TABLE_NUMBER' | translate }}
+    </div>
+    <div *ngIf="hasTakeAwayError" class="validation-error-message" [@fadeInUpOnEnter]>
+      {{ 'MENU.CHECKOUT.VALIDATION.TAKEAWAY_NAME' | translate }}
+    </div>
+
     <app-button actionType="save" type="submit" width="full"
       [disabled]="(loadingStatus| async) === LoadingStatus.Loading"
-      [title]="(loadingStatus| async) === LoadingStatus.Loading ? 'Requesting ..' : 'Request order'" />
+      [title]="(loadingStatus| async) === LoadingStatus.Loading ? 'MENU.CHECKOUT.BUTTON.LOADING' : 'MENU.CHECKOUT.BUTTON.ACTION'" />
   </form>
 </div>

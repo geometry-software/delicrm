@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, ViewChild } from '@angular/core'
 import { MatSort, Sort } from '@angular/material/sort'
-import { of } from 'rxjs'
+import { of, tap } from 'rxjs'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Store } from '@ngrx/store'
 import { PLATE_TYPE_TRANSLATE, RecipeConstants } from '../../models/recipe.constants'
@@ -25,9 +25,9 @@ export class RecipeListComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private route: ActivatedRoute,
     private router: Router,
     private signalService: SignalService,
+    private route: ActivatedRoute,
     private destroyRef: DestroyRef
   ) { }
 
@@ -57,7 +57,7 @@ export class RecipeListComponent implements OnInit {
 
   ngOnInit() {
     this.initData()
-    this.setSignals()
+    this.signalService.setLayoutType(this.route.snapshot.data['type'])
   }
 
   changeSort(sort: Sort) {
@@ -70,11 +70,6 @@ export class RecipeListComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       ).subscribe(([pagination, size, sort, status]) =>
         this.store.dispatch(ItemActions.getItems({ request: { pagination, size, sort, status: status as RepositoryEntityStatus } })))
-  }
-
-  setSignals() {
-    this.signalService.setToolbarTitle(this.route.snapshot.data['title'])
-    this.signalService.setLayoutType(this.route.snapshot.data['type'])
   }
 
   redirectToDetail(id: string) {

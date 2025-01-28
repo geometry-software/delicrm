@@ -29,7 +29,7 @@ export const prepareOrder = (main: MenuItem[], alacarte: MenuItem[], extras: Ext
             currency: restaurant.currency
         },
         comment: '',
-        progress: '50%',
+        progress: '60%',
         status: 'dining',
         isCreatedByUser
     }

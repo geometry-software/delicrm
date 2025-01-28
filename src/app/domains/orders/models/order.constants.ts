@@ -12,6 +12,7 @@ export abstract class OrderConstants {
   static readonly moduleUrl = '/orders'
   static readonly tableColumns = ['client', 'waiter', 'price']
   static readonly statusList: OrderStatus[] = ['dining', 'delivery', 'closed']
+  static readonly dialogStatusList: OrderStatus[] = ['closed']
   static readonly backToListButton = 'RECIPES.NAVBAR'
   static readonly defaultRequestStatus = 'dining'
   static readonly defaultPageRequest: RepositoryRequest<Order, OrderStatus> = {

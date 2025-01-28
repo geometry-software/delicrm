@@ -15,7 +15,7 @@ import { SignalService } from '../../../shared/services/signal.service'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpensesListComponent implements OnInit {
-  dataSourceObs: Observable<CdkTableDataSourceInput<any>>
+  dataSource: Observable<CdkTableDataSourceInput<any>>
   dataSourceColumn = ['waiter', 'createdAt', 'value', 'title']
 
   isUpdatingOrders: boolean
@@ -29,11 +29,10 @@ export class ExpensesListComponent implements OnInit {
 
   ngOnInit() {
     this.loadMarketExpenses()
-    this.initTitle()
   }
 
   loadMarketExpenses() {
-    this.dataSourceObs = this.expensesService.getAll()
+    this.dataSource = this.expensesService.getAll()
   }
 
   addExpenses() {
@@ -50,7 +49,4 @@ export class ExpensesListComponent implements OnInit {
       .subscribe()
   }
 
-  initTitle() {
-    this.signalService.setToolbarTitle(this.route.snapshot.data['title'])
-  }
 }

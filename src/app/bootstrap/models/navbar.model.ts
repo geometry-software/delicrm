@@ -17,5 +17,5 @@ export interface ResponsiveLayout {
 
 export type UserLanguageItem = {
   value: UserLanguage,
-  viewValue: string
+  title: string
 }

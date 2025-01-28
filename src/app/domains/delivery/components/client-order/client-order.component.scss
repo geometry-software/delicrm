@@ -37,3 +37,28 @@
   gap: 10px;
   margin-bottom: 20px;
 }
+
+.progress {
+  height: 30px;
+  border-radius: 14px;
+  background: #ddd;
+  width: 100%;
+  margin-right: 10px;
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    border-radius: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #555;
+    transition: all 0.5s ease-in-out;
+  }
+
+  .icon {
+    color: #555;
+    padding-right: 5px;
+  }
+}

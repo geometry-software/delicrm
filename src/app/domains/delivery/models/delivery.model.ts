@@ -8,6 +8,7 @@ export type Delivery = {
   order?: Order
   deliveryInfo?: DeliveryInfo
   status?: DeliveryStatus
+  progress?: DeliveryProgress
   createdAt: number
   createdByClient: Auth | null
   createdByUser: User | null
@@ -73,4 +74,31 @@ export type DeliveryStatusStamp = {
   status: DeliveryStatus,
   createdBy: User,
   createdAt: number
+}
+
+export enum DELIVERY_STATUS_COLOR {
+  requested = '#fdb16f',
+  confirmed = '#fdb16f',
+  accepted = '#fdb16f',
+  ontheway = '#fdb16f',
+  received = '#fdb16f',
+  closed = '#fdb16f',
+}
+
+export enum DELIVERY_STATUS_ICON {
+  requested = 'directions_bike',
+  confirmed = 'directions_bike',
+  accepted = 'directions_bike',
+  ontheway = 'directions_bike',
+  received = 'directions_bike',
+  closed = 'directions_bike',
+}
+
+export enum DELIVERY_STATUS_TRANSLATE {
+  requested = 'DELIVERY.STATUS.REQUESTED',
+  confirmed = 'DELIVERY.STATUS.CONFIRMED',
+  accepted = 'DELIVERY.STATUS.ACCEPTED',
+  ontheway = 'DELIVERY.STATUS.ONTHEWAY',
+  received = 'DELIVERY.STATUS.RECEIVED',
+  closed = 'DELIVERY.STATUS.CLOSED',
 }

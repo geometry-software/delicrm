@@ -9,6 +9,7 @@ export type Restaurant = {
     web: string
     delivery: number
     discount: number
+    openTime: string
     currency: string
 }
 

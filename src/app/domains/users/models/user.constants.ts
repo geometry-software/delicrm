@@ -8,9 +8,9 @@ export abstract class UserConstants {
   static readonly collectionName = 'Users'
   static readonly defaultTableSort = 'createdAt'
 
-  static readonly labelActive = 'Active'
-  static readonly labelRequested = 'Requested'
-  static readonly labelBlocked = 'Blocked'
+  static readonly labelActive = 'USERS.LIST.TAB.ACTIVE'
+  static readonly labelRequested = 'USERS.LIST.TAB.REQUESTED'
+  static readonly labelBlocked = 'USERS.LIST.TAB.BLOCKED'
 
   static readonly paginationSize = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20]
   static readonly moduleUrl = '/users'

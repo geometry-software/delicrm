@@ -59,7 +59,7 @@ export class RecipeFormComponent implements OnInit {
 
   ngOnInit() {
     this.initForm()
-    this.setSignals()
+    this.signalService.setLayoutType(this.route.snapshot.data['type'])
   }
 
   initForm() {
@@ -92,11 +92,6 @@ export class RecipeFormComponent implements OnInit {
       this.isFormDataLoaded = true
       this.cdr.markForCheck()
     }
-  }
-
-  setSignals() {
-    this.signalService.setToolbarTitle(this.route.snapshot.data['title'])
-    this.signalService.setLayoutType(this.route.snapshot.data['type'])
   }
 
   changeType(event: RecipeCourse) {

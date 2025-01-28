@@ -1,20 +1,21 @@
 <ng-container
   *ngIf="!(isRestaurantOpen | async) && (loadingStatus | async) === LoadingStatus.Loaded; else menuTemplate">
-  <div class="close-title" [@fadeInOnEnter]>Ahora el servicio está cerrado</div>
-  <div class="close-subtitle" [@fadeInOnEnter]>El menú estará disponible apartir de las 10 a.m.</div>
+  <app-title [@fadeInOnEnter] title="MENU.DAILY_MENU.CLOSED.TITLE" [subtitle]="serviceClosedSubtitle | async" />
 </ng-container>
 
 <ng-template #menuTemplate>
+
   <div [ngClass]="isDesktop ? 'toolbar-desktop' : 'toolbar-mobile'" *ngIf="dailyMenu | async">
-    <app-button (click)="save()" title="Continuar" width="full">
+    <app-button (click)="save()" title="MENU.DAILY_MENU.SUBMIT" width="full">
       <span class="dish-amount" *ngIf="dishAmount">({{ dishAmount }})</span>
     </app-button>
     <div *ngIf="emptyOrderError" class="validation-error-message mt-[10px]" [@fadeInUpOnEnter]>
-      At least one option has to be added
+      {{ "MENU.DAILY_MENU.VALIDATION.MIN_ONE_OPTION" | translate }}
     </div>
   </div>
 
   <div *ngIf="dailyMenu | async as menu" [@fadeInOnEnter]>
+
     <mat-chip-grid #plateList style="margin-top: 10px">
       <mat-chip-row style="color: white; background-color: sandybrown" *ngFor="let item of chosenDailyMenuItems"
         removable="true" (removed)="removeItem(item)" [@rubberBandOnEnter]>
@@ -31,14 +32,15 @@
       </mat-chip-row>
       <input [matChipInputFor]="alaCarteChipList" style="display: none" />
     </mat-chip-grid>
+
     <mat-tab-group [@.disabled]="true">
-      <mat-tab [label]="dailyMenuLabel">
+      <mat-tab [label]="'MENU.DAILY_MENU.TAB.MENU' | translate">
         <app-formatted-daily-menu [dailyMenu]="menu" [isAddAvailable]="true" [currency]="currency | async"
           (openDetail)="openDetail($event)" (addItem)="addItem($event)">
         </app-formatted-daily-menu>
       </mat-tab>
 
-      <mat-tab [label]="alaCarteLabel">
+      <mat-tab [label]="'MENU.DAILY_MENU.TAB.ALACARTE' | translate">
         <div class="flex items-center justify-between" *ngFor="let item of alaCarteList; let i = index">
           <div class="flex items-center">
             <div class="alacarte-item__title">
@@ -47,7 +49,7 @@
             <div class="item__history">{{ item.history }}</div>
           </div>
           <div class="flex items-center">
-            <div class="alacarte-item__price">{{ !item?.eightySix ? item.price : '86' }} currency</div>
+            <div class="alacarte-item__price">{{ !item?.eightySix ? item.price : '86' }} {{ currency | async }}</div>
             <button mat-icon-button (click)="addAlaCarteItem(item)">
               <mat-icon class="add-button">add</mat-icon>
             </button>
@@ -55,5 +57,6 @@
         </div>
       </mat-tab>
     </mat-tab-group>
+
   </div>
 </ng-template>

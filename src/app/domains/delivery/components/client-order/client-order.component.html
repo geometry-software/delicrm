@@ -3,10 +3,9 @@
     <ng-container *ngIf="data.auth; else userActions">
       <div class="card mb-[20px]" [@fadeInOnEnter]>
         <div class="name-title">
-          <div>Thanks for your order,
-            <br>
-            {{ data.delivery.createdByClient.name }}!
-          </div>
+          {{ 'DELIVERY.DETAIL.THANKS' | translate}}
+          <br>
+          {{ data.delivery.createdByClient.name }}!
         </div>
         <div class="text-center my-[30px]">
           <img src="/assets/images/done.png" width="150px" height="150px" />
@@ -15,13 +14,22 @@
     </ng-container>
     <ng-template #userActions>
       <div class="user-actions">
-        <app-button [title]="'back'" actionType="back" [icon]="'arrow_back'" [url]="'/delivery'"></app-button>
-        <app-button [title]="'Update'" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
+        <app-button title="DELIVERY.DETAIL.BUTTON.BACK" actionType="back" icon="arrow_back" url="/delivery" />
+        <app-button title="DELIVERY.DETAIL.BUTTON.UPDATE" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
           icon="arrow_forward" (click)="update()" />
       </div>
     </ng-template>
 
     <div class="card">
+      <div class="flex justify-between items-center">
+        <div class="progress">
+          <div [style.width]="deliveryStatusBar.progress" [style.background]="statusColor[deliveryStatusBar.status]">
+            <span class="material-symbols-outlined icon"> {{ statusIcon[deliveryStatusBar.status] }} </span>
+            {{ deliveryTanslate[deliveryStatusBar.status] | translate }}
+          </div>
+        </div>
+      </div>
+
       <div *ngFor="let item of data.delivery.order.main; let i = index; let last = last">
         <div class="item-card" [@pulseOnEnter]>
           <div class="flex items-center">
@@ -38,25 +46,30 @@
 
     <div class="card mt-[20px]">
       <div class="flex justify-between">
-        <app-title-item title="Address" [value]="data.delivery.deliveryInfo.address " />
+        <app-title-item title="DELIVERY.DETAIL.ADDRESS" [value]="data.delivery.deliveryInfo.address " />
         <button *ngIf="data.user" mat-icon-button (click)="copyAddress(data.delivery)" onclick="this.blur()">
           <mat-icon class="menu-icon"> pin_drop </mat-icon>
         </button>
       </div>
       <div class="flex justify-between">
-        <app-title-item title="Phone" [value]="data.delivery.deliveryInfo.phone " />
+        <app-title-item title="DELIVERY.DETAIL.PHONE" [value]="data.delivery.deliveryInfo.phone " />
         <button *ngIf="data.user" mat-icon-button (click)="copyPhone(data.delivery)" onclick="this.blur()">
           <mat-icon class="menu-icon"> call </mat-icon>
         </button>
       </div>
-      <app-title-item title="Payment" [value]="data.delivery.deliveryInfo.payment" />
-      <app-title-item *ngIf="data.delivery.deliveryInfo.payment === 'cash'" title="Change"
+      <app-title-item title="DELIVERY.DETAIL.PAYMENT" [value]="data.delivery.deliveryInfo.payment" />
+      <app-title-item *ngIf="data.delivery.deliveryInfo.payment === 'cash'" title="DELIVERY.DETAIL.CHANGE"
         [value]="data.delivery.deliveryInfo.change " />
-      <app-title-item margin="0" title="Delivery time" [value]="getDeliveryTime(data.delivery)" />
+      <app-title-item margin="0" title="DELIVERY.DETAIL.DELIVERY_TIME" [value]="getDeliveryTime(data.delivery)" />
     </div>
 
     <div class="card mt-[20px] mb-[10px]">
-      <app-title margin="0" title="Total" [subtitle]="getTotal(data.delivery.order)" />
+      <app-title title='MENU.CHECKOUT.TOTAL.TITLE' [subtitle]="getTotal(data.delivery)"
+        [disableTranslateSubtitle]="true" />
+
+      <app-title-item title="MENU.CHECKOUT.TOTAL.MENU_PRICE" [value]="getOrderPrice(data.delivery)" />
+      <app-title-item title="MENU.CHECKOUT.TOTAL.DELIVERY_PRICE" [value]="getDeliveryPrice(data.delivery)" />
+      <app-title-item title="MENU.CHECKOUT.TOTAL.ALACARTE_PRICE" [value]="getAlacartePrice(data.delivery)" margin="0" />
     </div>
   </ng-container>
 </ng-container>

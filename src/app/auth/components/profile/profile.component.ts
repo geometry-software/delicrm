@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table'
 import { AuthService } from '../../services/auth.service'
 import { UserService } from '../../../domains/users/services/user.service'
 import { filter, switchMap, tap } from 'rxjs'
+import { TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-profile',
@@ -11,58 +12,27 @@ import { filter, switchMap, tap } from 'rxjs'
   styleUrls: ['./profile.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent {
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private userService: UserService,
+    private translateService: TranslateService,
   ) { }
 
-  userData = this.userService.getUser().pipe(
-    tap(v => console.log(v)),
+  readonly userData = this.userService.getUser().pipe(
     filter(Boolean),
-    switchMap(user => this.userService.getById(user.userId)),
-    tap(v => console.log(v))
-  )
-  userId: string
-  isClient: boolean
-  isEmployee: boolean
-  clientData
-  employeeData
-  datasource = new MatTableDataSource()
-  displayedColumns = ['date', 'price']
-  clientForm: FormGroup
-  isLoaded: boolean
-  versionBuildDate: string = 'on the 1st of November 2024'
-
-  ngOnInit() {
-    this.initForm()
-    this.getUserData()
-  }
-
-  getUserData() {
-    // TODO
-  }
-
-  initForm() {
-    this.clientForm = this.formBuilder.group({
-      name: [null, [Validators.required]],
-      address: [null, [Validators.required]],
-      phone: [null, [Validators.required]],
-    })
-  }
-
-  updateClientData(form) {
-    // TODO
-  }
-
-  updateRestaurantData(form) {
-    // TODO
-  }
+    switchMap(user => this.userService.getById(user.userId)),)
+  readonly versionBuildDate: string = '29th of January 2025'
 
   logout() {
     this.authService.logout()
+  }
+
+  getVersion() {
+    const message = this.translateService.instant("PROFILE.VERSION_UPDATED")
+    return message + ' ' + this.versionBuildDate
   }
 
 }

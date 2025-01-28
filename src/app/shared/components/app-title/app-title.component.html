@@ -1,2 +1,2 @@
-<div class="title">{{ title | translate }}</div>
-<div class="subtitle">{{ subtitle | translate }}</div>
+<div class="title">{{ disableTranslateTitle ? title : title | translate }}</div>
+<div class="subtitle">{{ disableTranslateSubtitle ? subtitle : subtitle | translate }}</div>

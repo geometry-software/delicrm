@@ -17,7 +17,7 @@ export class OrderStatusComponent implements OnInit {
   ) { }
 
   currentStatus: OrderStatus
-  statusList = OrderConstants.statusList
+  readonly statusList = OrderConstants.dialogStatusList
   readonly orderTranslate = ORDER_STATUS_TRANSLATE
   readonly statusColor = ORDER_STATUS_COLOR
 

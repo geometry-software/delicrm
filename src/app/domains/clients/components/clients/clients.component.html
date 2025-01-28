@@ -19,7 +19,9 @@
     [matSortDirection]="defaultSortControlValue.direction" [matSortActive]="defaultSortControlValue.active"
     (matSortChange)="changeSort($event)">
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        {{ 'CLIENTS.LIST.TABLE.NAME' | translate }}
+      </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <div class="table-link" [routerLink]="['/clients', element.id]">
           {{ element.name ?? 'No name' }}
@@ -28,7 +30,9 @@
     </ng-container>
 
     <ng-container matColumnDef="status">
-      <mat-header-cell *matHeaderCellDef class="flex justify-center"> Status </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="flex justify-center">
+        {{ 'CLIENTS.LIST.TABLE.STATUS' | translate }}
+      </mat-header-cell>
       <mat-cell *matCellDef="let element" class="flex justify-center">
         <button mat-icon-button (click)="updateStatus(element)">
           <mat-icon>badge</mat-icon>

@@ -16,7 +16,8 @@ import { OrderActions as ItemActions } from '../../store/order.actions'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { OrderStatusComponent } from '../order-status/order-status.component'
 import { defaultErrorHandler } from '../../../../shared/utils/default-error-handler'
-import { isNaN } from 'lodash'
+import { isNaN, isNil } from 'lodash'
+import { TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-order-detail',
@@ -34,6 +35,7 @@ export class OrderDetailComponent implements OnInit {
     private store: Store,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
+    private translateService: TranslateService,
     private destroyRef: DestroyRef
   ) { }
 
@@ -56,15 +58,13 @@ export class OrderDetailComponent implements OnInit {
   status: OrderStatus
 
   get orderTitle() {
-    // TODO use obj[key]
-    const type = this.order.category.type
-    switch (type) {
+    switch (this.order.category.type) {
       case 'table':
-        return 'Table'
+        return 'ORDERS.DETAIL.ORDER_TYPE.TABLE'
       case 'delivery':
-        return 'Delivery'
+        return 'ORDERS.DETAIL.ORDER_TYPE.DELIVERY'
       case 'takeaway':
-        return 'Takeaway'
+        return 'ORDERS.DETAIL.ORDER_TYPE.TAKEAWAY'
     }
   }
 
@@ -73,7 +73,23 @@ export class OrderDetailComponent implements OnInit {
   }
 
   get emptyOrder() {
-    return isNaN(this.order)
+    return isNil(this.order)
+  }
+
+  get total() {
+    return this.order.price.total + ' ' + this.currency
+  }
+
+  get deliveryPrice() {
+    return this.order.price.delivery + ' ' + this.currency
+  }
+
+  get orderPrice() {
+    return this.order.price.order + ' ' + this.currency
+  }
+
+  get alacartePrice() {
+    return this.order.price.alacarte + ' ' + this.currency
   }
 
   ngOnInit() {
@@ -84,7 +100,8 @@ export class OrderDetailComponent implements OnInit {
   get orderDetail() {
     switch (this.order.category.type) {
       case 'table':
-        return 'number ' + this.order.category.table
+        const message = this.translateService.instant('ORDERS.DETAIL.TABLE_NUMBER')
+        return message + ' ' + this.order.category.table
       case 'delivery':
         return this.order.category.delivery.deliveryInfo.name
       case 'takeaway':
@@ -114,6 +131,12 @@ export class OrderDetailComponent implements OnInit {
     )
   }
 
+  getOrderErorrMessage() {
+    const start = this.translateService.instant('ORDERS.DETAIL.ERROR_MESSAGE_START')
+    const end = this.translateService.instant('ORDERS.DETAIL.ERROR_MESSAGE_END')
+    return start + ': ' + this.orderId + ' ' + end
+  }
+
   // TODO make order history by status changes
   // const history: OrderStatusHistory = {
   //   status,
@@ -122,11 +145,6 @@ export class OrderDetailComponent implements OnInit {
   // }
   // const statusHistory = [...this.order.statusHistory]
   // statusHistory.push(history)
-
-
-  getTotal(total: number) {
-    return total + ' ' + this.currency
-  }
 
   private async initData() {
     combineLatest([
@@ -146,6 +164,8 @@ export class OrderDetailComponent implements OnInit {
       } else {
         this.order = await this.requestOrder(id)
       }
+      console.log(this.order);
+
       this.orderId = id
       this.currency = currency
       this.orderStatusBar = {

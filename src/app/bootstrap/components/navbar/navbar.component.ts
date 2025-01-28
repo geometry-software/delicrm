@@ -11,11 +11,13 @@ import { combineLatest, map, shareReplay, tap } from 'rxjs'
 import { toObservable } from '@angular/core/rxjs-interop'
 import { Chart, ChartItem } from 'chart.js/auto';
 import { RestaurantService } from '../../../domains/admin/services/restaurant.service'
+import { fadeInOnEnterAnimation } from 'angular-animations'
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
+  animations: [fadeInOnEnterAnimation()],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent implements OnInit, AfterViewInit {
@@ -24,7 +26,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private restaurantService: RestaurantService,
     private signalService: SignalService,
-    private translate: TranslateService,
+    private translateService: TranslateService,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -37,9 +39,9 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   responsiveLayout: ResponsiveLayout = {}
 
   languageOptions: UserLanguageItem[] = [
-    { value: 'en', viewValue: 'English' },
-    { value: 'es', viewValue: 'Español' },
-    // { value: 'pt', viewValue: 'Português' }
+    { value: 'en', title: 'English' },
+    { value: 'es', title: 'Español' },
+    // { value: 'pt', title: 'Português' }
   ]
 
   hasAppAuth: boolean
@@ -96,10 +98,8 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   }
 
   initTranslate() {
-    this.translate.addLangs(['es', 'pt', 'en'])
-    this.translate.setDefaultLang('es')
-    const lang = this.translate.getBrowserLang()
-    this.translate.use(lang.match(/es|en/) ? lang : 'es')
+    this.translateService.addLangs(['es', 'pt', 'en'])
+    this.translateService.setDefaultLang('en')
   }
 
   checkDelivery() { }
@@ -133,7 +133,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   }
 
   changeLanguage(lang: UserLanguage) {
-    this.translate.use(lang)
+    this.translateService.use(lang)
     this.cdr.markForCheck()
   }
 

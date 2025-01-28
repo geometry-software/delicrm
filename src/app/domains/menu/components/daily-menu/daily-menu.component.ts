@@ -8,9 +8,12 @@ import { Recipe } from '../../../recipe/models/recipe.model'
 import { setProteinImage } from '../../../../shared/utils/protein-image'
 import { MenuConstants } from '../../utils/menu.constants'
 import { Store } from '@ngrx/store'
-import { getCurrency, getMenu, isRestaurantOpen, loadingStatus } from '../../store/menu.selectors'
+import { getCurrency, getMenu, getRestaurantInfo, isRestaurantOpen, loadingStatus } from '../../store/menu.selectors'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { MenuItem } from '../../../admin/models/restaurant'
+import { TranslateService } from '@ngx-translate/core'
+import { map } from 'rxjs'
+import { UserService } from '../../../users/services/user.service'
 
 @Component({
   selector: 'app-daily-menu',
@@ -28,27 +31,16 @@ export class DailyMenuComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private store: Store,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private translateService: TranslateService,
+    private userService: UserService,
   ) { }
-
-  readonly dailyMenuLabel = MenuConstants.dailyMenuLabel
-  readonly alaCarteLabel = MenuConstants.alaCarteLabel
 
   readonly chosenDailyMenuItems = []
   readonly chosenAlaCarteItems = []
 
-  menuTableArray = new Array()
-  barTableArray = new Array()
-
   alaCarteList: Array<MenuItem>
-  plateOrder: Order
-  plateList
   dishAmount: number = 0
-  isMenuUpdated: boolean
-  hasNoOrder: boolean
-  hasEmptyMenu: boolean
-  hasDeleteAuth: boolean
-  menuEntry: any
   emptyOrderError: boolean
 
   // TODO move to a single const (another in navbar) and make dependent from prod env
@@ -59,8 +51,12 @@ export class DailyMenuComponent implements OnInit {
   readonly LoadingStatus = LoadingStatus
   readonly dailyMenu = this.store.select(getMenu)
   readonly isRestaurantOpen = this.store.select(isRestaurantOpen)
+  readonly restaurantInfo = this.store.select(getRestaurantInfo)
   readonly loadingStatus = this.store.select(loadingStatus)
   readonly currency = this.store.select(getCurrency)
+  readonly user = this.userService.getUser()
+  readonly serviceClosedSubtitle = this.store.select(getRestaurantInfo).pipe(
+    map(value => this.translateService.instant('MENU.DAILY_MENU.CLOSED.SUBTITLE') + ' ' + value.openTime))
 
   ngOnInit(): void {
     this.store.dispatch(ItemActions.initDailyMenu())
@@ -97,17 +93,6 @@ export class DailyMenuComponent implements OnInit {
   }
 
   save() {
-    // const order: Order = {
-    //   main: this.chosenDailyMenuItems,
-    //   alacarte: this.chosenAlaCarteItems,
-    // createdAt: getCurrentUnixTime(),
-    // statusHistory: [],
-    // category: {
-    //   type: 'table',
-    //   delivery: {},
-    // },
-    // price: {}
-    // }
     if (!this.chosenDailyMenuItems.length) {
       this.emptyOrderError = true
     } else {
@@ -124,6 +109,8 @@ export class DailyMenuComponent implements OnInit {
       height: 'auto',
       data: {
         plate: item,
+        currency: this.currency,
+        user: this.user,
       },
     })
     dialog.afterClosed().subscribe(value => {
@@ -132,46 +119,46 @@ export class DailyMenuComponent implements OnInit {
         this.cdr.markForCheck()
       }
       if (value == 'remove') {
-        this.menuEntry.plates[index].plato.isRemoved = true
+        // this.menuEntry.plates[index].plato.isRemoved = true
         // TODO update menu
       }
     })
   }
 
-  openStarterDetail(item, index) {
-    if (this.hasDeleteAuth) {
-      let dialog = this.dialog.open(PlateDetailComponent, {
-        width: '90%',
-        height: 'auto',
-        data: {
-          starterDetail: true,
-          plate: item,
-        },
-      })
-      dialog.afterClosed().subscribe(value => {
-        if (value == 'remove') {
-          switch (item.type) {
-            case 'Starters (fruit or soup)':
-              this.menuEntry.starters.startersArray[index].isRemoved = true
-              break
-            case 'Drink (juice or lemonade)':
-              this.menuEntry.starters.drinksArray[index].isRemoved = true
-              break
-            case 'Salad':
-              this.menuEntry.starters.toppingsList[index].isRemoved = true
-              break
-            case 'Rice':
-              this.menuEntry.starters.toppingsList[index].isRemoved = true
-              break
-            case 'Garnish':
-              this.menuEntry.starters.toppingsList[index].isRemoved = true
-              break
-            case 'Dessert':
-              this.menuEntry.starters.toppingsList[3].isRemoved = true
-              break
-          }
-        }
-      })
-    }
-  }
+  // openStarterDetail(item, index) {
+  //   if (this.hasDeleteAuth) {
+  //     let dialog = this.dialog.open(PlateDetailComponent, {
+  //       width: '90%',
+  //       height: 'auto',
+  //       data: {
+  //         starterDetail: true,
+  //         plate: item,
+  //       },
+  //     })
+  //     dialog.afterClosed().subscribe(value => {
+  //       if (value == 'remove') {
+  //         switch (item.type) {
+  //           case 'Starters (fruit or soup)':
+  //             this.menuEntry.starters.startersArray[index].isRemoved = true
+  //             break
+  //           case 'Drink (juice or lemonade)':
+  //             this.menuEntry.starters.drinksArray[index].isRemoved = true
+  //             break
+  //           case 'Salad':
+  //             this.menuEntry.starters.toppingsList[index].isRemoved = true
+  //             break
+  //           case 'Rice':
+  //             this.menuEntry.starters.toppingsList[index].isRemoved = true
+  //             break
+  //           case 'Garnish':
+  //             this.menuEntry.starters.toppingsList[index].isRemoved = true
+  //             break
+  //           case 'Dessert':
+  //             this.menuEntry.starters.toppingsList[3].isRemoved = true
+  //             break
+  //         }
+  //       }
+  //     })
+  //   }
+  // }
 }

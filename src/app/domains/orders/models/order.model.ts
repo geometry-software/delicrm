@@ -45,11 +45,11 @@ export type OrderCategory = {
 
 export type OrderStatus = 'dining' | 'delivery' | 'closed'
 
-export type OrderProgress = '0%' | '50%' | '80%' | '100%'
+export type OrderProgress = '0%' | '60%' | '100%'
 
 export const orderStatusProgress: Record<OrderStatus, string> = {
-  dining: '50%',
-  delivery: '50%',
+  dining: '60%',
+  delivery: '60%',
   closed: '100%',
 }
 
@@ -87,13 +87,13 @@ export enum ORDER_STATUS_COLOR {
 }
 
 export enum ORDER_STATUS_ICON {
-  dining = 'skillet',
+  dining = 'deck',
   delivery = 'directions_bike',
   closed = 'attach_money',
 }
 
 export enum ORDER_STATUS_TRANSLATE {
-  dining = 'Dining',
-  delivery = 'In Delivery',
-  closed = 'Closed',
+  dining = 'ORDERS.DETAIL.STATUS.DINING',
+  delivery = 'ORDERS.DETAIL.STATUS.DELIVERY',
+  closed = 'ORDERS.DETAIL.STATUS.CLOSED',
 }

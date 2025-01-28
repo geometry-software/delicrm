@@ -141,6 +141,14 @@ mat-form-field {
   gap: 10px;
 }
 
+.timepicker-overlay {
+  z-index: 1100 !important;
+}
+
+.timepicker-backdrop-overlay {
+  z-index: 1100 !important;
+}
+
 /* TABLE */
 
 mat-table {

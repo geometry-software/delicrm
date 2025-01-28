@@ -1,13 +1,16 @@
-<app-title title="Order status" subtitle="update order status." />
+<app-title title="DELIVERY.DIALOG_STATUS.TITLE" subtitle="DELIVERY.DIALOG_STATUS.SUBTITLE" />
+
 
 <div class="container">
   @for (status of statusList; track status) {
   <button class="action" mat-stroked-button [style.background]="statusColor[status]" (click)="confirm(status)">
-    {{ orderTranslate[status] }}
+    {{ deliveryTanslate[status] | translate }}
   </button>
   }
 </div>
 
 <div class="close">
-  <button mat-stroked-button (click)="close()">Close</button>
+  <button mat-stroked-button (click)="close()">
+    {{ 'DELIVERY.DIALOG_STATUS.CLOSE_BUTTON' | translate }}
+  </button>
 </div>

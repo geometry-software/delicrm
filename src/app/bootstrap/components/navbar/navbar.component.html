@@ -5,7 +5,7 @@
   <mat-toolbar-row [ngClass]="responsiveLayout.isDesktop ? 'mat-toolbar-desktop' : 'mat-toolbar-mobile'">
     <button [disabled]="isLoading | async" [ngStyle]="{ 'margin-left': responsiveLayout.matToolbarRowButtonMargin }"
       mat-icon-button (click)="drawer.toggle()" onclick="this.blur()">
-      <mat-icon class="menu-icon"> menu </mat-icon>
+      <mat-icon class="menu-icon">menu</mat-icon>
     </button>
     <span class="toolbar-title text-ellipsis">{{ toolBarTitleSignal() | translate }}</span>
     <span class="toolbar-spacer"></span>
@@ -14,7 +14,7 @@
     </button>
     <mat-menu #menu="matMenu">
       <button *ngFor="let item of languageOptions" mat-menu-item (click)="changeLanguage(item.value)">
-        <span>{{item.viewValue}}</span>
+        <span>{{ item.title }}</span>
       </button>
     </mat-menu>
   </mat-toolbar-row>
@@ -23,7 +23,8 @@
 <mat-drawer-container>
   <mat-drawer #drawer [mode]="responsiveLayout.matDrawerMode" [opened]="responsiveLayout.isDesktop"
     class="mat-drawer-scrollbar">
-    <div class="menu-list-container" [ngStyle]="{ 'margin-top': responsiveLayout.menuListContainerMargin }">
+    <div [@fadeInOnEnter] class="menu-list-container"
+      [ngStyle]="{ 'margin-top': responsiveLayout.menuListContainerMargin }">
       <ng-container *ngIf="( appUser | async) as appUser; else clientTemplate">
         <ng-container *ngFor="let item of userMenuOptions">
           <ng-container *ngIf="item.roles.includes(appUser.role)">
@@ -55,7 +56,7 @@
               <img [src]="item.icon" width="80%" height="80%" />
             </div>
             <div class="menu-list-item-title">
-              {{ item.title }}
+              {{ item.title | translate }}
             </div>
           </div>
         </ng-container>
@@ -75,9 +76,9 @@
     </div>
     <div *ngIf="responsiveLayout.isDesktop" class="stats-container">
       <div class="stats">
-        <app-title title="Stats" />
-        <app-title-item title="New Deliveries" value="1" />
-        <app-title-item title="New clients" value="0" />
+        <app-title title="STATS.TITLE" />
+        <app-title-item title="STATS.NEW_DELIVERY" value="3" />
+        <app-title-item title="STATS.PLATES_TODAY" value="10" />
         <!-- <button mat-flat-button color="primary">theme color</button> -->
       </div>
       <div class="pie-chart">

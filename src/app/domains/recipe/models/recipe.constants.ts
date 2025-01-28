@@ -12,7 +12,7 @@ export abstract class RecipeConstants {
   static readonly moduleUrl = '/recipes'
   static readonly tableColumns = ['name', 'type']
   static readonly disableSort = false
-  static readonly searchPlaceholder = 'RECIPES.PAGE.LIST.TABLE.SEARCH'
+  static readonly searchPlaceholder = 'RECIPES.LIST.TABLE.SEARCH'
   static readonly deleteTitle = 'RECIPES.PAGE.DETAIL.DELETE_TITLE'
   static readonly backToListButton = 'RECIPES.NAVBAR'
   static readonly defaultRequestStatus = 'active'

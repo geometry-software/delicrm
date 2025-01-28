@@ -13,6 +13,8 @@ import { Store } from '@ngrx/store'
 import { AdminActions as ItemActions } from '../../store/admin-store/admin.actions'
 import { getCurrency, loadingStatus } from '../../store/admin-store/admin.selectors'
 import { DailyMenu, MenuItem } from '../../models/restaurant'
+import { highlightInvalidFields, showFieldErrors } from '../../../../shared/utils/form-error-handling'
+import { TranslateService } from '@ngx-translate/core'
 
 type MenuFormItem = MenuItem & { isAdded?: boolean }
 
@@ -33,11 +35,13 @@ export class MenuFormComponent implements OnInit {
     private signalService: SignalService,
     private formBuilder: FormBuilder,
     private recipeEntityService: RecipeEntityService,
+    private translateService: TranslateService,
     private store: Store
   ) { }
 
   private readonly startersAmount = RestaurantConstants.startersAmount
   private readonly drinksAmount = RestaurantConstants.drinksAmount
+
   readonly isFormDataLoaded = of(this.signalService.setLoadingStatus(LoadingStatus.Loading)).pipe(
     switchMap(() => this.recipeEntityService.getAll().pipe(
       tap(recipes => {
@@ -92,6 +96,8 @@ export class MenuFormComponent implements OnInit {
   filteredGarnishOptions: Observable<Recipe[]>
   filteredDessertOptions: Observable<Recipe[]>
 
+  readonly showFieldErrors = showFieldErrors
+
   ngOnInit() {
     this.initForm()
     this.updateServerDataBar()
@@ -127,6 +133,16 @@ export class MenuFormComponent implements OnInit {
 
   getDrinks() {
     return this.menuForm.get('drinks') as FormArray
+  }
+
+  getStartersLabel(index: number) {
+    const label = this.translateService.instant('ADMIN.BOARD.FORM.LABEL.STARTER')
+    return `${label} ${index + 1}`
+  }
+
+  getDrinksLabel(index: number) {
+    const label = this.translateService.instant('ADMIN.BOARD.FORM.LABEL.DRINK')
+    return `${label} ${index + 1}`
   }
 
   initAutocompleteOptions(recipes) {
@@ -204,7 +220,10 @@ export class MenuFormComponent implements OnInit {
     this.hasStartersValidationError = false
     if (form.valid) {
       stepper.next()
-    } else this.hasStartersValidationError = true
+    } else {
+      highlightInvalidFields(form)
+      this.hasStartersValidationError = true
+    }
   }
 
   choosePlates(stepper: MatStepper) {

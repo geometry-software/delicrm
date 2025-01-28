@@ -7,7 +7,6 @@ const paginationTitle = ClientConstants.paginationTitle
 const paginationSize = ClientConstants.paginationSize
 
 const labelAuth = ClientConstants.labelAuth
-const labelRequested = ClientConstants.labelRequested
 const labelActive = ClientConstants.labelActive
 const labelBlocked = ClientConstants.labelBlocked
 
@@ -39,7 +38,6 @@ export const getPaginationResponse = createSelector(getPaginationItem, getCurren
 export const itemsAmountByStatus = createSelector(getState, (state) => state.itemsAmountByStatus)
 export const getListLabels = createSelector(itemsAmountByStatus, (status) => ({
   auth: { title: labelAuth, amount: status.auth },
-  requested: { title: labelRequested, amount: status.requested },
   active: { title: labelActive, amount: status.active },
   blocked: { title: labelBlocked, amount: status.blocked }
 }))

@@ -18,4 +18,10 @@ export class AppTitleComponent {
   @Input()
   subtitle: string
 
+  @Input()
+  disableTranslateTitle: boolean
+
+  @Input()
+  disableTranslateSubtitle: boolean
+
 }

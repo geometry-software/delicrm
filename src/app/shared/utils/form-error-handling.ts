@@ -1,22 +1,43 @@
-import { AbstractControl, FormGroup } from '@angular/forms'
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms'
+import { isNil } from 'lodash'
 
 export const highlightInvalidFields = (form: FormGroup) => {
-  Object.values(form.controls).forEach((control) => {
+  Object.values(form.controls).forEach(control => {
     if (control.invalid) {
       control.markAsTouched()
       control.markAsDirty()
       control.updateValueAndValidity()
     }
+    if (control['controls']) {
+      control['controls'].forEach(element => {
+        if (element.invalid) {
+          element.markAsTouched()
+          element.markAsDirty()
+          element.updateValueAndValidity()
+        }
+      })
+    }
   })
 }
 
-export const showFieldErrors = (form: FormGroup, name: string) => {
-  const control = form.controls[name]
-  const isInvalid = control.invalid && control.touched
-  if (isInvalid) {
-    return getErrorMessage(control)
+export const showFieldErrors = (form: FormGroup, name: string, i: number = null) => {
+  if (!isNil(i)) {
+    const control = ((form.controls[name]) as FormArray).controls[i]
+    const isInvalid = control.invalid && control.touched
+    if (isInvalid) {
+      return getErrorMessage(control)
+    }
+    return null
+  } else if (typeof name === 'string') {
+    const control = form.get(name)
+    const isInvalid = control.invalid && control.touched
+    if (isInvalid) {
+      return getErrorMessage(control)
+    }
+    return null
+  } else {
+    return null
   }
-  return null
 }
 
 const getErrorMessage = (control: AbstractControl): string => {

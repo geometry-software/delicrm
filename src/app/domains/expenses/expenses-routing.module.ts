@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { ExpensesListComponent } from './expenses-list/expenses-list.component'
+import { ToolbarGuard } from '../../shared/guards/toolbar.guard'
 
 const routes: Routes = [
   {
     path: '',
     component: ExpensesListComponent,
-    data: { title: 'EXPENSES.PAGE.LIST.TOOLBAR' },
+    data: { title: 'EXPENSES.TOOLBAR' },
+    canActivate: [ToolbarGuard],
   },
 ]
 

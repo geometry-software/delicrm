@@ -1,18 +1,20 @@
 <div class="dialog-padding" cdkFocusInitial>
-  <h5>{{ 'EXPENSES.PAGE.DIALOG.TITLE' | translate }}</h5>
+  <app-title title="EXPENSES.PAGE.DIALOG.TITLE" />
 
   <form [formGroup]="form" (ngSubmit)="confirm(form)" style="padding-top: 20px">
     <mat-form-field appearance="outline">
-      <input matInput type="text" formControlName="title" [placeholder]="'EXPENSES.PAGE.DIALOG.FORM.DESCRIPTION' | translate" />
+      <input matInput type="text" formControlName="title"
+        [placeholder]="'EXPENSES.PAGE.DIALOG.FORM.DESCRIPTION' | translate" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <input matInput type="number" [placeholder]="'EXPENSES.PAGE.DIALOG.FORM.VALUE' | translate" formControlName="value" />
+      <input matInput type="number" [placeholder]="'EXPENSES.PAGE.DIALOG.FORM.VALUE' | translate"
+        formControlName="value" />
     </mat-form-field>
 
-    <div style="display: flex; justify-content: space-between">
-      <app-button [title]="'No'" [type]="'edit'" (click)="close()"></app-button>
-      <app-button [title]="'BUTTON.ADD'" [disabled]="!form.valid" type="submit" actionType="save"></app-button>
+    <div class="form-actions">
+      <app-button title="BUTTON.NO" type="edit" (click)="close()" />
+      <app-button title="BUTTON.ADD" [disabled]="!form.valid" type="submit" actionType="save" />
     </div>
   </form>
 </div>

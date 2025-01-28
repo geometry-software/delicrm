@@ -1,13 +1,14 @@
 <ng-container *ngIf="shift | async as item">
 
-  <app-title title="Shift details" [subtitle]="getDateFromUnix(item.createdAt) " />
+  <app-title title="SHIFTS.DETAIL.TITLE" [subtitle]="getDateFromUnix(item.createdAt)"
+    [disableTranslateSubtitle]="true" />
 
-  <app-title-item title="Total Orders" [value]="item.totalOrders" />
-  <app-title-item title="Total Price" [value]="item.totalPrice" />
-  <app-title-item title="Created At" [value]=" getTimeFromUnix(item.createdAt)" />
-  <app-title-item title="Closed At" [value]="getTimeFromUnix(item.closedAt)" />
+  <app-title-item title="SHIFTS.DETAIL.PLATES" [value]="item.totalOrders" />
+  <app-title-item title="SHIFTS.DETAIL.TOTAL" [value]="item.totalPrice" />
+  <app-title-item title="TIMESTAMP.CREATED_AT" [value]=" getTimeFromUnix(item.createdAt)" />
+  <app-title-item title="TIMESTAMP.CLOSED_AT" [value]="getTimeFromUnix(item.closedAt)" />
 
 </ng-container>
 
 <br>
-TODO list of orders with amount by type
+<!-- TODO list of orders with amount by type -->

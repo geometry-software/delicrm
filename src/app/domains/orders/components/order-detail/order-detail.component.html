@@ -1,20 +1,21 @@
 <div *ngIf="order; else orderNotFoundTemplate" class="p-[3px]">
   <div class="order-actions">
-    <app-button [title]="'back'" actionType="back" [icon]="'arrow_back'" [url]="'/orders'"></app-button>
-    <app-button [title]="statusButtonTitle" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
-      icon="arrow_forward" (click)="update()" />
-    <app-button [title]="printButtonTitle" [disabled]="(loadingStatus | async) === LoadingStatus.Loading" icon="print"
-      (click)="print()" />
+    <app-button title="ORDERS.DETAIL.BUTTON.BACK" actionType="back" [icon]="'arrow_back'"
+      [url]="'/orders'"></app-button>
+    <app-button title="ORDERS.DETAIL.BUTTON.UPDATE" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
+      icon="check_small" (click)="update()" />
+    <app-button title="ORDERS.DETAIL.BUTTON.PRINT" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
+      icon="print" (click)="print()" />
   </div>
   <div [@fadeInOnEnter]>
     <div class="card">
-      <app-title [title]="orderTitle" [subtitle]="orderDetail" />
+      <app-title [title]="orderTitle" [subtitle]="orderDetail" [disableTranslateSubtitle]="true" />
 
       <div class="flex justify-between items-center">
         <div class="progress">
           <div [style.width]="orderStatusBar.progress" [style.background]="statusColor[orderStatusBar.status]">
             <span class="material-symbols-outlined icon"> {{ statusIcon[orderStatusBar.status] }} </span>
-            {{ orderTranslate[orderStatusBar.status] }}
+            {{ orderTranslate[orderStatusBar.status] | translate }}
           </div>
         </div>
       </div>
@@ -22,8 +23,8 @@
         <li *ngFor="let item of order.main">
           <h2>{{ item.plate.name }}</h2>
           <div class="description">
-            <app-title-item title="Starter" [value]="item.starter.name " />
-            <app-title-item title="Drink" [value]="item.drink.name " />
+            <app-title-item title="ORDERS.DETAIL.EXTRA_DISHES.STARTER" [value]="item.starter.name " />
+            <app-title-item title="ORDERS.DETAIL.EXTRA_DISHES.DRINK" [value]="item.drink.name " />
 
             <div *ngIf="!item.salad.id">
               <strong>- {{ 'ORDERS.DETAIL.NO_SALAD' | translate }} </strong>
@@ -43,27 +44,31 @@
     </div>
 
     <div class="card mt-[20px]">
-      <app-title title="Order details" />
+      <app-title title='ORDERS.DETAIL.ORDER_DETAILS_TITLE' />
 
       <app-title-item title="TIMESTAMP.CREATED_AT" [value]="getFullTimeFromUnix(order.createdAt)" />
-      <app-title-item title="TIMESTAMP.CREATED_BY" [value]="this.order?.createdBy?.name" />
-      <app-title-item title="TIMESTAMP.CLOSED_AT" [value]="getFullTimeFromUnix(order.closedAt) ?? '-'" />
-      <app-title-item title="TIMESTAMP.CLOSED_BY" [value]="this.order?.closedBy?.name ?? '-' " margin="0" />
+      <app-title-item title="TIMESTAMP.CREATED_BY" [value]="order.createdBy.name" />
+      <ng-container *ngIf="order.closedAt">
+        <app-title-item title="TIMESTAMP.CLOSED_AT" [value]="getFullTimeFromUnix(order.closedAt)" />
+        <app-title-item title="TIMESTAMP.CLOSED_BY" [value]="order.closedBy.name" />
+      </ng-container>
+      <app-title-item title="ORDERS.DETAIL.COMMENT" [value]="comment" margin="0" />
     </div>
 
     <div class="card mt-[20px]">
-      <app-title title="Summary" />
+      <app-title title='MENU.CHECKOUT.TOTAL.TITLE' [subtitle]="total" [disableTranslateSubtitle]="true" />
 
-      <app-title-item title="Comment" [value]="comment" />
-      <app-title-item title="Total" [value]="getTotal(order.price.total)" margin="0" />
+      <app-title-item title="MENU.CHECKOUT.TOTAL.MENU_PRICE" [value]="orderPrice" />
+      <app-title-item title="MENU.CHECKOUT.TOTAL.DELIVERY_PRICE" [value]="deliveryPrice" />
+      <app-title-item title="MENU.CHECKOUT.TOTAL.ALACARTE_PRICE" [value]="alacartePrice" margin="0" />
     </div>
   </div>
 </div>
 
 <ng-template #orderNotFoundTemplate>
-  <div class="validation-error-message" *ngIf="emptyOrder">
-    <ng-container *ngIf="orderNotFound">
-      Order id: {{ orderId }} was not found
-    </ng-container>
+  <div *ngIf="emptyOrder && orderNotFound">
+    <div class="validation-error-message">
+      {{ getOrderErorrMessage() }}
+    </div>
   </div>
 </ng-template>

@@ -19,7 +19,9 @@
     [matSortDirection]="defaultSortControlValue.direction" [matSortActive]="defaultSortControlValue.active"
     (matSortChange)="changeSort($event)">
     <ng-container matColumnDef="client">
-      <mat-header-cell mat-sort-header="createdAt" *matHeaderCellDef>Client</mat-header-cell>
+      <mat-header-cell mat-sort-header="createdAt" *matHeaderCellDef>
+        {{ 'ORDERS.LIST.TABLE.CLIENT' | translate }}
+      </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <ng-container [ngSwitch]="element.category.type">
           <ng-container *ngSwitchCase="'table'">
@@ -31,7 +33,7 @@
           <ng-container *ngSwitchCase="'delivery'">
             <div class="table-link flex items-center" [routerLink]="['/orders', element.id]">
               <mat-icon class="table-icon ">directions_bike</mat-icon>
-              <div class="table-item">{{ element?.delivery?.deliveryInfo.name }}</div>
+              <div class="table-item">{{ element.category?.delivery?.deliveryInfo?.name }}</div>
             </div>
           </ng-container>
           <ng-container *ngSwitchCase="'takeaway'">
@@ -45,16 +47,20 @@
     </ng-container>
 
     <ng-container matColumnDef="waiter">
-      <mat-header-cell *matHeaderCellDef> Waiter </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        {{ 'ORDERS.LIST.TABLE.WAITER' | translate }}
+      </mat-header-cell>
       <mat-cell *matCellDef="let element">
         {{ element.createdBy?.name }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="price">
-      <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        {{ 'ORDERS.LIST.TABLE.PRICE' | translate }}
+      </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        {{ element.price.total }} {{ currency | async }}
+        {{ element.price.total }} {{ element.price.currency }}
       </mat-cell>
     </ng-container>
 

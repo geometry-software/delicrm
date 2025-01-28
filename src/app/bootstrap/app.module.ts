@@ -11,13 +11,14 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage'
 import { NavbarComponent } from './components/navbar/navbar.component'
 import { IndexComponent } from './components/index/index.component'
 import { ServiceWorkerModule } from '@angular/service-worker'
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
+import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { SharedModule } from '../shared/shared.module'
 import { StoreModule } from '@ngrx/store'
 import { EffectsModule } from '@ngrx/effects'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 import { httpLoaderFactory } from './utils/translate'
+import { AppMissingTranslationHandler } from '../shared/utils/missing-translation-handler'
 
 @NgModule({
   declarations: [
@@ -40,6 +41,10 @@ import { httpLoaderFactory } from './utils/translate'
         useFactory: httpLoaderFactory,
         deps: [HttpClient],
       },
+      missingTranslationHandler: {
+        provide: MissingTranslationHandler,
+        useClass: AppMissingTranslationHandler
+      },
     }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
@@ -60,3 +65,8 @@ import { httpLoaderFactory } from './utils/translate'
   bootstrap: [AppComponent],
 })
 export class AppModule { }
+
+TranslateModule.forRoot({
+
+  useDefaultLang: false
+})

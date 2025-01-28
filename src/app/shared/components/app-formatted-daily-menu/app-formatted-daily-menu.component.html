@@ -1,4 +1,4 @@
-<div class="section">Main plates</div>
+<div class="section">{{ 'SHARED.DAILY_MENU.MAIN_PLATES' | translate }}</div>
 <div class="flex items-center justify-between" *ngFor="let item of dailyMenu.main; let i = index">
   <div class="flex items-center">
     <img [src]="setProteinImage(item.protein)" width="30px" height="30px" />
@@ -13,17 +13,17 @@
     </button>
   </div>
 </div>
-<div class="section">Starters</div>
+<div class="section">{{ 'SHARED.DAILY_MENU.STARTERS' | translate }}</div>
 <div *ngFor="let item of dailyMenu.extras.starters">
   <div class="item__title">{{ item.name }}</div>
   <div class="item__history">{{ item.history }}</div>
 </div>
-<div class="section">Drinks</div>
+<div class="section">{{ 'SHARED.DAILY_MENU.DRINKS' | translate }}</div>
 <div *ngFor="let item of dailyMenu.extras.drinks">
   <div class="item__title">{{ item.name }}</div>
   <div class="item__history">{{ item.history }}</div>
 </div>
-<div class="section">Side dishes</div>
+<div class="section">{{ 'SHARED.DAILY_MENU.SIDE_DISHES' | translate }}</div>
 <div class="item__title">{{ dailyMenu.extras.rice.name }}</div>
 <div class="item__history">
   {{ dailyMenu.extras.rice.history }}
@@ -36,7 +36,7 @@
 <div class="item__history">
   {{ dailyMenu.extras.garnish.history }}
 </div>
-<div class="section">Dessert</div>
+<div class="section">{{ 'SHARED.DAILY_MENU.DESSERT' | translate }}</div>
 <div class="item__title">{{ dailyMenu.extras.dessert.name }}</div>
 <div class="item__history">
   {{ dailyMenu.extras?.dessert.history }}

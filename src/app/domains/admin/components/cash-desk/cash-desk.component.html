@@ -5,23 +5,29 @@
     (matSortChange)="changeSort($event)">
 
     <ng-container matColumnDef="date">
-      <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        {{ 'SHIFTS.LIST.DATE' | translate }}
+      </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <div class="table-link" [routerLink]="['/shifts/report', element.id]">
+        <div class="table-link" [routerLink]="['/shifts/reports', element.id]">
           {{ getDateFromUnix(element.closedAt) }}
         </div>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="plates">
-      <mat-header-cell *matHeaderCellDef> Plates </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        {{ 'SHIFTS.LIST.PLATES' | translate }}
+      </mat-header-cell>
       <mat-cell *matCellDef="let element">
         {{ element.totalOrders }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="total">
-      <mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        {{ 'SHIFTS.LIST.TOTAL' | translate }}
+      </mat-header-cell>
       <mat-cell *matCellDef="let element">
         {{ element.totalPrice }} {{ currency | async }}
       </mat-cell>

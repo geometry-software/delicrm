@@ -1,30 +1,27 @@
 <div cdkFocusInitial></div>
 <div mat-dialog-content>
-  <div style="font-size: 2em; color: #555; text-align: center; margin-bottom: 10px">
-    {{ plate?.name }}
-  </div>
+
   <div class="flex justify-center">
-    <img [src]="plate.imgURL ?? setProteinImage(plate.protein)" width="200px" height="200px"
-      style="border-radius: 8px" />
+    <img style="border-radius: 8px" [src]="plate.imgURL ?? setProteinImage(plate.protein)" width="200px"
+      height="200px" />
   </div>
 
+  <app-title [title]="plate.name" subtitle="MENU.PLATE_DETAIL.INCLUDED" [disableTranslateTitle]="true" />
   <div class="title-desc">{{ plate?.history }}</div>
-  <div class="title-desc"><b>Incluye: </b> {{ plateDetail }}</div>
 
-  <br />
   <div class="hr"></div>
-  <div style="font-size: 1.2em; color: #555; text-align: end">{{ plate?.price }} currency</div>
+  <div *ngIf="plate.price" style="font-size: 1.2em; color: #555; text-align: end">
+    {{ plate.price }} {{ currency | async }}
+  </div>
   <br />
 
-  <app-button *ngIf="!plate?.isRemoved" (click)="addPlate()" title="Agregar plato" width="full"
-    background="white"></app-button>
-  <span *ngIf="plate?.isRemoved"
-    style="font-size: 1.1em; font-weight: 500; color: #444; padding-left: 10px; text-transform: uppercase">
-    86
-  </span>
+  <app-button actionType="save" (click)="addPlate()" title="MENU.PLATE_DETAIL.ADD_BUTTON" width="full" />
 
-  <button mat-flat-button (click)="removeFromMenu()" *ngIf="hasDeleteAuth"
-    style="background-color: #444; color: white; text-transform: uppercase; font-size: 0.9em; margin-top: 25px">
-    86
-  </button>
+  <br>
+  <div class="form-actions" *ngIf="hasDeleteAuth">
+    <app-button *ngIf="!plate.eightySix" title="MENU.PLATE_DETAIL.86_BUTTON.REMOVE" actionType="back"
+      (submit)="removePlate()" />
+    <app-button *ngIf="plate.eightySix" title="MENU.PLATE_DETAIL.86_BUTTON.RETURN_BACK" actionType="back"
+      (submit)="returnPlate()" />
+  </div>
 </div>

@@ -87,6 +87,7 @@ export class OrderCheckoutComponent implements OnInit {
   hasStarterError: boolean
   hasDrinkError: boolean
   hasPaymentTypeError: boolean
+  hasBillTypeError: boolean
   hasTableNumberError: boolean
   hasTakeAwayError: boolean
 
@@ -260,7 +261,6 @@ export class OrderCheckoutComponent implements OnInit {
         this.form.addControl('payment', new FormControl(this.PaymentType.Card, Validators.required))
         this.form.addControl('change', new FormControl(null))
         this.form.addControl('comment', new FormControl(null))
-        this.order.category.table = null
         break
       case 'table':
         this.removeAllFormControls()
@@ -271,7 +271,6 @@ export class OrderCheckoutComponent implements OnInit {
         this.removeAllFormControls()
         this.form.addControl('name', new FormControl(null, Validators.required))
         this.form.addControl('comment', new FormControl(null))
-        this.order.category.table = null
         break
     }
     this.order.category.type = type
@@ -283,6 +282,8 @@ export class OrderCheckoutComponent implements OnInit {
     this.resetValidation()
     if (!this.hasSkippedStarter && !this.hasSkippedDrink && this.form.valid) {
       this.formatOrder()
+      console.log(this.order);
+
       this.store.dispatch(MenuActions.checkoutOrder({ order: this.order }))
     } else {
       this.hightlightValidation()
@@ -312,8 +313,8 @@ export class OrderCheckoutComponent implements OnInit {
     this.hasPaymentTypeError = false
     this.hasTakeAwayError = false
     this.hasTableNumberError = false
-    this.hasSkippedStarter = Boolean(!this.order.main.find(el => Boolean(el.starter.name)))
-    this.hasSkippedDrink = Boolean(!this.order.main.find(el => Boolean(el.drink.name)))
+    this.hasSkippedStarter = Boolean(!this.order.main.find(el => Boolean(el.starter?.name)))
+    this.hasSkippedDrink = Boolean(!this.order.main.find(el => Boolean(el.drink?.name)))
   }
 
   private hightlightValidation() {
@@ -325,6 +326,9 @@ export class OrderCheckoutComponent implements OnInit {
           this.form.controls['payment'].hasError('required')
             ? (this.hasPaymentTypeError = true)
             : (this.hasPaymentTypeError = false)
+          this.form.controls['change'].hasError('required')
+            ? (this.hasBillTypeError = true)
+            : (this.hasBillTypeError = false)
           const nameError = this.form.controls['name'].hasError('required')
           const addressError = this.form.controls['address'].hasError('required')
           const phoneError = this.form.controls['phone'].hasError('required')
@@ -366,6 +370,7 @@ export class OrderCheckoutComponent implements OnInit {
       clientName: null,
       table: null
     }
+    this.order.status = 'delivery'
     this.order.category.type = 'delivery'
     this.order.category.delivery = {
       createdAt: getCurrentUnixTime(),

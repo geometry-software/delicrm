@@ -19,9 +19,9 @@ export class RestaurantFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public dialogData: any
   ) { }
 
-  formProps = RestaurantFormProps
-  form = restaurantFormGroup
-  showFieldErrors = showFieldErrors
+  readonly formProps = RestaurantFormProps
+  readonly form = restaurantFormGroup
+  readonly showFieldErrors = showFieldErrors
 
   ngOnInit(): void {
     if (this.dialogData) {

@@ -5,7 +5,7 @@ import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { Store } from '@ngrx/store'
 import { tap } from 'rxjs'
 import { Sort } from '@angular/material/sort'
-import { getCurrency, getItems, getListLabels, getItemsLoadingStatus, getPaginationResponse, getStatus } from '../../store/order.selectors'
+import { getItems, getListLabels, getItemsLoadingStatus, getPaginationResponse, getStatus } from '../../store/order.selectors'
 import { MatTabChangeEvent } from '@angular/material/tabs'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormControl } from '@angular/forms'
@@ -35,7 +35,6 @@ export class OrderListComponent implements OnInit {
   readonly loadingStatus = this.store.select(getItemsLoadingStatus)
   readonly paginationPayload = this.store.select(getPaginationResponse)
   readonly itemStatus = this.store.select(getStatus)
-  readonly currency = this.store.select(getCurrency)
 
   readonly paginationControl = new FormControl(OrderConstants.defaultPageRequest.pagination)
   readonly sizeControl = new FormControl(OrderConstants.defaultPageRequest.size)
