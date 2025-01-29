@@ -6,6 +6,7 @@
     "DELETE": "Delete",
     "SAVING": "Saving ..",
     "INFO": "Info",
+    "BACK": "Back",
     "NO": "No"
   },
   "TIMESTAMP": {
@@ -14,11 +15,17 @@
     "CLOSED_AT": "Closed at",
     "CLOSED_BY": "Closed by"
   },
+  "NOTIFICATION": {
+    "SUCCESS": "Success",
+    "INFO": "Info",
+    "ERROR": "Error",
+    "WARNING": "Warning"
+  },
   "FORM": {
     "FIELD_ERROR_MESSAGE": {
       "REQUIRED": "Field is required",
       "EMAIL": "Email format is not valid",
-      "ZERO_TABLE_NUMBER": "Table could not be 0",
+      "ZERO_TABLE_NUMBER": "Table can't be 0",
       "DEFAULT": "Error"
     }
   },
@@ -37,13 +44,14 @@
     "NOT_FOUND": {
       "PAGE": "Page not found",
       "ANOTHER": "Try another address"
-    }
+    },
+    "INDEX_DELIVERY_BUTTON": "Delivery"
   },
   "MISC": {
     "PLATE_TYPE": {
       "MAIN": "Main dish",
-      "STARTER": "Starter (soup or fruit)",
-      "DRINK": "Drink (juice or lemonade)",
+      "STARTER": "Starter",
+      "DRINK": "Drink",
       "SALAD": "Salad",
       "RICE": "Rice",
       "GARNISH": "Garnish",
@@ -63,12 +71,12 @@
     "TOOLBAR": {
       "MENU": "Daily menu",
       "CHECKOUT": "Order checkout",
-      "ORDER": "Order detail"
+      "ORDER": "Order details"
     },
     "DAILY_MENU": {
       "CLOSED": {
         "TITLE": "We are closed now",
-        "SUBTITLE": "Menu will be available since"
+        "SUBTITLE": "Menu will be available starting"
       },
       "TAB": {
         "MENU": "Daily menu",
@@ -81,7 +89,7 @@
     },
     "CHECKOUT": {
       "BACK_BUTTON": "Back",
-      "DISH_SUBTITLE": "Choose a starter, drink and sidedishes",
+      "DISH_SUBTITLE": "Choose a starter, drink and side dishes",
       "ORDER_DETAILS": {
         "TITLE": "Order details",
         "SUBTITLE": "Choose required options to finalize the order",
@@ -115,7 +123,7 @@
       },
       "VALIDATION": {
         "CLIENT_DATA": "Verify client data",
-        "PAYMENT_TYPE": "Payment method missing",
+        "PAYMENT_TYPE": "Payment method is missing",
         "BILL_TYPE": "Bill type is missing",
         "STARTER": "Starter is not chosen",
         "DRINK": "Drink is not chosen",
@@ -132,7 +140,7 @@
       "ADD_BUTTON": "Add plate",
       "86_BUTTON": {
         "REMOVE": "Put on stop list",
-        "RETURN_BACK": "Return back from stop list"
+        "RETURN_BACK": "Return from stop list"
       }
     }
   },
@@ -179,8 +187,14 @@
         }
       },
       "EMAIL": {
-        "CONFIRM": "Please confirm email to proceed a registration",
-        "CONFIRMED": "Email confirmed",
+        "CONFIRM": {
+          "TITLE": "Confirmation email was sent",
+          "SUBTITLE": "Please confirm email to proceed with the admin registration"
+        },
+        "CONFIRMED": {
+          "TITLE": "Congrats!",
+          "SUBTITLE": "Email confirmed. Now you can register a restaurant"
+        },
         "BUTTON": {
           "UPDATE": "Update",
           "RESEND": "Resend email"
@@ -189,7 +203,7 @@
       "REGISTER_RESTAURANT": {
         "BUTTON": "Register restaurant",
         "LOADING": " Registering ..",
-        "SUCCESS": "Registered Successfully",
+        "SUCCESS": "Registered successfully",
         "ERROR": "Error: "
       }
     },
@@ -199,12 +213,12 @@
         "SUBTITLE": "This is an initial registration. Following account will be used later to login.",
         "GOOGLE_BUTTON_TITLE": "Proceed with Google",
         "HEY": "Hey",
-        "LOGIN_CONFIRMATION": "We call you as soon as account will be reviewed",
+        "LOGIN_CONFIRMATION": "We will call you as soon as the account is reviewed",
         "PROFILE_BUTTON": "See profile"
       },
       "ADMIN": {
         "TITLE": "Admin login",
-        "NAME": "Name",
+        "EMAIL": "Email",
         "PASSWORD": "Password",
         "BUTTON": {
           "ACTION": "Login",
@@ -234,6 +248,10 @@
         "PRICE": "Price"
       }
     },
+    "DELETE": {
+      "TITLE": "Delete recipe",
+      "SUBTITLE": "Are you sure you want to delete this recipe?"
+    },
     "FORM": {
       "ENTER_PLATE_NAME": "Enter plate name",
       "RECIPE_DESCRIPTION": "Recipe description",
@@ -249,13 +267,18 @@
         "ACTION": "Save recipe",
         "LOADING": "Saving .."
       }
+    },
+    "ACTION": {
+      "CREATE": "Recipe was added",
+      "UPDATE": "Recipe was updated",
+      "DELETE": "Recipe was deleted"
     }
   },
   "ORDERS": {
     "NAVBAR": "Orders",
     "TOOLBAR": {
       "LIST": "Orders",
-      "DETAIL": "Order detail"
+      "DETAIL": "Order details"
     },
     "LIST": {
       "TAB": {
@@ -314,7 +337,7 @@
     },
     "DIALOG_STATUS": {
       "TITLE": "Order status",
-      "SUBTITLE": "Update order status.",
+      "SUBTITLE": "Update order status",
       "CLOSE_BUTTON": "Close"
     }
   },
@@ -322,7 +345,7 @@
     "NAVBAR": "Delivery",
     "TOOLBAR": {
       "LIST": "Deliveries",
-      "DETAIL": "Delivery detail"
+      "DETAIL": "Delivery details"
     },
     "LIST": {
       "TAB": {
@@ -361,8 +384,24 @@
     },
     "DIALOG_STATUS": {
       "TITLE": "Delivery status",
-      "SUBTITLE": "Update delivery status.",
+      "SUBTITLE": "Update delivery status",
       "CLOSE_BUTTON": "Close"
+    }
+  },
+  "CLIENT_ORDERS": {
+    "NAVBAR": "Orders",
+    "TOOLBAR": {
+      "LIST": "Orders",
+      "DETAIL": "Order details"
+    },
+    "TABLE": {
+      "DATE": "Date",
+      "STATUS": "Status",
+      "NO_ORDERS": "There are no orders so far"
+    },
+    "DETAIL": {
+      "COPY_PHONE": "Phone number was coppied",
+      "COPY_ADDRESS": "Address was coppied"
     }
   },
   "USERS": {
@@ -397,7 +436,7 @@
     },
     "MODAL": {
       "TITLE": "Update user",
-      "SUBTITLE": "Choose status and role.",
+      "SUBTITLE": "Choose status and role",
       "STATUS_TITLE": "Current status",
       "ROLE_TITLE": "Current role",
       "BUTTON": {
@@ -438,7 +477,7 @@
     },
     "MODAL": {
       "TITLE": "Update user",
-      "SUBTITLE": "Choose status and role.",
+      "SUBTITLE": "Choose status and role",
       "STATUS_TITLE": "Current status",
       "ROLE_TITLE": "Current role",
       "BUTTON": {
@@ -453,7 +492,7 @@
       "BOARD": "Board",
       "MENU_FORM": "Menu form",
       "REPORTS": "Reports",
-      "REPORT": "Report detail"
+      "REPORT": "Report details"
     },
     "BOARD": {
       "BUTTON": {
@@ -482,7 +521,7 @@
           "CONTINUE": "Continue with main dishes",
           "VERIFY": "Verify menu",
           "CONFIRM": {
-            "ACTION": "Update menu and open a service",
+            "ACTION": "Update menu and open the service",
             "LOADING": "Updating .."
           }
         },
@@ -513,7 +552,7 @@
         "EDIT": "Update restaurant"
       },
       "SUBTITLE": {
-        "CREATE": "Fill the form to proceed the registration.",
+        "CREATE": "Fill out the form to proceed with the registration",
         "EDIT": "Change restaurant info"
       },
       "NAME": "Name",
@@ -552,7 +591,7 @@
         }
       },
       "DIALOG": {
-        "TITLE": "Add expense",
+        "TITLE": "Add an expense",
         "FORM": {
           "DESCRIPTION": "Description",
           "VALUE": "Value"

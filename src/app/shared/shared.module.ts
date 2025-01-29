@@ -11,7 +11,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { AppConfirmationDialogComponent } from './components/app-confirmation-dialog/app-confirmation-dialog.component'
 import { AppNotFoundComponent } from './components/app-not-found/app-not-found.component'
 import { AppAddressComponent } from './components/app-address/app-address.component'
-import { AppLayoutToolbarComponent } from './components/app-layout-toolbar/app-layout-toolbar.component'
 import { AppPaginationComponent } from './components/app-pagination/app-pagination.component'
 import { AppTableLinkComponent } from './components/app-table-link/app-table-link.component'
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker'
@@ -32,7 +31,6 @@ import { TabLabelPipe } from './pipes/tab-label.pipe'
     AppConfirmationDialogComponent,
     AppNotFoundComponent,
     AppAddressComponent,
-    AppLayoutToolbarComponent,
     AppPaginationComponent,
     AppTableLinkComponent,
     AppInfoComponent,
@@ -58,7 +56,6 @@ import { TabLabelPipe } from './pipes/tab-label.pipe'
     AppTitleItemComponent,
     AppNotFoundComponent,
     AppAddressComponent,
-    AppLayoutToolbarComponent,
     AppPaginationComponent,
     AppTableLinkComponent,
     NgxMaterialTimepickerModule,

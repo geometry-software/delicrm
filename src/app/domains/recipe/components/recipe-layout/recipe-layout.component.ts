@@ -5,6 +5,7 @@ import { debounceTime, tap } from 'rxjs'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Store } from '@ngrx/store'
 import { RecipeActions as ItemActions } from '../../store/recipe.actions'
+import { getItem, getItemId } from '../../store/recipe.selectors'
 
 @Component({
   selector: 'app-recipe-layout',
@@ -20,12 +21,11 @@ export class RecipeLayoutComponent implements OnInit {
   ) { }
 
   readonly searchControl = new FormControl()
-  readonly moduleUrl = RecipeConstants.moduleUrl
-  readonly backTitle = RecipeConstants.paginationTitle
   readonly backToListButton = RecipeConstants.backToListButton
   readonly searchPlaceholder = RecipeConstants.searchPlaceholder
   readonly defaultSearchKey = RecipeConstants.defaultSearchKey
   readonly defaultPageRequest = RecipeConstants.defaultPageRequest
+  readonly item = this.store.select(getItem)
 
   ngOnInit(): void {
     this.searchControl.valueChanges

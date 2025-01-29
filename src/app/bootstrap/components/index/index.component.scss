@@ -9,7 +9,7 @@
 }
 
 .delivery-button {
-  margin-top: 150px;
+  margin-top: 130px;
   min-width: 100%;
   min-height: 45px;
   border: 2px solid #57aaf7;
@@ -67,6 +67,7 @@ img {
   from {
     opacity: 0.5;
   }
+
   to {
     opacity: 1;
   }
@@ -76,7 +77,21 @@ img {
   from {
     opacity: 0.5;
   }
+
   to {
     opacity: 1;
   }
+}
+
+.title {
+  font-size: 3em;
+  text-align: center;
+  font-weight: 500;
+}
+
+.subtitle {
+  font-size: 2em;
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 10px;
 }

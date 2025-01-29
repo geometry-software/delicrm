@@ -16,6 +16,7 @@ import { Router } from '@angular/router'
 import { NotificationService } from '../../../shared/services/notification.service'
 import { TranslateService } from '@ngx-translate/core'
 import { User } from '../../../domains/users/models/user.model'
+import { SessionService } from '../../services/session.service'
 
 @Component({
   selector: 'app-login',
@@ -31,6 +32,7 @@ export class LoginComponent {
     private translateService: TranslateService,
     private authService: AuthService,
     private userService: UserService,
+    private sessionService: SessionService,
     private matDialog: MatDialog,
     private cdr: ChangeDetectorRef,
     private router: Router,
@@ -107,7 +109,7 @@ export class LoginComponent {
   redirectToAdmin(user: User) {
     const message = this.translateService.instant('AUTH.ADMIN.REGISTER_RESTAURANT.SUCCESS')
     this.notificationService.success(message)
-    this.userService.setUser(user)
+    this.sessionService.setUser(user)
     this.router.navigate(['/admin'])
   }
 

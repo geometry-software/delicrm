@@ -5,7 +5,7 @@ import { MatStepper } from '@angular/material/stepper'
 import { Observable, filter, map, of, startWith, switchMap, tap } from 'rxjs'
 import { Recipe } from '../../../recipe/models/recipe.model'
 import { SignalService } from '../../../../shared/services/signal.service'
-import { RecipeEntityService } from '../../../recipe/services/recipe.service'
+import { RecipeService } from '../../../recipe/services/recipe.service'
 import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 import { RestaurantConstants } from '../../models/restaurant.constants'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
@@ -34,7 +34,7 @@ export class MenuFormComponent implements OnInit {
   constructor(
     private signalService: SignalService,
     private formBuilder: FormBuilder,
-    private recipeEntityService: RecipeEntityService,
+    private recipeEntityService: RecipeService,
     private translateService: TranslateService,
     private store: Store
   ) { }

@@ -15,6 +15,7 @@ import { highlightInvalidFields, showFieldErrors } from '../../../../shared/util
 import { recipeFormGroup, RecipeFormProps } from '../../models/recipe.form'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { fadeInOnEnterAnimation } from 'angular-animations'
+import { RecipeService } from '../../services/recipe.service'
 
 @Component({
   selector: 'app-recipe-form',
@@ -30,15 +31,17 @@ export class RecipeFormComponent implements OnInit {
     private route: ActivatedRoute,
     private fileStorageService: FileStorageService,
     private signalService: SignalService,
+    private recipeService: RecipeService,
     private destroyRef: DestroyRef,
     private cdr: ChangeDetectorRef
   ) { }
 
   readonly LoadingStatus = LoadingStatus
   readonly loadingState = this.store.select(getLoadingStatus)
+  readonly form = this.recipeService.form
+  readonly formProps = RecipeFormProps
+  readonly showFieldErrors = showFieldErrors
 
-  recipeTosave: Recipe | undefined
-  isEditForm: boolean | undefined
   itemId: string | undefined
   isFormDataLoaded: boolean | undefined
   hasPrice: boolean | undefined
@@ -53,45 +56,9 @@ export class RecipeFormComponent implements OnInit {
   plateTypeTranslate = PLATE_TYPE_TRANSLATE
   plateProteinTranslate = PLATE_PROTEIN_TRANSLATE
 
-  readonly form = recipeFormGroup
-  readonly formProps = RecipeFormProps
-  readonly showFieldErrors = showFieldErrors
-
   ngOnInit() {
     this.initForm()
     this.signalService.setLayoutType(this.route.snapshot.data['type'])
-  }
-
-  initForm() {
-    if (!this.route.snapshot.routeConfig.path.includes('create')) {
-      this.itemId = this.route.snapshot.params['id']
-      this.isEditForm = true
-      console.log(this.itemId);
-
-      this.store.dispatch(ItemActions.getItem({ id: this.itemId }))
-      this.store.select(getItem)
-        .pipe(
-          filter(Boolean),
-          takeUntilDestroyed(this.destroyRef),
-          tap(value => {
-            console.log(value)
-            this.form.patchValue(value, { onlySelf: true })
-            if (value?.price) {
-              this.hasPrice = true
-            }
-            this.isFormDataLoaded = true
-            this.cdr.markForCheck()
-          })
-        ).subscribe()
-      // TODO: history of orders for exact recipe
-      // this.dao.getDocument(this.itemId).subscribe(value => {
-      //   this.form.patchValue(value, { onlySelf: true })
-      //   if (value?.price) this.hasPrice = true
-      // })
-    } else {
-      this.isFormDataLoaded = true
-      this.cdr.markForCheck()
-    }
   }
 
   changeType(event: RecipeCourse) {
@@ -120,10 +87,14 @@ export class RecipeFormComponent implements OnInit {
 
   submit(form) {
     if (form.valid) {
-      !this.isEditForm
-        ? this.store.dispatch(ItemActions.createItem({ item: form.value }))
-        : this.store.dispatch(ItemActions.updateItem({ item: form.value, id: this.itemId }))
-    } else highlightInvalidFields(form)
+      if (this.itemId) {
+        this.store.dispatch(ItemActions.updateItem({ item: form.value, id: this.itemId }))
+      } else {
+        this.store.dispatch(ItemActions.createItem({ item: form.value }))
+      }
+    } else {
+      highlightInvalidFields(form)
+    }
   }
 
   updateImg(event) {
@@ -149,5 +120,42 @@ export class RecipeFormComponent implements OnInit {
       }
     })
     uploadLink.getDownloadURL().subscribe((URL) => this.form.controls[RecipeFormProps.imgURL].setValue(URL))
+  }
+
+  private initForm() {
+    this.resetForm()
+    if (!this.route.snapshot.routeConfig.path.includes('create')) {
+      this.store.dispatch(ItemActions.getItem({ id: this.route.snapshot.params['id'] }))
+      this.store.select(getItem).pipe(
+        filter(Boolean),
+        tap(value => {
+          this.form.patchValue(value, { onlySelf: true })
+          console.log(value);
+          this.itemId = value.id
+          if (value.price) {
+            this.hasPrice = true
+          }
+          this.isFormDataLoaded = true
+          this.cdr.markForCheck()
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe()
+      // TODO: history of orders for exact recipe
+      // this.dao.getDocument(this.itemId).subscribe(value => {
+      //   this.form.patchValue(value, { onlySelf: true })
+      //   if (value?.price) this.hasPrice = true
+      // })
+    } else {
+      this.isFormDataLoaded = true
+      this.cdr.markForCheck()
+    }
+  }
+
+  private resetForm() {
+    this.store.dispatch(ItemActions.createItemFormInit())
+    this.form.reset()
+    this.hasPrice = false
+    this.hasProtein = false
+    this.isFormDataLoaded = false
   }
 }

@@ -1,561 +1,600 @@
 {
   "BUTTON": {
-    "ADD": "Add",
-    "SAVE": "Save",
-    "EDIT": "Edit",
-    "DELETE": "Delete",
-    "SAVING": "Saving ..",
-    "INFO": "Info",
+    "ADD": "Añadir",
+    "SAVE": "Guardar",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar",
+    "SAVING": "Guardando ..",
+    "INFO": "Información",
+    "BACK": "Back",
     "NO": "No"
   },
   "TIMESTAMP": {
-    "CREATED_AT": "Created at",
-    "CREATED_BY": "Created by",
-    "CLOSED_AT": "Closed at",
-    "CLOSED_BY": "Closed by"
+    "CREATED_AT": "Creado en",
+    "CREATED_BY": "Creado por",
+    "CLOSED_AT": "Cerrado en",
+    "CLOSED_BY": "Cerrado por"
+  },
+  "NOTIFICATION": {
+    "SUCCESS": "Exito",
+    "INFO": "Info",
+    "ERROR": "Error",
+    "WARNING": "Advertencia"
   },
   "FORM": {
     "FIELD_ERROR_MESSAGE": {
-      "REQUIRED": "Field is required",
-      "EMAIL": "Email format is not valid",
-      "ZERO_TABLE_NUMBER": "Table could not be 0",
+      "REQUIRED": "El campo es obligatorio",
+      "EMAIL": "El formato del correo electrónico no es válido",
+      "ZERO_TABLE_NUMBER": "La mesa no puede ser 0",
       "DEFAULT": "Error"
     }
   },
   "SHARED": {
     "CONFIRMATION_DIALOG": {
-      "YES": "Yes",
+      "YES": "Sí",
       "NO": "No"
     },
     "DAILY_MENU": {
-      "MAIN_PLATES": "Main plates",
-      "STARTERS": "Starters",
-      "DRINKS": "Drinks",
-      "SIDE_DISHES": "Side dishes",
-      "DESSERT": "Dessert"
+      "MAIN_PLATES": "Platos principales",
+      "STARTERS": "Entradas",
+      "DRINKS": "Bebidas",
+      "SIDE_DISHES": "Acompañamientos",
+      "DESSERT": "Postre"
     },
     "NOT_FOUND": {
-      "PAGE": "Page not found",
-      "ANOTHER": "Try another address"
-    }
+      "PAGE": "Página no encontrada",
+      "ANOTHER": "Prueba otra dirección"
+    },
+    "INDEX_DELIVERY_BUTTON": "Entrega"
   },
   "MISC": {
     "PLATE_TYPE": {
-      "MAIN": "Main dish",
-      "STARTER": "Starter (soup or fruit)",
-      "DRINK": "Drink (juice or lemonade)",
-      "SALAD": "Salad",
-      "RICE": "Rice",
-      "GARNISH": "Garnish",
-      "DESSERT": "Dessert",
-      "ALACARTE": "A la carte"
+      "MAIN": "Plato principal",
+      "STARTER": "Entrada",
+      "DRINK": "Bebida",
+      "SALAD": "Ensalada",
+      "RICE": "Arroz",
+      "GARNISH": "Guarnición",
+      "DESSERT": "Postre",
+      "ALACARTE": "A la carta"
     },
     "PROTEIN_TYPE": {
-      "MEAT": "Meat",
-      "CHICKEN": "Chicken",
-      "FISH": "Fish",
-      "VEG": "Vegetarian"
+      "MEAT": "Carne",
+      "CHICKEN": "Pollo",
+      "FISH": "Pescado",
+      "VEG": "Vegetariano"
     },
-    "SEARCH_PLACEHOLDER": "Search .."
+    "SEARCH_PLACEHOLDER": "Buscar .."
   },
   "MENU": {
-    "NAVBAR": "Menu",
+    "NAVBAR": "Menú",
     "TOOLBAR": {
-      "MENU": "Daily menu",
-      "CHECKOUT": "Order checkout",
-      "ORDER": "Order detail"
+      "MENU": "Menú del día",
+      "CHECKOUT": "Finalizar pedido",
+      "ORDER": "Detalles del pedido"
     },
     "DAILY_MENU": {
       "CLOSED": {
-        "TITLE": "We are closed now",
-        "SUBTITLE": "Menu will be available since"
+        "TITLE": "Estamos cerrados ahora",
+        "SUBTITLE": "El menú estará disponible desde"
       },
       "TAB": {
-        "MENU": "Daily menu",
-        "ALACARTE": "A la carte"
+        "MENU": "Menú del día",
+        "ALACARTE": "A la carta"
       },
-      "SUBMIT": "Continue",
+      "SUBMIT": "Continuar",
       "VALIDATION": {
-        "MIN_ONE_OPTION": "At least one option has to be added"
+        "MIN_ONE_OPTION": "Se debe agregar al menos una opción"
       }
     },
     "CHECKOUT": {
-      "BACK_BUTTON": "Back",
-      "DISH_SUBTITLE": "Choose a starter, drink and sidedishes",
+      "BACK_BUTTON": "Atrás",
+      "DISH_SUBTITLE": "Elige una entrada, bebida y acompañamientos",
       "ORDER_DETAILS": {
-        "TITLE": "Order details",
-        "SUBTITLE": "Choose required options to finalize the order",
+        "TITLE": "Detalles del pedido",
+        "SUBTITLE": "Elige las opciones requeridas para finalizar el pedido",
         "TABLE": {
-          "TITLE": "Table",
-          "NUMBER": "Table number"
+          "TITLE": "Mesa",
+          "NUMBER": "Número de mesa"
         },
         "DELIVERY": {
-          "TITLE": "Delivery",
-          "DETAILS": "Delivery details",
-          "NAME": "Name",
-          "ADDRESS": "Address",
-          "PHONE": "Phone",
-          "PAYMENT": "Payment type",
-          "BILL_TYPE": "Bill type",
-          "DELIVERY_TIME": "Delivery time",
-          "NOW": "Now",
-          "CHOOSE_TIME": "Choose time"
+          "TITLE": "Entrega",
+          "DETAILS": "Detalles de entrega",
+          "NAME": "Nombre",
+          "ADDRESS": "Dirección",
+          "PHONE": "Teléfono",
+          "PAYMENT": "Tipo de pago",
+          "BILL_TYPE": "Tipo de factura",
+          "DELIVERY_TIME": "Hora de entrega",
+          "NOW": "Ahora",
+          "CHOOSE_TIME": "Elegir hora"
         },
         "TAKE_AWAY": {
-          "TITLE": "Take away",
-          "NAME": "Client name"
+          "TITLE": "Para llevar",
+          "NAME": "Nombre del cliente"
         },
-        "COMMENT": "Comment"
+        "COMMENT": "Comentario"
       },
       "TOTAL": {
         "TITLE": "Total",
-        "MENU_PRICE": "Daily menu price",
-        "DELIVERY_PRICE": "Delivery price",
-        "ALACARTE_PRICE": "A la carte price"
+        "MENU_PRICE": "Precio del menú del día",
+        "DELIVERY_PRICE": "Precio de entrega",
+        "ALACARTE_PRICE": "Precio a la carta"
       },
       "VALIDATION": {
-        "CLIENT_DATA": "Verify client data",
-        "PAYMENT_TYPE": "Payment method missing",
-        "BILL_TYPE": "Bill type is missing",
-        "STARTER": "Starter is not chosen",
-        "DRINK": "Drink is not chosen",
-        "TABLE_NUMBER": "Table number is missing",
-        "TAKEAWAY_NAME": "Client name is missing"
+        "CLIENT_DATA": "Verificar datos del cliente",
+        "PAYMENT_TYPE": "Falta el método de pago",
+        "BILL_TYPE": "Falta el tipo de factura",
+        "STARTER": "No se ha elegido entrada",
+        "DRINK": "No se ha elegido bebida",
+        "TABLE_NUMBER": "Falta el número de mesa",
+        "TAKEAWAY_NAME": "Falta el nombre del cliente"
       },
       "BUTTON": {
-        "ACTION": "Request order",
-        "LOADING": "Requesting .."
+        "ACTION": "Solicitar pedido",
+        "LOADING": "Solicitando .."
       }
     },
     "PLATE_DETAIL": {
-      "INCLUDED": "Included: starter, drink and side dishes of the day. Dessert of the day.",
-      "ADD_BUTTON": "Add plate",
+      "INCLUDED": "Incluido: entrada, bebida y acompañamientos del día. Postre del día.",
+      "ADD_BUTTON": "Añadir plato",
       "86_BUTTON": {
-        "REMOVE": "Put on stop list",
-        "RETURN_BACK": "Return back from stop list"
+        "REMOVE": "Poner en lista de espera",
+        "RETURN_BACK": "Regresar de la lista de espera"
       }
     }
   },
   "PROFILE": {
-    "NAVBAR": "Profile",
+    "NAVBAR": "Perfil",
     "INFO": {
-      "EMAIL": "Email",
+      "EMAIL": "Correo electrónico",
       "AUTH_METHOD": {
-        "TITLE": "Auth method",
-        "SUBTITLE": "Information is obtained from Firebase AngularFireAuth and maintained within the FirebaseAngularFirestoreCollection with READ and WRITE access for users confirmed by the application administrator or other responsible person"
+        "TITLE": "Método de autenticación",
+        "SUBTITLE": "La información se obtiene de Firebase AngularFireAuth y se mantiene dentro de FirebaseAngularFirestoreCollection con acceso de LECTURA y ESCRITURA para los usuarios confirmados por el administrador de la aplicación u otra persona responsable"
       },
-      "EXIT": "Close session and exit app"
+      "EXIT": "Cerrar sesión y salir de la aplicación"
     },
-    "VERSION_UPDATED": "Version has been updated on"
+    "VERSION_UPDATED": "La versión ha sido actualizada el"
   },
   "SHIFTS": {
-    "NAVBAR": "Reports",
+    "NAVBAR": "Informes",
     "LIST": {
-      "DATE": "Date",
-      "PLATES": "Plates",
+      "DATE": "Fecha",
+      "PLATES": "Platos",
       "TOTAL": "Total"
     },
     "DETAIL": {
-      "TITLE": "Shift date",
-      "PLATES": "Amount of orders",
-      "TOTAL": "Total amount"
+      "TITLE": "Fecha del turno",
+      "PLATES": "Cantidad de pedidos",
+      "TOTAL": "Monto total"
     }
   },
   "AUTH": {
-    "NAVBAR": "Login",
-    "LAYOUT_LOADING": "Loading ..",
+    "NAVBAR": "Iniciar sesión",
+    "LAYOUT_LOADING": "Cargando ..",
     "ADMIN": {
-      "HAS_ADMIN_USER": "Admin has been already registered",
+      "HAS_ADMIN_USER": "El administrador ya ha sido registrado",
       "FORM": {
-        "TITLE": "Admin registration",
-        "SUBTITLE": "This is an initial registration. Following email and password will be used as admin credentials.",
-        "EMAIL": "Email",
-        "PASSWORD": "Password",
-        "REPEAT_PASSWORD": "Repeat password",
-        "TERMS": "This app holds user session with Firebase Authentication. Personal data such as email, username, order history and etc. are stored in Firebase Firestore and aren't shared knowingly with any other apps. Firebase is part of Google Cloud Platform.",
+        "TITLE": "Registro de administrador",
+        "SUBTITLE": "Este es un registro inicial. El siguiente correo electrónico y contraseña se utilizarán como credenciales de administrador.",
+        "EMAIL": "Correo electrónico",
+        "PASSWORD": "Contraseña",
+        "REPEAT_PASSWORD": "Repetir contraseña",
+        "TERMS": "Esta aplicación mantiene la sesión del usuario con Firebase Authentication. Datos personales como correo electrónico, nombre de usuario, historial de pedidos, etc., se almacenan en Firebase Firestore y no se comparten intencionalmente con otras aplicaciones. Firebase es parte de Google Cloud Platform.",
         "BUTTON": {
-          "ACTION": "Register",
-          "LOADING": "Registration in process .."
+          "ACTION": "Registrar",
+          "LOADING": "Registro en proceso .."
         }
       },
       "EMAIL": {
-        "CONFIRM": "Please confirm email to proceed a registration",
-        "CONFIRMED": "Email confirmed",
+        "CONFIRM": {
+          "TITLE": "Se envió el correo de confirmación",
+          "SUBTITLE": "Por favor, confirma el correo para proceder con el registro de administrador"
+        },
+        "CONFIRMED": {
+          "TITLE": "¡Felicidades!",
+          "SUBTITLE": "Correo confirmado. Ahora puedes registrar un restaurante"
+        },
         "BUTTON": {
-          "UPDATE": "Update",
-          "RESEND": "Resend email"
+          "UPDATE": "Actualizar",
+          "RESEND": "Reenviar correo electrónico"
         }
       },
       "REGISTER_RESTAURANT": {
-        "BUTTON": "Register restaurant",
-        "LOADING": " Registering ..",
-        "SUCCESS": "Registered Successfully",
+        "BUTTON": "Registrar restaurante",
+        "LOADING": "Registrando ..",
+        "SUCCESS": "Registrado con éxito",
         "ERROR": "Error: "
       }
     },
     "LOGIN": {
       "EMPLOYEE": {
-        "TITLE": "Employee registration",
-        "SUBTITLE": "This is an initial registration. Following account will be used later to login.",
-        "GOOGLE_BUTTON_TITLE": "Proceed with Google",
-        "HEY": "Hey",
-        "LOGIN_CONFIRMATION": "We call you as soon as account will be reviewed",
-        "PROFILE_BUTTON": "See profile"
+        "TITLE": "Registro de empleado",
+        "SUBTITLE": "Este es un registro inicial. La siguiente cuenta se utilizará más adelante para iniciar sesión.",
+        "GOOGLE_BUTTON_TITLE": "Continuar con Google",
+        "HEY": "Hola",
+        "LOGIN_CONFIRMATION": "Te llamaremos tan pronto como se revise la cuenta",
+        "PROFILE_BUTTON": "Ver perfil"
       },
       "ADMIN": {
-        "TITLE": "Admin login",
-        "NAME": "Name",
-        "PASSWORD": "Password",
+        "TITLE": "Inicio de sesión de administrador",
+        "EMAIL": "Correo electrónico",
+        "PASSWORD": "Contraseña",
         "BUTTON": {
-          "ACTION": "Login",
-          "LOADING": "Processing .."
+          "ACTION": "Iniciar sesión",
+          "LOADING": "Procesando .."
         }
       }
     }
   },
   "RECIPES": {
-    "NAVBAR": "Recipes",
+    "NAVBAR": "Recetas",
     "TOOLBAR": {
-      "CREATE": "Create recipe",
-      "LIST": "Recipes list",
-      "EDIT": "Edit recipe"
+      "CREATE": "Crear receta",
+      "LIST": "Lista de recetas",
+      "EDIT": "Editar receta"
     },
     "LIST": {
-      "NAME": "Name",
-      "DESCRIPTION": "Description",
-      "TYPE": "Type",
-      "PROTEIN": "Protein type",
-      "PRICE": "Price",
-      "IMAGE": "Image",
+      "NAME": "Nombre",
+      "DESCRIPTION": "Descripción",
+      "TYPE": "Tipo",
+      "PROTEIN": "Tipo de proteína",
+      "PRICE": "Precio",
+      "IMAGE": "Imagen",
       "TABLE": {
-        "SEARCH": "Search by name",
-        "NAME": "Name",
-        "TYPE": "Type",
-        "PRICE": "Price"
+        "SEARCH": "Buscar por nombre",
+        "NAME": "Nombre",
+        "TYPE": "Tipo",
+        "PRICE": "Precio"
       }
     },
+    "DELETE": {
+      "TITLE": "Delete recipe",
+      "SUBTITLE": "Are you sure you want to delete this recipe?"
+    },
     "FORM": {
-      "ENTER_PLATE_NAME": "Enter plate name",
-      "RECIPE_DESCRIPTION": "Recipe description",
-      "PLATE_TYPE": "Plate type",
-      "PROTEIN_TYPE": "Protein type",
-      "PRICE": "Price",
-      "UPDATE_SUCCESS": "Image has been updated successfully! Save the recipe.",
-      "CHANGE_IMAGE": "Change image",
-      "UPLOAD_IMAGE_TO_SERVER": "Upload image to server",
-      "UPLOADING_IMAGE": "Uploading image",
-      "DESCRIPTION_PLACEHOLDER": "Recipe description",
+      "ENTER_PLATE_NAME": "Ingresa el nombre del plato",
+      "RECIPE_DESCRIPTION": "Descripción de la receta",
+      "PLATE_TYPE": "Tipo de plato",
+      "PROTEIN_TYPE": "Tipo de proteína",
+      "PRICE": "Precio",
+      "UPDATE_SUCCESS": "¡La imagen ha sido actualizada con éxito! Guarda la receta.",
+      "CHANGE_IMAGE": "Cambiar imagen",
+      "UPLOAD_IMAGE_TO_SERVER": "Subir imagen al servidor",
+      "UPLOADING_IMAGE": "Subiendo imagen",
+      "DESCRIPTION_PLACEHOLDER": "Descripción de la receta",
       "BUTTON": {
-        "ACTION": "Save recipe",
-        "LOADING": "Saving .."
+        "ACTION": "Guardar receta",
+        "LOADING": "Guardando .."
       }
+    },
+    "ACTION": {
+      "CREATE": "Recipe was added",
+      "UPDATE": "Recipe was updated",
+      "DELETE": "Recipe was deleted"
     }
   },
   "ORDERS": {
-    "NAVBAR": "Orders",
+    "NAVBAR": "Órdenes",
     "TOOLBAR": {
-      "LIST": "Orders",
-      "DETAIL": "Order detail"
+      "LIST": "Órdenes",
+      "DETAIL": "Detalles de la orden"
     },
     "LIST": {
       "TAB": {
-        "DINING": "Dining",
-        "DELIVERY": "Delivery",
-        "CLOSED": "Closed"
+        "DINING": "Comer en el sitio",
+        "DELIVERY": "Entrega",
+        "CLOSED": "Cerrado"
       },
       "TABLE": {
-        "CLIENT": "Client",
-        "WAITER": "Waiter",
-        "PRICE": "Price"
+        "CLIENT": "Cliente",
+        "WAITER": "Mesero",
+        "PRICE": "Precio"
       },
-      "CLIENT": "Name",
-      "WAITER": "Description",
-      "PRICE": "Type",
-      "FOOTER-TITLE": "orders"
+      "CLIENT": "Nombre",
+      "WAITER": "Descripción",
+      "PRICE": "Tipo",
+      "FOOTER-TITLE": "órdenes"
     },
     "DETAIL": {
       "TAB": {
-        "DINING": "Dining",
-        "DELIVERY": "Delivery",
-        "CLOSED": "Closed"
+        "DINING": "Comer en el sitio",
+        "DELIVERY": "Entrega",
+        "CLOSED": "Cerrado"
       },
       "BUTTON": {
-        "BACK": "Back",
-        "UPDATE": "Update",
-        "PRINT": "Print"
+        "BACK": "Atrás",
+        "UPDATE": "Actualizar",
+        "PRINT": "Imprimir"
       },
       "EXTRA_DISHES": {
-        "STARTER": "Starter",
-        "DRINK": "Drink"
+        "STARTER": "Entrada",
+        "DRINK": "Bebida"
       },
       "STATUS": {
-        "DINING": "Dining",
-        "DELIVERY": "Delivery",
-        "CLOSED": "Closed"
+        "DINING": "Comer en el sitio",
+        "DELIVERY": "Entrega",
+        "CLOSED": "Cerrado"
       },
       "ORDER_TYPE": {
-        "TABLE": "Table",
-        "DELIVERY": "Delivery",
-        "TAKEAWAY": "Takeaway"
+        "TABLE": "Mesa",
+        "DELIVERY": "Entrega",
+        "TAKEAWAY": "Para llevar"
       },
-      "TABLE_NUMBER": "number",
-      "ORDER_DETAILS_TITLE": "Order details",
-      "NO_SALAD": "without salad",
-      "NO_GARNISH": "without garnish",
-      "NO_RICE": "without rice",
-      "NO_DESSERT": "without dessert",
-      "CLIENT": "Name",
-      "WAITER": "Description",
-      "PRICE": "Type",
-      "FOOTER-TITLE": "orders",
-      "COMMENT": "Comment",
-      "ERROR_MESSAGE_START": "Order id",
-      "ERROR_MESSAGE_END": "was not found"
+      "TABLE_NUMBER": "Número",
+      "ORDER_DETAILS_TITLE": "Detalles de la orden",
+      "NO_SALAD": "sin ensalada",
+      "NO_GARNISH": "sin guarnición",
+      "NO_RICE": "sin arroz",
+      "NO_DESSERT": "sin postre",
+      "CLIENT": "Nombre",
+      "WAITER": "Descripción",
+      "PRICE": "Tipo",
+      "FOOTER-TITLE": "órdenes",
+      "COMMENT": "Comentario",
+      "ERROR_MESSAGE_START": "ID de la orden",
+      "ERROR_MESSAGE_END": "no fue encontrado"
     },
     "DIALOG_STATUS": {
-      "TITLE": "Order status",
-      "SUBTITLE": "Update order status.",
-      "CLOSE_BUTTON": "Close"
+      "TITLE": "Estado de la orden",
+      "SUBTITLE": "Actualizar estado de la orden",
+      "CLOSE_BUTTON": "Cerrar"
     }
   },
   "DELIVERY": {
-    "NAVBAR": "Delivery",
+    "NAVBAR": "Domicilios",
     "TOOLBAR": {
-      "LIST": "Deliveries",
-      "DETAIL": "Delivery detail"
+      "LIST": "Entregas",
+      "DETAIL": "Detalles de la entrega"
     },
     "LIST": {
       "TAB": {
-        "REQUESTED": "Requested",
-        "CONFIRMED": "Confirmed",
-        "ACCEPTED": "Accepted",
-        "ONTHEWAY": "On the way",
-        "RECEIVED": "Received",
-        "CLOSED": "Closed"
+        "REQUESTED": "Solicitado",
+        "CONFIRMED": "Confirmado",
+        "ACCEPTED": "Aceptado",
+        "ONTHEWAY": "En camino",
+        "RECEIVED": "Recibido",
+        "CLOSED": "Cerrado"
       },
-      "TOOLBAR": "Order list",
-      "CLIENT": "Name",
-      "WAITER": "Description",
-      "PRICE": "Type",
-      "FOOTER-TITLE": "deliveries"
+      "TOOLBAR": "Lista de órdenes",
+      "CLIENT": "Nombre",
+      "WAITER": "Descripción",
+      "PRICE": "Tipo",
+      "FOOTER-TITLE": "entregas"
     },
     "DETAIL": {
-      "THANKS": "Thanks for your order,",
-      "ADDRESS": "Address",
-      "PHONE": "Phone",
-      "PAYMENT": "Payment",
-      "CHANGE": "Change",
-      "DELIVERY_TIME": "Delivery time",
+      "THANKS": "Gracias por tu pedido,",
+      "ADDRESS": "Dirección",
+      "PHONE": "Teléfono",
+      "PAYMENT": "Pago",
+      "CHANGE": "Cambio",
+      "DELIVERY_TIME": "Tiempo de entrega",
       "BUTTON": {
-        "BACK": "Back",
-        "UPDATE": "Update"
+        "BACK": "Atrás",
+        "UPDATE": "Actualizar"
       }
     },
     "STATUS": {
-      "REQUESTED": "Requested",
-      "CONFIRMED": "Confirmed",
-      "ACCEPTED": "Accepted",
-      "ONTHEWAY": "On the way",
-      "RECEIVED": "Received",
-      "CLOSED": "Closed"
+      "REQUESTED": "Solicitado",
+      "CONFIRMED": "Confirmado",
+      "ACCEPTED": "Aceptado",
+      "ONTHEWAY": "En camino",
+      "RECEIVED": "Recibido",
+      "CLOSED": "Cerrado"
     },
     "DIALOG_STATUS": {
-      "TITLE": "Delivery status",
-      "SUBTITLE": "Update delivery status.",
-      "CLOSE_BUTTON": "Close"
+      "TITLE": "Estado de la entrega",
+      "SUBTITLE": "Actualizar estado de la entrega",
+      "CLOSE_BUTTON": "Cerrar"
+    }
+  },
+  "CLIENT_ORDERS": {
+    "NAVBAR": "Órdenes",
+    "TOOLBAR": {
+      "LIST": "Órdenes",
+      "DETAIL": "Detalles de la orden"
+    },
+    "TABLE": {
+      "DATE": "Fecha",
+      "STATUS": "Estado",
+      "NO_ORDERS": "No hay órdenes hasta ahora"
+    },
+    "DETAIL": {
+      "COPY_PHONE": "El teléfono ha sido copiado",
+      "COPY_ADDRESS": "La dirección ha sido copiada"
     }
   },
   "USERS": {
-    "NAVBAR": "Users",
+    "NAVBAR": "Usuarios",
     "LIST": {
       "TAB": {
-        "ACTIVE": "Active",
-        "REQUESTED": "Requested",
-        "BLOCKED": "Blocked"
+        "ACTIVE": "Activo",
+        "REQUESTED": "Solicitado",
+        "BLOCKED": "Bloqueado"
       },
       "TABLE": {
-        "NAME": "Name",
-        "ROLE": "Role"
+        "NAME": "Nombre",
+        "ROLE": "Rol"
       },
-      "TOOLBAR": "Order list",
-      "CLIENT": "Name",
-      "WAITER": "Description",
-      "PRICE": "Type",
-      "FOOTER-TITLE": "deliveries"
+      "TOOLBAR": "Lista de órdenes",
+      "CLIENT": "Nombre",
+      "WAITER": "Descripción",
+      "PRICE": "Tipo",
+      "FOOTER-TITLE": "entregas"
     },
     "FORM": {
-      "TITLE": "User details",
+      "TITLE": "Detalles del usuario",
       "FIELDS": {
-        "NAME": "Name",
-        "EMAIL": "Email",
-        "ROLE": "Role",
-        "CREATED_AT": "Created at",
-        "STATUS": "Status"
+        "NAME": "Nombre",
+        "EMAIL": "Correo electrónico",
+        "ROLE": "Rol",
+        "CREATED_AT": "Creado en",
+        "STATUS": "Estado"
       },
-      "CHANGE_NAME_SUCCESS": "Name has been changed",
-      "BUTTON": "Change name"
+      "CHANGE_NAME_SUCCESS": "El nombre ha sido cambiado",
+      "BUTTON": "Cambiar nombre"
     },
     "MODAL": {
-      "TITLE": "Update user",
-      "SUBTITLE": "Choose status and role.",
-      "STATUS_TITLE": "Current status",
-      "ROLE_TITLE": "Current role",
+      "TITLE": "Actualizar usuario",
+      "SUBTITLE": "Elige estado y rol",
+      "STATUS_TITLE": "Estado actual",
+      "ROLE_TITLE": "Rol actual",
       "BUTTON": {
-        "UPDATE": "Update",
-        "CLOSE": "Close"
+        "UPDATE": "Actualizar",
+        "CLOSE": "Cerrar"
       }
     }
   },
   "CLIENTS": {
-    "NAVBAR": "Clients",
+    "NAVBAR": "Clientes",
     "LIST": {
       "TAB": {
-        "AUTH": "Auth",
-        "ACTIVE": "Active",
-        "BLOCKED": "Blocked"
+        "AUTH": "Autenticación",
+        "ACTIVE": "Activo",
+        "BLOCKED": "Bloqueado"
       },
       "TABLE": {
-        "NAME": "Name",
-        "STATUS": "Status"
+        "NAME": "Nombre",
+        "STATUS": "Estado"
       },
-      "TOOLBAR": "Order list",
-      "CLIENT": "Name",
-      "WAITER": "Description",
-      "PRICE": "Type",
-      "FOOTER-TITLE": "deliveries"
+      "TOOLBAR": "Lista de órdenes",
+      "CLIENT": "Nombre",
+      "WAITER": "Descripción",
+      "PRICE": "Tipo",
+      "FOOTER-TITLE": "entregas"
     },
     "FORM": {
-      "TITLE": "Client details",
+      "TITLE": "Detalles del cliente",
       "FIELDS": {
-        "NAME": "Name",
-        "ADDRESS": "Address",
-        "PHONE": "Phone",
-        "CREATED_AT": "Created at",
-        "STATUS": "Status"
+        "NAME": "Nombre",
+        "ADDRESS": "Dirección",
+        "PHONE": "Teléfono",
+        "CREATED_AT": "Creado en",
+        "STATUS": "Estado"
       },
-      "UPDATE_CLIENT_SUCCESS": "Client has been updated",
-      "BUTTON": "Update"
+      "UPDATE_CLIENT_SUCCESS": "El cliente ha sido actualizado",
+      "BUTTON": "Actualizar"
     },
     "MODAL": {
-      "TITLE": "Update user",
-      "SUBTITLE": "Choose status and role.",
-      "STATUS_TITLE": "Current status",
-      "ROLE_TITLE": "Current role",
+      "TITLE": "Actualizar usuario",
+      "SUBTITLE": "Elige estado y rol",
+      "STATUS_TITLE": "Estado actual",
+      "ROLE_TITLE": "Rol actual",
       "BUTTON": {
-        "UPDATE": "Update",
-        "CLOSE": "Close"
+        "UPDATE": "Actualizar",
+        "CLOSE": "Cerrar"
       }
     }
   },
   "ADMIN": {
-    "NAVBAR": "Board",
+    "NAVBAR": "Tablero",
     "TOOLBAR": {
-      "BOARD": "Board",
-      "MENU_FORM": "Menu form",
-      "REPORTS": "Reports",
-      "REPORT": "Report detail"
+      "BOARD": "Panel",
+      "MENU_FORM": "Formulario de menú",
+      "REPORTS": "Reportes",
+      "REPORT": "Detalles del reporte"
     },
     "BOARD": {
       "BUTTON": {
-        "UPDATE": "Update menu",
-        "CLOSE": "Close service",
-        "OPEN": "Open service",
-        "DOWNLOAD": "Download",
-        "CONFIG": "Configuration",
-        "BACK": "Back",
-        "REBUILD": "Rebuild daily menu",
-        "ALACARTE": "A la carte menu"
+        "UPDATE": "Actualizar menú",
+        "CLOSE": "Cerrar servicio",
+        "OPEN": "Abrir servicio",
+        "DOWNLOAD": "Descargar",
+        "CONFIG": "Configuración",
+        "BACK": "Atrás",
+        "REBUILD": "Reconstruir menú diario",
+        "ALACARTE": "Menú a la carta"
       },
       "CLOSE_SERVICE": {
         "CONFIRMATION": {
-          "TITLE": "Clear menu",
-          "SUBTITLE": "Are you sure you want to clear the menu?"
+          "TITLE": "Borrar menú",
+          "SUBTITLE": "¿Estás seguro de que quieres borrar el menú?"
         }
       },
       "FORM": {
         "TAB": {
-          "STARTERS": "Choose starters",
-          "MAIN_DISHES": "Add main dishes",
-          "CONFIRM": "Confirm menu"
+          "STARTERS": "Elige entradas",
+          "MAIN_DISHES": "Añadir platos principales",
+          "CONFIRM": "Confirmar menú"
         },
         "BUTTON": {
-          "CONTINUE": "Continue with main dishes",
-          "VERIFY": "Verify menu",
+          "CONTINUE": "Continuar con los platos principales",
+          "VERIFY": "Verificar menú",
           "CONFIRM": {
-            "ACTION": "Update menu and open a service",
-            "LOADING": "Updating .."
+            "ACTION": "Actualizar menú y abrir servicio",
+            "LOADING": "Actualizando .."
           }
         },
-        "PLATES_AMOUNT": "plates",
-        "ALL_REQUIRED_VALIDATION": "Not all positions were chosen",
+        "PLATES_AMOUNT": "platos",
+        "ALL_REQUIRED_VALIDATION": "No se han elegido todas las posiciones",
         "LABEL": {
-          "STARTER": "Starter",
-          "DRINK": "Drink",
-          "SALAD": "Salad",
-          "RICE": "Rice",
-          "GARNISH": "Garnish",
-          "DESSERT": "Dessert",
-          "CONFIRM": "Confirm menu"
+          "STARTER": "Entrada",
+          "DRINK": "Bebida",
+          "SALAD": "Ensalada",
+          "RICE": "Arroz",
+          "GARNISH": "Guarnición",
+          "DESSERT": "Postre",
+          "CONFIRM": "Confirmar menú"
         },
-        "UPDATE": "Update menu",
-        "CLOSE": "Close service",
-        "OPEN": "Open service",
-        "DOWNLOAD": "Download",
-        "CONFIG": "Configuration",
-        "BACK": "Back",
-        "REBUILD": "Rebuild",
-        "ALACARTE": "A la carte"
+        "UPDATE": "Actualizar menú",
+        "CLOSE": "Cerrar servicio",
+        "OPEN": "Abrir servicio",
+        "DOWNLOAD": "Descargar",
+        "CONFIG": "Configuración",
+        "BACK": "Atrás",
+        "REBUILD": "Reconstruir",
+        "ALACARTE": "A la carta"
       }
     },
     "RESTAURANT_FORM": {
       "TITLE": {
-        "CREATE": "Register restaurant",
-        "EDIT": "Update restaurant"
+        "CREATE": "Registrar restaurante",
+        "EDIT": "Actualizar restaurante"
       },
       "SUBTITLE": {
-        "CREATE": "Fill the form to proceed the registration.",
-        "EDIT": "Change restaurant info"
+        "CREATE": "Completa el formulario para proceder con el registro",
+        "EDIT": "Cambiar información del restaurante"
       },
-      "NAME": "Name",
-      "DESCRIPTION": "Description",
-      "CONTACT": "Contact name",
-      "ADDRESS": "Address",
-      "PHONE": "Phone",
+      "NAME": "Nombre",
+      "DESCRIPTION": "Descripción",
+      "CONTACT": "Nombre de contacto",
+      "ADDRESS": "Dirección",
+      "PHONE": "Teléfono",
       "WEB": "Web",
-      "OPEN_TIME": "Open at time",
-      "CURRENCY": "Currency",
-      "DELIVERY": "Delivery amount",
-      "DISCOUNT": "Discount amount",
+      "OPEN_TIME": "Hora de apertura",
+      "CURRENCY": "Moneda",
+      "DELIVERY": "Costo de entrega",
+      "DISCOUNT": "Monto de descuento",
       "BUTTON": {
-        "CANCEL": "Cancel",
-        "CREATE": "Register",
-        "EDIT": "Update"
+        "CANCEL": "Cancelar",
+        "CREATE": "Registrar",
+        "EDIT": "Actualizar"
       }
     }
   },
   "STATS": {
-    "TITLE": "Stats",
-    "NEW_DELIVERY": "New deliveries",
-    "PLATES_TODAY": "Plates today"
+    "TITLE": "Estadísticas",
+    "NEW_DELIVERY": "Nuevas entregas",
+    "PLATES_TODAY": "Platos de hoy"
   },
   "EXPENSES": {
-    "NAVBAR": "Expenses",
-    "TOOLBAR": "Expenses",
+    "NAVBAR": "Gastos",
+    "TOOLBAR": "Gastos",
     "PAGE": {
       "LIST": {
         "TABLE": {
-          "SEARCH": "Search by name",
-          "WAITER": "Waiter",
-          "TIME": "Time",
-          "VALUE": "Value",
-          "DESCRIPTION": "Description"
+          "SEARCH": "Buscar por nombre",
+          "WAITER": "Mesero",
+          "TIME": "Hora",
+          "VALUE": "Valor",
+          "DESCRIPTION": "Descripción"
         }
       },
       "DIALOG": {
-        "TITLE": "Add expense",
+        "TITLE": "Añadir gasto",
         "FORM": {
-          "DESCRIPTION": "Description",
-          "VALUE": "Value"
+          "DESCRIPTION": "Descripción",
+          "VALUE": "Valor"
         }
       }
     }

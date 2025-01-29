@@ -13,7 +13,7 @@
       <br>
       <form [formGroup]="form" (ngSubmit)="submitAdminLoginForm()">
         <mat-form-field [hideRequiredMarker]="true">
-          <mat-label> {{ 'AUTH.LOGIN.ADMIN.NAME' | translate }} </mat-label>
+          <mat-label> {{ 'AUTH.LOGIN.ADMIN.EMAIL' | translate }} </mat-label>
           <input matInput [formControlName]="formProps.email" />
           <mat-error *ngIf="showFieldErrors(form, formProps.email) as error">
             {{ error | translate }}
@@ -48,7 +48,7 @@
   <ng-template #adminTemplate>
     <ng-container
       *ngIf="(adminEmailWasVerified | async ) && (restaurantRegisterStatus | async) as status; else confirmedEmail">
-      <app-title title='AUTH.ADMIN.EMAIL.CONFIRMED' />
+      <app-title title='AUTH.ADMIN.EMAIL.CONFIRMED.TITLE' subtitle='AUTH.ADMIN.EMAIL.CONFIRMED.SUBTITLE' />
 
       <app-button title="AUTH.ADMIN.REGISTER_RESTAURANT.BUTTON" actionType="save" (submit)="registerRestaurant()" />
 
@@ -74,7 +74,7 @@
   </ng-template>
 
   <ng-template #confirmedEmail>
-    <app-title title="AUTH.ADMIN.EMAIL.CONFIRM" />
+    <app-title title="AUTH.ADMIN.EMAIL.CONFIRM.TITLE" subtitle="AUTH.ADMIN.EMAIL.CONFIRM.SUBTITLE" />
     <div class="flex gap-[10px]">
       <app-button title="AUTH.ADMIN.EMAIL.BUTTON.UPDATE" (submit)="update()" />
       <app-button title="AUTH.ADMIN.EMAIL.BUTTON.RESEND" actionType="save" (submit)="sendEmail()" />

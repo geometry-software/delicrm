@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
-import * as moment from 'moment'
+import { RestaurantService } from '../../../domains/admin/services/restaurant.service'
+import { map } from 'rxjs'
 
 @Component({
   selector: 'app-index',
@@ -9,11 +9,13 @@ import * as moment from 'moment'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IndexComponent implements OnInit {
-  today = moment(new Date()).locale('es').format('DD MMMM')
+
+  constructor(
+    private restaurantService: RestaurantService
+  ) { }
 
   imageIndex = 0
-
-  constructor(private router: Router) { }
+  readonly restaurantInfo = this.restaurantService.getRestaurantInfo()
 
   ngOnInit() {
     this.carousel()

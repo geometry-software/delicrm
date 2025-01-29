@@ -3,8 +3,9 @@ import { RouterModule, Routes } from '@angular/router'
 import { DailyMenuComponent } from './components/daily-menu/daily-menu.component'
 import { OrderCheckoutComponent } from './components/order-checkout/order-checkout.component'
 import { MenuLayoutComponent } from './components/menu-layout/menu-layout.component'
-import { ClientOrderComponent } from '../delivery/components/client-order/client-order.component'
+// import { ClientOrderComponent } from '../delivery/components/client-order/client-order.component'
 import { ToolbarGuard } from '../../shared/guards/toolbar.guard'
+import { ClientOrderComponent } from '../client-orders/components/client-order/client-order.component'
 
 const routes: Routes = [
   {

@@ -1,4 +1,7 @@
-<h3 class="index-title">Welcome to Deli CRM</h3>
+<ng-container *ngIf="restaurantInfo | async as info">
+  <div class="title">{{info.name}}</div>
+  <div class="subtitle">{{info.description}}</div>
+</ng-container>
 <div class="flex flex-col align-items">
   <div class="gallery-container">
     <img class="mySlides fade" src="assets/images/bg/bg_3.jpg" width="100%" height="300px" />
@@ -18,7 +21,7 @@
           font-weight: 500;
           letter-spacing: 2px;
         ">
-        Delivery
+        {{ 'SHARED.INDEX_DELIVERY_BUTTON' | translate }}
       </div>
     </div>
   </button>

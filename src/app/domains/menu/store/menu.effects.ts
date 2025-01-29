@@ -19,6 +19,7 @@ import { getExtras, getRestaurantInfo } from './menu.selectors'
 import { CheckoutOrder } from '../models/checkout'
 import { NotificationService } from '../../../shared/services/notification.service'
 import { cloneDeep } from 'lodash'
+import { SessionService } from '../../../auth/services/session.service'
 
 @Injectable()
 export class MenuEffects {
@@ -33,7 +34,8 @@ export class MenuEffects {
     private orderService: OrderService,
     private restaurantService: RestaurantService,
     private signalService: SignalService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private sessionService: SessionService,
   ) { }
 
   private readonly checkOutUrl = MenuConstants.checkOutUrl
@@ -61,7 +63,7 @@ export class MenuEffects {
       withLatestFrom(
         this.store.select(getExtras),
         this.store.select(getRestaurantInfo),
-        this.userService.getUser().pipe(map(user => user ? true : false))
+        this.sessionService.getUser().pipe(map(user => user ? true : false))
       ),
       tap(() => this.router.navigate([this.checkOutUrl])),
       map(([{ main, alacarte }, extra, restaurant, isCreatedByUser]) => prepareOrder(main, alacarte, extra, restaurant, isCreatedByUser)),
@@ -127,7 +129,7 @@ export class MenuEffects {
   }
 
   private updateAuth(info: DeliveryInfo) {
-    return this.userService.getAuth().pipe(
+    return this.sessionService.getAuth().pipe(
       first(),
       switchMap(auth => {
         const currentAuthName = auth.name
@@ -142,7 +144,7 @@ export class MenuEffects {
             address: newAuthAddress,
             phone: newAuthPhone,
           }
-          this.userService.setAuth({ ...auth, ...updatedAuth })
+          this.sessionService.setAuth({ ...auth, ...updatedAuth })
           return this.authService.updateAuth(auth.authId, updatedAuth)
         } else {
           return of(null)

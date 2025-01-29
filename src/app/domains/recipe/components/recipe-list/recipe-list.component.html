@@ -1,4 +1,4 @@
-<div class="table-loading-shade" *ngIf="loadingStatus() === LoadingStatus.Loading"></div>
+<div class="table-loading-shade" *ngIf="(loadingStatus | async) === LoadingStatus.Loading"></div>
 
 <mat-table [dataSource]="dataList | async" matSort [matSortDirection]="defaultSortControlValue.direction"
   [matSortActive]="defaultSortControlValue.active" (matSortChange)="changeSort($event)">

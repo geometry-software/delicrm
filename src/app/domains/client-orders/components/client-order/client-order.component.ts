@@ -2,20 +2,26 @@ import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { fadeInOnEnterAnimation, pulseOnEnterAnimation } from 'angular-animations'
 import { setProteinImage } from '../../../../shared/utils/protein-image'
-import { DeliveryService } from '../../services/delivery.service'
+// import { DeliveryService } from '../../services/delivery.service'
 import { SharedModule } from '../../../../shared/shared.module'
 import { UserService } from '../../../users/services/user.service'
 import { filter, map, switchMap, tap } from 'rxjs'
 import { Order } from '../../../orders/models/order.model'
 import { MatDialog } from '@angular/material/dialog'
-import { DeliveryStatusComponent } from '../delivery-status/delivery-status.component'
+// import { DeliveryStatusComponent } from '../delivery-status/delivery-status.component'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Store } from '@ngrx/store'
-import { DeliveryActions as ItemActions } from '../../store/delivery.actions'
-import { getLoadingStatus } from '../../store/delivery.selectors'
+import { ClientOrdersActions as ItemActions } from '../../store/client-orders.actions'
+import { DeliveryActions } from '../../../delivery/store/delivery.actions'
+import { getLoadingStatus } from '../../store/client-orders.selectors'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
-import { Delivery, DELIVERY_STATUS_COLOR, DELIVERY_STATUS_ICON, DELIVERY_STATUS_TRANSLATE, DeliveryStatusBar } from '../../models/delivery.model'
+import { Delivery, DELIVERY_STATUS_COLOR, DELIVERY_STATUS_ICON, DELIVERY_STATUS_TRANSLATE, DeliveryStatusBar } from '../../../delivery/models/delivery.model'
 import { MatSnackBar } from '@angular/material/snack-bar'
+import { DeliveryService } from '../../../delivery/services/delivery.service'
+import { DeliveryStatusComponent } from '../../../delivery/components/delivery-status/delivery-status.component'
+import { SessionService } from '../../../../auth/services/session.service'
+import { SignalService } from '../../../../shared/services/signal.service'
+import { TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-client-order',
@@ -38,16 +44,21 @@ export class ClientOrderComponent {
     private dialog: MatDialog,
     private destroyRef: DestroyRef,
     private snackBar: MatSnackBar,
-    private store: Store
+    private store: Store,
+    private translateService: TranslateService,
+    private sessionService: SessionService,
+    private signalService: SignalService,
   ) { }
 
-  readonly auth = this.userService.getAuth()
-  readonly user = this.userService.getUser()
+  readonly auth = this.sessionService.getAuth()
+  readonly user = this.sessionService.getUser()
   readonly delivery = this.route.params.pipe(
     map(value => value['id']),
+    tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loading)),
     // TODO
     // how to fetch restricted collection record if only auth exists
     switchMap(id => this.deliveryService.getById(id).pipe(
+      tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loaded)),
       tap(delivery => {
         this.deliveryStatusBar = {
           progress: delivery.progress,
@@ -87,13 +98,15 @@ export class ClientOrderComponent {
   }
 
   copyAddress(delivery: Delivery) {
+    const message = this.translateService.instant('CLIENT_ORDERS.DETAIL.COPY_ADDRESS')
     navigator.clipboard.writeText(delivery.deliveryInfo.address)
-      .then(() => this.openSnackBar('Dirección fue copiado'))
+      .then(() => this.openSnackBar(message))
   }
 
   copyPhone(delivery: Delivery) {
+    const message = this.translateService.instant('CLIENT_ORDERS.DETAIL.COPY_PHONE')
     navigator.clipboard.writeText(delivery.deliveryInfo.phone)
-      .then(() => this.openSnackBar('Teléfono fue copiado'))
+      .then(() => this.openSnackBar(message))
   }
 
 
@@ -113,7 +126,7 @@ export class ClientOrderComponent {
     }).afterClosed().pipe(
       filter(Boolean),
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(status => this.store.dispatch(ItemActions.updateDeliveryStatus({ id: this.route.snapshot.params['id'], status })))
+    ).subscribe(status => this.store.dispatch(DeliveryActions.updateDeliveryStatus({ id: this.route.snapshot.params['id'], status })))
   }
 
 }

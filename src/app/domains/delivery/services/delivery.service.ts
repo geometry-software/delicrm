@@ -28,6 +28,10 @@ export class DeliveryService {
     return this.repositoryService.getDocumentById(this.collection, id)
   }
 
+  getDeliveriesById(id: string) {
+    return this.repositoryService.getAllDocumentsById(this.collection, id)
+  }
+
   getTotalByStatus(status: DeliveryStatus) {
     return this.repositoryService.getCollectionSizeByStatus(this.collection, status)
   }

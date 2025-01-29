@@ -75,6 +75,11 @@ export const authMenuOptions: Array<MenuOption> = [
     link: 'auth/login',
   },
   {
+    title: 'CLIENT_ORDERS.NAVBAR',
+    icon: '/assets/images/bell.png',
+    link: 'client-orders',
+  },
+  {
     title: 'PROFILE.NAVBAR',
     icon: '/assets/images/account.png',
     link: 'auth/profile',

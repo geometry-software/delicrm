@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service'
 import { UserService } from '../../../domains/users/services/user.service'
 import { filter, switchMap, tap } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
+import { SessionService } from '../../services/session.service'
 
 @Component({
   selector: 'app-profile',
@@ -15,13 +16,13 @@ import { TranslateService } from '@ngx-translate/core'
 export class ProfileComponent {
 
   constructor(
-    private formBuilder: FormBuilder,
+    private sessionService: SessionService,
     private authService: AuthService,
     private userService: UserService,
     private translateService: TranslateService,
   ) { }
 
-  readonly userData = this.userService.getUser().pipe(
+  readonly userData = this.sessionService.getUser().pipe(
     filter(Boolean),
     switchMap(user => this.userService.getById(user.userId)),)
   readonly versionBuildDate: string = '29th of January 2025'

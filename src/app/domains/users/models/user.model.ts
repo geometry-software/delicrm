@@ -25,6 +25,6 @@ export type UserStatusResponse = {
 
 export type UserStatus = 'requested' | 'active' | 'blocked'
 
-export type UserLanguage = 'en' | 'es' | 'pt'
+export type UserLanguage = 'en' | 'es' | 'pt' | 'ru'
 
 export type UserRole = 'waiter' | 'delivery' | 'admin'

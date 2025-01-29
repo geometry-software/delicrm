@@ -32,7 +32,7 @@ export class RecipeListComponent implements OnInit {
   ) { }
 
   readonly LoadingStatus = LoadingStatus
-  readonly loadingStatus = this.signalService.getLoadingStatus
+  readonly loadingStatus = this.store.select(getLoadingStatus)
   readonly dataList = this.store.select(getItems)
   readonly query = this.store.select(getQuery)
   readonly customQuerySize = this.store.select(getSize)

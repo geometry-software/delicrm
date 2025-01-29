@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core'
-import { DeliveryRoutingModule } from './delivery-routing.module'
+import { DeliveryRoutingModule } from './client-orders-routing.module'
 import { DeliveryListComponent } from './components/delivery-list/delivery-list.component'
 import { SharedModule } from '../../shared/shared.module'
 import { DeliveryLayoutComponent } from './components/delivery-layout/delivery-layout.component'

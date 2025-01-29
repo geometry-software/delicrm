@@ -14,6 +14,7 @@ import { MenuItem } from '../../../admin/models/restaurant'
 import { TranslateService } from '@ngx-translate/core'
 import { map } from 'rxjs'
 import { UserService } from '../../../users/services/user.service'
+import { SessionService } from '../../../../auth/services/session.service'
 
 @Component({
   selector: 'app-daily-menu',
@@ -34,6 +35,7 @@ export class DailyMenuComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private translateService: TranslateService,
     private userService: UserService,
+    private sessionService: SessionService,
   ) { }
 
   readonly chosenDailyMenuItems = []
@@ -54,7 +56,7 @@ export class DailyMenuComponent implements OnInit {
   readonly restaurantInfo = this.store.select(getRestaurantInfo)
   readonly loadingStatus = this.store.select(loadingStatus)
   readonly currency = this.store.select(getCurrency)
-  readonly user = this.userService.getUser()
+  readonly user = this.sessionService.getUser()
   readonly serviceClosedSubtitle = this.store.select(getRestaurantInfo).pipe(
     map(value => this.translateService.instant('MENU.DAILY_MENU.CLOSED.SUBTITLE') + ' ' + value.openTime))
 

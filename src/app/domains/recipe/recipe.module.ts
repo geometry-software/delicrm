@@ -9,12 +9,14 @@ import { RecipeConstants } from './models/recipe.constants'
 import { reducer } from './store/recipe.reducer'
 import { EffectsModule } from '@ngrx/effects'
 import { RecipeEffects } from './store/recipe.effects'
+import { RecipeToolbarComponent } from './components/recipe-toolbar/recipe-toolbar.component'
 
 @NgModule({
   declarations: [
     RecipeFormComponent,
     RecipeListComponent,
-    RecipeLayoutComponent
+    RecipeLayoutComponent,
+    RecipeToolbarComponent
   ],
   imports: [
     SharedModule,

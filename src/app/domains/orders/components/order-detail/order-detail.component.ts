@@ -18,6 +18,7 @@ import { OrderStatusComponent } from '../order-status/order-status.component'
 import { defaultErrorHandler } from '../../../../shared/utils/default-error-handler'
 import { isNaN, isNil } from 'lodash'
 import { TranslateService } from '@ngx-translate/core'
+import { SessionService } from '../../../../auth/services/session.service'
 
 @Component({
   selector: 'app-order-detail',
@@ -34,6 +35,7 @@ export class OrderDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private store: Store,
     private dialog: MatDialog,
+    private sessionService: SessionService,
     private cdr: ChangeDetectorRef,
     private translateService: TranslateService,
     private destroyRef: DestroyRef
@@ -148,7 +150,7 @@ export class OrderDetailComponent implements OnInit {
 
   private async initData() {
     combineLatest([
-      this.userService.getUser().pipe(filter(Boolean)),
+      this.sessionService.getUser().pipe(filter(Boolean)),
       this.store.select(getCurrency).pipe(filter(Boolean)),
       this.route.params.pipe(
         map(value => value['id']),

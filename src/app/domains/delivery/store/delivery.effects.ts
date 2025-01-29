@@ -1,15 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import {
-  catchError,
-  combineLatest,
-  EMPTY,
-  map,
-  of,
-  switchMap,
-  tap,
-  withLatestFrom,
-} from 'rxjs'
+import { catchError, combineLatest, EMPTY, map, of, switchMap, tap, withLatestFrom } from 'rxjs'
 import { DeliveryActions as ItemActions } from './delivery.actions'
 import { Store } from '@ngrx/store'
 import { getCurrent, getSize, getTotal } from './delivery.selectors'

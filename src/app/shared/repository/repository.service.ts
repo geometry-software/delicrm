@@ -38,6 +38,19 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
    * @param collection name of the collection
    * @returns Observable with all documents from collection
    */
+  getAllDocumentsById = (collection: string, id: string): Observable<T[]> =>
+    this.angularFirestore
+      .collection<T>(collection, (query) => query
+        .orderBy('createdAt', 'desc')
+        .where('authId', '==', id))
+      .snapshotChanges()
+      .pipe(map(appendId<T[]>), responseTransform(this.notificationService))
+
+  /**
+   * Queries a Firestore collection
+   * @param collection name of the collection
+   * @returns Observable with all documents from collection
+   */
   getAllDocumentsByStatus = (collection: string, status: string): Observable<T[]> =>
     this.angularFirestore
       .collection<T>(collection, (query) => query

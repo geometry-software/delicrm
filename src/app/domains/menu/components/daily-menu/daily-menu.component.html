@@ -1,6 +1,7 @@
 <ng-container
   *ngIf="!(isRestaurantOpen | async) && (loadingStatus | async) === LoadingStatus.Loaded; else menuTemplate">
-  <app-title [@fadeInOnEnter] title="MENU.DAILY_MENU.CLOSED.TITLE" [subtitle]="serviceClosedSubtitle | async" />
+  <app-title [@fadeInOnEnter] title="MENU.DAILY_MENU.CLOSED.TITLE" [subtitle]="serviceClosedSubtitle | async"
+    [disableTranslateSubtitle]="true" />
 </ng-container>
 
 <ng-template #menuTemplate>

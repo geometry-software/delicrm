@@ -6,6 +6,7 @@ export type Delivery = {
   id?: string
   orderId?: string
   order?: Order
+  authId?: string
   deliveryInfo?: DeliveryInfo
   status?: DeliveryStatus
   progress?: DeliveryProgress

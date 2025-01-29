@@ -1,18 +1,20 @@
 import { Injectable, inject } from '@angular/core'
-import { EMPTY, Observable, delay } from 'rxjs'
+import { EMPTY, Observable, delay, map } from 'rxjs'
 import { RecipeConstants } from '../models/recipe.constants'
 import { Recipe, RecipeStatus } from '../models/recipe.model'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
 import { SortRequest } from '../../../shared/repository/repository.models'
+import { recipeFormGroup } from '../models/recipe.form'
 
 @Injectable({
   providedIn: 'root',
 })
-export class RecipeEntityService {
+export class RecipeService {
 
   readonly collection = RecipeConstants.collectionName
   readonly collectionLog = RecipeConstants.collectionName + '_log'
+  readonly form = recipeFormGroup
   readonly repositoryService: RepositoryService<Recipe, RecipeStatus> = inject(RepositoryService)
 
   getAll() {
@@ -20,7 +22,9 @@ export class RecipeEntityService {
   }
 
   getById(id: string) {
-    return this.repositoryService.getDocumentById(this.collection, id)
+    return this.repositoryService.getDocumentById(this.collection, id).pipe(
+      map(item => ({ ...item, id }))
+    )
   }
 
   getTotalByStatus(status: RecipeStatus) {
@@ -40,6 +44,9 @@ export class RecipeEntityService {
   }
 
   getAllByQuery(property: string, value: string) {
+    console.log(property);
+    console.log(value);
+
     return this.repositoryService.getAllDocumentsByIncludesQuery(this.collection, property, value)
   }
 
@@ -49,7 +56,9 @@ export class RecipeEntityService {
       status: 'active',
       createdAt: getCurrentUnixTime(),
     }
-    return this.repositoryService.createDocument(this.collection, document)
+    return this.repositoryService.createDocument(this.collection, document).pipe(
+      map(id => ({ ...document, id }))
+    )
   }
 
   update(item: Recipe, id: string) {

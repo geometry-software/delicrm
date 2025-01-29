@@ -27,6 +27,7 @@ import { PaymentType } from '../../models/checkout'
 import { Extras } from '../../../admin/models/restaurant'
 import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 import { User } from '../../../users/models/user.model'
+import { SessionService } from '../../../../auth/services/session.service'
 
 @Component({
   selector: 'app-order-checkout',
@@ -47,6 +48,7 @@ export class OrderCheckoutComponent implements OnInit {
     private store: Store,
     private userService: UserService,
     private formBuilder: FormBuilder,
+    private sessionService: SessionService,
     private router: Router,
     private cdr: ChangeDetectorRef,
     private destroyRef: DestroyRef
@@ -61,7 +63,6 @@ export class OrderCheckoutComponent implements OnInit {
   readonly PaymentType = PaymentType
 
   order: Order
-  delivery: Delivery
   extras: Extras
 
   hasDelivery: boolean
@@ -119,8 +120,8 @@ export class OrderCheckoutComponent implements OnInit {
       this.store.select(getOrder),
       this.store.select(getExtras),
       this.store.select(getCurrency),
-      this.userService.getUser(),
-      this.userService.getAuth()
+      this.sessionService.getUser(),
+      this.sessionService.getAuth()
     ]).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(([order, extras, currency, user, auth]) => {
@@ -373,6 +374,7 @@ export class OrderCheckoutComponent implements OnInit {
     this.order.status = 'delivery'
     this.order.category.type = 'delivery'
     this.order.category.delivery = {
+      authId: this.auth.authId,
       createdAt: getCurrentUnixTime(),
       createdByUser: this.appUser ? this.appUser : null,
       createdByClient: !this.appUser ? this.auth : null,

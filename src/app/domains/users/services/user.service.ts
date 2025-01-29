@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, catchError, combineLatest, concat, EMPTY, filter, first, map, of, switchMap, tap } from 'rxjs'
+import { BehaviorSubject, catchError, combineLatest, concat, EMPTY, filter, first, map, merge, of, Subject, switchMap, tap } from 'rxjs'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { Auth } from '../../../auth/models/auth.model'
 import { mapAdminUser, mapRequestedUser, UserInfo } from '../utils/app-user.mapper'
@@ -19,59 +19,10 @@ export class UserService {
 
   constructor(
     private repositoryService: RepositoryService<User, UserStatus>,
-    private authService: AuthService,
-    private signalService: SignalService,
-    private notificationService: NotificationService,
-  ) {
-    this.initAuthSession()
-  }
+    private authService: AuthService
+  ) { }
 
   private readonly collection = UserConstants.collectionName
-  private readonly collectionAuth = AuthConstants.collectionName
-  private readonly appUserSubject = new BehaviorSubject<User>(null)
-  private readonly appAuthSubject = new BehaviorSubject<Auth>(null)
-
-  setUser(user: User) {
-    this.appUserSubject.next(user)
-  }
-
-  getUser() {
-    return this.appUserSubject.asObservable()
-  }
-
-  setAuth(auth: Auth) {
-    this.appAuthSubject.next(auth)
-  }
-
-  getAuth() {
-    return this.appAuthSubject.asObservable()
-  }
-
-  initAuthSession() {
-    this.authService.firebaseUser.pipe(
-      first(),
-      tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loading)),
-      switchMap(firebaseUser => firebaseUser?.uid
-        ? this.repositoryService.getDocumentById(this.collection, firebaseUser.uid).pipe(
-          switchMap(user => user
-            ? of(this.appUserSubject.next(user))
-            : this.authService.getAuth(firebaseUser.uid).pipe(
-              switchMap(auth => auth
-                ? of(this.appAuthSubject.next(auth))
-                : of(null)),
-              catchError(error => this.handleAuthError(error)))),
-          catchError(error => this.handleAuthError(error)))
-        : this.authService.signUpAnonymously().pipe(
-          tap(auth => this.appAuthSubject.next(auth)))),
-      tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loaded)),
-      catchError(error => this.handleAuthError(error))
-    ).subscribe()
-  }
-
-  readonly isUserLoading = concat(
-    of(true),
-    this.getUser().pipe(map(() => false))
-  )
 
   createAdminUser(id: string, name: string) {
     return this.authService.firebaseUser.pipe(
@@ -90,10 +41,6 @@ export class UserService {
   createRequestedUser(auth: Auth, role: UserRole, info: UserInfo) {
     return this.repositoryService.setDocument(this.collection, mapRequestedUser(auth.authId, role, info), auth.authId).pipe(
       map(() => ({ id: auth.authId, auth })))
-  }
-
-  getAll() {
-    return this.repositoryService.getAllDocuments(this.collectionAuth)
   }
 
   getById(id: string) {
@@ -142,13 +89,6 @@ export class UserService {
 
   updateStatus(id: string, status: UserStatus, role: UserRole) {
     return this.repositoryService.updateDocument(this.collection, { status, role }, id)
-  }
-
-  private handleAuthError(error: Error) {
-    this.notificationService.error(error)
-    this.signalService.setLoadingStatus(LoadingStatus.NotLoaded)
-    console.error(error)
-    return EMPTY
   }
 
 }

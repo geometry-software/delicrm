@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router'
 import { NavbarComponent } from './components/navbar/navbar.component'
 import { IndexComponent } from './components/index/index.component'
 import { UserGuard } from '../domains/users/services/user.guard'
+import { AppNotFoundComponent } from '../shared/components/app-not-found/app-not-found.component'
 
 export const routes: Routes = [
   {
@@ -15,12 +16,18 @@ export const routes: Routes = [
         loadChildren: () => import('../auth/auth.module').then((m) => m.AuthModule),
       },
       {
+        path: 'client-orders',
+        loadChildren: () => import('../domains/client-orders/client-orders.module').then((m) => m.ClientOrdersModule),
+      },
+      {
         path: 'users',
         loadChildren: () => import('../domains/users/users.module').then((m) => m.UsersModule),
+        canActivate: [],
       },
       {
         path: 'clients',
         loadChildren: () => import('../domains/clients/clients.module').then((m) => m.ClientsModule),
+        canActivate: [],
       },
       {
         path: 'admin',
@@ -56,9 +63,11 @@ export const routes: Routes = [
         path: 'expenses',
         loadChildren: () => import('../domains/expenses/expenses.module').then((m) => m.ExpensesModule),
         canActivate: [],
-      }
+      },
+      { path: '**', component: AppNotFoundComponent },
     ]
-  }
+  },
+
 ]
 
 @NgModule({

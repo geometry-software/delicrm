@@ -7,11 +7,12 @@ import { UserService } from '../../../domains/users/services/user.service'
 import { SignalService } from '../../../shared/services/signal.service'
 import { UserLanguage } from '../../../domains/users/models/user.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { combineLatest, map, shareReplay, tap } from 'rxjs'
+import { combineLatest, map, shareReplay } from 'rxjs'
 import { toObservable } from '@angular/core/rxjs-interop'
 import { Chart, ChartItem } from 'chart.js/auto';
 import { RestaurantService } from '../../../domains/admin/services/restaurant.service'
 import { fadeInOnEnterAnimation } from 'angular-animations'
+import { SessionService } from '../../../auth/services/session.service'
 
 @Component({
   selector: 'app-navbar',
@@ -26,13 +27,14 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private restaurantService: RestaurantService,
     private signalService: SignalService,
+    private sessionService: SessionService,
     private translateService: TranslateService,
     private cdr: ChangeDetectorRef
   ) { }
 
   readonly authMenuOptions = authMenuOptions
   readonly userMenuOptions = userMenuOptions
-  readonly appUser = this.userService.getUser()
+  readonly appUser = this.sessionService.getUser()
   readonly restaurantInfo = this.restaurantService.getRestaurantInfo()
 
   @ViewChild('drawer') drawer: MatDrawer
@@ -41,7 +43,8 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   languageOptions: UserLanguageItem[] = [
     { value: 'en', title: 'English' },
     { value: 'es', title: 'Español' },
-    // { value: 'pt', title: 'Português' }
+    { value: 'pt', title: 'Português' },
+    { value: 'ru', title: 'Русский' }
   ]
 
   hasAppAuth: boolean
@@ -52,7 +55,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   readonly isLoading = combineLatest([
     toObservable(this.signalService.getLoadingStatus).pipe(
       map(value => value === LoadingStatus.Loading ? true : false)),
-    this.userService.isUserLoading
+    this.sessionService.isSessionLoading
   ]).pipe(
     map(([signal, auth]) => signal || auth),
     shareReplay(1)
