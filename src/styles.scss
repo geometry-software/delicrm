@@ -172,6 +172,11 @@ mat-cell {
   font-family: 'Open Sans', sans-serif !important;
 }
 
+.eighty-six {
+  color: #999 !important;
+  text-decoration: line-through;
+}
+
 .pagination-margin {
   margin-top: 20px;
 }
@@ -242,6 +247,12 @@ h1 {
 h2 {
   font-size: 2em;
   text-align: center;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 1.2em;
   font-weight: 500;
   margin-bottom: 10px;
 }

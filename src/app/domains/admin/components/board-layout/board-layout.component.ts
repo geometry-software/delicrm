@@ -4,7 +4,7 @@ import { Router, Scroll } from '@angular/router'
 import { combineLatest, filter, first, map, switchMap, tap } from 'rxjs'
 import { isEqual } from 'lodash'
 import { Store } from '@ngrx/store'
-import { AdminActions, AdminActions as ItemActions } from '../../store/admin-store/admin.actions'
+import { AdminActions } from '../../store/admin-store/admin.actions'
 import { AppConfirmationDialogComponent } from '../../../../shared/components/app-confirmation-dialog/app-confirmation-dialog.component'
 import { getRestaurantInfo, isRestaurantOpen, loadingStatus } from '../../store/admin-store/admin.selectors'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
@@ -69,7 +69,7 @@ export class BoardLayoutComponent implements OnInit {
   }
 
   printMenu() {
-    this.store.dispatch(ItemActions.printMenu())
+    this.store.dispatch(AdminActions.printMenu())
   }
 
   clearMenu() {
@@ -99,6 +99,10 @@ export class BoardLayoutComponent implements OnInit {
         tap(restaurant => this.store.dispatch(AdminActions.updateRestaurant({ restaurant }))))),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe()
+  }
+
+  rebuild() {
+    this.store.dispatch(AdminActions.rebuildDailyMenu())
   }
 
 }

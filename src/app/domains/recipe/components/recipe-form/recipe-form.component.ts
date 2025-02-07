@@ -3,7 +3,7 @@ import { Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { AngularFireStorageReference } from '@angular/fire/compat/storage'
 import { PLATE_PROTEIN_TRANSLATE, PLATE_TYPE_TRANSLATE, } from '../../models/recipe.constants'
-import { Recipe, RecipeCourse } from '../../models/recipe.model'
+import { Recipe, RecipeType } from '../../models/recipe.model'
 import { Store } from '@ngrx/store'
 import { getItem, getLoadingStatus } from '../../store/recipe.selectors'
 import { RecipeActions as ItemActions } from '../../store/recipe.actions'
@@ -61,7 +61,7 @@ export class RecipeFormComponent implements OnInit {
     this.signalService.setLayoutType(this.route.snapshot.data['type'])
   }
 
-  changeType(event: RecipeCourse) {
+  changeType(event: RecipeType) {
     if (event === 'main') {
       this.hasPrice = true
       this.hasProtein = true

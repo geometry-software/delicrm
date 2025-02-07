@@ -17,14 +17,9 @@
 <div class="sm:flex gap-1" *ngIf="currentRoute === formRoute">
   <div class="flex gap-2 justify-evenly">
     <app-button title="ADMIN.BOARD.BUTTON.BACK" actionType="back" icon="arrow_back" url="/admin" />
-    <app-button title="ADMIN.BOARD.BUTTON.REBUILD" actionType="back" icon="refresh" />
+    <app-button title="ADMIN.BOARD.BUTTON.REBUILD" actionType="back" icon="refresh" (click)="rebuild()" />
     <app-button title="ADMIN.BOARD.BUTTON.ALACARTE" actionType="back" icon="local_drink" />
   </div>
-  <!-- <div class="divider"></div>
-  <div class="flex gap-2 justify-evenly">
-    <app-button [title]="buttonTitleAdditional" [actionType]="'back'" [icon]="'local_drink'" />
-    <app-button [title]="buttonTitleMenu" [actionType]="'back'" [icon]="'restaurant'" />
-  </div> -->
 </div>
 
 <router-outlet></router-outlet>

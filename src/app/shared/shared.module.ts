@@ -22,6 +22,7 @@ import { NotificationService } from './services/notification.service'
 import { ConfirmationService } from './services/confirmation.service'
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
 import { TabLabelPipe } from './pipes/tab-label.pipe'
+import { AppSpinboxComponent } from './components/app-spinbox/app-spinbox.component'
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { TabLabelPipe } from './pipes/tab-label.pipe'
     AppTitleComponent,
     AppTitleItemComponent,
     AppFormattedDailyMenuComponent,
-    TabLabelPipe
+    TabLabelPipe,
+    AppSpinboxComponent
   ],
   exports: [
     MaterialModule,
@@ -60,7 +62,8 @@ import { TabLabelPipe } from './pipes/tab-label.pipe'
     AppTableLinkComponent,
     NgxMaterialTimepickerModule,
     AppFormattedDailyMenuComponent,
-    TabLabelPipe
+    TabLabelPipe,
+    AppSpinboxComponent
   ],
   imports: [
     MaterialModule,

@@ -7,7 +7,7 @@ export interface Recipe {
   price?: number;
   // TODO: add an option to calculate and show value for the client
   nutritionalValue?: NutritionalValue;
-  type?: RecipeCourse;
+  type?: RecipeType;
   protein?: RecipeProtein;
   imgURL?: string;
   id?: string;
@@ -23,14 +23,11 @@ export interface NutritionalValue {
 
 export type RecipeStatus = RepositoryEntityStatus;
 
-export type RecipeCourse =
+export type RecipeType =
   | 'main'
   | 'starter'
   | 'drink'
-  | 'salad'
-  | 'rice'
-  | 'garnish'
-  | 'dessert'
+  | 'side'
   | 'alacarte'
 
 export type RecipeProtein = 'meat' | 'chicken' | 'fish' | 'veg'

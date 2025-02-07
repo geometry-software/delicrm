@@ -42,7 +42,7 @@ export class MenuEffects {
   private readonly ordersUrl = MenuConstants.ordersUrl
   private readonly deliveryUrl = MenuConstants.deliveryUrl
 
-  updateUserStatus = createEffect(() =>
+  initDailyMenu = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.initDailyMenu),
       tap(() => this.setLoading()),
@@ -66,8 +66,22 @@ export class MenuEffects {
         this.sessionService.getUser().pipe(map(user => user ? true : false))
       ),
       tap(() => this.router.navigate([this.checkOutUrl])),
-      map(([{ main, alacarte }, extra, restaurant, isCreatedByUser]) => prepareOrder(main, alacarte, extra, restaurant, isCreatedByUser)),
+      map(([{ main, alacarte }, extras, restaurant, isCreatedByUser]) => prepareOrder(main, alacarte, extras, restaurant, isCreatedByUser)),
       map(order => ItemActions.setOrderSuccess({ order })))
+  )
+
+  setEightySix = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.setEightySix),
+      tap(() => this.setLoading()),
+      switchMap(({ id }) => this.restaurantService.getDailyMenu().pipe(
+        map(menu => this.restaurantService.calulatedMenuWithEightySix(menu, id)),
+        switchMap(updatedMenu => this.restaurantService.updateMenuWithEightySix(updatedMenu).pipe(
+          switchMap(() => this.restaurantService.getDailyMenu().pipe(
+            map(newMenu => {
+              this.setLoaded()
+              return ItemActions.eightySixSuccess({ menu: newMenu })
+            }))))))))
   )
 
   checkoutOrder = createEffect(() =>

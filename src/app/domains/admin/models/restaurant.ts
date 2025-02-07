@@ -7,6 +7,9 @@ export type Restaurant = {
     description: string
     phone: string
     web: string
+    startersAmount: number
+    drinksAmount: number
+    sideDishesAmount: number
     delivery: number
     discount: number
     openTime: string
@@ -15,6 +18,7 @@ export type Restaurant = {
 
 export type DailyMenu = {
     main: Array<MenuItem>
+    alacarte: Array<MenuItem>
     extras: Extras
     open: boolean
     createdAt: number
@@ -24,10 +28,13 @@ export type DailyMenu = {
 export type Extras = {
     starters: Array<MenuItem>
     drinks: Array<MenuItem>
-    garnish: MenuItem
-    rice: MenuItem
-    salad: MenuItem
-    dessert: MenuItem
+    sideDishes: Array<MenuItem>
 }
 
-export type MenuItem = Recipe & { eightySix: boolean }
+export type MenuItem = Recipe &
+{
+    eightySix?: boolean
+    isAdded?: boolean
+    isSkipped?: boolean
+    skippedTitle?: string
+}

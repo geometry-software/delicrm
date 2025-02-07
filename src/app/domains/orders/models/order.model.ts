@@ -1,12 +1,12 @@
 import { Auth } from '../../../auth/models/auth.model'
+import { MenuItem } from '../../admin/models/restaurant'
 import { Delivery } from '../../delivery/models/delivery.model'
-import { Recipe } from '../../recipe/models/recipe.model'
 import { User } from '../../users/models/user.model'
 
 export type Order = {
   id?: string
   main: Array<OrderItem>
-  alacarte: Array<Recipe>
+  alacarte: Array<MenuItem>
   price: OrderPrice
   progress: OrderProgress
   status: OrderStatus
@@ -26,13 +26,14 @@ export type OrderStatusHistory = {
 }
 
 export type OrderItem = {
-  plate: Recipe
-  starter: Recipe
-  drink: Recipe
-  garnish: Recipe
-  rice: Recipe
-  salad: Recipe
-  dessert: Recipe
+  plate: MenuItem
+  starter: MenuItem
+  drink: MenuItem
+  sideDishes: Array<MenuItem>
+  // garnish: Recipe
+  // rice: Recipe
+  // salad: Recipe
+  // dessert: Recipe
   name: string
 }
 

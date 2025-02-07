@@ -42,7 +42,7 @@ export class ExpensesFormComponent implements OnInit {
 
   confirm(form) {
     let item = form.value
-    item.waiter = this.waiter
+    item.waiter = 'waiter'
     item.createdAt = getCurrentUnixTime()
     this.dialogRef.close(item)
   }

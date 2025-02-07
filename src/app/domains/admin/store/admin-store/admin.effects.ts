@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects'
-import { catchError, delay, map, of, switchMap, tap } from 'rxjs'
+import { catchError, combineLatest, delay, map, of, switchMap, tap } from 'rxjs'
 import { AdminActions as ItemActions } from './admin.actions'
 import { Router } from '@angular/router'
 import { Action, Store } from '@ngrx/store'
@@ -11,6 +11,8 @@ import { RepositoryRequestQuery } from '../../../../shared/repository/repository
 import { calculateShiftSummary } from '../../utils/calculate-shift-summary'
 import { AdminConstants } from '../../models/admin.constants'
 import { ShiftService } from '../../services/shift.service'
+import { MenuFormService } from '../../services/menu-form.service'
+import { RecipeService } from '../../../recipe/services/recipe.service'
 
 @Injectable()
 export class AdminEffects implements OnInitEffects {
@@ -20,6 +22,8 @@ export class AdminEffects implements OnInitEffects {
     private actions: Actions,
     private store: Store,
     private restaurantService: RestaurantService,
+    private recipeService: RecipeService,
+    private menuFormService: MenuFormService,
     private shiftService: ShiftService,
     private signalService: SignalService
   ) { }
@@ -36,13 +40,16 @@ export class AdminEffects implements OnInitEffects {
     this.actions.pipe(
       ofType(ItemActions.getRestaurantInfo),
       tap(() => this.setLoading()),
-      switchMap(() => this.restaurantService.getRestaurantInfo().pipe(
-        map(restaurant => {
-          this.setLoaded()
-          return ItemActions.setRestaurantInfo({ restaurant })
+      switchMap(() => combineLatest([
+        this.restaurantService.getRestaurantInfo(),
+        this.recipeService.getAll(),
+      ]).pipe(
+        map(([restaurant, recipes]) => {
+          this.menuFormService.initForm(restaurant.startersAmount, restaurant.drinksAmount, restaurant.sideDishesAmount)
+          return ItemActions.setRestaurantInfo({ restaurant, recipes })
         }),
-        catchError(error => this.handleError(error, 'create')))))
-  )
+        tap(() => this.setLoaded()),
+        catchError(error => this.handleError(error, 'create'))))))
 
   setRestaurantInfo = createEffect(() =>
     this.actions.pipe(
@@ -74,6 +81,22 @@ export class AdminEffects implements OnInitEffects {
           return ItemActions.getDailyMenu()
         }),
         catchError(error => this.handleError(error, 'create')))))
+  )
+
+  rebuildDailyMenu = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.rebuildDailyMenu),
+      map(() => {
+        this.menuFormService.menuForm.reset()
+        this.menuFormService.menuForm.markAsPristine()
+        this.menuFormService.menuForm.markAsUntouched()
+        this.menuFormService.plateForm.reset()
+        this.menuFormService.plateForm.markAsPristine()
+        this.menuFormService.plateForm.markAsUntouched()
+        this.router.navigate(['/admin/form'])
+        return ItemActions.rebuildDailyMenuSuccess()
+      })
+    )
   )
 
   closeShift = createEffect(() =>

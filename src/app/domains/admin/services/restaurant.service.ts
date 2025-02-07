@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core'
 import { RepositoryService } from '../../../shared/repository/repository.service'
-import { DailyMenu, Restaurant } from '../models/restaurant'
+import { DailyMenu, MenuItem, Restaurant } from '../models/restaurant'
 import { RestaurantConstants } from '../models/restaurant.constants'
-import { Observable, map, switchMap } from 'rxjs'
+import { EMPTY, Observable, map, switchMap } from 'rxjs'
 import { Shift } from '../models/shift'
 import { CheckoutOrder } from '../../menu/models/checkout'
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 @Injectable({
   providedIn: 'root'
@@ -51,6 +52,38 @@ export class RestaurantService {
     return this.repositoryService.getDocumentById(this.collection, this.menuDocument).pipe(
       map(menu => menu.orders)
     )
+  }
+
+  updateMenuWithEightySix(menu: DailyMenu) {
+    return this.repositoryService.updateDocument(this.collection, menu, this.menuDocument)
+  }
+
+  calulatedMenuWithEightySix(menu: DailyMenu, id: string) {
+    const updatedMain = menu.main.map(item => this.updateItemEightySix(item, id))
+    const updatedAlacarte = (menu.alacarte ?? []).map(item => this.updateItemEightySix(item, id))
+    const updatedStarters = menu.extras.starters.map(item => this.updateItemEightySix(item, id))
+    const updatedDrinks = menu.extras.drinks.map(item => this.updateItemEightySix(item, id))
+    const updatedSideDishes = menu.extras.sideDishes.map(item => this.updateItemEightySix(item, id))
+    const updatedMenu: DailyMenu = {
+      ...menu,
+      main: updatedMain,
+      alacarte: updatedAlacarte,
+      extras: {
+        drinks: updatedDrinks,
+        starters: updatedStarters,
+        sideDishes: updatedSideDishes
+      }
+    }
+    return updatedMenu
+  }
+
+  private updateItemEightySix(item: MenuItem, id: string) {
+    if (item.id === id) {
+      item.eightySix = !item.eightySix
+      return item
+    } else {
+      return item
+    }
   }
 
 }

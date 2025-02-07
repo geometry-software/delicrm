@@ -52,10 +52,7 @@
       "MAIN": "Plato principal",
       "STARTER": "Entrada",
       "DRINK": "Bebida",
-      "SALAD": "Ensalada",
-      "RICE": "Arroz",
-      "GARNISH": "Guarnición",
-      "DESSERT": "Postre",
+      "SIDE_DISH": "Acompañamiento",
       "ALACARTE": "A la carta"
     },
     "PROTEIN_TYPE": {
@@ -130,6 +127,10 @@
         "TABLE_NUMBER": "Falta el número de mesa",
         "TAKEAWAY_NAME": "Falta el nombre del cliente"
       },
+      "SKIP": {
+        "DRINK": "Sin bebida",
+        "STARTER": "Sin entrada"
+      },
       "BUTTON": {
         "ACTION": "Solicitar pedido",
         "LOADING": "Solicitando .."
@@ -139,8 +140,8 @@
       "INCLUDED": "Incluido: entrada, bebida y acompañamientos del día. Postre del día.",
       "ADD_BUTTON": "Añadir plato",
       "86_BUTTON": {
-        "REMOVE": "Poner en lista de espera",
-        "RETURN_BACK": "Regresar de la lista de espera"
+        "REMOVE": "Agotado",
+        "RETURN_BACK": "Disponible"
       }
     }
   },
@@ -269,9 +270,9 @@
       }
     },
     "ACTION": {
-      "CREATE": "Recipe was added",
-      "UPDATE": "Recipe was updated",
-      "DELETE": "Recipe was deleted"
+      "CREATE": "La receta fue añadida",
+      "UPDATE": "La receta fue actualizada",
+      "DELETE": "La receta fue eliminada"
     }
   },
   "ORDERS": {
@@ -309,7 +310,8 @@
       },
       "EXTRA_DISHES": {
         "STARTER": "Entrada",
-        "DRINK": "Bebida"
+        "DRINK": "Bebida",
+        "SIDE_DISHES": "Acompañamientos"
       },
       "STATUS": {
         "DINING": "Comer en el sitio",
@@ -323,10 +325,6 @@
       },
       "TABLE_NUMBER": "Número",
       "ORDER_DETAILS_TITLE": "Detalles de la orden",
-      "NO_SALAD": "sin ensalada",
-      "NO_GARNISH": "sin guarnición",
-      "NO_RICE": "sin arroz",
-      "NO_DESSERT": "sin postre",
       "CLIENT": "Nombre",
       "WAITER": "Descripción",
       "PRICE": "Tipo",
@@ -489,7 +487,7 @@
   "ADMIN": {
     "NAVBAR": "Tablero",
     "TOOLBAR": {
-      "BOARD": "Panel",
+      "BOARD": "Tablero",
       "MENU_FORM": "Formulario de menú",
       "REPORTS": "Reportes",
       "REPORT": "Detalles del reporte"
@@ -531,10 +529,7 @@
           "STARTER": "Entrada",
           "DRINK": "Bebida",
           "SALAD": "Ensalada",
-          "RICE": "Arroz",
-          "GARNISH": "Guarnición",
-          "DESSERT": "Postre",
-          "CONFIRM": "Confirmar menú"
+          "SIDE_DISH": "Acompañamiento"
         },
         "UPDATE": "Actualizar menú",
         "CLOSE": "Cerrar servicio",

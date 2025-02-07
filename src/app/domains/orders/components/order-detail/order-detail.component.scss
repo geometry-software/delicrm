@@ -40,6 +40,10 @@ li {
   margin-bottom: 20px;
 }
 
+li:last-child {
+  margin-bottom: 0;
+}
+
 h2 {
   margin-bottom: 10px;
 }

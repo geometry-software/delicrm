@@ -52,19 +52,11 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field [hideRequiredMarker]="true">
-    <mat-label> {{ 'ADMIN.RESTAURANT_FORM.CURRENCY' | translate }} </mat-label>
-    <input matInput [formControlName]="formProps.currency" />
-    <mat-error *ngIf="showFieldErrors(form, formProps.currency) as error">
-      {{ error | translate }}
-    </mat-error>
-  </mat-form-field>
-
-  <div class="amount-configurations">
+  <div class="flex-gap">
     <mat-form-field [hideRequiredMarker]="true">
-      <mat-label> {{ 'ADMIN.RESTAURANT_FORM.DELIVERY' | translate }} </mat-label>
-      <input matInput [formControlName]="formProps.delivery" type="number" />
-      <mat-error *ngIf="showFieldErrors(form, formProps.delivery) as error">
+      <mat-label> {{ 'ADMIN.RESTAURANT_FORM.CURRENCY' | translate }} </mat-label>
+      <input matInput [formControlName]="formProps.currency" />
+      <mat-error *ngIf="showFieldErrors(form, formProps.currency) as error">
         {{ error | translate }}
       </mat-error>
     </mat-form-field>
@@ -77,6 +69,16 @@
         {{ error | translate }}
       </mat-error>
     </mat-form-field>
+  </div>
+
+  <div class="flex-gap">
+    <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> {{ 'ADMIN.RESTAURANT_FORM.DELIVERY' | translate }} </mat-label>
+      <input matInput [formControlName]="formProps.delivery" type="number" />
+      <mat-error *ngIf="showFieldErrors(form, formProps.delivery) as error">
+        {{ error | translate }}
+      </mat-error>
+    </mat-form-field>
 
     <mat-form-field [hideRequiredMarker]="true">
       <mat-label> {{ 'ADMIN.RESTAURANT_FORM.DISCOUNT' | translate }} </mat-label>
@@ -85,6 +87,12 @@
         {{ error | translate }}
       </mat-error>
     </mat-form-field>
+  </div>
+
+  <div class="flex-gap">
+    <app-spinbox label="SHARED.DAILY_MENU.STARTERS" [formControlName]="formProps.startersAmount" />
+    <app-spinbox label="SHARED.DAILY_MENU.DRINKS" [formControlName]="formProps.drinksAmount" />
+    <app-spinbox label="SHARED.DAILY_MENU.SIDE_DISHES" [formControlName]="formProps.sideDishesAmount" />
   </div>
 
   <div class="form-actions">

@@ -5,4 +5,5 @@ export abstract class RestaurantConstants {
   static readonly menuDocument = 'menu'
   static readonly startersAmount = 3
   static readonly drinksAmount = 2
+  static readonly sideDishesAmount = 4
 }

@@ -105,7 +105,6 @@ export class DailyMenuComponent implements OnInit {
 
   openDetail(event) {
     const item = event.item
-    const index = event.index
     const dialog = this.dialog.open(PlateDetailComponent, {
       width: '90%',
       height: 'auto',
@@ -121,8 +120,7 @@ export class DailyMenuComponent implements OnInit {
         this.cdr.markForCheck()
       }
       if (value == 'remove') {
-        // this.menuEntry.plates[index].plato.isRemoved = true
-        // TODO update menu
+        this.store.dispatch(ItemActions.setEightySix({ id: item.id }))
       }
     })
   }

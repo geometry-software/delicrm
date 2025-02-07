@@ -11,7 +11,7 @@ import {
 } from 'angular-animations'
 import { Order, OrderType } from '../../../orders/models/order.model'
 import { Recipe } from '../../../recipe/models/recipe.model'
-import { MenuActions as ItemActions, MenuActions } from '../../store/menu.actions'
+import { MenuActions } from '../../store/menu.actions'
 import { UserService } from '../../../users/services/user.service'
 import { MenuConstants } from '../../utils/menu.constants'
 import { Store } from '@ngrx/store'
@@ -24,10 +24,11 @@ import { showFieldErrors } from '../../../../shared/utils/form-error-handling'
 import { tableZeroNumberValidator } from '../../utils/table-zero-number-validator'
 import { Auth } from '../../../../auth/models/auth.model'
 import { PaymentType } from '../../models/checkout'
-import { Extras } from '../../../admin/models/restaurant'
+import { Extras, MenuItem } from '../../../admin/models/restaurant'
 import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 import { User } from '../../../users/models/user.model'
 import { SessionService } from '../../../../auth/services/session.service'
+import { MatCheckboxChange } from '@angular/material/checkbox'
 
 @Component({
   selector: 'app-order-checkout',
@@ -159,64 +160,31 @@ export class OrderCheckoutComponent implements OnInit {
     this.cdr.markForCheck()
   }
 
-  getDishTitle(i: number, name: string) {
+  getDishTitle(name: string, i: number) {
     return i + 1 + '. ' + name
   }
 
-  chooseStarter(event, i) {
-    if (!event) {
-      this.order.main[i].starter.id = null
+  chooseStarter(item: MenuItem, i: number) {
+    if (item.isSkipped) {
+      this.order.main[i].starter = { ...item, isSkipped: true }
     } else {
-      this.order.main[i].starter = {
-        id: event.id,
-        name: event.name
-      }
+      this.order.main[i].starter = { ...item, isSkipped: false }
     }
   }
 
-  chooseDrink(event, i) {
-    if (!event) {
-      this.order.main[i].drink.id = null
+  chooseDrink(item: MenuItem, i: number) {
+    if (item.isSkipped) {
+      this.order.main[i].drink = { ...item, isSkipped: true }
     } else {
-      this.order.main[i].drink = {
-        id: event.id,
-        name: event.name
-      }
+      this.order.main[i].drink = { ...item, isSkipped: false }
     }
   }
 
-  chooseSideDish(event: Recipe, index: number) {
-    const name = event.name
-    const id = event.id
-    switch (event.type) {
-      case 'salad':
-        if (this.order.main[index].salad.id !== id) {
-          this.order.main[index].salad = { id, name }
-        } else {
-          this.order.main[index].salad.id = null
-        }
-        break;
-      case 'rice':
-        if (this.order.main[index].rice.id !== id) {
-          this.order.main[index].rice = { id, name }
-        } else {
-          this.order.main[index].rice.id = null
-        }
-        break;
-      case 'garnish':
-        if (this.order.main[index].garnish.id !== id) {
-          this.order.main[index].garnish = { id, name }
-        } else {
-          this.order.main[index].garnish.id = null
-        }
-        break;
-      case 'dessert':
-        if (this.order.main[index].dessert.id !== id) {
-          this.order.main[index].dessert = { id, name }
-        } else {
-          this.order.main[index].dessert.id = null
-        }
-        break;
+  chooseSideDish(event: MatCheckboxChange, recipe: Recipe, dishIndex: number, plateIndex: number) {
+    if (event.checked) {
+      this.order.main[plateIndex].sideDishes[dishIndex] = { ...recipe, isSkipped: false }
+    } else {
+      this.order.main[plateIndex].sideDishes[dishIndex] = { ...recipe, isSkipped: true }
     }
   }
 
@@ -283,8 +251,6 @@ export class OrderCheckoutComponent implements OnInit {
     this.resetValidation()
     if (!this.hasSkippedStarter && !this.hasSkippedDrink && this.form.valid) {
       this.formatOrder()
-      console.log(this.order);
-
       this.store.dispatch(MenuActions.checkoutOrder({ order: this.order }))
     } else {
       this.hightlightValidation()
@@ -314,8 +280,8 @@ export class OrderCheckoutComponent implements OnInit {
     this.hasPaymentTypeError = false
     this.hasTakeAwayError = false
     this.hasTableNumberError = false
-    this.hasSkippedStarter = Boolean(!this.order.main.find(el => Boolean(el.starter?.name)))
-    this.hasSkippedDrink = Boolean(!this.order.main.find(el => Boolean(el.drink?.name)))
+    this.hasSkippedStarter = Boolean(!this.order.main.find(el => Boolean(el.starter.id) || el.starter.isSkipped))
+    this.hasSkippedDrink = Boolean(!this.order.main.find(el => Boolean(el.drink.id) || el.starter.isSkipped))
   }
 
   private hightlightValidation() {

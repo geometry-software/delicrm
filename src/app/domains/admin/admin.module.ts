@@ -15,6 +15,7 @@ import { ShiftConstants } from './models/shift.constants'
 import { shiftReducer } from './store/shift-store/shift.reducer'
 import { ShiftService } from './services/shift.service'
 import { ShiftReportComponent } from './components/shift-report/shift-report.component'
+import { MenuFormService } from './services/menu-form.service'
 
 @NgModule({
   declarations: [
@@ -31,6 +32,9 @@ import { ShiftReportComponent } from './components/shift-report/shift-report.com
     StoreModule.forFeature(ShiftConstants.storeFeatureKey, shiftReducer),
     EffectsModule.forFeature([AdminEffects, ShiftEffects]),
   ],
-  providers: [ShiftService]
+  providers: [
+    MenuFormService,
+    ShiftService
+  ]
 })
 export class AdminModule { }

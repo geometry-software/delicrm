@@ -3,16 +3,19 @@ import { AdminConstants } from '../../models/admin.constants'
 import { DailyMenu, Restaurant } from '../../models/restaurant'
 import { RepositoryRequestQuery } from '../../../../shared/repository/repository.models';
 import { LoadingStatus } from '../../../../shared/models/loading-status';
+import { Recipe } from '../../../recipe/models/recipe.model';
 
 export const AdminActions = createActionGroup({
   source: AdminConstants.storeFeatureKey,
   events: {
     'Set Items Loading Status': props<{ status: LoadingStatus }>(),
     'Create Daily Menu': props<{ menu: DailyMenu }>(),
+    'Rebuild Daily Menu': emptyProps(),
+    'Rebuild Daily Menu Success': emptyProps(),
     'Get Daily Menu': emptyProps(),
     'Set Daily Menu': props<{ menu: DailyMenu }>(),
     'Get Restaurant Info': emptyProps(),
-    'Set Restaurant Info': props<{ restaurant: Restaurant }>(),
+    'Set Restaurant Info': props<{ restaurant: Restaurant, recipes: Recipe[] }>(),
     'Print Menu': emptyProps(),
     'Print Menu Success': emptyProps(),
     'Update Restaurant': props<{ restaurant: Restaurant }>(),

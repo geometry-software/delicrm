@@ -3,52 +3,37 @@
 
   <ng-container *ngFor="let plate of order.main; let i = index">
     <div class="card mt-[10px]">
-      <app-title [title]="getDishTitle(i, plate.name)" subtitle="MENU.CHECKOUT.DISH_SUBTITLE"
+      <app-title [title]="getDishTitle(plate.name, i)" subtitle="MENU.CHECKOUT.DISH_SUBTITLE"
         [disableTranslateTitle]="true" />
 
       <div class="section">{{ 'SHARED.DAILY_MENU.STARTERS' | translate }}</div>
-      <mat-radio-group class="radio-group" (change)="chooseStarter($event.value, i)">
-        <mat-radio-button *ngFor="let starter of extras.starters" [value]="starter" [disabled]="starter.eightySix"
-          [style.text-decoration]="starter.eightySix ? 'line-through' : 'none'">
-          {{ starter.name }}
+      <mat-radio-group class="selection-group" (change)="chooseStarter($event.value, i)">
+        <mat-radio-button *ngFor="let starter of extras.starters" [value]="starter" [disabled]="starter.eightySix">
+          <span [class.eighty-six]="starter.eightySix" *ngIf="!starter.isSkipped; else skippedStarterTitle">
+            {{starter.name }}
+          </span>
+          <ng-template #skippedStarterTitle>
+            <span>{{ starter.skippedTitle | translate }}</span>
+          </ng-template>
         </mat-radio-button>
       </mat-radio-group>
 
       <div class="section">{{ 'SHARED.DAILY_MENU.DRINKS' | translate }}</div>
-      <mat-radio-group class="radio-group" (change)="chooseDrink($event.value, i)">
-        <mat-radio-button *ngFor="let drink of extras.drinks" [value]="drink" [disabled]="drink.eightySix"
-          [style.text-decoration]="drink.eightySix ? 'line-through' : 'none'">
-          {{ drink.name }}
+      <mat-radio-group class="selection-group" (change)="chooseDrink($event.value, i)">
+        <mat-radio-button *ngFor="let drink of extras.drinks" [value]="drink" [disabled]="drink.eightySix">
+          <span [class.eighty-six]="drink.eightySix" *ngIf="!drink.isSkipped; else skippedDrinkTitle">
+            {{ drink.name }}
+          </span>
+          <ng-template #skippedDrinkTitle>
+            <span>{{ drink.skippedTitle | translate }}</span>
+          </ng-template>
         </mat-radio-button>
       </mat-radio-group>
 
       <div class="section">{{ 'SHARED.DAILY_MENU.SIDE_DISHES' | translate }}</div>
-      <mat-checkbox [checked]="!extras.garnish.eightySix" (change)="chooseSideDish(extras.garnish, i)"
-        [disabled]="extras.garnish.eightySix">
-        <span [style.text-decoration]="extras.garnish.eightySix ? 'line-through' : 'none'">
-          {{ extras.garnish.name }}
-        </span>
-      </mat-checkbox>
-      <br />
-      <mat-checkbox [checked]="!extras.rice.eightySix" (change)="chooseSideDish(extras.rice, i)"
-        [disabled]="extras.rice.eightySix">
-        <span [style.text-decoration]="extras.rice.eightySix ? 'line-through' : 'none'">
-          {{ extras.rice.name }}
-        </span>
-      </mat-checkbox>
-      <br />
-      <mat-checkbox [checked]="!extras.salad.eightySix" (change)="chooseSideDish(extras.salad, i)"
-        [disabled]="extras.salad.eightySix">
-        <span [style.text-decoration]="extras.salad.eightySix ? 'line-through' : 'none'">
-          {{ extras.salad.name }}
-        </span>
-      </mat-checkbox>
-      <br />
-      <mat-checkbox [checked]="!extras.dessert.eightySix" (change)="chooseSideDish(extras.dessert, i)"
-        [disabled]="extras.dessert.eightySix">
-        <span [style.text-decoration]="extras.dessert.eightySix ? 'line-through' : 'none'">
-          {{ extras.dessert.name }}
-        </span>
+      <mat-checkbox class="selection-group" *ngFor="let item of extras.sideDishes; let dishIndex = index"
+        [checked]="!item.eightySix" (change)="chooseSideDish($event, item, dishIndex, i)" [disabled]="item.eightySix">
+        <span [class.eighty-six]="item.eightySix">{{ item.name }}</span>
       </mat-checkbox>
     </div>
   </ng-container>

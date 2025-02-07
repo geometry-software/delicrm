@@ -10,7 +10,6 @@
   &__main-dish {
     padding-left: 10px;
     transition: all 0.2s ease-in-out;
-    cursor: pointer;
   }
 
   &__main-dish:hover {
@@ -22,6 +21,7 @@
     color: #555;
     font-size: 1.4em;
     font-weight: 500;
+    cursor: pointer;
   }
 
   &__price {

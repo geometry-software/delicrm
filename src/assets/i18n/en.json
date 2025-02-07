@@ -52,10 +52,7 @@
       "MAIN": "Main dish",
       "STARTER": "Starter",
       "DRINK": "Drink",
-      "SALAD": "Salad",
-      "RICE": "Rice",
-      "GARNISH": "Garnish",
-      "DESSERT": "Dessert",
+      "SIDE_DISH": "Side dish",
       "ALACARTE": "A la carte"
     },
     "PROTEIN_TYPE": {
@@ -129,6 +126,10 @@
         "DRINK": "Drink is not chosen",
         "TABLE_NUMBER": "Table number is missing",
         "TAKEAWAY_NAME": "Client name is missing"
+      },
+      "SKIP": {
+        "DRINK": "Without drink",
+        "STARTER": "Without starter"
       },
       "BUTTON": {
         "ACTION": "Request order",
@@ -309,7 +310,8 @@
       },
       "EXTRA_DISHES": {
         "STARTER": "Starter",
-        "DRINK": "Drink"
+        "DRINK": "Drink",
+        "SIDE_DISHES": "Side dishes"
       },
       "STATUS": {
         "DINING": "Dining",
@@ -323,10 +325,6 @@
       },
       "TABLE_NUMBER": "number",
       "ORDER_DETAILS_TITLE": "Order details",
-      "NO_SALAD": "without salad",
-      "NO_GARNISH": "without garnish",
-      "NO_RICE": "without rice",
-      "NO_DESSERT": "without dessert",
       "CLIENT": "Name",
       "WAITER": "Description",
       "PRICE": "Type",
@@ -531,10 +529,7 @@
           "STARTER": "Starter",
           "DRINK": "Drink",
           "SALAD": "Salad",
-          "RICE": "Rice",
-          "GARNISH": "Garnish",
-          "DESSERT": "Dessert",
-          "CONFIRM": "Confirm menu"
+          "SIDE_DISH": "Side dish"
         },
         "UPDATE": "Update menu",
         "CLOSE": "Close service",

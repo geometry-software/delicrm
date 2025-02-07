@@ -43,7 +43,11 @@ export class PlateDetailComponent implements OnInit {
   }
 
   returnPlate() {
-    // this.dialogRef.close('remove')
+    this.dialogRef.close('remove')
+  }
+
+  getPlateWithImage(item: Recipe) {
+    return item.type === 'alacarte' || item.type === 'main'
   }
 
 }

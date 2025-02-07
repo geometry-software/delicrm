@@ -19,5 +19,8 @@ export const MenuActions = createActionGroup({
     'Create User Order': props<{ order: Order }>(),
     'Create User Delivery': props<{ delivery: Delivery }>(),
     'Checkout Order Success': props<{ id: string, checkout: Checkout }>(),
+    'Set Eighty Six': props<{ id: string }>(),
+    'Unset Eighty Six': props<{ id: string }>(),
+    'Eighty Six Success': props<{ menu: DailyMenu }>(),
   },
 })

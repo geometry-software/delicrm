@@ -12,10 +12,7 @@ export const prepareOrder = (main: MenuItem[], alacarte: MenuItem[], extras: Ext
             name: plate.name,
             starter: null,
             drink: null,
-            garnish: extras.garnish,
-            rice: extras.rice,
-            salad: extras.salad,
-            dessert: extras.dessert
+            sideDishes: extras.sideDishes
         })),
         alacarte,
         category: {

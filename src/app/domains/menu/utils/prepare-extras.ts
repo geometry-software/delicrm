@@ -1,11 +1,12 @@
 import { cloneDeep } from "lodash";
+import { DailyMenu } from "../../admin/models/restaurant";
 
-export const prepareExtras = (menu) => {
+export const prepareExtras = (menu: DailyMenu) => {
     if (!menu) {
-        return
+        return null
     }
     const extras = cloneDeep(menu.extras)
-    extras.drinks.push({ name: 'without drink', id: 'w/o' })
-    extras.starters.push({ name: 'without starter', id: 'w/o' })
+    extras.drinks.push({ skippedTitle: 'MENU.CHECKOUT.SKIP.DRINK', isSkipped: true })
+    extras.starters.push({ skippedTitle: 'MENU.CHECKOUT.SKIP.STARTER', isSkipped: true })
     return extras
 }

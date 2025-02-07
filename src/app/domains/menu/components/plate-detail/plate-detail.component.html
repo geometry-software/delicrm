@@ -1,7 +1,7 @@
 <div cdkFocusInitial></div>
 <div mat-dialog-content>
 
-  <div class="flex justify-center">
+  <div class="flex justify-center" *ngIf="getPlateWithImage(plate)">
     <img style="border-radius: 8px" [src]="plate.imgURL ?? setProteinImage(plate.protein)" width="200px"
       height="200px" />
   </div>

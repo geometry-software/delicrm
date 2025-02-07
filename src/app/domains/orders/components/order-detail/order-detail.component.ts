@@ -19,6 +19,7 @@ import { defaultErrorHandler } from '../../../../shared/utils/default-error-hand
 import { isNaN, isNil } from 'lodash'
 import { TranslateService } from '@ngx-translate/core'
 import { SessionService } from '../../../../auth/services/session.service'
+import { MenuItem } from '../../../admin/models/restaurant'
 
 @Component({
   selector: 'app-order-detail',
@@ -139,6 +140,10 @@ export class OrderDetailComponent implements OnInit {
     return start + ': ' + this.orderId + ' ' + end
   }
 
+  getStarterOrDrinkTitle(item: MenuItem) {
+    return item.name ?? this.translateService.instant(item.skippedTitle)
+  }
+
   // TODO make order history by status changes
   // const history: OrderStatusHistory = {
   //   status,
@@ -166,8 +171,6 @@ export class OrderDetailComponent implements OnInit {
       } else {
         this.order = await this.requestOrder(id)
       }
-      console.log(this.order);
-
       this.orderId = id
       this.currency = currency
       this.orderStatusBar = {

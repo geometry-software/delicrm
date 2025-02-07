@@ -27,8 +27,8 @@ export class AppFormattedDailyMenuComponent {
 
   setProteinImage = setProteinImage
 
-  open(item, index) {
-    this.openDetail.next({ item: item, index: index })
+  open(item) {
+    this.openDetail.next({ item: item, index: 0 })
   }
 
   add(item) {

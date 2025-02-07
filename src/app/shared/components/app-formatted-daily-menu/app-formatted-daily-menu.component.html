@@ -2,12 +2,12 @@
 <div class="flex items-center justify-between" *ngFor="let item of dailyMenu.main; let i = index">
   <div class="flex items-center">
     <img [src]="setProteinImage(item.protein)" width="30px" height="30px" />
-    <div (click)="open(item, i)" class="item__title item__main-dish">
+    <div (click)="open(item)" class="item__title item__main-dish" [class.eighty-six]="item.eightySix">
       {{ item.name }}
     </div>
   </div>
-  <div class="flex items-center">
-    <div class="item__price">{{ !item.eightySix ? item.price : '86' }} {{ currency }}</div>
+  <div class="flex items-center" *ngIf="!item.eightySix">
+    <div class="item__price">{{ item.price }} {{ currency }}</div>
     <button mat-icon-button (click)="add(item)" *ngIf="isAddAvailable">
       <mat-icon class="add-button">add</mat-icon>
     </button>
@@ -15,29 +15,18 @@
 </div>
 <div class="section">{{ 'SHARED.DAILY_MENU.STARTERS' | translate }}</div>
 <div *ngFor="let item of dailyMenu.extras.starters">
-  <div class="item__title">{{ item.name }}</div>
-  <div class="item__history">{{ item.history }}</div>
+  <ng-container *ngTemplateOutlet="extraItem; context: { item }"></ng-container>
 </div>
 <div class="section">{{ 'SHARED.DAILY_MENU.DRINKS' | translate }}</div>
 <div *ngFor="let item of dailyMenu.extras.drinks">
-  <div class="item__title">{{ item.name }}</div>
-  <div class="item__history">{{ item.history }}</div>
+  <ng-container *ngTemplateOutlet="extraItem; context: { item }"></ng-container>
 </div>
 <div class="section">{{ 'SHARED.DAILY_MENU.SIDE_DISHES' | translate }}</div>
-<div class="item__title">{{ dailyMenu.extras.rice.name }}</div>
-<div class="item__history">
-  {{ dailyMenu.extras.rice.history }}
+<div *ngFor="let item of dailyMenu.extras.sideDishes">
+  <ng-container *ngTemplateOutlet="extraItem; context: { item }"></ng-container>
 </div>
-<div class="item__title">{{ dailyMenu.extras.salad.name }}</div>
-<div class="item__history">
-  {{ dailyMenu.extras.salad.history }}
-</div>
-<div class="item__title">{{ dailyMenu.extras.garnish.name }}</div>
-<div class="item__history">
-  {{ dailyMenu.extras.garnish.history }}
-</div>
-<div class="section">{{ 'SHARED.DAILY_MENU.DESSERT' | translate }}</div>
-<div class="item__title">{{ dailyMenu.extras.dessert.name }}</div>
-<div class="item__history">
-  {{ dailyMenu.extras?.dessert.history }}
-</div>
+
+<ng-template #extraItem let-item="item">
+  <div (click)="open(item)" class="item__title" [class.eighty-six]="item.eightySix">{{ item.name }}</div>
+  <div class="item__history">{{ item.history }}</div>
+</ng-template>

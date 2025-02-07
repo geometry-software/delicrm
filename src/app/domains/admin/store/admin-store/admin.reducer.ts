@@ -16,9 +16,10 @@ export const reducer = createReducer<State>(
     ...state,
     print: false,
   })),
-  on(ItemActions.setRestaurantInfo, (state, { restaurant }) => ({
+  on(ItemActions.setRestaurantInfo, (state, { restaurant, recipes }) => ({
     ...state,
     restaurant,
+    recipes
   })),
   on(ItemActions.setDailyMenu, (state, { menu }) => ({
     ...state,
@@ -27,5 +28,13 @@ export const reducer = createReducer<State>(
   on(ItemActions.closeShiftSuccess, (state) => ({
     ...state,
     menu: null
-  }))
+  })),
+  on(ItemActions.rebuildDailyMenu, (state) => ({
+    ...state,
+    rebuildMenu: false
+  })),
+  on(ItemActions.rebuildDailyMenuSuccess, (state) => ({
+    ...state,
+    rebuildMenu: true
+  })),
 )

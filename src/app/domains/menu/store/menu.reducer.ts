@@ -21,4 +21,8 @@ export const reducer = createReducer<State>(
     ...state,
     loadingStatus: status
   })),
+  on(ItemActions.eightySixSuccess, (state, { menu }) => ({
+    ...state,
+    menu
+  })),
 )

@@ -3,7 +3,7 @@ export abstract class AuthConstants {
   static readonly collectionName = 'Auth'
   static readonly configCollectionName = 'Config'
   static readonly adminCollectionId = 'admin'
-  static readonly defaultLocale = 'en'
+  static readonly defaultLocale = 'es'
   static readonly adminProcessing = 'admin-processing'
   static readonly signedUpAnonymously = 'signed-up-nonymously'
   static readonly firebaseProviderId = 'firebase'

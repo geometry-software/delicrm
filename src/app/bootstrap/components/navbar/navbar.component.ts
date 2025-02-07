@@ -24,7 +24,6 @@ import { SessionService } from '../../../auth/services/session.service'
 export class NavbarComponent implements OnInit, AfterViewInit {
 
   constructor(
-    private userService: UserService,
     private restaurantService: RestaurantService,
     private signalService: SignalService,
     private sessionService: SessionService,
@@ -35,6 +34,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   readonly authMenuOptions = authMenuOptions
   readonly userMenuOptions = userMenuOptions
   readonly appUser = this.sessionService.getUser()
+  readonly appAuth = this.sessionService.getAuth()
   readonly restaurantInfo = this.restaurantService.getRestaurantInfo()
 
   @ViewChild('drawer') drawer: MatDrawer
@@ -102,7 +102,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
 
   initTranslate() {
     this.translateService.addLangs(['es', 'pt', 'en'])
-    this.translateService.setDefaultLang('en')
+    this.translateService.setDefaultLang('es')
   }
 
   checkDelivery() { }

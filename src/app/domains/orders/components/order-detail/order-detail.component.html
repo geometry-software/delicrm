@@ -21,22 +21,13 @@
       </div>
       <ol>
         <li *ngFor="let item of order.main">
-          <h2>{{ item.plate.name }}</h2>
+          <h3>{{ item.plate.name }}</h3>
           <div class="description">
-            <app-title-item title="ORDERS.DETAIL.EXTRA_DISHES.STARTER" [value]="item.starter.name " />
-            <app-title-item title="ORDERS.DETAIL.EXTRA_DISHES.DRINK" [value]="item.drink.name " />
-
-            <div *ngIf="!item.salad.id">
-              <strong>- {{ 'ORDERS.DETAIL.NO_SALAD' | translate }} </strong>
-            </div>
-            <div *ngIf="!item.garnish.id">
-              <strong>- {{ 'ORDERS.DETAIL.NO_GARNISH' | translate }}</strong>
-            </div>
-            <div *ngIf="!item.rice.id">
-              <strong>- {{ 'ORDERS.DETAIL.NO_RICE' | translate }}</strong>
-            </div>
-            <div *ngIf="!item.dessert.id">
-              <strong>- {{ 'ORDERS.DETAIL.NO_DESSERT' | translate }}</strong>
+            <app-title-item title="ORDERS.DETAIL.EXTRA_DISHES.STARTER" [value]="getStarterOrDrinkTitle(item.starter)" />
+            <app-title-item title="ORDERS.DETAIL.EXTRA_DISHES.DRINK" [value]="getStarterOrDrinkTitle(item.drink)" />
+            <app-title-item title="ORDERS.DETAIL.EXTRA_DISHES.SIDE_DISHES" margin="0" />
+            <div [class.eighty-six]="item.isSkipped || item.eightySix" *ngFor="let item of item.sideDishes">
+              {{ item.name }}
             </div>
           </div>
         </li>

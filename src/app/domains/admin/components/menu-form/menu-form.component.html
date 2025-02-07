@@ -3,7 +3,7 @@
     <form [formGroup]="menuForm" (ngSubmit)="addExtras(menuForm, stepper)">
 
       <div class="section">{{ 'SHARED.DAILY_MENU.STARTERS' | translate }}</div>
-      <div formArrayName="starters" *ngFor="let item of getStarters().controls; let i = index">
+      <div formArrayName="starters" *ngFor="let item of starters.controls; let i = index">
         <mat-form-field [hideRequiredMarker]="true">
           <mat-label> {{ getStartersLabel(i) }} </mat-label>
           <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoStarter" />
@@ -19,7 +19,7 @@
       </div>
 
       <div class="section">{{ 'SHARED.DAILY_MENU.DRINKS' | translate }}</div>
-      <div formArrayName="drinks" *ngFor="let item of getDrinks().controls; let i = index">
+      <div formArrayName="drinks" *ngFor="let item of drinks.controls; let i = index">
         <mat-form-field [hideRequiredMarker]="true">
           <mat-label> {{ getDrinksLabel(i) }} </mat-label>
           <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoDrink" />
@@ -35,57 +35,20 @@
       </div>
 
       <div class="section">{{ 'SHARED.DAILY_MENU.SIDE_DISHES' | translate }}</div>
-      <mat-form-field [hideRequiredMarker]="true">
-        <mat-label> {{ 'ADMIN.BOARD.FORM.LABEL.SALAD' | translate }} </mat-label>
-        <input type="text" matInput formControlName="salad" [matAutocomplete]="autoSalad" />
-        <mat-autocomplete requireSelection #autoSalad="matAutocomplete" [displayWith]="displayFn">
-          <mat-option *ngFor="let option of filteredSaladOptions | async" [value]="option">
-            {{ option.name }}
-          </mat-option>
-        </mat-autocomplete>
-        <mat-error *ngIf="showFieldErrors(menuForm, 'salad') as error">
-          {{ error | translate }}
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field [hideRequiredMarker]="true">
-        <mat-label>{{ 'ADMIN.BOARD.FORM.LABEL.RICE' | translate }}</mat-label>
-        <input type="text" matInput formControlName="rice" [matAutocomplete]="autoRice" />
-        <mat-autocomplete requireSelection #autoRice="matAutocomplete" [displayWith]="displayFn">
-          <mat-option *ngFor="let option of filteredRiceOptions | async" [value]="option">
-            {{ option.name }}
-          </mat-option>
-        </mat-autocomplete>
-        <mat-error *ngIf="showFieldErrors(menuForm, 'rice') as error">
-          {{ error | translate }}
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field [hideRequiredMarker]="true">
-        <mat-label> {{ 'ADMIN.BOARD.FORM.LABEL.GARNISH' | translate }} </mat-label>
-        <input type="text" matInput formControlName="garnish" [matAutocomplete]="autoGarnish" />
-        <mat-autocomplete requireSelection #autoGarnish="matAutocomplete" [displayWith]="displayFn">
-          <mat-option *ngFor="let option of filteredGarnishOptions | async" [value]="option">
-            {{ option.name }}
-          </mat-option>
-        </mat-autocomplete>
-        <mat-error *ngIf="showFieldErrors(menuForm, 'garnish') as error">
-          {{ error | translate }}
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field [hideRequiredMarker]="true">
-        <mat-label> {{ 'ADMIN.BOARD.FORM.LABEL.STARTER' | translate }} </mat-label>
-        <input type="text" matInput formControlName="dessert" [matAutocomplete]="autoDessert" />
-        <mat-autocomplete requireSelection #autoDessert="matAutocomplete" [displayWith]="displayFn">
-          <mat-option *ngFor="let option of filteredDessertOptions | async" [value]="option">
-            {{ option.name }}
-          </mat-option>
-        </mat-autocomplete>
-        <mat-error *ngIf="showFieldErrors(menuForm, 'dessert') as error">
-          {{ error | translate }}
-        </mat-error>
-      </mat-form-field>
+      <div formArrayName="sideDishes" *ngFor="let item of sideDishes.controls; let i = index">
+        <mat-form-field [hideRequiredMarker]="true">
+          <mat-label> {{ getSideDishesLabel(i) }} </mat-label>
+          <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoSidedish" />
+          <mat-autocomplete requireSelection #autoSidedish="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredSideDishesOptions[i] | async" [value]="option">
+              {{ option.name }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="showFieldErrors(menuForm, 'sideDishes', i) as error">
+            {{ error | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
 
       <div *ngIf="hasStartersValidationError" class="validation-error-message">
         {{ 'ADMIN.BOARD.FORM.ALL_REQUIRED_VALIDATION' | translate }}
