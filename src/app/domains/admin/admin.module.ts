@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core'
 import { AdminRoutingModule } from './admin-routing.module'
-import { MenuFormComponent } from './components/menu-form/menu-form.component'
-import { CashDeskComponent } from './components/cash-desk/cash-desk.component'
+import { MenuFormComponent } from './components/daily-menu-form/menu-form.component'
+import { ReportsComponent } from './components/reports/reports.component'
 import { SharedModule } from '../../shared/shared.module'
 import { BoardLayoutComponent } from './components/board-layout/board-layout.component'
 import { StoreModule } from '@ngrx/store'
@@ -22,7 +22,7 @@ import { MenuFormService } from './services/menu-form.service'
     BoardLayoutComponent,
     MenuFormComponent,
     ImageMenuComponent,
-    CashDeskComponent,
+    ReportsComponent,
     ShiftReportComponent
   ],
   imports: [

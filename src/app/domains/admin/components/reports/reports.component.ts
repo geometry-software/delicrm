@@ -15,12 +15,12 @@ import { getDateFromUnix } from '../../../../shared/utils/format-unix-time'
 import { getCurrency } from '../../store/admin-store/admin.selectors'
 
 @Component({
-  selector: 'app-cash-desk',
-  templateUrl: './cash-desk.component.html',
-  styleUrls: ['./cash-desk.component.scss'],
+  selector: 'app-reports',
+  templateUrl: './reports.component.html',
+  styleUrls: ['./reports.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CashDeskComponent implements OnInit {
+export class ReportsComponent implements OnInit {
 
   constructor(
     private store: Store,

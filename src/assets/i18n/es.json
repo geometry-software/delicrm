@@ -25,6 +25,8 @@
     "FIELD_ERROR_MESSAGE": {
       "REQUIRED": "El campo es obligatorio",
       "EMAIL": "El formato del correo electrónico no es válido",
+      "MINLENGTH": "La longitud mínima de la contraseña debe ser de 6 símbolos",
+      "PASSWORDS_NOT_MATCHED": "Las contraseñas no coinciden",
       "ZERO_TABLE_NUMBER": "La mesa no puede ser 0",
       "DEFAULT": "Error"
     }
@@ -190,7 +192,7 @@
       "EMAIL": {
         "CONFIRM": {
           "TITLE": "Se envió el correo de confirmación",
-          "SUBTITLE": "Por favor, confirma el correo para proceder con el registro de administrador"
+          "SUBTITLE": "Confirme el correo electrónico para continuar con el registro de administrador. Si no aparece el correo electrónico, verifique la carpeta de correo no deseado o vuelva a enviar la carta de confirmación."
         },
         "CONFIRMED": {
           "TITLE": "¡Felicidades!",
@@ -198,7 +200,7 @@
         },
         "BUTTON": {
           "UPDATE": "Actualizar",
-          "RESEND": "Reenviar correo electrónico"
+          "RESEND": "Reenviar confirmación"
         }
       },
       "REGISTER_RESTAURANT": {
@@ -283,7 +285,7 @@
     },
     "LIST": {
       "TAB": {
-        "DINING": "Comer en el sitio",
+        "DINING": "En la sala",
         "DELIVERY": "Entrega",
         "CLOSED": "Cerrado"
       },
@@ -323,7 +325,7 @@
         "DELIVERY": "Entrega",
         "TAKEAWAY": "Para llevar"
       },
-      "TABLE_NUMBER": "Número",
+      "TABLE_NUMBER": "número",
       "ORDER_DETAILS_TITLE": "Detalles de la orden",
       "CLIENT": "Nombre",
       "WAITER": "Descripción",
@@ -488,13 +490,13 @@
     "NAVBAR": "Tablero",
     "TOOLBAR": {
       "BOARD": "Tablero",
-      "MENU_FORM": "Formulario de menú",
+      "MENU_FORM": "Formulario menú del dia",
       "REPORTS": "Reportes",
       "REPORT": "Detalles del reporte"
     },
     "BOARD": {
       "BUTTON": {
-        "UPDATE": "Actualizar menú",
+        "UPDATE": "Actualizar menú del dia",
         "CLOSE": "Cerrar servicio",
         "OPEN": "Abrir servicio",
         "DOWNLOAD": "Descargar",
@@ -508,6 +510,13 @@
           "TITLE": "Borrar menú",
           "SUBTITLE": "¿Estás seguro de que quieres borrar el menú?"
         }
+      },
+      "IMAGE_MENU": {
+        "NOT_PUBLISHED": "El menú no está publicado",
+        "TITLE": "Menú del dia",
+        "DELIVERY": "Domicilio",
+        "ADDRESS": "dirección",
+        "PHONE": "Teléfono"
       },
       "FORM": {
         "TAB": {
@@ -550,16 +559,16 @@
         "CREATE": "Completa el formulario para proceder con el registro",
         "EDIT": "Cambiar información del restaurante"
       },
-      "NAME": "Nombre",
-      "DESCRIPTION": "Descripción",
+      "NAME": "Nombre del restaurante",
+      "DESCRIPTION": "Descripción del restaurante",
       "CONTACT": "Nombre de contacto",
-      "ADDRESS": "Dirección",
-      "PHONE": "Teléfono",
+      "ADDRESS": "Dirección del restaurante",
+      "PHONE": "Teléfono del restaurante",
+      "CLOSED": "Texto que se muestra cuando el restaurante está cerrado",
       "WEB": "Web",
-      "OPEN_TIME": "Hora de apertura",
+      "LANG": "Seleccione idioma",
       "CURRENCY": "Moneda",
       "DELIVERY": "Costo de entrega",
-      "DISCOUNT": "Monto de descuento",
       "BUTTON": {
         "CANCEL": "Cancelar",
         "CREATE": "Registrar",

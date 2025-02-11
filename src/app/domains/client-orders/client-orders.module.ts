@@ -5,7 +5,7 @@ import { SharedModule } from '../../shared/shared.module'
 // import { DeliveryLayoutComponent } from './components/delivery-layout/delivery-layout.component'
 // import { DeliveryStatusComponent } from './components/delivery-status/delivery-status.component'
 import { ClientOrdersConstants } from './models/client-orders.constants'
-import { DeliveryEffects } from './store/client-orders.effects'
+import { ClientOrdersEffects } from './store/client-orders.effects'
 import { StoreModule } from '@ngrx/store'
 import { EffectsModule } from '@ngrx/effects'
 import { reducer } from './store/client-orders.reducer'
@@ -22,7 +22,7 @@ import { ClientOrdersLayoutComponent } from './components/client-orders-layout/c
     SharedModule,
     ClientOrdersRoutingModule,
     StoreModule.forFeature(ClientOrdersConstants.storeFeatureKey, reducer),
-    EffectsModule.forFeature([DeliveryEffects]),
+    EffectsModule.forFeature([ClientOrdersEffects]),
   ],
 })
 export class ClientOrdersModule { }

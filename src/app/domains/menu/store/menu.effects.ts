@@ -137,8 +137,8 @@ export class MenuEffects {
 
   private handleError(error: Error) {
     this.notificationService.error(error)
-    this.signalService.setLoadingStatus(LoadingStatus.LoadingFailed)
-    this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed }))
+    this.signalService.setLoadingStatus(LoadingStatus.Failed)
+    this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.Failed }))
     return EMPTY
   }
 
@@ -161,7 +161,7 @@ export class MenuEffects {
           this.sessionService.setAuth({ ...auth, ...updatedAuth })
           return this.authService.updateAuth(auth.authId, updatedAuth)
         } else {
-          return of(null)
+          return EMPTY
         }
       })
     )

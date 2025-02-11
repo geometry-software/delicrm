@@ -1,32 +1,38 @@
-<ng-container *ngIf="{ menu: dailyMenu | async, restaurant: restaurantInfo | async } as data">
+<ng-container *ngIf="isLoaded | async">
+  <ng-container *ngIf="imageData | async as data">
 
-  <ng-container *ngIf="!data.menu?.open; else menuTemplate">
-    <div class="no-menu" *ngIf="isLoaded | async">Menu is not published</div>
-  </ng-container>
+    <ng-container *ngIf="!data.open; else menuTemplate">
+      <div class="no-menu">{{ 'ADMIN.BOARD.IMAGE_MENU.NOT_PUBLISHED' | translate }}</div>
+    </ng-container>
 
-  <ng-template #menuTemplate>
-    <div style="display: flex; justify-content: center">
-      <div id="print" style="width: 400px">
-        <div class="menu__title-border">
-          <div class="menu__title">{{ data.restaurant.name }}</div>
-          <div class="menu__subtitle">Daily Menu</div>
-          <div class="menu__day">{{ today }}</div>
-        </div>
-
-        <app-formatted-daily-menu [dailyMenu]="data.menu" [currency]="currency | async"></app-formatted-daily-menu>
-
-        <div class="contact__border">
-          <div class="contact__title">Delivery:
-            <span class="contact__subtitle contact__link">{{ data.restaurant.web}}</span>
+    <ng-template #menuTemplate>
+      <div class="flex justify-center">
+        <div id="print" class="image-width">
+          <div class="menu__title-border">
+            <div class="menu__title">{{ data.restaurant.name }}</div>
+            <div class="menu__subtitle">{{ 'ADMIN.BOARD.IMAGE_MENU.TITLE' | translate }}</div>
+            <div class="menu__day">{{ data.today }}</div>
           </div>
-          <div class="contact__title">Address:<span class="contact__subtitle">{{ data.restaurant.address }}</span>
+
+          <app-formatted-daily-menu [dailyMenu]="data.menu" [currency]="data.currency" />
+
+          <div class="contact__border">
+            <div class="contact__title">
+              {{ 'ADMIN.BOARD.IMAGE_MENU.DELIVERY' | translate }}:
+              <span class="contact__subtitle contact__link">{{ data.restaurant.web }}</span>
+            </div>
+            <div class="contact__title">
+              {{ 'ADMIN.BOARD.IMAGE_MENU.ADDRESS' | translate }}:
+              <span class="contact__subtitle">{{ data.restaurant.address }}</span>
+            </div>
+            <div class="contact__title">
+              {{ 'ADMIN.BOARD.IMAGE_MENU.PHONE' | translate }}:
+              <span class="contact__subtitle">{{ data.restaurant.phone }}</span>
+            </div>
+            <!-- <div class="contact__footer">We accept all cards, QR and cash</div> -->
           </div>
-          <div class="contact__title">WhatsApp:<span class="contact__subtitle">{{ data.restaurant.phone }}</span>
-          </div>
-          <div class="contact__footer">We accept all cards, QR and cash</div>
         </div>
       </div>
-    </div>
-  </ng-template>
-
+    </ng-template>
+  </ng-container>
 </ng-container>

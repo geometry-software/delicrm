@@ -37,7 +37,7 @@ export class DeliveryEffects {
           }),
           catchError(error => of(
             ItemActions.notifyError({ error }),
-            ItemActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed })
+            ItemActions.setItemsLoadingStatus({ status: LoadingStatus.Failed })
           ))))),
     { dispatch: false }
   )

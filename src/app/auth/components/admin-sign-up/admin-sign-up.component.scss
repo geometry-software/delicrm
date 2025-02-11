@@ -47,3 +47,9 @@
   text-align: justify;
   font-size: 0.8em;
 }
+
+.notmatched {
+  font-size: 0.75em;
+  color: var(--mat-form-field-error-text-color);
+  padding-left: 20px;
+}

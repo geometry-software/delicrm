@@ -1,4 +1,6 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms"
+import { BootstrapConstants } from "../../../bootstrap/models/bootstrap.constants"
+// import { BootstrapConstants } from "../../../bootstrap/utils/bootstrap.constants"
 
 export enum RestaurantFormProps {
     name = 'name',
@@ -7,13 +9,15 @@ export enum RestaurantFormProps {
     address = 'address',
     phone = 'phone',
     web = 'web',
-    startersAmount = 'startersAmount',
-    drinksAmount = 'drinksAmount',
-    sideDishesAmount = 'sideDishesAmount',
-    openTime = 'openTime',
+    locale = 'locale',
+    // startersAmount = 'startersAmount',
+    // drinksAmount = 'drinksAmount',
+    // sideDishesAmount = 'sideDishesAmount',
+    // openTime = 'openTime',
     currency = 'currency',
     delivery = 'delivery',
-    discount = 'discount'
+    closed = 'closed',
+    // discount = 'discount'
 }
 
 export const restaurantFormGroup = new FormGroup({
@@ -23,11 +27,13 @@ export const restaurantFormGroup = new FormGroup({
     [RestaurantFormProps.address]: new FormControl(null, Validators.required),
     [RestaurantFormProps.phone]: new FormControl(null, Validators.required),
     [RestaurantFormProps.web]: new FormControl(null, Validators.required),
-    [RestaurantFormProps.startersAmount]: new FormControl(null, Validators.required),
-    [RestaurantFormProps.drinksAmount]: new FormControl(null, Validators.required),
-    [RestaurantFormProps.sideDishesAmount]: new FormControl(null, Validators.required),
-    [RestaurantFormProps.openTime]: new FormControl(null, Validators.required),
-    [RestaurantFormProps.currency]: new FormControl('$', Validators.required),
+    [RestaurantFormProps.locale]: new FormControl(null, Validators.required),
+    [RestaurantFormProps.closed]: new FormControl(null, Validators.required),
+    // [RestaurantFormProps.startersAmount]: new FormControl(null, Validators.required),
+    // [RestaurantFormProps.drinksAmount]: new FormControl(null, Validators.required),
+    // [RestaurantFormProps.sideDishesAmount]: new FormControl(null, Validators.required),
+    // [RestaurantFormProps.openTime]: new FormControl(null, Validators.required),
+    [RestaurantFormProps.currency]: new FormControl(BootstrapConstants.currency, Validators.required),
     [RestaurantFormProps.delivery]: new FormControl(0, Validators.required),
-    [RestaurantFormProps.discount]: new FormControl(0, Validators.required),
+    // [RestaurantFormProps.discount]: new FormControl(0, Validators.required),
 })

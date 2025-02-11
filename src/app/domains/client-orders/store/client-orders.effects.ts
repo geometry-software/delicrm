@@ -27,7 +27,7 @@ import { SessionService } from '../../../auth/services/session.service'
 
 
 @Injectable()
-export class DeliveryEffects {
+export class ClientOrdersEffects {
 
   constructor(
     private actions: Actions,

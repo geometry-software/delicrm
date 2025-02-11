@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { GoogleAuthProvider } from 'firebase/auth'
-import { BehaviorSubject, concat, from, map, of, shareReplay, switchMap, catchError, tap, EMPTY, Subject, first, merge } from 'rxjs'
+import { BehaviorSubject, concat, from, map, of, shareReplay, switchMap, catchError, tap, EMPTY, Subject, first, merge, combineLatest } from 'rxjs'
 import { AdminSignUpLoadingStatus } from '../models/loading-status'
 import { AuthConstants } from '../models/auth.constants'
 import { RepositoryService } from '../../shared/repository/repository.service'
 import { Router } from '@angular/router'
 import { AuthStatus, Auth } from '../models/auth.model'
-import { mapAuth, mapRequested } from '../models/auth.mapper'
+import { mapAuth } from '../models/auth.mapper'
 import { SortRequest } from '../../shared/repository/repository.models'
 import { UserConstants } from '../../domains/users/models/user.constants'
 import { AuthService } from './auth.service'
@@ -55,6 +55,20 @@ export class SessionService {
     return this.appAuthSubject.asObservable()
   }
 
+  changeLanguage(locale: string) {
+    return combineLatest([this.getAuth(), this.getUser()]).pipe(
+      switchMap(value => {
+        if (value[0]) {
+          return this.authService.updateLanguage(value[0].authId, locale)
+        }
+        if (value[1]) {
+          return this.userService.updateLanguage(value[1].userId, locale)
+        }
+        return EMPTY
+      })
+    )
+  }
+
   private initAuthSession() {
     this.authService.firebaseUser.pipe(
       first(),
@@ -78,7 +92,7 @@ export class SessionService {
 
   private handleAuthError(error: Error) {
     this.notificationService.error(error)
-    this.signalService.setLoadingStatus(LoadingStatus.NotLoaded)
+    this.signalService.setLoadingStatus(LoadingStatus.Failed)
     console.error(error)
     return EMPTY
   }

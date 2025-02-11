@@ -49,7 +49,7 @@ export class ClientEffects {
           }),
           catchError(error => of(
             ItemActions.notifyError({ error, query: 'edit' }),
-            ItemActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed })
+            ItemActions.setItemsLoadingStatus({ status: LoadingStatus.Failed })
           )))))
   )
 

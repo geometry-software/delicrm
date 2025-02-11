@@ -1,14 +1,17 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core'
 import { saveAs } from 'file-saver'
 import * as moment from 'moment'
-import { filter, map, tap } from 'rxjs'
+import { combineLatest, filter, map, tap } from 'rxjs'
 import domtoimage from 'dom-to-image'
 import { Store } from '@ngrx/store'
-import { getCurrency, getMenu, getRestaurantInfo, loadingStatus, printMenu } from '../../store/admin-store/admin.selectors'
+import { getCurrency, getMenu, getRestaurantInfo, getRestaurantLocale, isRestaurantOpen, loadingStatus, printMenu } from '../../store/admin-store/admin.selectors'
 import { AdminActions as ItemActions } from '../../store/admin-store/admin.actions'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { fadeInOnEnterAnimation } from 'angular-animations'
+import { RestaurantService } from '../../services/restaurant.service'
+import { BootstrapConstants } from '../../../../bootstrap/models/bootstrap.constants'
+import { isNil } from 'lodash'
 
 @Component({
   selector: 'app-image-menu',
@@ -24,11 +27,25 @@ export class ImageMenuComponent implements OnInit {
     private destroyRef: DestroyRef
   ) { }
 
+  private readonly today = this.store.select(getRestaurantLocale).pipe(
+    map(value => moment(new Date()).locale(value ?? BootstrapConstants.locale).format('dddd DD MMMM')))
+
+  readonly imageData = combineLatest([
+    this.today,
+    this.store.select(getMenu),
+    this.store.select(getCurrency),
+    this.store.select(getRestaurantInfo),
+    this.store.select(isRestaurantOpen),
+  ]).pipe(
+    map(value => ({
+      today: value[0],
+      menu: value[1],
+      currency: value[2],
+      restaurant: value[3],
+      open: value[4],
+    }))
+  )
   readonly commonImg = 'assets/dish.png'
-  readonly today = moment(new Date()).locale('es').format('dddd DD MMMM')
-  readonly dailyMenu = this.store.select(getMenu)
-  readonly currency = this.store.select(getCurrency)
-  readonly restaurantInfo = this.store.select(getRestaurantInfo)
   readonly isLoaded = this.store.select(loadingStatus).pipe(
     map(loading => loading === LoadingStatus.Loaded))
 

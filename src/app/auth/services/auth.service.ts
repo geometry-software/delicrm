@@ -9,6 +9,8 @@ import { Router } from '@angular/router'
 import { AuthStatus, Auth } from '../models/auth.model'
 import { mapAuth, mapRequested } from '../models/auth.mapper'
 import { SortRequest } from '../../shared/repository/repository.models'
+import { RestaurantService } from '../../domains/admin/services/restaurant.service'
+import { BootstrapConstants } from '../../bootstrap/models/bootstrap.constants'
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +20,7 @@ export class AuthService {
   constructor(
     private repositoryService: RepositoryService<Auth, AuthStatus>,
     private angularFireAuth: AngularFireAuth,
+    private restaurantService: RestaurantService,
     private router: Router
   ) { }
 
@@ -58,25 +61,25 @@ export class AuthService {
 
   linkWithGoogle() {
     return from(this.angularFireAuth.signOut()).pipe(
-      switchMap(() => from(this.angularFireAuth.signInWithPopup(new GoogleAuthProvider())).pipe(
-        map(auth => mapRequested(
-          auth.user.uid,
-          auth.user.email,
-          auth.user.displayName,
-          auth.user.photoURL,
-          AuthConstants.defaultLocale)),
-        switchMap(auth => this.repositoryService.setDocument(this.collection, auth, auth.authId))
-      ))
-    )
+      switchMap(() => this.restaurantService.getRestaurantInfo().pipe(
+        map(value => value ? value.locale : BootstrapConstants.locale),
+        switchMap(locale => from(this.angularFireAuth.signInWithPopup(new GoogleAuthProvider())).pipe(
+          map(auth => mapRequested(
+            auth.user.uid,
+            auth.user.email,
+            auth.user.displayName,
+            auth.user.photoURL,
+            locale)),
+          switchMap(auth => this.repositoryService.setDocument(this.collection, auth, auth.authId)))))))
   }
 
   signUpAnonymously() {
-    return from(this.angularFireAuth.signInAnonymously()).pipe(
-      map(auth => mapAuth(auth.user.uid)),
-      switchMap(auth => this.repositoryService.setDocument(this.collection, auth, auth.authId).pipe(
-        map(() => auth)
-      ))
-    )
+    return this.restaurantService.getRestaurantInfo().pipe(
+      map(value => value ? value.locale : BootstrapConstants.locale),
+      switchMap(locale => from(this.angularFireAuth.signInAnonymously()).pipe(
+        map(auth => mapAuth(auth.user.uid, locale)),
+        switchMap(auth => this.repositoryService.setDocument(this.collection, auth, auth.authId).pipe(
+          map(() => auth))))))
   }
 
   loginAdmin(email: string, password: string) {
@@ -84,11 +87,15 @@ export class AuthService {
       switchMap(() => from(this.angularFireAuth.signInWithEmailAndPassword(email, password))))
   }
 
+  hasAdminUser() {
+    return this.repositoryService.getAllDocumentsByStrictQuery(this.collection, { active: 'createdAt', direction: 'asc' }, 'role', 'admin')
+  }
+
   signUpAdmin(admin) {
     return from(this.angularFireAuth.signOut()).pipe(
       switchMap(() => from(this.angularFireAuth.createUserWithEmailAndPassword(admin.email, admin.password)).pipe(
         switchMap(response => from(response.user.sendEmailVerification()).pipe(
-          switchMap(() => this.repositoryService.setDocument(this.collection, mapAuth(response.user.uid), this.adminCollectionId)))))))
+          switchMap(() => this.repositoryService.setDocument(this.collection, mapAuth(response.user.uid, BootstrapConstants.locale), this.adminCollectionId)))))))
   }
 
   getRequested(sort: SortRequest, size: number, status: AuthStatus) {
@@ -113,6 +120,10 @@ export class AuthService {
 
   updateAuth(id: string, data: Partial<Auth>) {
     return this.repositoryService.updateDocument(this.collection, data, id)
+  }
+
+  updateLanguage(id: string, locale: string) {
+    return this.repositoryService.updateDocument(this.collection, { locale }, id)
   }
 
   sendEmailVerification() {

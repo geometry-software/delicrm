@@ -1,44 +1,40 @@
-<ng-container *ngIf="!(hasUser | async); else hasUserTemplate">
+<app-title title="AUTH.ADMIN.FORM.TITLE" [subtitle]="'AUTH.ADMIN.FORM.SUBTITLE'" />
 
-  <app-title title="AUTH.ADMIN.FORM.TITLE" [subtitle]="'AUTH.ADMIN.FORM.SUBTITLE'" />
+<form [formGroup]="form" (ngSubmit)="submitForm()">
 
-  <form [formGroup]="form" (ngSubmit)="submitForm()">
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label> {{ 'AUTH.ADMIN.FORM.EMAIL' | translate }} </mat-label>
+    <input matInput [formControlName]="formProps.email" />
+    <mat-error *ngIf="showFieldErrors(form, formProps.email) as error">
+      {{ error | translate }}
+    </mat-error>
+  </mat-form-field>
 
-    <mat-form-field [hideRequiredMarker]="true">
-      <mat-label> {{ 'AUTH.ADMIN.FORM.EMAIL' | translate }} </mat-label>
-      <input matInput [formControlName]="formProps.email" />
-      <mat-error *ngIf="showFieldErrors(form, formProps.email) as error">
-        {{ error | translate }}
-      </mat-error>
-    </mat-form-field>
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label> {{ 'AUTH.ADMIN.FORM.PASSWORD' | translate }} </mat-label>
+    <input matInput [formControlName]="formProps.password" />
+    <mat-error *ngIf="showFieldErrors(form, formProps.password) as error">
+      {{ error | translate }}
+    </mat-error>
+  </mat-form-field>
 
-    <mat-form-field [hideRequiredMarker]="true">
-      <mat-label> {{ 'AUTH.ADMIN.FORM.PASSWORD' | translate }} </mat-label>
-      <input matInput [formControlName]="formProps.password" />
-      <mat-error *ngIf="showFieldErrors(form, formProps.password) as error">
-        {{ error | translate }}
-      </mat-error>
-    </mat-form-field>
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label> {{ 'AUTH.ADMIN.FORM.REPEAT_PASSWORD' | translate }} </mat-label>
+    <input matInput [formControlName]="formProps.repeatPassword" />
+    <mat-error *ngIf="showFieldErrors(form, formProps.repeatPassword) as error">
+      {{ error | translate }}
+    </mat-error>
+  </mat-form-field>
 
-    <mat-form-field [hideRequiredMarker]="true">
-      <mat-label> {{ 'AUTH.ADMIN.FORM.REPEAT_PASSWORD' | translate }} </mat-label>
-      <input matInput [formControlName]="formProps.repeatPassword" />
-      <mat-error *ngIf="showFieldErrors(form, formProps.repeatPassword) as error">
-        {{ error | translate }}
-      </mat-error>
-    </mat-form-field>
+  <div class="notmatched" *ngIf="form.getError('notmatched') && isNotMatchedPasswordErrorShown">
+    {{ 'FORM.FIELD_ERROR_MESSAGE.PASSWORDS_NOT_MATCHED' | translate }}
+  </div>
 
-    <div class="auth-desc">
-      {{ 'AUTH.ADMIN.FORM.TERMS' | translate }}
-    </div>
+  <div class="auth-desc">
+    {{ 'AUTH.ADMIN.FORM.TERMS' | translate }}
+  </div>
 
-    <br>
-    <app-button actionType="save" width="full" type="submit" [disabled]="isLoading"
-      [title]="isLoading ? 'AUTH.ADMIN.FORM.BUTTON.LOADING' : 'AUTH.ADMIN.FORM.BUTTON.ACTION'" />
-  </form>
-
-</ng-container>
-
-<ng-template #hasUserTemplate>
-  {{ 'AUTH.ADMIN.HAS_ADMIN_USER' | translate }}
-</ng-template>
+  <br>
+  <app-button actionType="save" width="full" type="submit" [disabled]="isLoading"
+    [title]="isLoading ? 'AUTH.ADMIN.FORM.BUTTON.LOADING' : 'AUTH.ADMIN.FORM.BUTTON.ACTION'" />
+</form>

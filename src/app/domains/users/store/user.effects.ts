@@ -52,7 +52,7 @@ export class UserEffects {
             }),
             catchError(error => of(
               ItemActions.notifyError({ error, query: 'edit' }),
-              ItemActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed })
+              ItemActions.setItemsLoadingStatus({ status: LoadingStatus.Failed })
             )))))
         : this.userService.updateStatus(id, status, role).pipe(
           map(() => {
@@ -61,7 +61,7 @@ export class UserEffects {
           }),
           catchError(error => of(
             ItemActions.notifyError({ error, query: 'edit' }),
-            ItemActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed })
+            ItemActions.setItemsLoadingStatus({ status: LoadingStatus.Failed })
           )))
       ))
   )

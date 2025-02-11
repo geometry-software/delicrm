@@ -7,12 +7,13 @@ import { UserService } from '../../../domains/users/services/user.service'
 import { SignalService } from '../../../shared/services/signal.service'
 import { UserLanguage } from '../../../domains/users/models/user.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { combineLatest, map, shareReplay } from 'rxjs'
+import { catchError, combineLatest, EMPTY, first, map, shareReplay } from 'rxjs'
 import { toObservable } from '@angular/core/rxjs-interop'
 import { Chart, ChartItem } from 'chart.js/auto';
 import { RestaurantService } from '../../../domains/admin/services/restaurant.service'
 import { fadeInOnEnterAnimation } from 'angular-animations'
 import { SessionService } from '../../../auth/services/session.service'
+import { BootstrapConstants } from '../../models/bootstrap.constants'
 
 @Component({
   selector: 'app-navbar',
@@ -36,17 +37,10 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   readonly appUser = this.sessionService.getUser()
   readonly appAuth = this.sessionService.getAuth()
   readonly restaurantInfo = this.restaurantService.getRestaurantInfo()
+  readonly languageOptions = BootstrapConstants.languageOptions
 
   @ViewChild('drawer') drawer: MatDrawer
   responsiveLayout: ResponsiveLayout = {}
-
-  languageOptions: UserLanguageItem[] = [
-    { value: 'en', title: 'English' },
-    { value: 'es', title: 'Español' },
-    { value: 'pt', title: 'Português' },
-    { value: 'ru', title: 'Русский' }
-  ]
-
   hasAppAuth: boolean
   hasNewDelivery: boolean
   isMobileShown: boolean
@@ -65,7 +59,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     this.checkDelivery()
     this.checkClient()
     this.updateScreenSize()
-    this.initTranslate()
+    this.setTranslate()
   }
 
   ngAfterViewInit(): void {
@@ -100,9 +94,17 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     );
   }
 
-  initTranslate() {
-    this.translateService.addLangs(['es', 'pt', 'en'])
-    this.translateService.setDefaultLang('es')
+  setTranslate() {
+    combineLatest([this.appAuth, this.appUser]).subscribe(value => {
+      let locale
+      if (value[0]) {
+        locale = value[0].locale
+      }
+      if (value[1]) {
+        locale = value[1].locale
+      }
+      this.translateService.use(locale)
+    })
   }
 
   checkDelivery() { }
@@ -136,8 +138,14 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   }
 
   changeLanguage(lang: UserLanguage) {
-    this.translateService.use(lang)
-    this.cdr.markForCheck()
+    this.signalService.setLoadingStatus(LoadingStatus.Loading)
+    this.sessionService.changeLanguage(lang).pipe(
+      first(),
+      catchError(() => {
+        this.signalService.setLoadingStatus(LoadingStatus.Failed)
+        return EMPTY
+      })
+    ).subscribe(() => location.reload())
   }
 
   toggleMobile() {

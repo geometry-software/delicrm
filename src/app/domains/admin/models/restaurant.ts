@@ -7,12 +7,14 @@ export type Restaurant = {
     description: string
     phone: string
     web: string
+    locale: string
     startersAmount: number
     drinksAmount: number
     sideDishesAmount: number
+    dessertAmount: number
     delivery: number
     discount: number
-    openTime: string
+    closed: string
     currency: string
 }
 

@@ -2,9 +2,12 @@ import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AuthService } from '../../services/auth.service'
 import { adminFormGroup, AdminFormProps } from '../../models/admin.form'
-import { showFieldErrors } from '../../../shared/utils/form-error-handling'
+import { highlightInvalidFields, showFieldErrors } from '../../../shared/utils/form-error-handling'
 import { catchError, EMPTY, filter, map, tap } from 'rxjs'
 import { UserService } from '../../../domains/users/services/user.service'
+import { LoadingStatus } from '../../../shared/models/loading-status'
+import { SignalService } from '../../../shared/services/signal.service'
+// import { BootstarpConstants } from '../../../bootstrap/models/bootstrap.constants'
 
 @Component({
   selector: 'app-admin-sign-up',
@@ -16,32 +19,42 @@ export class AdminSignUpComponent {
 
   constructor(
     private authService: AuthService,
-    private userService: UserService,
-    private destroyRef: DestroyRef
+    private destroyRef: DestroyRef,
+    private signalService: SignalService,
   ) { }
+
+  readonly showFieldErrors = showFieldErrors
+  readonly hasUser = this.authService.hasAdminUser().pipe(
+    map(value => Boolean(value)))
 
   form = adminFormGroup
   formProps = AdminFormProps
   isLoading: boolean
-  readonly showFieldErrors = showFieldErrors
-  readonly hasUser = this.userService.getTotalByStatus('active').pipe(
-    map(value => Boolean(value))
-  )
+  isNotMatchedPasswordErrorShown: boolean
 
   async submitForm() {
     this.isLoading = true
+    this.isNotMatchedPasswordErrorShown = false
+    this.signalService.setLoadingStatus(LoadingStatus.Loading)
     if (this.form.valid) {
       this.authService.signUpAdmin(this.form.value).pipe(
         catchError(error => {
           console.error(error);
           this.isLoading = false
+          this.signalService.setLoadingStatus(LoadingStatus.Failed)
           return EMPTY
         }),
         takeUntilDestroyed(this.destroyRef)
       ).subscribe(() => {
         this.isLoading = false
+        this.signalService.setLoadingStatus(LoadingStatus.Loaded)
         this.authService.checkAdminRegistration.next()
       })
+    } else {
+      this.isNotMatchedPasswordErrorShown = true
+      this.isLoading = false
+      this.signalService.setLoadingStatus(LoadingStatus.Failed)
+      highlightInvalidFields(this.form)
     }
   }
 

@@ -134,8 +134,8 @@ export class OrderEffects implements OnInitEffects {
   )
 
   private handleError(error, type: RepositoryRequestQuery) {
-    this.signalService.setLoadingStatus(LoadingStatus.LoadingFailed)
-    this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.LoadingFailed }))
+    this.signalService.setLoadingStatus(LoadingStatus.Failed)
+    this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.Failed }))
     return of(ItemActions.notifyError({ error, errorType: type }))
   }
 

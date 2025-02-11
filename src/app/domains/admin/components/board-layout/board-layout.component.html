@@ -1,25 +1,31 @@
-<div class="sm:flex gap-1" *ngIf="currentRoute === imageRoute">
-  <div class="flex gap-2 justify-evenly">
-    <app-button title="ADMIN.BOARD.BUTTON.UPDATE" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
-      actionType="back" icon="edit" url="form" />
-    <app-button title="ADMIN.BOARD.BUTTON.CLOSE" [disabled]="disabledMenu | async" actionType="back"
-      icon="cleaning_services" (click)="clearMenu()" />
-  </div>
-  <div class="divider"></div>
-  <div class="flex gap-2 justify-evenly">
-    <app-button title="ADMIN.BOARD.BUTTON.DOWNLOAD" [disabled]="disabledMenu | async" actionType="back" icon="image"
-      (click)="printMenu()" />
-    <app-button title="ADMIN.BOARD.BUTTON.CONFIG" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
-      actionType="back" icon="settings" (click)="updateRestaurant()" />
-  </div>
-</div>
+<div class="flex gap-2">
+  <ng-container [ngSwitch]="currentRoute">
 
-<div class="sm:flex gap-1" *ngIf="currentRoute === formRoute">
-  <div class="flex gap-2 justify-evenly">
-    <app-button title="ADMIN.BOARD.BUTTON.BACK" actionType="back" icon="arrow_back" url="/admin" />
-    <app-button title="ADMIN.BOARD.BUTTON.REBUILD" actionType="back" icon="refresh" (click)="rebuild()" />
-    <app-button title="ADMIN.BOARD.BUTTON.ALACARTE" actionType="back" icon="local_drink" />
-  </div>
+    <!-- BOARD -->
+    <ng-container *ngSwitchCase="imageRoute">
+      <app-button title="ADMIN.BOARD.BUTTON.CLOSE" [disabled]="disabledMenu | async" actionType="back"
+        icon="cleaning_services" (click)="clearMenu()" />
+      <app-button title="ADMIN.BOARD.BUTTON.DOWNLOAD" [disabled]="disabledMenu | async" actionType="back" icon="image"
+        (click)="printMenu()" />
+      <app-button title="ADMIN.BOARD.BUTTON.UPDATE" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
+        actionType="back" icon="edit" url="daily" />
+      <app-button title="ADMIN.BOARD.BUTTON.ALACARTE" actionType="back" icon="local_drink" url="alacarte" />
+      <app-button title="ADMIN.BOARD.BUTTON.CONFIG" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
+        actionType="back" icon="settings" (click)="updateRestaurant()" />
+    </ng-container>
+
+    <!-- DAILY MENU -->
+    <ng-container *ngSwitchCase="formRoute">
+      <app-button title="ADMIN.BOARD.BUTTON.BACK" actionType="back" icon="arrow_back" url="/admin" />
+      <app-button title="ADMIN.BOARD.BUTTON.REBUILD" actionType="back" icon="refresh" (click)="rebuild()" />
+    </ng-container>
+
+    <!-- ALA CARTE MENU -->
+    <ng-container *ngSwitchCase="alacarteRoute">
+      <app-button title="ADMIN.BOARD.BUTTON.BACK" actionType="back" icon="arrow_back" url="/admin" />
+    </ng-container>
+
+  </ng-container>
 </div>
 
 <router-outlet></router-outlet>

@@ -17,6 +17,7 @@ import { NotificationService } from '../../../shared/services/notification.servi
 import { TranslateService } from '@ngx-translate/core'
 import { User } from '../../../domains/users/models/user.model'
 import { SessionService } from '../../services/session.service'
+import { RecipeConstants } from '../../../domains/recipe/models/recipe.constants'
 
 @Component({
   selector: 'app-login',
@@ -107,10 +108,9 @@ export class LoginComponent {
   }
 
   redirectToAdmin(user: User) {
-    const message = this.translateService.instant('AUTH.ADMIN.REGISTER_RESTAURANT.SUCCESS')
-    this.notificationService.success(message)
+    this.notificationService.success('AUTH.ADMIN.REGISTER_RESTAURANT.SUCCESS')
     this.sessionService.setUser(user)
-    this.router.navigate(['/admin'])
+    this.router.navigate([RecipeConstants.moduleUrl])
   }
 
   getNameTitle(name: string) {
@@ -120,6 +120,7 @@ export class LoginComponent {
 
   private handleRegisterRestaurantError(error) {
     this.restaurantRegisterStatus.next(RestaurantLoadingStatus.RegisterFailed)
+    console.error(error)
     return of(error)
   }
 

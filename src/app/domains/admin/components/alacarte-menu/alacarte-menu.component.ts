@@ -1,25 +1,25 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { fadeInOnEnterAnimation, fadeInUpOnEnterAnimation, rubberBandOnEnterAnimation } from 'angular-animations'
-import { PlateDetailComponent } from '../plate-detail/plate-detail.component'
-import { MenuActions as ItemActions } from '../../store/menu.actions'
+import { PlateDetailComponent } from '../../../menu/components/plate-detail/plate-detail.component'
+import { MenuActions as ItemActions } from '../../../menu/store/menu.actions'
 import { Order } from '../../../orders/models/order.model'
 import { Recipe } from '../../../recipe/models/recipe.model'
 import { setProteinImage } from '../../../../shared/utils/protein-image'
-import { MenuConstants } from '../../utils/menu.constants'
+import { MenuConstants } from '../../../menu/utils/menu.constants'
 import { Store } from '@ngrx/store'
-import { getCurrency, getMenu, getRestaurantInfo, isRestaurantOpen, loadingStatus } from '../../store/menu.selectors'
+import { getCurrency, getMenu, getRestaurantInfo, isRestaurantOpen, loadingStatus } from '../../../menu/store/menu.selectors'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
-import { MenuItem } from '../../../admin/models/restaurant'
+import { MenuItem } from '../../models/restaurant'
 import { TranslateService } from '@ngx-translate/core'
 import { map } from 'rxjs'
 import { UserService } from '../../../users/services/user.service'
 import { SessionService } from '../../../../auth/services/session.service'
 
 @Component({
-  selector: 'app-daily-menu',
-  templateUrl: './daily-menu.component.html',
-  styleUrls: ['./daily-menu.component.scss'],
+  selector: 'app-alacarte-menu',
+  templateUrl: './alacarte-menu.component.html',
+  styleUrls: ['./alacarte-menu.component.scss'],
   animations: [
     fadeInOnEnterAnimation(),
     fadeInUpOnEnterAnimation(),
@@ -27,7 +27,7 @@ import { SessionService } from '../../../../auth/services/session.service'
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DailyMenuComponent implements OnInit {
+export class AlacarteMenuComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,

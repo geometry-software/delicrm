@@ -29,6 +29,8 @@ export class DeliveryService {
   }
 
   getDeliveriesById(id: string) {
+    console.log(id);
+
     return this.repositoryService.getAllDocumentsById(this.collection, id)
   }
 

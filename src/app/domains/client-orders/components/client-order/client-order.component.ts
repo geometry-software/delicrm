@@ -5,7 +5,7 @@ import { setProteinImage } from '../../../../shared/utils/protein-image'
 // import { DeliveryService } from '../../services/delivery.service'
 import { SharedModule } from '../../../../shared/shared.module'
 import { UserService } from '../../../users/services/user.service'
-import { filter, map, switchMap, tap } from 'rxjs'
+import { catchError, EMPTY, filter, map, switchMap, tap } from 'rxjs'
 import { Order } from '../../../orders/models/order.model'
 import { MatDialog } from '@angular/material/dialog'
 // import { DeliveryStatusComponent } from '../delivery-status/delivery-status.component'
@@ -64,6 +64,10 @@ export class ClientOrderComponent {
           progress: delivery.progress,
           status: delivery.status
         }
+      }),
+      catchError(() => {
+        this.signalService.setLoadingStatus(LoadingStatus.Failed)
+        return EMPTY
       })
     ))
   )

@@ -11,6 +11,7 @@ import { SignalService } from '../../../shared/services/signal.service'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { NotificationService } from '../../../shared/services/notification.service'
 import { AuthConstants } from '../../../auth/models/auth.constants'
+import { BootstrapConstants } from '../../../bootstrap/models/bootstrap.constants'
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class UserService {
         map(auth => mapAdminUser(auth.authId, {
           avatar: AuthConstants.adminAvatarPath,
           email: firebaseUser.email,
-          locale: AuthConstants.defaultLocale,
+          locale: BootstrapConstants.locale,
           name
         })),
         switchMap(user => this.repositoryService.setDocument(this.collection, user, user.userId).pipe(
@@ -85,6 +86,10 @@ export class UserService {
 
   updateName(name: string, id: string) {
     return this.repositoryService.updateDocument(this.collection, { name }, id)
+  }
+
+  updateLanguage(id: string, locale: string) {
+    return this.repositoryService.updateDocument(this.collection, { locale }, id)
   }
 
   updateStatus(id: string, status: UserStatus, role: UserRole) {

@@ -1,11 +1,12 @@
 import { getCurrentUnixTime } from "../../shared/utils/format-unix-time"
 import { Auth } from "./auth.model"
 import { AuthConstants } from "./auth.constants"
+// import { BootstarpConstants } from "../../bootstrap/models/bootstrap.constants"
 
-export const mapAuth = (authId: string): Auth => ({
+export const mapAuth = (authId: string, locale: string): Auth => ({
     authId,
     createdAt: getCurrentUnixTime(),
-    locale: AuthConstants.defaultLocale,
+    locale,
     status: 'auth',
     name: null,
     email: null,
@@ -16,10 +17,9 @@ export const mapAuth = (authId: string): Auth => ({
 })
 
 export const mapRequested = (authId: string, email: string, name: string, avatar: string, locale: string): Auth => ({
-    ...mapAuth(authId),
+    ...mapAuth(authId, locale),
     status: 'requested',
     name,
     email,
-    locale,
     avatar
 })

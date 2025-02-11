@@ -42,7 +42,8 @@ export class BoardLayoutComponent implements OnInit {
   readonly buttonTitleMenu = 'Daily menu'
 
   readonly imageRoute = '/admin'
-  readonly formRoute = '/admin/form'
+  readonly formRoute = '/admin/daily'
+  readonly alacarteRoute = '/admin/alacarte'
   readonly LoadingStatus = LoadingStatus
   readonly formComponentConfig = SharedConstants.formComponentConfig
   readonly loadingStatus = this.store.select(loadingStatus)

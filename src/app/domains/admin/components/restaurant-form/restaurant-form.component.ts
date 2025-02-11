@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
 import { highlightInvalidFields, showFieldErrors } from '../../../../shared/utils/form-error-handling'
 import { RestaurantFormProps, restaurantFormGroup } from '../../models/restaurant.form'
 import { SharedModule } from '../../../../shared/shared.module'
+import { BootstrapConstants } from '../../../../bootstrap/models/bootstrap.constants'
 
 @Component({
   selector: 'restaurant-form',
@@ -22,8 +23,11 @@ export class RestaurantFormComponent implements OnInit {
   readonly formProps = RestaurantFormProps
   readonly form = restaurantFormGroup
   readonly showFieldErrors = showFieldErrors
+  readonly languageOptions = BootstrapConstants.languageOptions
 
   ngOnInit(): void {
+    this.form.controls[RestaurantFormProps.web].setValue(BootstrapConstants.web)
+    this.form.controls[RestaurantFormProps.web].disable()
     if (this.dialogData) {
       this.form.patchValue(this.dialogData)
     }

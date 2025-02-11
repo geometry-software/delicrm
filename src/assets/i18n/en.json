@@ -25,6 +25,8 @@
     "FIELD_ERROR_MESSAGE": {
       "REQUIRED": "Field is required",
       "EMAIL": "Email format is not valid",
+      "MINLENGTH": "Minimum password length has to be 6 symbols",
+      "PASSWORDS_NOT_MATCHED": "Passwords are not matched",
       "ZERO_TABLE_NUMBER": "Table can't be 0",
       "DEFAULT": "Error"
     }
@@ -190,7 +192,7 @@
       "EMAIL": {
         "CONFIRM": {
           "TITLE": "Confirmation email was sent",
-          "SUBTITLE": "Please confirm email to proceed with the admin registration"
+          "SUBTITLE": "Please confirm email to proceed with the admin registration. If email is not appeared, please check the spam folder or resend confirmation letter"
         },
         "CONFIRMED": {
           "TITLE": "Congrats!",
@@ -198,7 +200,7 @@
         },
         "BUTTON": {
           "UPDATE": "Update",
-          "RESEND": "Resend email"
+          "RESEND": "Resend confirmation"
         }
       },
       "REGISTER_RESTAURANT": {
@@ -488,13 +490,14 @@
     "NAVBAR": "Board",
     "TOOLBAR": {
       "BOARD": "Board",
-      "MENU_FORM": "Menu form",
+      "MENU_FORM": "Daily menu form",
+      "ALACARTE_FORM": "Alacarte menu form",
       "REPORTS": "Reports",
       "REPORT": "Report details"
     },
     "BOARD": {
       "BUTTON": {
-        "UPDATE": "Update menu",
+        "UPDATE": "Update daily menu",
         "CLOSE": "Close service",
         "OPEN": "Open service",
         "DOWNLOAD": "Download",
@@ -508,6 +511,13 @@
           "TITLE": "Clear menu",
           "SUBTITLE": "Are you sure you want to clear the menu?"
         }
+      },
+      "IMAGE_MENU": {
+        "NOT_PUBLISHED": "Menu is not published",
+        "TITLE": "Daily Menu",
+        "DELIVERY": "Delivery",
+        "ADDRESS": "Address",
+        "PHONE": "Phone"
       },
       "FORM": {
         "TAB": {
@@ -550,16 +560,16 @@
         "CREATE": "Fill out the form to proceed with the registration",
         "EDIT": "Change restaurant info"
       },
-      "NAME": "Name",
-      "DESCRIPTION": "Description",
+      "NAME": "Restaurant name",
+      "DESCRIPTION": "Restaurant description",
       "CONTACT": "Contact name",
-      "ADDRESS": "Address",
-      "PHONE": "Phone",
+      "ADDRESS": "Restaurant address",
+      "PHONE": "Restaurant phone",
+      "CLOSED": "Text shown when restaurant is closed",
       "WEB": "Web",
-      "OPEN_TIME": "Open at time",
+      "LANG": "Choose language",
       "CURRENCY": "Currency",
       "DELIVERY": "Delivery amount",
-      "DISCOUNT": "Discount amount",
       "BUTTON": {
         "CANCEL": "Cancel",
         "CREATE": "Register",

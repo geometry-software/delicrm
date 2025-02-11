@@ -166,7 +166,8 @@ export class RecipeEffects implements OnInitEffects {
   )
 
   private handleError(error, query) {
-    this.signalService.setLoadingStatus(LoadingStatus.LoadingFailed)
+    this.signalService.setLoadingStatus(LoadingStatus.Failed)
+    this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.Failed }))
     return of(ItemActions.notifyError({ error, query }))
   }
 
