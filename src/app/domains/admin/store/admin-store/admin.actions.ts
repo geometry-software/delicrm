@@ -12,6 +12,7 @@ export const AdminActions = createActionGroup({
     'Create Daily Menu': props<{ menu: DailyMenu }>(),
     'Rebuild Daily Menu': emptyProps(),
     'Rebuild Daily Menu Success': emptyProps(),
+    'Copy Daily Menu': emptyProps(),
     'Get Daily Menu': emptyProps(),
     'Set Daily Menu': props<{ menu: DailyMenu }>(),
     'Get Restaurant Info': emptyProps(),

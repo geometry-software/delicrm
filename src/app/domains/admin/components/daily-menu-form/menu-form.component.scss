@@ -14,6 +14,14 @@
   .mat-stepper-horizontal {
     background: none;
   }
+
+  ::ng-deep .mat-step-header {
+    pointer-events: none !important;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
 }
 
 .empty-bar {
@@ -39,5 +47,32 @@
 .main-dish {
   color: #555;
   font-size: 1.4em;
+  font-weight: 500;
+}
+
+
+.add-button {
+  width: 100%;
+}
+
+.section-border {
+  border: 1px #ddd solid;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.section-row {
+  display: flex;
+  gap: 10px
+}
+
+.no-extras {
+  text-align: center;
+  padding-top: 10px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 0.8em;
   font-weight: 500;
 }

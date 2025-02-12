@@ -41,7 +41,7 @@
       "STARTERS": "Starters",
       "DRINKS": "Drinks",
       "SIDE_DISHES": "Side dishes",
-      "DESSERT": "Dessert"
+      "DESSERTS": "Desserts"
     },
     "NOT_FOUND": {
       "PAGE": "Page not found",
@@ -55,6 +55,7 @@
       "STARTER": "Starter",
       "DRINK": "Drink",
       "SIDE_DISH": "Side dish",
+      "DESSERT": "Dessert",
       "ALACARTE": "A la carte"
     },
     "PROTEIN_TYPE": {
@@ -503,7 +504,8 @@
         "DOWNLOAD": "Download",
         "CONFIG": "Configuration",
         "BACK": "Back",
-        "REBUILD": "Rebuild daily menu",
+        "REBUILD": "Rebuild",
+        "COPY": "Copy from yesterday",
         "ALACARTE": "A la carte menu"
       },
       "CLOSE_SERVICE": {
@@ -535,11 +537,11 @@
         },
         "PLATES_AMOUNT": "plates",
         "ALL_REQUIRED_VALIDATION": "Not all positions were chosen",
-        "LABEL": {
-          "STARTER": "Starter",
-          "DRINK": "Drink",
-          "SALAD": "Salad",
-          "SIDE_DISH": "Side dish"
+        "EMPTY_EXTRAS": {
+          "STARTER": "No starters added",
+          "DRINK": "No drinks added",
+          "SIDE_DISH": "No side dishes added",
+          "DESSERT": "No desserts added"
         },
         "UPDATE": "Update menu",
         "CLOSE": "Close service",

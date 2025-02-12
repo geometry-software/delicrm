@@ -1,5 +1,5 @@
 <button [type]="type" [routerLink]="url" [disabled]="disabled"
-  [ngClass]="{ back: 'back', save: 'save', edit: 'edit', delete: 'delete' }[actionType]"
+  [ngClass]="{ back: 'back', save: 'save', edit: 'edit', delete: 'delete' }[action]"
   [style.width]="width === 'full' ? '100% !important' : 'auto'" [style.background]="background" (click)="submit.emit()">
   <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
   <div [ngStyle]="{ 'padding-left': icon ? '5px' : '0' }">

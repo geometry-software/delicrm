@@ -28,7 +28,7 @@
           </mat-error>
         </mat-form-field>
 
-        <app-button actionType="save" width="full" type="submit" [disabled]="isAdminLoginLoading"
+        <app-button action="save" width="full" type="submit" [disabled]="isAdminLoginLoading"
           [title]="isAdminLoginLoading ?  'AUTH.LOGIN.ADMIN.BUTTON.LOADING' : 'AUTH.LOGIN.ADMIN.BUTTON.ACTION'" />
       </form>
     </mat-tab>
@@ -50,7 +50,7 @@
       *ngIf="(adminEmailWasVerified | async ) && (restaurantRegisterStatus | async) as status; else confirmedEmail">
       <app-title title='AUTH.ADMIN.EMAIL.CONFIRMED.TITLE' subtitle='AUTH.ADMIN.EMAIL.CONFIRMED.SUBTITLE' />
 
-      <app-button title="AUTH.ADMIN.REGISTER_RESTAURANT.BUTTON" actionType="save" (submit)="registerRestaurant()" />
+      <app-button title="AUTH.ADMIN.REGISTER_RESTAURANT.BUTTON" action="save" (submit)="registerRestaurant()" />
 
       <ng-container [ngSwitch]="status">
         <ng-container *ngSwitchCase="RestaurantLoadingStatus.Registering">
@@ -77,7 +77,7 @@
     <app-title title="AUTH.ADMIN.EMAIL.CONFIRM.TITLE" subtitle="AUTH.ADMIN.EMAIL.CONFIRM.SUBTITLE" />
     <div class="flex gap-[10px]">
       <app-button title="AUTH.ADMIN.EMAIL.BUTTON.UPDATE" (submit)="update()" />
-      <app-button title="AUTH.ADMIN.EMAIL.BUTTON.RESEND" actionType="save" (submit)="sendEmail()" />
+      <app-button title="AUTH.ADMIN.EMAIL.BUTTON.RESEND" action="save" (submit)="sendEmail()" />
     </div>
   </ng-template>
 </ng-container>

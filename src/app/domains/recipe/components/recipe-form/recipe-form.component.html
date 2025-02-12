@@ -75,8 +75,7 @@
       <mat-progress-spinner mode="determinate" [value]="uploadProgress" [diameter]="25"></mat-progress-spinner>
     </span>
 
-    <app-button actionType="save" width="full" type="submit"
-      [disabled]="(loadingState | async) === LoadingStatus.Loading"
+    <app-button action="save" width="full" type="submit" [disabled]="(loadingState | async) === LoadingStatus.Loading"
       [title]="(loadingState | async) === LoadingStatus.Loading ?  'RECIPES.FORM.BUTTON.LOADING' : 'RECIPES.FORM.BUTTON.ACTION'" />
   </form>
 </div>

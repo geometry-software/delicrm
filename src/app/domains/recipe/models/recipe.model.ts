@@ -28,6 +28,7 @@ export type RecipeType =
   | 'starter'
   | 'drink'
   | 'side'
+  | 'dessert'
   | 'alacarte'
 
 export type RecipeProtein = 'meat' | 'chicken' | 'fish' | 'veg'

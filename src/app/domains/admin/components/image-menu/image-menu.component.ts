@@ -46,6 +46,7 @@ export class ImageMenuComponent implements OnInit {
     }))
   )
   readonly commonImg = 'assets/dish.png'
+  readonly web = BootstrapConstants.web
   readonly isLoaded = this.store.select(loadingStatus).pipe(
     map(loading => loading === LoadingStatus.Loaded))
 

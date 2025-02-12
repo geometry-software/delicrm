@@ -21,7 +21,9 @@ export class RestaurantService {
   private readonly menuDocument = RestaurantConstants.menuDocument
 
   createRestaurant(item: Restaurant) {
-    return this.repositoryService.setDocument(this.collection, item, this.infoDocument)
+    return this.repositoryService.setDocument(this.collection, item, this.infoDocument).pipe(
+      switchMap(() => this.repositoryService.setDocument(this.collection, this.getInitialDailyMenu(), this.menuDocument))
+    )
   }
 
   updateRestaurantInfo(item: Restaurant) {
@@ -33,7 +35,7 @@ export class RestaurantService {
   }
 
   updateDailyMenu(menu: DailyMenu) {
-    return this.repositoryService.setDocument(this.collection, menu, this.menuDocument)
+    return this.repositoryService.updateDocument(this.collection, menu, this.menuDocument)
   }
 
   cleanDailyMenu() {
@@ -63,6 +65,7 @@ export class RestaurantService {
     const updatedAlacarte = (menu.alacarte ?? []).map(item => this.updateItemEightySix(item, id))
     const updatedStarters = menu.extras.starters.map(item => this.updateItemEightySix(item, id))
     const updatedDrinks = menu.extras.drinks.map(item => this.updateItemEightySix(item, id))
+    const updatedDesserts = menu.extras.desserts.map(item => this.updateItemEightySix(item, id))
     const updatedSideDishes = menu.extras.sideDishes.map(item => this.updateItemEightySix(item, id))
     const updatedMenu: DailyMenu = {
       ...menu,
@@ -71,7 +74,8 @@ export class RestaurantService {
       extras: {
         drinks: updatedDrinks,
         starters: updatedStarters,
-        sideDishes: updatedSideDishes
+        sideDishes: updatedSideDishes,
+        desserts: updatedDesserts
       }
     }
     return updatedMenu
@@ -84,6 +88,24 @@ export class RestaurantService {
     } else {
       return item
     }
+  }
+
+  private getInitialDailyMenu() {
+    const menu: DailyMenu = {
+      createdAt: null,
+      extras: null,
+      extrasAmount: {
+        starters: 0,
+        drinks: 0,
+        sideDishes: 0,
+        desserts: 0
+      },
+      main: [],
+      open: false,
+      orders: [],
+      alacarte: []
+    }
+    return menu
   }
 
 }

@@ -96,7 +96,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
 
   setTranslate() {
     combineLatest([this.appAuth, this.appUser]).subscribe(value => {
-      let locale
+      let locale = BootstrapConstants.locale
       if (value[0]) {
         locale = value[0].locale
       }

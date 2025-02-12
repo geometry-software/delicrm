@@ -18,7 +18,7 @@ export class AppButtonComponent {
   @Input()
   disabled: boolean
   @Input()
-  actionType: string = 'back'
+  action: string = 'back'
   @Input()
   type: string = 'button'
   @Input()

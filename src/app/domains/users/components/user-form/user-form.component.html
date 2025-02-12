@@ -21,7 +21,7 @@
     </mat-form-field>
 
     <div class="form-actions">
-      <app-button title="USERS.FORM.BUTTON" actionType="save" width="full"
+      <app-button title="USERS.FORM.BUTTON" action="save" width="full"
         [disabled]="(loading | async) === LoadingStatus.Loading" (submit)="confirm()" />
     </div>
 

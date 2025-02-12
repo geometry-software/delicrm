@@ -1,7 +1,6 @@
 <div *ngIf="order; else orderNotFoundTemplate" class="p-[3px]">
   <div class="order-actions">
-    <app-button title="ORDERS.DETAIL.BUTTON.BACK" actionType="back" [icon]="'arrow_back'"
-      [url]="'/orders'"></app-button>
+    <app-button title="ORDERS.DETAIL.BUTTON.BACK" action="back" [icon]="'arrow_back'" [url]="'/orders'"></app-button>
     <app-button title="ORDERS.DETAIL.BUTTON.UPDATE" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
       icon="check_small" (click)="update()" />
     <app-button title="ORDERS.DETAIL.BUTTON.PRINT" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"

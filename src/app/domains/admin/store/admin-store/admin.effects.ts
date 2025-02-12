@@ -42,10 +42,11 @@ export class AdminEffects implements OnInitEffects {
       tap(() => this.setLoading()),
       switchMap(() => combineLatest([
         this.restaurantService.getRestaurantInfo(),
+        this.restaurantService.getDailyMenu(),
         this.recipeService.getAll(),
       ]).pipe(
-        map(([restaurant, recipes]) => {
-          this.menuFormService.initForm(restaurant.startersAmount, restaurant.drinksAmount, restaurant.sideDishesAmount)
+        map(([restaurant, menu, recipes]) => {
+          this.menuFormService.initForm(menu, recipes)
           return ItemActions.setRestaurantInfo({ restaurant, recipes })
         }),
         tap(() => this.setLoaded()),
@@ -87,16 +88,18 @@ export class AdminEffects implements OnInitEffects {
     this.actions.pipe(
       ofType(ItemActions.rebuildDailyMenu),
       map(() => {
-        this.menuFormService.menuForm.reset()
-        this.menuFormService.menuForm.markAsPristine()
-        this.menuFormService.menuForm.markAsUntouched()
-        this.menuFormService.plateForm.reset()
-        this.menuFormService.plateForm.markAsPristine()
-        this.menuFormService.plateForm.markAsUntouched()
-        this.router.navigate(['/admin/form'])
+        this.menuFormService.resetChosenPlates()
+        this.router.navigate(['/admin/daily'])
         return ItemActions.rebuildDailyMenuSuccess()
       })
     )
+  )
+
+  copyDailyMenu = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.copyDailyMenu),
+      tap(() => this.menuFormService.patchForms())
+    ), { dispatch: false }
   )
 
   closeShift = createEffect(() =>

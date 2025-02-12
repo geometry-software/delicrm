@@ -83,13 +83,12 @@ export class LoginComponent {
   registerRestaurant() {
     this.matDialog.open(RestaurantFormComponent, this.restaurantFormComponentConfig)
       .afterClosed().pipe(
-        tap(console.warn),
         filter(Boolean),
         tap(() => this.restaurantRegisterStatus.next(RestaurantLoadingStatus.Registering)),
-        switchMap(value => this.userService.createAdminUser(this.adminCollectionId, value.contact).pipe(
+        switchMap(value => this.userService.createAdminUser(this.adminCollectionId, value.contact, value.locale).pipe(
           switchMap(user => this.restaurantService.createRestaurant(value).pipe(
             switchMap(() => this.authService.deleteAdminAuth().pipe(
-              tap(() => this.redirectToAdmin(user)),
+              tap(() => this.redirectAfterRegistration(user)),
               catchError(error => this.handleRegisterRestaurantError(error)))),
             catchError(error => this.handleRegisterRestaurantError(error)))),
           catchError(error => this.handleRegisterRestaurantError(error)))),
@@ -107,7 +106,7 @@ export class LoginComponent {
     location.reload()
   }
 
-  redirectToAdmin(user: User) {
+  redirectAfterRegistration(user: User) {
     this.notificationService.success('AUTH.ADMIN.REGISTER_RESTAURANT.SUCCESS')
     this.sessionService.setUser(user)
     this.router.navigate([RecipeConstants.moduleUrl])

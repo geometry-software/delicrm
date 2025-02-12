@@ -2,11 +2,11 @@
   <div class="header-toolbar" *ngIf="layoutTypeSignal() as type">
     <ng-container [ngSwitch]="type">
       <ng-container *ngSwitchCase="'form'">
-        <app-button title="BUTTON.BACK" actionType="back" icon="arrow_back" [url]="getPlaceUrl()" />
+        <app-button title="BUTTON.BACK" action="back" icon="arrow_back" [url]="getPlaceUrl()" />
         <app-button *ngIf="item" title="BUTTON.DELETE" icon="clear" type="delete" (click)="deleteRecipe()" />
       </ng-container>
       <ng-container *ngSwitchCase="'list'">
-        <app-button *ngIf="url" title="BUTTON.ADD" icon="add" actionType="back" [url]="getCreateUrl()" />
+        <app-button *ngIf="url" title="BUTTON.ADD" icon="add" action="back" [url]="getCreateUrl()" />
         <input class="list-search-field" [formControl]="searchControl" [placeholder]="searchPlaceholder | translate" />
       </ng-container>
     </ng-container>

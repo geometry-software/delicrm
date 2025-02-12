@@ -14,7 +14,7 @@
     </ng-container>
     <ng-template #userActions>
       <div class="user-actions">
-        <app-button title="DELIVERY.DETAIL.BUTTON.BACK" actionType="back" icon="arrow_back" url="/delivery" />
+        <app-button title="DELIVERY.DETAIL.BUTTON.BACK" action="back" icon="arrow_back" url="/delivery" />
         <app-button title="DELIVERY.DETAIL.BUTTON.UPDATE" [disabled]="(loadingStatus | async) === LoadingStatus.Loading"
           icon="arrow_forward" (click)="update()" />
       </div>

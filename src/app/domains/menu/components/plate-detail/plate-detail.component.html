@@ -15,13 +15,13 @@
   </div>
   <br />
 
-  <app-button actionType="save" (click)="addPlate()" title="MENU.PLATE_DETAIL.ADD_BUTTON" width="full" />
+  <app-button action="save" (click)="addPlate()" title="MENU.PLATE_DETAIL.ADD_BUTTON" width="full" />
 
   <br>
   <div class="form-actions" *ngIf="hasDeleteAuth">
-    <app-button *ngIf="!plate.eightySix" title="MENU.PLATE_DETAIL.86_BUTTON.REMOVE" actionType="back"
+    <app-button *ngIf="!plate.eightySix" title="MENU.PLATE_DETAIL.86_BUTTON.REMOVE" action="back"
       (submit)="removePlate()" />
-    <app-button *ngIf="plate.eightySix" title="MENU.PLATE_DETAIL.86_BUTTON.RETURN_BACK" actionType="back"
+    <app-button *ngIf="plate.eightySix" title="MENU.PLATE_DETAIL.86_BUTTON.RETURN_BACK" action="back"
       (submit)="returnPlate()" />
   </div>
 </div>

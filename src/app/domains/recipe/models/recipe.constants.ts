@@ -36,6 +36,7 @@ export enum PLATE_TYPE_TRANSLATE {
   starter = 'MISC.PLATE_TYPE.STARTER',
   drink = 'MISC.PLATE_TYPE.DRINK',
   side = 'MISC.PLATE_TYPE.SIDE_DISH',
+  dessert = 'MISC.PLATE_TYPE.DESSERT',
   alacarte = 'MISC.PLATE_TYPE.ALACARTE',
 }
 

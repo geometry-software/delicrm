@@ -1,53 +1,113 @@
 <mat-stepper [linear]="true" #stepper *ngIf="isFormDataLoaded | async">
-  <mat-step [stepControl]="menuForm" [label]="'ADMIN.BOARD.FORM.TAB.STARTERS' | translate">
-    <form [formGroup]="menuForm" (ngSubmit)="addExtras(menuForm, stepper)">
+  <mat-step [stepControl]="extrasForm" [label]="'ADMIN.BOARD.FORM.TAB.STARTERS' | translate">
+    <form [formGroup]="extrasForm" (ngSubmit)="addExtras(extrasForm, stepper)">
 
-      <div class="section">{{ 'SHARED.DAILY_MENU.STARTERS' | translate }}</div>
-      <div formArrayName="starters" *ngFor="let item of starters.controls; let i = index">
-        <mat-form-field [hideRequiredMarker]="true">
-          <mat-label> {{ getStartersLabel(i) }} </mat-label>
-          <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoStarter" />
-          <mat-autocomplete requireSelection #autoStarter="matAutocomplete" [displayWith]="displayFn">
-            <mat-option *ngFor="let option of filteredStarterOptions[i] | async" [value]="option">
-              {{ option.name }}
-            </mat-option>
-          </mat-autocomplete>
-          <mat-error *ngIf="showFieldErrors(menuForm, 'starters', i) as error">
-            {{ error | translate }}
-          </mat-error>
-        </mat-form-field>
+      <div class="section-border">
+        <div class="section">{{ 'SHARED.DAILY_MENU.STARTERS' | translate }}</div>
+        <div class="section-row" formArrayName="starters" *ngFor="let item of starters.controls; let i = index">
+          <mat-form-field [hideRequiredMarker]="true">
+            <mat-label> {{ getStartersLabel(i) }} </mat-label>
+            <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoStarter" />
+            <mat-autocomplete requireSelection #autoStarter="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let option of filteredStarterOptions[i] | async" [value]="option">
+                {{ option.name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="showFieldErrors(extrasForm, 'starters', i) as error">
+              {{ error | translate }}
+            </mat-error>
+          </mat-form-field>
+          <button mat-icon-button (click)="removeStarter(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <div class="no-extras" *ngIf="!starters.controls.length">
+          {{ 'ADMIN.BOARD.FORM.EMPTY_EXTRAS.STARTER' | translate }}
+        </div>
+        <button class="add-button" mat-button (click)="addStarter()">
+          <mat-icon>add</mat-icon>
+        </button>
       </div>
 
-      <div class="section">{{ 'SHARED.DAILY_MENU.DRINKS' | translate }}</div>
-      <div formArrayName="drinks" *ngFor="let item of drinks.controls; let i = index">
-        <mat-form-field [hideRequiredMarker]="true">
-          <mat-label> {{ getDrinksLabel(i) }} </mat-label>
-          <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoDrink" />
-          <mat-autocomplete requireSelection #autoDrink="matAutocomplete" [displayWith]="displayFn">
-            <mat-option *ngFor="let option of filteredDrinkOptions[i] | async" [value]="option">
-              {{ option.name }}
-            </mat-option>
-          </mat-autocomplete>
-          <mat-error *ngIf="showFieldErrors(menuForm, 'drinks', i) as error">
-            {{ error | translate }}
-          </mat-error>
-        </mat-form-field>
+      <div class="section-border">
+        <div class="section">{{ 'SHARED.DAILY_MENU.DRINKS' | translate }}</div>
+        <div class="section-row" formArrayName="drinks" *ngFor="let item of drinks.controls; let i = index">
+          <mat-form-field [hideRequiredMarker]="true">
+            <mat-label> {{ getDrinksLabel(i) }} </mat-label>
+            <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoDrink" />
+            <mat-autocomplete requireSelection #autoDrink="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let option of filteredDrinkOptions[i] | async" [value]="option">
+                {{ option.name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="showFieldErrors(extrasForm, 'drinks', i) as error">
+              {{ error | translate }}
+            </mat-error>
+          </mat-form-field>
+          <button mat-icon-button (click)="removeDrink(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <div class="no-extras" *ngIf="!drinks.controls.length">
+          {{ 'ADMIN.BOARD.FORM.EMPTY_EXTRAS.DRINK' | translate }}
+        </div>
+        <button class="add-button" mat-button (click)="addDrink()">
+          <mat-icon>add</mat-icon>
+        </button>
       </div>
 
-      <div class="section">{{ 'SHARED.DAILY_MENU.SIDE_DISHES' | translate }}</div>
-      <div formArrayName="sideDishes" *ngFor="let item of sideDishes.controls; let i = index">
-        <mat-form-field [hideRequiredMarker]="true">
-          <mat-label> {{ getSideDishesLabel(i) }} </mat-label>
-          <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoSidedish" />
-          <mat-autocomplete requireSelection #autoSidedish="matAutocomplete" [displayWith]="displayFn">
-            <mat-option *ngFor="let option of filteredSideDishesOptions[i] | async" [value]="option">
-              {{ option.name }}
-            </mat-option>
-          </mat-autocomplete>
-          <mat-error *ngIf="showFieldErrors(menuForm, 'sideDishes', i) as error">
-            {{ error | translate }}
-          </mat-error>
-        </mat-form-field>
+      <div class="section-border">
+        <div class="section">{{ 'SHARED.DAILY_MENU.SIDE_DISHES' | translate }}</div>
+        <div class="section-row" formArrayName="sideDishes" *ngFor="let item of sideDishes.controls; let i = index">
+          <mat-form-field [hideRequiredMarker]="true">
+            <mat-label> {{ getSideDishesLabel(i) }} </mat-label>
+            <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoSidedish" />
+            <mat-autocomplete requireSelection #autoSidedish="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let option of filteredSideDishOptions[i] | async" [value]="option">
+                {{ option.name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="showFieldErrors(extrasForm, 'sideDishes', i) as error">
+              {{ error | translate }}
+            </mat-error>
+          </mat-form-field>
+          <button mat-icon-button (click)="removeSidedish(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <div class="no-extras" *ngIf="!sideDishes.controls.length">
+          {{ 'ADMIN.BOARD.FORM.EMPTY_EXTRAS.SIDE_DISH' | translate }}
+        </div>
+        <button class="add-button" mat-button (click)="addSidedish()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
+      <div class="section-border">
+        <div class="section">{{ 'SHARED.DAILY_MENU.DESSERTS' | translate }}</div>
+        <div class="section-row" formArrayName="desserts" *ngFor="let item of desserts.controls; let i = index">
+          <mat-form-field [hideRequiredMarker]="true">
+            <mat-label> {{ getDessertLabel(i) }} </mat-label>
+            <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoDessert" />
+            <mat-autocomplete requireSelection #autoDessert="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let option of filteredDessertOptions[i] | async" [value]="option">
+                {{ option.name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="showFieldErrors(extrasForm, 'desserts', i) as error">
+              {{ error | translate }}
+            </mat-error>
+          </mat-form-field>
+          <button mat-icon-button (click)="removeDessert(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <div class="no-extras" *ngIf="!desserts.controls.length">
+          {{ 'ADMIN.BOARD.FORM.EMPTY_EXTRAS.DESSERT' | translate }}
+        </div>
+        <button class="add-button" mat-button (click)="addDessert()">
+          <mat-icon>add</mat-icon>
+        </button>
       </div>
 
       <div *ngIf="hasStartersValidationError" class="validation-error-message">
@@ -58,7 +118,7 @@
   </mat-step>
 
   <mat-step [label]="'ADMIN.BOARD.FORM.TAB.MAIN_DISHES' | translate">
-    <form [formGroup]="plateForm" (ngSubmit)="choosePlates(stepper)">
+    <form [formGroup]="platesForm" (ngSubmit)="choosePlates(stepper)">
 
       <div class="section">{{ 'SHARED.DAILY_MENU.MAIN_PLATES' | translate }}</div>
       <div class="flex items-center" *ngFor="let item of plateList; let i = index">
@@ -75,13 +135,13 @@
 
     </form>
   </mat-step>
-  <mat-step [stepControl]="plateForm" [label]="'ADMIN.BOARD.FORM.TAB.CONFIRM' | translate">
+  <mat-step [stepControl]="platesForm" [label]="'ADMIN.BOARD.FORM.TAB.CONFIRM' | translate">
 
-    <app-formatted-daily-menu *ngIf="dailyMenu.main" [dailyMenu]="dailyMenu" [currency]="currency | async" />
+    <app-formatted-daily-menu *ngIf="dailyMenu" [dailyMenu]="dailyMenu" [currency]="currency | async" />
     <br />
     <app-button
       [title]="!(isLoading | async) ? 'ADMIN.BOARD.FORM.BUTTON.CONFIRM.ACTION' : 'ADMIN.BOARD.FORM.BUTTON.CONFIRM.LOADING'"
-      [disabled]="(isLoading | async)" actionType="save" width="full" (click)="createDailyMenu()" />
+      [disabled]="(isLoading | async)" action="save" width="full" (click)="createDailyMenu()" />
 
   </mat-step>
 </mat-stepper>

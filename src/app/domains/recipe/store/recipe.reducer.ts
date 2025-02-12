@@ -41,8 +41,9 @@ export const reducer = createReducer<State>(
   })),
   on(ItemActions.createItemSuccess, (state, { item }) => ({
     ...state,
-    item: {
-      data: item,
+    items: {
+      ...state.items,
+      item
     },
   })),
 )

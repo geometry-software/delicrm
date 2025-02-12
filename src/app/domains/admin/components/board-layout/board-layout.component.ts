@@ -106,4 +106,8 @@ export class BoardLayoutComponent implements OnInit {
     this.store.dispatch(AdminActions.rebuildDailyMenu())
   }
 
+  copy() {
+    this.store.dispatch(AdminActions.copyDailyMenu())
+  }
+
 }

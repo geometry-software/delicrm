@@ -25,14 +25,14 @@ export class UserService {
 
   private readonly collection = UserConstants.collectionName
 
-  createAdminUser(id: string, name: string) {
+  createAdminUser(id: string, name: string, locale: string) {
     return this.authService.firebaseUser.pipe(
       filter(firebaseUser => firebaseUser?.emailVerified),
       switchMap(firebaseUser => this.authService.getAuth(id).pipe(
         map(auth => mapAdminUser(auth.authId, {
           avatar: AuthConstants.adminAvatarPath,
           email: firebaseUser.email,
-          locale: BootstrapConstants.locale,
+          locale,
           name
         })),
         switchMap(user => this.repositoryService.setDocument(this.collection, user, user.userId).pipe(

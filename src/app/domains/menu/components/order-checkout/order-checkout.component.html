@@ -208,8 +208,7 @@
       {{ 'MENU.CHECKOUT.VALIDATION.TAKEAWAY_NAME' | translate }}
     </div>
 
-    <app-button actionType="save" type="submit" width="full"
-      [disabled]="(loadingStatus| async) === LoadingStatus.Loading"
+    <app-button action="save" type="submit" width="full" [disabled]="(loadingStatus| async) === LoadingStatus.Loading"
       [title]="(loadingStatus| async) === LoadingStatus.Loading ? 'MENU.CHECKOUT.BUTTON.LOADING' : 'MENU.CHECKOUT.BUTTON.ACTION'" />
   </form>
 </div>

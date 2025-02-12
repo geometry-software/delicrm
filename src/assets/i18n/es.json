@@ -41,7 +41,7 @@
       "STARTERS": "Entradas",
       "DRINKS": "Bebidas",
       "SIDE_DISHES": "Acompañamientos",
-      "DESSERT": "Postre"
+      "DESSERTS": "Postres"
     },
     "NOT_FOUND": {
       "PAGE": "Página no encontrada",
@@ -55,6 +55,7 @@
       "STARTER": "Entrada",
       "DRINK": "Bebida",
       "SIDE_DISH": "Acompañamiento",
+      "DESSERT": "Dessert",
       "ALACARTE": "A la carta"
     },
     "PROTEIN_TYPE": {
@@ -491,6 +492,7 @@
     "TOOLBAR": {
       "BOARD": "Tablero",
       "MENU_FORM": "Formulario menú del dia",
+      "ALACARTE_FORM": "Alacarte menú form",
       "REPORTS": "Reportes",
       "REPORT": "Detalles del reporte"
     },
@@ -502,7 +504,8 @@
         "DOWNLOAD": "Descargar",
         "CONFIG": "Configuración",
         "BACK": "Atrás",
-        "REBUILD": "Reconstruir menú diario",
+        "REBUILD": "Reconstruir",
+        "COPY": "Copiar de ayer",
         "ALACARTE": "Menú a la carta"
       },
       "CLOSE_SERVICE": {
@@ -534,11 +537,11 @@
         },
         "PLATES_AMOUNT": "platos",
         "ALL_REQUIRED_VALIDATION": "No se han elegido todas las posiciones",
-        "LABEL": {
-          "STARTER": "Entrada",
-          "DRINK": "Bebida",
-          "SALAD": "Ensalada",
-          "SIDE_DISH": "Acompañamiento"
+        "EMPTY_EXTRAS": {
+          "STARTER": "No se añaden entradas",
+          "DRINK": "No se añaden bebidas",
+          "SIDE_DISH": "No se añaden acompañamientos",
+          "DESSERT": "No se añaden postres"
         },
         "UPDATE": "Actualizar menú",
         "CLOSE": "Cerrar servicio",

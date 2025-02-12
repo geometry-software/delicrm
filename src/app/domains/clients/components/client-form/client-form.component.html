@@ -32,7 +32,7 @@
     </mat-form-field>
 
     <div class="form-actions">
-      <app-button title="CLIENTS.FORM.BUTTON" actionType="save" width="full"
+      <app-button title="CLIENTS.FORM.BUTTON" action="save" width="full"
         [disabled]="(loading | async) === LoadingStatus.Loading" (submit)="confirm()" />
     </div>
 

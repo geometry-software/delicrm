@@ -48,7 +48,7 @@ export class RecipeEffects implements OnInitEffects {
       switchMap(({ item }) => this.entityService.create(item).pipe(
         tap(item => {
           this.handleLoadedRequest()
-          this.router.navigate([this.moduleUrl, item.id])
+          this.router.navigate([this.moduleUrl])
           this.notificationService.success(this.createNotificationTitle)
         }),
         map(item => ItemActions.createItemSuccess({ item })),
