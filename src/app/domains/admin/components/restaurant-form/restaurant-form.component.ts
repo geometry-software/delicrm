@@ -28,6 +28,8 @@ export class RestaurantFormComponent implements OnInit {
   ngOnInit(): void {
     this.form.controls[RestaurantFormProps.web].setValue(BootstrapConstants.web)
     this.form.controls[RestaurantFormProps.web].disable()
+    this.form.controls[RestaurantFormProps.locale].setValue(BootstrapConstants.locale)
+    this.form.controls[RestaurantFormProps.locale].disable()
     if (this.dialogData) {
       this.form.patchValue(this.dialogData)
     }

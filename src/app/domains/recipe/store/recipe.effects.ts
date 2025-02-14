@@ -71,12 +71,12 @@ export class RecipeEffects implements OnInitEffects {
   deleteItem = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.deleteItem),
-      tap(() => this.handleLoadingRequest()),
       switchMap(({ id }) => this.confirmationService.confirm(this.deleteTitle, this.deleteSubtitle).pipe(
+        tap(() => this.handleLoadingRequest()),
         switchMap(() => this.entityService.delete(id).pipe(
           tap(() => {
             this.handleLoadedRequest()
-            this.notificationService.warning(this.deleteNotificationTitle)
+            this.notificationService.success(this.deleteNotificationTitle)
             this.router.navigate([this.moduleUrl])
           }),
           catchError(error => this.handleError(error, 'edit')))))))

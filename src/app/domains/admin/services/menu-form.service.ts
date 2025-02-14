@@ -22,9 +22,11 @@ export class MenuFormService {
   private menu: DailyMenu
   private plateListSub = new BehaviorSubject<Array<MenuItem>>([])
   private chosenPlatesSub = new BehaviorSubject<Array<MenuItem>>([])
+  private recipesSub = new BehaviorSubject<Array<MenuItem>>([])
   private extrasAmountSub = new BehaviorSubject<ExtrasAmount>(null)
   extrasForm: FormGroup
-  platesForm: FormGroup
+
+  // this.store.select(getRecipes).pipe(filter(Boolean)),
 
   initForm(menu: DailyMenu, recipes: Recipe[]) {
     this.extrasForm = this.formBuilder.group({
@@ -34,9 +36,9 @@ export class MenuFormService {
       desserts: this.initFormArrayItem(menu.extrasAmount.desserts),
     })
     this.menu = menu
-    this.platesForm = this.formBuilder.group({})
     this.plateList = recipes.filter(value => value.type == 'main')
     this.plateListSub.next(this.plateList)
+    this.recipesSub.next(recipes)
     this.extrasAmountSub.next(menu.extrasAmount)
   }
 
@@ -68,14 +70,16 @@ export class MenuFormService {
     return this.extrasAmountSub.asObservable()
   }
 
+  getRecipes() {
+    return this.recipesSub.asObservable()
+  }
+
   resetChosenPlates() {
     const list = this.plateList.map(el => ({ ...el, isAdded: false }))
     this.plateListSub.next(list)
     this.chosenPlates = []
     this.chosenPlatesSub.next([])
     this.extrasForm.markAsPristine()
-    this.platesForm.reset()
-    this.platesForm.markAsPristine()
   }
 
   patchForms() {

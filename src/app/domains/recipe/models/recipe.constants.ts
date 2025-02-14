@@ -6,7 +6,7 @@ export abstract class RecipeConstants {
   static readonly collectionName = 'Recipes'
   static readonly defaultCreateStatus = 'active'
   static readonly defaultTableSort = 'createdAt'
-  static readonly defaultSearchKey = 'name'
+  static readonly defaultSearchKey = 'nameLowerCase'
   static readonly paginationTitle = 'recipes'
   static readonly paginationSize = [5, 10, 20, 50]
   static readonly moduleUrl = '/recipes'

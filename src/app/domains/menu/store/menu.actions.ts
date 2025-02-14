@@ -10,7 +10,7 @@ export const MenuActions = createActionGroup({
   source: MenuConstants.storeFeatureKey,
   events: {
     'Init Daily Menu': emptyProps(),
-    'Init Daily Menu Success': props<{ menu: DailyMenu, restaurant: Restaurant }>(),
+    'Init Daily Menu Success': props<{ menu: DailyMenu, restaurant: Restaurant, open: boolean }>(),
     'Set Items Loading Status': props<{ status: LoadingStatus }>(),
     'Set Order': props<{ main: MenuItem[], alacarte: MenuItem[] }>(),
     'Set Order Success': props<{ order: Order }>(),

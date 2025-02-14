@@ -46,7 +46,7 @@ export class OrderEffects implements OnInitEffects {
       switchMap(() => this.restaurantService.getRestaurantInfo().pipe(
         map(restaurant => {
           this.handleLoadedRequest()
-          return ItemActions.setRestaurantInfo({ restaurant })
+          return ItemActions.setRestaurantInfo({ restaurant: restaurant.restaurant })
         }),
         catchError(error => this.handleError(error, 'create')))))
   )

@@ -1,6 +1,6 @@
 <ng-container *ngIf="restaurantInfo | async as info">
-  <div class="title">{{info.name}}</div>
-  <div class="subtitle">{{info.description}}</div>
+  <div class="title">{{info.restaurant?.name}}</div>
+  <div class="subtitle">{{info.restaurant?.description}}</div>
 </ng-container>
 <div class="flex flex-col align-items">
   <div class="gallery-container">

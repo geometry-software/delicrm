@@ -5,13 +5,12 @@ import { prepareExtras } from '../utils/prepare-extras'
 
 export const reducer = createReducer<State>(
   initialState,
-  on(ItemActions.initDailyMenuSuccess, (state, { menu, restaurant }) => ({
+  on(ItemActions.initDailyMenuSuccess, (state, { menu, restaurant, open }) => ({
     ...state,
     menu,
     restaurant,
-    orders: menu?.orders,
+    open,
     extras: prepareExtras(menu),
-    open: menu?.open
   })),
   on(ItemActions.setOrderSuccess, (state, { order }) => ({
     ...state,

@@ -16,6 +16,7 @@ import { shiftReducer } from './store/shift-store/shift.reducer'
 import { ShiftService } from './services/shift.service'
 import { ShiftReportComponent } from './components/shift-report/shift-report.component'
 import { MenuFormService } from './services/menu-form.service'
+import { AlacarteMenuComponent } from './components/alacarte-menu/alacarte-menu.component'
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { MenuFormService } from './services/menu-form.service'
     MenuFormComponent,
     ImageMenuComponent,
     ReportsComponent,
-    ShiftReportComponent
+    ShiftReportComponent,
+    AlacarteMenuComponent
   ],
   imports: [
     SharedModule,

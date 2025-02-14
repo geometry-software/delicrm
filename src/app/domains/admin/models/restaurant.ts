@@ -7,20 +7,22 @@ export type Restaurant = {
     description: string
     phone: string
     web: string
-    locale: string
+    // locale: string
     delivery: number
     closed: string
     currency: string
 }
 
+export type RestaurantInfo = {
+    restaurant: Restaurant,
+    open: boolean
+}
+
 export type DailyMenu = {
+    createdAt: number
     main: Array<MenuItem>
     extras: Extras
-    open: boolean
-    createdAt: number
     extrasAmount: ExtrasAmount
-    orders: Array<CheckoutOrder>
-    alacarte?: Array<MenuItem>
 }
 
 export type Extras = {

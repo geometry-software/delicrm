@@ -11,7 +11,7 @@
           <div class="menu__title-border">
             <div class="menu__title">{{ data.restaurant.name }}</div>
             <div class="menu__subtitle">{{ 'ADMIN.BOARD.IMAGE_MENU.TITLE' | translate }}</div>
-            <div class="menu__day">{{ data.today }}</div>
+            <div class="menu__day">{{ today }}</div>
           </div>
 
           <app-formatted-daily-menu [dailyMenu]="data.menu" [currency]="data.currency" />

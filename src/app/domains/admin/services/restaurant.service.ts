@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
 import { RepositoryService } from '../../../shared/repository/repository.service'
-import { DailyMenu, MenuItem, Restaurant } from '../models/restaurant'
+import { DailyMenu, MenuItem, Restaurant, RestaurantInfo } from '../models/restaurant'
 import { RestaurantConstants } from '../models/restaurant.constants'
-import { EMPTY, Observable, map, switchMap } from 'rxjs'
+import { EMPTY, Observable, combineLatest, map, switchMap } from 'rxjs'
 import { Shift } from '../models/shift'
 import { CheckoutOrder } from '../../menu/models/checkout'
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
@@ -19,93 +19,69 @@ export class RestaurantService {
   private readonly collection = RestaurantConstants.collectionName
   private readonly infoDocument = RestaurantConstants.infoDocument
   private readonly menuDocument = RestaurantConstants.menuDocument
+  private readonly alacarteDocument = RestaurantConstants.alacarteDocument
+  private readonly ordersDocument = RestaurantConstants.ordersDocument
+  private readonly openDocument = RestaurantConstants.openDocument
+  private readonly initialMenu = RestaurantConstants.initialMenu
 
   createRestaurant(item: Restaurant) {
-    return this.repositoryService.setDocument(this.collection, item, this.infoDocument).pipe(
-      switchMap(() => this.repositoryService.setDocument(this.collection, this.getInitialDailyMenu(), this.menuDocument))
-    )
+    return combineLatest([
+      this.repositoryService.setDocument(this.collection, item, this.infoDocument),
+      this.repositoryService.setDocument(this.collection, this.initialMenu, this.menuDocument),
+      this.repositoryService.setDocument(this.collection, { alacarte: [] }, this.alacarteDocument),
+      this.repositoryService.setDocument(this.collection, { orders: [] }, this.ordersDocument),
+      this.repositoryService.setDocument(this.collection, { open: false }, this.openDocument),
+    ])
   }
+
+  openRestaurant(open: boolean) {
+    return this.repositoryService.updateDocument(this.collection, { open }, this.openDocument)
+  }
+
 
   updateRestaurantInfo(item: Restaurant) {
     return this.repositoryService.updateDocument(this.collection, item, this.infoDocument)
   }
 
-  getRestaurantInfo(): Observable<Restaurant> {
-    return this.repositoryService.getDocumentById(this.collection, this.infoDocument)
+  getRestaurantInfo(): Observable<RestaurantInfo> {
+    return combineLatest([
+      this.repositoryService.getDocumentById(this.collection, this.infoDocument),
+      this.repositoryService.getDocumentById(this.collection, this.openDocument)
+    ]).pipe(
+      map(value => {
+        const restaurant: Restaurant = value[0]
+        const open: boolean = value[1]
+        return { restaurant, open }
+      })
+    )
   }
 
   updateDailyMenu(menu: DailyMenu) {
     return this.repositoryService.updateDocument(this.collection, menu, this.menuDocument)
   }
 
-  cleanDailyMenu() {
-    return this.repositoryService.updateDocument(this.collection, { open: false }, this.menuDocument)
-  }
-
-  updateDailyMenuOrders(orders: CheckoutOrder[]) {
-    return this.repositoryService.updateDocument(this.collection, { orders }, this.menuDocument)
-  }
-
   getDailyMenu(): Observable<DailyMenu> {
     return this.repositoryService.getDocumentById(this.collection, this.menuDocument)
   }
 
-  getCheckOutOrders() {
-    return this.repositoryService.getDocumentById(this.collection, this.menuDocument).pipe(
-      map(menu => menu.orders)
-    )
+  updateAlacarteMenu(alacarte: MenuItem[]) {
+    return this.repositoryService.updateDocument(this.collection, { alacarte }, this.alacarteDocument)
+  }
+
+  getAlacarteMenu(): Observable<MenuItem[]> {
+    return this.repositoryService.getDocumentById(this.collection, this.alacarteDocument)
+  }
+
+  updateDailyOrders(orders: CheckoutOrder[]) {
+    return this.repositoryService.updateDocument(this.collection, { orders }, this.ordersDocument)
+  }
+
+  getDailyOrders(): Observable<CheckoutOrder[]> {
+    return this.repositoryService.getDocumentById(this.collection, this.ordersDocument)
   }
 
   updateMenuWithEightySix(menu: DailyMenu) {
     return this.repositoryService.updateDocument(this.collection, menu, this.menuDocument)
-  }
-
-  calulatedMenuWithEightySix(menu: DailyMenu, id: string) {
-    const updatedMain = menu.main.map(item => this.updateItemEightySix(item, id))
-    const updatedAlacarte = (menu.alacarte ?? []).map(item => this.updateItemEightySix(item, id))
-    const updatedStarters = menu.extras.starters.map(item => this.updateItemEightySix(item, id))
-    const updatedDrinks = menu.extras.drinks.map(item => this.updateItemEightySix(item, id))
-    const updatedDesserts = menu.extras.desserts.map(item => this.updateItemEightySix(item, id))
-    const updatedSideDishes = menu.extras.sideDishes.map(item => this.updateItemEightySix(item, id))
-    const updatedMenu: DailyMenu = {
-      ...menu,
-      main: updatedMain,
-      alacarte: updatedAlacarte,
-      extras: {
-        drinks: updatedDrinks,
-        starters: updatedStarters,
-        sideDishes: updatedSideDishes,
-        desserts: updatedDesserts
-      }
-    }
-    return updatedMenu
-  }
-
-  private updateItemEightySix(item: MenuItem, id: string) {
-    if (item.id === id) {
-      item.eightySix = !item.eightySix
-      return item
-    } else {
-      return item
-    }
-  }
-
-  private getInitialDailyMenu() {
-    const menu: DailyMenu = {
-      createdAt: null,
-      extras: null,
-      extrasAmount: {
-        starters: 0,
-        drinks: 0,
-        sideDishes: 0,
-        desserts: 0
-      },
-      main: [],
-      open: false,
-      orders: [],
-      alacarte: []
-    }
-    return menu
   }
 
 }

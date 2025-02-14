@@ -61,7 +61,7 @@
           </div>
         </ng-container>
         <ng-container *ngIf="restaurantInfo | async as restaurant">
-          <app-address [restaurant]="restaurant"></app-address>
+          <app-address [restaurant]="restaurant.restaurant"></app-address>
         </ng-container>
       </ng-template>
     </div>

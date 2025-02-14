@@ -45,18 +45,16 @@ export class MenuFormComponent implements AfterViewInit {
   private dessertsAmount: number
 
   extrasForm: FormGroup
-  platesForm: FormGroup
   @ViewChild('stepper') stepper: MatStepper
 
   readonly isFormDataLoaded = combineLatest([
-    this.store.select(getRecipes).pipe(filter(Boolean)),
+    this.menuFormService.getRecipes(),
     this.menuFormService.getMainPlates(),
     this.menuFormService.getChosenPlates(),
     this.menuFormService.getExtrasAmount(),
   ]).pipe(
     map(([recipes, plates, chosenPlates, extrasAmount]) => {
       this.extrasForm = this.menuFormService.extrasForm
-      this.platesForm = this.menuFormService.platesForm
       this.startersAmount = extrasAmount.starters
       this.drinksAmount = extrasAmount.drinks
       this.sideDishesAmount = extrasAmount.sideDishes
@@ -207,7 +205,6 @@ export class MenuFormComponent implements AfterViewInit {
     this.drinkList = this.recipes.filter(value => value.type == 'drink')
     this.sideDishList = this.recipes.filter(value => value.type == 'side')
     this.dessertList = this.recipes.filter(value => value.type == 'dessert')
-    // this.alacarteList = recipes.filter(value => value.type == 'alacarte')
     for (let i = 0; i < this.startersAmount; i++) {
       this.filteredStarterOptions[i] = this.starters.at(i).valueChanges.pipe(
         startWith(null),
@@ -268,9 +265,7 @@ export class MenuFormComponent implements AfterViewInit {
     if (this.chosenPlates.length) {
       stepper.next()
       this.dailyMenu = {
-        open: true,
         createdAt: getCurrentUnixTime(),
-        orders: [],
         extrasAmount: {
           starters: this.starters.length,
           drinks: this.drinks.length,

@@ -61,25 +61,21 @@ export class AuthService {
 
   linkWithGoogle() {
     return from(this.angularFireAuth.signOut()).pipe(
-      switchMap(() => this.restaurantService.getRestaurantInfo().pipe(
-        map(value => value ? value.locale : BootstrapConstants.locale),
-        switchMap(locale => from(this.angularFireAuth.signInWithPopup(new GoogleAuthProvider())).pipe(
-          map(auth => mapRequested(
-            auth.user.uid,
-            auth.user.email,
-            auth.user.displayName,
-            auth.user.photoURL,
-            locale)),
-          switchMap(auth => this.repositoryService.setDocument(this.collection, auth, auth.authId)))))))
+      switchMap(() => from(this.angularFireAuth.signInWithPopup(new GoogleAuthProvider())).pipe(
+        map(auth => mapRequested(
+          auth.user.uid,
+          auth.user.email,
+          auth.user.displayName,
+          auth.user.photoURL,
+          BootstrapConstants.locale)),
+        switchMap(auth => this.repositoryService.setDocument(this.collection, auth, auth.authId)))))
   }
 
   signUpAnonymously() {
-    return this.restaurantService.getRestaurantInfo().pipe(
-      map(value => value ? value.locale : BootstrapConstants.locale),
-      switchMap(locale => from(this.angularFireAuth.signInAnonymously()).pipe(
-        map(auth => mapAuth(auth.user.uid, locale)),
-        switchMap(auth => this.repositoryService.setDocument(this.collection, auth, auth.authId).pipe(
-          map(() => auth))))))
+    return from(this.angularFireAuth.signInAnonymously()).pipe(
+      map(auth => mapAuth(auth.user.uid, BootstrapConstants.locale)),
+      switchMap(auth => this.repositoryService.setDocument(this.collection, auth, auth.authId).pipe(
+        map(() => auth))))
   }
 
   loginAdmin(email: string, password: string) {
@@ -91,9 +87,9 @@ export class AuthService {
     return this.repositoryService.getAllDocumentsByStrictQuery(this.collection, { active: 'createdAt', direction: 'asc' }, 'role', 'admin')
   }
 
-  signUpAdmin(admin) {
+  signUpAdmin(email, password) {
     return from(this.angularFireAuth.signOut()).pipe(
-      switchMap(() => from(this.angularFireAuth.createUserWithEmailAndPassword(admin.email, admin.password)).pipe(
+      switchMap(() => from(this.angularFireAuth.createUserWithEmailAndPassword(email, password)).pipe(
         switchMap(response => from(response.user.sendEmailVerification()).pipe(
           switchMap(() => this.repositoryService.setDocument(this.collection, mapAuth(response.user.uid, BootstrapConstants.locale), this.adminCollectionId)))))))
   }

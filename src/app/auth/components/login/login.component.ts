@@ -85,15 +85,15 @@ export class LoginComponent {
       .afterClosed().pipe(
         filter(Boolean),
         tap(() => this.restaurantRegisterStatus.next(RestaurantLoadingStatus.Registering)),
-        switchMap(value => this.userService.createAdminUser(this.adminCollectionId, value.contact, value.locale).pipe(
+        switchMap(value => this.userService.createAdminUser(this.adminCollectionId, value.contact).pipe(
           switchMap(user => this.restaurantService.createRestaurant(value).pipe(
             switchMap(() => this.authService.deleteAdminAuth().pipe(
               tap(() => this.redirectAfterRegistration(user)),
               catchError(error => this.handleRegisterRestaurantError(error)))),
             catchError(error => this.handleRegisterRestaurantError(error)))),
           catchError(error => this.handleRegisterRestaurantError(error)))),
-        takeUntilDestroyed(this.destroyRef))
-      .subscribe(error => this.registerRestaurantErrorMessage = error)
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe(error => this.registerRestaurantErrorMessage = error)
   }
 
   sendEmail() {

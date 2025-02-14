@@ -12,7 +12,10 @@
 
   <mat-form-field [hideRequiredMarker]="true">
     <mat-label> {{ 'AUTH.ADMIN.FORM.PASSWORD' | translate }} </mat-label>
-    <input matInput [formControlName]="formProps.password" />
+    <input matInput type="password" [formControlName]="formProps.password" #password />
+    <button matSuffix mat-icon-button aria-label="Clear" (click)="showPassword()">
+      <mat-icon>visibility</mat-icon>
+    </button>
     <mat-error *ngIf="showFieldErrors(form, formProps.password) as error">
       {{ error | translate }}
     </mat-error>

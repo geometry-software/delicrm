@@ -4,7 +4,7 @@ import * as moment from 'moment'
 import { combineLatest, filter, map, tap } from 'rxjs'
 import domtoimage from 'dom-to-image'
 import { Store } from '@ngrx/store'
-import { getCurrency, getMenu, getRestaurantInfo, getRestaurantLocale, isRestaurantOpen, loadingStatus, printMenu } from '../../store/admin-store/admin.selectors'
+import { getCurrency, getMenu, getRestaurantInfo, isRestaurantOpen, loadingStatus, printMenu } from '../../store/admin-store/admin.selectors'
 import { AdminActions as ItemActions } from '../../store/admin-store/admin.actions'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
@@ -27,22 +27,18 @@ export class ImageMenuComponent implements OnInit {
     private destroyRef: DestroyRef
   ) { }
 
-  private readonly today = this.store.select(getRestaurantLocale).pipe(
-    map(value => moment(new Date()).locale(value ?? BootstrapConstants.locale).format('dddd DD MMMM')))
-
+  readonly today = moment(new Date()).locale(BootstrapConstants.locale).format('dddd DD MMMM')
   readonly imageData = combineLatest([
-    this.today,
     this.store.select(getMenu),
     this.store.select(getCurrency),
     this.store.select(getRestaurantInfo),
     this.store.select(isRestaurantOpen),
   ]).pipe(
     map(value => ({
-      today: value[0],
-      menu: value[1],
-      currency: value[2],
-      restaurant: value[3],
-      open: value[4],
+      menu: value[0],
+      currency: value[1],
+      restaurant: value[2],
+      open: value[3],
     }))
   )
   readonly commonImg = 'assets/dish.png'

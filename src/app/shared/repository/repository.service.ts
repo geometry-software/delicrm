@@ -40,7 +40,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
    */
   getAllDocumentsById = (collection: string, id: string): Observable<T[]> =>
     this.angularFirestore
-      .collection<T>(collection, (query) => query
+      .collection<T>(collection, query => query
         .orderBy('createdAt', 'desc')
         .where('authId', '==', id))
       .snapshotChanges()
@@ -53,7 +53,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
    */
   getAllDocumentsByStatus = (collection: string, status: string): Observable<T[]> =>
     this.angularFirestore
-      .collection<T>(collection, (query) => query
+      .collection<T>(collection, query => query
         .orderBy('name', 'desc')
         .where(defaultStatusPropertyName, '==', status))
       .snapshotChanges()
@@ -127,7 +127,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
     field: string = defaultStatusPropertyName
   ): Observable<T[]> =>
     this.angularFirestore
-      .collection<T>(collection, (query) => query
+      .collection<T>(collection, query => query
         .orderBy(sort.active, sort.direction)
         .where(field, '==', status)
         .limit(size))
@@ -156,7 +156,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
     field: string = defaultStatusPropertyName,
   ): Observable<T[]> =>
     this.angularFirestore
-      .collection<T>(collection, (query) => query
+      .collection<T>(collection, query => query
         .orderBy(sort.active, sort.direction)
         .where(field, '==', status)
         .startAfter(value)
@@ -186,7 +186,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
     field: string = defaultStatusPropertyName,
   ): Observable<T[]> =>
     this.angularFirestore
-      .collection<T>(collection, (query) => query
+      .collection<T>(collection, query => query
         .orderBy(sort.active, sort.direction)
         .where(field, '==', status)
         .endBefore(value)
@@ -213,7 +213,9 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
     value: string
   ): Observable<T[]> =>
     this.angularFirestore
-      .collection<T>(collection, (query) => query.orderBy(sort.active, sort.direction).where(property, '==', value))
+      .collection<T>(collection, query => query
+        .orderBy(sort.active, sort.direction)
+        .where(property, '==', value))
       .snapshotChanges()
       .pipe(
         map(appendId<T[]>),
@@ -229,10 +231,10 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
    */
   getAllDocumentsByIncludesQuery = (collection: string, property: string, value: string): Observable<T[]> =>
     this.angularFirestore
-      .collection<T>(collection, (query) => query
+      .collection<T>(collection, query => query
         .orderBy(property)
-        .startAt(value)
-        .endAt(value + '~'))
+        .startAt(value.toLowerCase())
+        .endAt(value.toLowerCase() + '~'))
       .snapshotChanges()
       .pipe(
         map(appendId<T[]>),

@@ -53,16 +53,6 @@
 
   <div class="flex-gap">
     <mat-form-field [hideRequiredMarker]="true">
-      <mat-label> {{ 'ADMIN.RESTAURANT_FORM.LANG' | translate }} </mat-label>
-      <mat-select [formControlName]="formProps.locale">
-        <mat-option *ngFor="let item of languageOptions" [value]="item.value">{{ item.title }}</mat-option>
-      </mat-select>
-      <mat-error *ngIf="showFieldErrors(form, formProps.locale) as error">
-        {{ error | translate }}
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field [hideRequiredMarker]="true">
       <mat-label> {{ 'ADMIN.RESTAURANT_FORM.CURRENCY' | translate }} </mat-label>
       <input matInput [formControlName]="formProps.currency" />
       <mat-error *ngIf="showFieldErrors(form, formProps.currency) as error">
@@ -79,13 +69,24 @@
     </mat-form-field>
   </div>
 
-  <mat-form-field [hideRequiredMarker]="true">
-    <mat-label> {{ 'ADMIN.RESTAURANT_FORM.WEB' | translate }} </mat-label>
-    <input matInput [formControlName]="formProps.web" />
-    <mat-error *ngIf="showFieldErrors(form, formProps.web) as error">
-      {{ error | translate }}
-    </mat-error>
-  </mat-form-field>
+  <div class="flex-gap">
+    <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> {{ 'ADMIN.RESTAURANT_FORM.WEB' | translate }} </mat-label>
+      <input matInput [formControlName]="formProps.web" />
+      <mat-error *ngIf="showFieldErrors(form, formProps.web) as error">
+        {{ error | translate }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> {{ 'ADMIN.RESTAURANT_FORM.LANG' | translate }} </mat-label>
+      <mat-select [formControlName]="formProps.locale">
+        <mat-option *ngFor="let item of languageOptions" [value]="item.value">{{ item.title }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="showFieldErrors(form, formProps.locale) as error">
+        {{ error | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
 
   <div class="form-actions">
     <app-button title="ADMIN.RESTAURANT_FORM.BUTTON.CANCEL" (submit)="close()" />

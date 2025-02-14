@@ -26,6 +26,7 @@
       "REQUIRED": "El campo es obligatorio",
       "EMAIL": "El formato del correo electrónico no es válido",
       "MINLENGTH": "La longitud mínima de la contraseña debe ser de 6 símbolos",
+      "PATTERN": "La contraseña debe contener solo letras y números",
       "PASSWORDS_NOT_MATCHED": "Las contraseñas no coinciden",
       "ZERO_TABLE_NUMBER": "La mesa no puede ser 0",
       "DEFAULT": "Error"
@@ -38,6 +39,7 @@
     },
     "DAILY_MENU": {
       "MAIN_PLATES": "Platos principales",
+      "ALACARTE": "Platos ejecutivos",
       "STARTERS": "Entradas",
       "DRINKS": "Bebidas",
       "SIDE_DISHES": "Acompañamientos",
@@ -257,7 +259,7 @@
       "SUBTITLE": "Are you sure you want to delete this recipe?"
     },
     "FORM": {
-      "ENTER_PLATE_NAME": "Ingresa el nombre del plato",
+      "ENTER_PLATE_NAME": "Nombre del receta",
       "RECIPE_DESCRIPTION": "Descripción de la receta",
       "PLATE_TYPE": "Tipo de plato",
       "PROTEIN_TYPE": "Tipo de proteína",
@@ -521,6 +523,14 @@
         "ADDRESS": "dirección",
         "PHONE": "Teléfono"
       },
+      "ALACARTE": {
+        "NOT_PUBLISHED": "No se publicaron opciones de alacarte",
+        "NO_RECIPES": "No se agregaron opciones de alacarte a las recetas",
+        "BUTTON": {
+          "ACTION": "Actualizar alacarte menú",
+          "LOADING": "Actualizando .."
+        }
+      },
       "FORM": {
         "TAB": {
           "STARTERS": "Elige entradas",
@@ -564,12 +574,12 @@
       },
       "NAME": "Nombre del restaurante",
       "DESCRIPTION": "Descripción del restaurante",
-      "CONTACT": "Nombre de contacto",
+      "CONTACT": "Nombre del contacto",
       "ADDRESS": "Dirección del restaurante",
       "PHONE": "Teléfono del restaurante",
       "CLOSED": "Texto que se muestra cuando el restaurante está cerrado",
       "WEB": "Web",
-      "LANG": "Seleccione idioma",
+      "LANG": "Idioma de usuario predeterminado",
       "CURRENCY": "Moneda",
       "DELIVERY": "Costo de entrega",
       "BUTTON": {

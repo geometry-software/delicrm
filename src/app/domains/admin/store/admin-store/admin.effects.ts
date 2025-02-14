@@ -33,28 +33,29 @@ export class AdminEffects implements OnInitEffects {
   readonly defaultCreateStatus = AdminConstants.defaultCreateStatus
 
   ngrxOnInitEffects(): Action {
-    return ItemActions.getRestaurantInfo()
+    return ItemActions.getBoardInfo()
   }
 
-  getRestaurantInfo = createEffect(() =>
+  getBoardInfo = createEffect(() =>
     this.actions.pipe(
-      ofType(ItemActions.getRestaurantInfo),
+      ofType(ItemActions.getBoardInfo),
       tap(() => this.setLoading()),
       switchMap(() => combineLatest([
         this.restaurantService.getRestaurantInfo(),
         this.restaurantService.getDailyMenu(),
+        this.restaurantService.getAlacarteMenu(),
         this.recipeService.getAll(),
       ]).pipe(
-        map(([restaurant, menu, recipes]) => {
+        map(([restaurant, menu, alacarte, recipes]) => {
           this.menuFormService.initForm(menu, recipes)
-          return ItemActions.setRestaurantInfo({ restaurant, recipes })
+          return ItemActions.setBoardInfo({ restaurant: restaurant.restaurant, recipes, open: restaurant.open })
         }),
         tap(() => this.setLoaded()),
         catchError(error => this.handleError(error, 'create'))))))
 
-  setRestaurantInfo = createEffect(() =>
+  setBoardInfo = createEffect(() =>
     this.actions.pipe(
-      ofType(ItemActions.setRestaurantInfo),
+      ofType(ItemActions.setBoardInfo),
       tap(() => this.setLoading()),
       map(() => ItemActions.getDailyMenu()))
   )
@@ -75,7 +76,10 @@ export class AdminEffects implements OnInitEffects {
     this.actions.pipe(
       ofType(ItemActions.createDailyMenu),
       tap(() => this.setLoading()),
-      switchMap(({ menu }) => this.restaurantService.updateDailyMenu(menu).pipe(
+      switchMap(({ menu }) => combineLatest([
+        this.restaurantService.updateDailyMenu(menu),
+        this.restaurantService.openRestaurant(true)
+      ]).pipe(
         map(() => {
           this.setLoaded()
           this.router.navigate(['admin'])
@@ -106,18 +110,24 @@ export class AdminEffects implements OnInitEffects {
     this.actions.pipe(
       ofType(ItemActions.closeShift),
       tap(() => this.setLoading()),
-      switchMap(() => this.restaurantService.getDailyMenu().pipe(
-        map(({ orders, createdAt }) => calculateShiftSummary(orders, createdAt)),
-        switchMap(shift => this.restaurantService.cleanDailyMenu().pipe(
-          switchMap(() => this.shiftService.create(shift).pipe(
-            map(id => {
-              this.setLoaded()
-              this.router.navigate(['/shifts/report', id])
-              return ItemActions.closeShiftSuccess()
-            })
-          ))
-        )),
-        catchError(error => this.handleError(error, 'create')))),
+      switchMap(() => combineLatest([
+        this.restaurantService.getDailyMenu().pipe(
+          map(value => value.createdAt)
+        ),
+        this.restaurantService.getDailyOrders()
+      ])
+        .pipe(
+          map(([createdAt, orders,]) => calculateShiftSummary(orders, createdAt)),
+          switchMap(shift => this.restaurantService.openRestaurant(false).pipe(
+            switchMap(() => this.shiftService.create(shift).pipe(
+              map(id => {
+                this.setLoaded()
+                this.router.navigate(['/shifts/report', id])
+                return ItemActions.closeShiftSuccess()
+              })
+            ))
+          )),
+          catchError(error => this.handleError(error, 'create')))),
       catchError(error => this.handleError(error, 'create')))
   )
 
@@ -128,7 +138,7 @@ export class AdminEffects implements OnInitEffects {
       switchMap(({ restaurant }) => this.restaurantService.updateRestaurantInfo(restaurant).pipe(
         map(() => {
           this.setLoaded()
-          return ItemActions.getRestaurantInfo()
+          return ItemActions.getBoardInfo()
         }),
         catchError(error => this.handleError(error, 'create')))))
   )

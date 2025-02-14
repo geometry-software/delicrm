@@ -3,6 +3,7 @@ import { RepositoryEntityStatus } from "../../../shared/repository/repository.mo
 export interface Recipe {
   createdAt?: number;
   name?: string;
+  nameLowerCase?: string;
   history?: string;
   price?: number;
   // TODO: add an option to calculate and show value for the client

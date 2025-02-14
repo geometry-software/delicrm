@@ -16,10 +16,11 @@ export const reducer = createReducer<State>(
     ...state,
     print: false,
   })),
-  on(ItemActions.setRestaurantInfo, (state, { restaurant, recipes }) => ({
+  on(ItemActions.setBoardInfo, (state, { restaurant, recipes, open }) => ({
     ...state,
     restaurant,
-    recipes
+    recipes,
+    open
   })),
   on(ItemActions.setDailyMenu, (state, { menu }) => ({
     ...state,

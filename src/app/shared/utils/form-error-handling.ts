@@ -45,8 +45,12 @@ const getErrorMessage = (control: AbstractControl): string => {
     return 'FORM.FIELD_ERROR_MESSAGE.REQUIRED'
   } else if (control.hasError('email')) {
     return 'FORM.FIELD_ERROR_MESSAGE.EMAIL'
+  } else if (control.hasError('email')) {
+    return 'FORM.FIELD_ERROR_MESSAGE.EMAIL'
   } else if (control.hasError('minlength')) {
     return 'FORM.FIELD_ERROR_MESSAGE.MINLENGTH'
+  } else if (control.hasError('pattern')) {
+    return 'FORM.FIELD_ERROR_MESSAGE.PATTERN'
   } else if (control.hasError('tableZeroNumber')) {
     return 'FORM.FIELD_ERROR_MESSAGE.ZERO_TABLE_NUMBER'
   } else {

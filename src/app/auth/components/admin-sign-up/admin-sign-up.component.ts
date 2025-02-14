@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core'
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, ViewChild } from '@angular/core'
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop'
 import { AuthService } from '../../services/auth.service'
 import { adminFormGroup, AdminFormProps } from '../../models/admin.form'
@@ -23,6 +23,7 @@ export class AdminSignUpComponent {
     private signalService: SignalService,
   ) { }
 
+  @ViewChild('password') password: ElementRef;
   readonly showFieldErrors = showFieldErrors
   readonly hasUser = this.authService.hasAdminUser().pipe(
     map(value => Boolean(value)))
@@ -37,7 +38,9 @@ export class AdminSignUpComponent {
     this.isNotMatchedPasswordErrorShown = false
     this.signalService.setLoadingStatus(LoadingStatus.Loading)
     if (this.form.valid) {
-      this.authService.signUpAdmin(this.form.value).pipe(
+      const email = this.form.value[AdminFormProps.email]
+      const password = this.form.value[AdminFormProps.password]
+      this.authService.signUpAdmin(email, password).pipe(
         catchError(error => {
           console.error(error);
           this.isLoading = false
@@ -54,7 +57,17 @@ export class AdminSignUpComponent {
       this.isNotMatchedPasswordErrorShown = true
       this.isLoading = false
       this.signalService.setLoadingStatus(LoadingStatus.Failed)
+      this.form.markAsDirty()
       highlightInvalidFields(this.form)
+    }
+  }
+
+  showPassword() {
+    const el = this.password.nativeElement
+    if (el.type === "password") {
+      el.type = "text"
+    } else {
+      el.type = "password"
     }
   }
 

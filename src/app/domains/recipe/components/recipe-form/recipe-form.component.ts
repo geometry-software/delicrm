@@ -87,10 +87,14 @@ export class RecipeFormComponent implements OnInit {
 
   submit(form) {
     if (form.valid) {
+      const item: Recipe = {
+        ...form.value,
+        nameLowerCase: form.value.name.toLowerCase()
+      }
       if (this.itemId) {
-        this.store.dispatch(ItemActions.updateItem({ item: form.value, id: this.itemId }))
+        this.store.dispatch(ItemActions.updateItem({ item, id: this.itemId }))
       } else {
-        this.store.dispatch(ItemActions.createItem({ item: form.value }))
+        this.store.dispatch(ItemActions.createItem({ item }))
       }
     } else {
       highlightInvalidFields(form)
@@ -106,12 +110,9 @@ export class RecipeFormComponent implements OnInit {
   uploadFile() {
     this.isUploadingImg = true
     const uploadLink = this.fileStorageService.getFileLink(this.fileName)
-    this.fileStorageService.saveFile(
-      this.fileName,
-      this.fileImg
-    ).percentageChanges().pipe(
+    this.fileStorageService.saveFile(this.fileName, this.fileImg).percentageChanges().pipe(
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe((percentage) => {
+    ).subscribe(percentage => {
       this.uploadProgress = Math.round(percentage)
       if (this.uploadProgress == 100) {
         this.showUploadButton = false
@@ -119,7 +120,7 @@ export class RecipeFormComponent implements OnInit {
         this.isUploadedImg = true
       }
     })
-    uploadLink.getDownloadURL().subscribe((URL) => this.form.controls[RecipeFormProps.imgURL].setValue(URL))
+    uploadLink.getDownloadURL().subscribe(url => this.form.controls[RecipeFormProps.imgURL].setValue(url))
   }
 
   private initForm() {
@@ -130,10 +131,12 @@ export class RecipeFormComponent implements OnInit {
         filter(Boolean),
         tap(value => {
           this.form.patchValue(value, { onlySelf: true })
-          console.log(value);
           this.itemId = value.id
           if (value.price) {
             this.hasPrice = true
+          }
+          if (value.protein) {
+            this.hasProtein = true
           }
           this.isFormDataLoaded = true
           this.cdr.markForCheck()

@@ -26,6 +26,7 @@
       "REQUIRED": "Field is required",
       "EMAIL": "Email format is not valid",
       "MINLENGTH": "Minimum password length has to be 6 symbols",
+      "PATTERN": "Password must contain only letters and numbers",
       "PASSWORDS_NOT_MATCHED": "Passwords are not matched",
       "ZERO_TABLE_NUMBER": "Table can't be 0",
       "DEFAULT": "Error"
@@ -38,6 +39,7 @@
     },
     "DAILY_MENU": {
       "MAIN_PLATES": "Main plates",
+      "ALACARTE": "A la carte plates",
       "STARTERS": "Starters",
       "DRINKS": "Drinks",
       "SIDE_DISHES": "Side dishes",
@@ -257,7 +259,7 @@
       "SUBTITLE": "Are you sure you want to delete this recipe?"
     },
     "FORM": {
-      "ENTER_PLATE_NAME": "Enter plate name",
+      "ENTER_PLATE_NAME": "Recipe name",
       "RECIPE_DESCRIPTION": "Recipe description",
       "PLATE_TYPE": "Plate type",
       "PROTEIN_TYPE": "Protein type",
@@ -521,6 +523,14 @@
         "ADDRESS": "Address",
         "PHONE": "Phone"
       },
+      "ALACARTE": {
+        "NOT_PUBLISHED": "No alacarte options were published",
+        "NO_RECIPES": "No alacarte options were added to recipes",
+        "BUTTON": {
+          "ACTION": "Update alacarte menu",
+          "LOADING": "Updating .."
+        }
+      },
       "FORM": {
         "TAB": {
           "STARTERS": "Choose starters",
@@ -569,7 +579,7 @@
       "PHONE": "Restaurant phone",
       "CLOSED": "Text shown when restaurant is closed",
       "WEB": "Web",
-      "LANG": "Choose language",
+      "LANG": "Default user language",
       "CURRENCY": "Currency",
       "DELIVERY": "Delivery amount",
       "BUTTON": {

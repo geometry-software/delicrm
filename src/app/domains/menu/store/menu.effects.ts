@@ -20,6 +20,7 @@ import { CheckoutOrder } from '../models/checkout'
 import { NotificationService } from '../../../shared/services/notification.service'
 import { cloneDeep } from 'lodash'
 import { SessionService } from '../../../auth/services/session.service'
+import { calulatedMenuWithEightySix } from '../../admin/utils/eighty-six'
 
 @Injectable()
 export class MenuEffects {
@@ -50,9 +51,9 @@ export class MenuEffects {
         this.restaurantService.getDailyMenu(),
         this.restaurantService.getRestaurantInfo()
       ]).pipe(
-        map(([menu, restaurant]) => {
+        map(([menu, info]) => {
           this.setLoaded()
-          return ItemActions.initDailyMenuSuccess({ menu, restaurant })
+          return ItemActions.initDailyMenuSuccess({ menu, restaurant: info.restaurant, open: info.open })
         }),
         catchError(error => this.handleError(error)))))
   )
@@ -75,7 +76,7 @@ export class MenuEffects {
       ofType(ItemActions.setEightySix),
       tap(() => this.setLoading()),
       switchMap(({ id }) => this.restaurantService.getDailyMenu().pipe(
-        map(menu => this.restaurantService.calulatedMenuWithEightySix(menu, id)),
+        map(menu => calulatedMenuWithEightySix(menu, id)),
         switchMap(updatedMenu => this.restaurantService.updateMenuWithEightySix(updatedMenu).pipe(
           switchMap(() => this.restaurantService.getDailyMenu().pipe(
             map(newMenu => {
@@ -107,9 +108,9 @@ export class MenuEffects {
   createUserOrder = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.createUserOrder),
-      switchMap(({ order }) => this.restaurantService.getCheckOutOrders().pipe(
+      switchMap(({ order }) => this.restaurantService.getDailyOrders().pipe(
         switchMap(orders => this.orderService.create(order).pipe(
-          switchMap(id => this.restaurantService.updateDailyMenuOrders([...orders, { id, total: order.price.total }]).pipe(
+          switchMap(id => this.restaurantService.updateDailyOrders([...orders, { id, total: order.price.total }]).pipe(
             map(() => order.category.type === 'delivery'
               ? ItemActions.createUserDelivery({ delivery: cloneDeep({ ...order.category.delivery, orderId: id }) })
               : ItemActions.checkoutOrderSuccess({ id, checkout: 'order' })))),
@@ -169,7 +170,7 @@ export class MenuEffects {
 
   private updateCheckoutOrders(orders: CheckoutOrder[], total: number, id: string) {
     const updatedOrders = [...orders, { id, total }]
-    return this.restaurantService.updateDailyMenuOrders(updatedOrders)
+    return this.restaurantService.updateDailyOrders(updatedOrders)
   }
 
   private setLoading() {

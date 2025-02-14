@@ -118,24 +118,22 @@
   </mat-step>
 
   <mat-step [label]="'ADMIN.BOARD.FORM.TAB.MAIN_DISHES' | translate">
-    <form [formGroup]="platesForm" (ngSubmit)="choosePlates(stepper)">
 
-      <div class="section">{{ 'SHARED.DAILY_MENU.MAIN_PLATES' | translate }}</div>
-      <div class="flex items-center" *ngFor="let item of plateList; let i = index">
-        <mat-checkbox [checked]="item.isAdded" (change)="addPlate(item)">
-          <span class="main-dish">{{ item.name }}</span>
-        </mat-checkbox>
-      </div>
+    <div class="section">{{ 'SHARED.DAILY_MENU.MAIN_PLATES' | translate }}</div>
+    <div class="flex items-center" *ngFor="let item of plateList; let i = index">
+      <mat-checkbox [checked]="item.isAdded" (change)="addPlate(item)">
+        <span class="main-dish">{{ item.name }}</span>
+      </mat-checkbox>
+    </div>
 
-      <div class="plates-result-amount">
-        {{ chosenPlates.length }}
-        {{ 'ADMIN.BOARD.FORM.PLATES_AMOUNT' | translate }}
-      </div>
-      <app-button title="ADMIN.BOARD.FORM.BUTTON.VERIFY" type="submit" width="full" />
+    <div class="plates-result-amount">
+      {{ chosenPlates.length }}
+      {{ 'ADMIN.BOARD.FORM.PLATES_AMOUNT' | translate }}
+    </div>
+    <app-button title="ADMIN.BOARD.FORM.BUTTON.VERIFY" type="submit" width="full" (click)="choosePlates(stepper)" />
 
-    </form>
   </mat-step>
-  <mat-step [stepControl]="platesForm" [label]="'ADMIN.BOARD.FORM.TAB.CONFIRM' | translate">
+  <mat-step [label]="'ADMIN.BOARD.FORM.TAB.CONFIRM' | translate">
 
     <app-formatted-daily-menu *ngIf="dailyMenu" [dailyMenu]="dailyMenu" [currency]="currency | async" />
     <br />
