@@ -28,6 +28,10 @@
             <div [class.eighty-six]="item.isSkipped || item.eightySix" *ngFor="let item of item.sideDishes">
               {{ item.name }}
             </div>
+            <app-title-item title="ORDERS.DETAIL.EXTRA_DISHES.SIDE_DISHES" margin="0" />
+            <div [class.eighty-six]="item.isSkipped || item.eightySix" *ngFor="let item of item.sideDishes">
+              {{ item.name }}
+            </div>
           </div>
         </li>
       </ol>

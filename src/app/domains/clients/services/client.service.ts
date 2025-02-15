@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core'
-import { combineLatest, map } from 'rxjs'
+import { combineLatest, map, tap } from 'rxjs'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { SortRequest } from '../../../shared/repository/repository.models'
 import { Auth, AuthStatus } from '../../../auth/models/auth.model'
 import { ClientConstants } from '../models/client.constants'
+import { v4 as uuidv4 } from 'uuid';
+import { BootstrapConstants } from '../../../bootstrap/models/bootstrap.constants'
+import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
 
 @Injectable()
 export class ClientService {
@@ -16,6 +19,10 @@ export class ClientService {
 
   getAll() {
     return this.repositoryService.getAllDocuments(this.collection)
+  }
+
+  getAllByActiveStatus() {
+    return this.repositoryService.getAllDocumentsByStatus(this.collection, 'active')
   }
 
   getById(id: string) {
@@ -55,8 +62,20 @@ export class ClientService {
     return this.repositoryService.getAllDocumentsByIncludesQuery(this.collection, property, value)
   }
 
-  set(item: Auth, id: string) {
-    return this.repositoryService.setDocument(this.collection, item, id)
+  create(name: string, address: string, phone: string) {
+    const client: Auth = {
+      authId: uuidv4(),
+      address,
+      phone,
+      name,
+      deliveries: [],
+      locale: BootstrapConstants.locale,
+      status: 'active',
+      createdAt: getCurrentUnixTime(),
+    }
+    return this.repositoryService.setDocument(this.collection, client, client.authId).pipe(
+      map(() => client.authId)
+    )
   }
 
   update(id: string, name: string, address: string, phone: string) {

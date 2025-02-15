@@ -23,7 +23,7 @@
         {{ 'CLIENTS.LIST.TABLE.NAME' | translate }}
       </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <div class="table-link" [routerLink]="['/clients', element.id]">
+        <div class="table-link" (click)="openForm(element)">
           {{ element.name ?? 'No name' }}
         </div>
       </mat-cell>

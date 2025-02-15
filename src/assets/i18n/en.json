@@ -27,6 +27,7 @@
       "EMAIL": "Email format is not valid",
       "MINLENGTH": "Minimum password length has to be 6 symbols",
       "PATTERN": "Password must contain only letters and numbers",
+      "REQUIRED_AUTOCOMPLETE": "Only selected value can be used",
       "PASSWORDS_NOT_MATCHED": "Passwords are not matched",
       "ZERO_TABLE_NUMBER": "Table can't be 0",
       "DEFAULT": "Error"
@@ -101,6 +102,8 @@
         },
         "DELIVERY": {
           "TITLE": "Delivery",
+          "EXISTED_CLIENT": "Existed client",
+          "NEW_CLIENT": "Add new client",
           "DETAILS": "Delivery details",
           "NAME": "Name",
           "ADDRESS": "Address",
@@ -316,7 +319,8 @@
       "EXTRA_DISHES": {
         "STARTER": "Starter",
         "DRINK": "Drink",
-        "SIDE_DISHES": "Side dishes"
+        "SIDE_DISHES": "Side dishes",
+        "DESSERTS": "Desserts"
       },
       "STATUS": {
         "DINING": "Dining",
@@ -467,7 +471,8 @@
       "FOOTER-TITLE": "deliveries"
     },
     "FORM": {
-      "TITLE": "Client details",
+      "UPDATE_TITLE": "Client details",
+      "CREATE_TITLE": "Add new client",
       "FIELDS": {
         "NAME": "Name",
         "ADDRESS": "Address",
@@ -475,16 +480,17 @@
         "CREATED_AT": "Created at",
         "STATUS": "Status"
       },
-      "UPDATE_CLIENT_SUCCESS": "Client has been updated",
+      "UPDATE_CLIENT_SUCCESS": "Client was updated",
+      "CREATE_CLIENT_SUCCESS": "Client was created",
       "BUTTON": "Update"
     },
     "MODAL": {
-      "TITLE": "Update user",
-      "SUBTITLE": "Choose status and role",
-      "STATUS_TITLE": "Current status",
-      "ROLE_TITLE": "Current role",
+      "TITLE": "Client status",
+      "SUBTITLE": "Update client status",
       "BUTTON": {
         "UPDATE": "Update",
+        "CREATE": "Add",
+        "ACTION": "Updating ..",
         "CLOSE": "Close"
       }
     }

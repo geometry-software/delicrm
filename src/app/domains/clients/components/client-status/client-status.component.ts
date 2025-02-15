@@ -16,7 +16,7 @@ export class ClientStatusComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private dialogData: any) { }
 
   currentStatus: AuthStatus
-  statusList = ClientConstants.statusList
+  statusList = ClientConstants.statusList.filter(el => el !== 'auth')
 
   ngOnInit(): void {
     this.currentStatus = this.dialogData.status

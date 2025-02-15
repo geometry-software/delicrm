@@ -1,40 +1,40 @@
-<ng-container *ngIf="client | async as data">
+<app-title [title]="dialogData ? 'CLIENTS.FORM.UPDATE_TITLE' : 'CLIENTS.FORM.CREATE_TITLE'" />
 
-  <app-title title="CLIENTS.FORM.TITLE" />
+<form [formGroup]="form">
 
-  <app-title-item title="CLIENTS.FORM.FIELDS.STATUS" [value]="data.status" />
-  <app-title-item title="CLIENTS.FORM.FIELDS.CREATED_AT" [value]="getDateFromUnix(data.createdAt)" />
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label> {{ 'CLIENTS.FORM.FIELDS.NAME' | translate }} </mat-label>
+    <input matInput formControlName="name" />
+    <mat-error *ngIf="showFieldErrors(form,'name') as error">
+      {{ error | translate }}
+    </mat-error>
+  </mat-form-field>
 
-  <form [formGroup]="form">
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label> {{ 'CLIENTS.FORM.FIELDS.ADDRESS' | translate }} </mat-label>
+    <input matInput formControlName="address" />
+    <mat-error *ngIf="showFieldErrors(form,'address') as error">
+      {{ error | translate }}
+    </mat-error>
+  </mat-form-field>
 
-    <mat-form-field [hideRequiredMarker]="true">
-      <mat-label> {{ 'CLIENTS.FORM.FIELDS.NAME' | translate }} </mat-label>
-      <input matInput formControlName="name" />
-      <mat-error *ngIf="showFieldErrors(form,'name') as error">
-        {{ error | translate }}
-      </mat-error>
-    </mat-form-field>
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label> {{ 'CLIENTS.FORM.FIELDS.PHONE' | translate }} </mat-label>
+    <input matInput formControlName="phone" />
+    <mat-error *ngIf="showFieldErrors(form,'phone') as error">
+      {{ error | translate }}
+    </mat-error>
+  </mat-form-field>
 
-    <mat-form-field [hideRequiredMarker]="true">
-      <mat-label> {{ 'CLIENTS.FORM.FIELDS.ADDRESS' | translate }} </mat-label>
-      <input matInput formControlName="address" />
-      <mat-error *ngIf="showFieldErrors(form,'address') as error">
-        {{ error | translate }}
-      </mat-error>
-    </mat-form-field>
+  <ng-container *ngIf="dialogData">
+    <app-title-item title="CLIENTS.FORM.FIELDS.STATUS" [value]="dialogData.status" />
+    <app-title-item title="CLIENTS.FORM.FIELDS.CREATED_AT" [value]="getDateFromUnix(client.createdAt)" />
+  </ng-container>
 
-    <mat-form-field [hideRequiredMarker]="true">
-      <mat-label> {{ 'CLIENTS.FORM.FIELDS.PHONE' | translate }} </mat-label>
-      <input matInput formControlName="phone" />
-      <mat-error *ngIf="showFieldErrors(form,'phone') as error">
-        {{ error | translate }}
-      </mat-error>
-    </mat-form-field>
+  <div class="form-actions" *ngIf="loadingStatus | async as loading">
+    <app-button title="CLIENTS.MODAL.BUTTON.CLOSE" action="back" (submit)="close()" />
+    <app-button [title]="getButtonTitle(loading)" action="save" width="full"
+      [disabled]="loading  === LoadingStatus.Loading" (submit)="confirm()" />
+  </div>
 
-    <div class="form-actions">
-      <app-button title="CLIENTS.FORM.BUTTON" action="save" width="full"
-        [disabled]="(loading | async) === LoadingStatus.Loading" (submit)="confirm()" />
-    </div>
-
-  </form>
-</ng-container>
+</form>

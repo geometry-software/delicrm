@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { MenuFormComponent } from './components/daily-menu-form/menu-form.component'
+import { MenuFormComponent } from './components/menu-form/menu-form.component'
 import { ReportsComponent } from './components/reports/reports.component'
 import { BoardLayoutComponent } from './components/board-layout/board-layout.component'
 import { ImageMenuComponent } from './components/image-menu/image-menu.component'

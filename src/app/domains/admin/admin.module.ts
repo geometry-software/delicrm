@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
 import { AdminRoutingModule } from './admin-routing.module'
-import { MenuFormComponent } from './components/daily-menu-form/menu-form.component'
+import { MenuFormComponent } from './components/menu-form/menu-form.component'
 import { ReportsComponent } from './components/reports/reports.component'
 import { SharedModule } from '../../shared/shared.module'
 import { BoardLayoutComponent } from './components/board-layout/board-layout.component'
@@ -17,6 +17,7 @@ import { ShiftService } from './services/shift.service'
 import { ShiftReportComponent } from './components/shift-report/shift-report.component'
 import { MenuFormService } from './services/menu-form.service'
 import { AlacarteMenuComponent } from './components/alacarte-menu/alacarte-menu.component'
+import { RequiredAutocompleteDirective } from '../../shared/directives/required-autocomplete.directive'
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AlacarteMenuComponent } from './components/alacarte-menu/alacarte-menu.
     ImageMenuComponent,
     ReportsComponent,
     ShiftReportComponent,
-    AlacarteMenuComponent
+    AlacarteMenuComponent,
+    // RequiredAutocompleteDirective,
   ],
   imports: [
     SharedModule,

@@ -21,6 +21,7 @@ import { NotificationService } from '../../../shared/services/notification.servi
 import { cloneDeep } from 'lodash'
 import { SessionService } from '../../../auth/services/session.service'
 import { calulatedMenuWithEightySix } from '../../admin/utils/eighty-six'
+import { ClientService } from '../../clients/services/client.service'
 
 @Injectable()
 export class MenuEffects {
@@ -32,6 +33,7 @@ export class MenuEffects {
     private deliveryService: DeliveryService,
     private authService: AuthService,
     private userService: UserService,
+    private clientService: ClientService,
     private orderService: OrderService,
     private restaurantService: RestaurantService,
     private signalService: SignalService,
@@ -49,11 +51,12 @@ export class MenuEffects {
       tap(() => this.setLoading()),
       switchMap(() => combineLatest([
         this.restaurantService.getDailyMenu(),
-        this.restaurantService.getRestaurantInfo()
+        this.restaurantService.getRestaurantInfo(),
+        this.clientService.getAllByActiveStatus(),
       ]).pipe(
-        map(([menu, info]) => {
+        map(([menu, info, clients]) => {
           this.setLoaded()
-          return ItemActions.initDailyMenuSuccess({ menu, restaurant: info.restaurant, open: info.open })
+          return ItemActions.initDailyMenuSuccess({ menu, restaurant: info.restaurant, open: info.open, clients })
         }),
         catchError(error => this.handleError(error)))))
   )
@@ -136,6 +139,37 @@ export class MenuEffects {
     , { dispatch: false }
   )
 
+  createClient = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.createClient),
+      tap(() => this.signalService.setClientLoadingStatus(LoadingStatus.Loading)),
+      switchMap(({ name, address, phone }) =>
+        this.clientService.create(name, address, phone).pipe(
+          map(() => ItemActions.getActiveClients()),
+          catchError(error => {
+            this.notificationService.error(error)
+            this.signalService.setClientLoadingStatus(LoadingStatus.Failed)
+            return EMPTY
+          }))))
+  )
+
+  getActiveClients = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.getActiveClients),
+      switchMap(() =>
+        this.clientService.getAllByActiveStatus().pipe(
+          map(clients => {
+            this.notificationService.success('CLIENTS.FORM.CREATE_CLIENT_SUCCESS')
+            this.signalService.setClientLoadingStatus(LoadingStatus.Loaded)
+            return ItemActions.getActiveClientsSuccess({ clients })
+          }),
+          catchError(error => {
+            this.notificationService.error(error)
+            this.signalService.setClientLoadingStatus(LoadingStatus.Failed)
+            return EMPTY
+          }))))
+  )
+
   private handleError(error: Error) {
     this.notificationService.error(error)
     this.signalService.setLoadingStatus(LoadingStatus.Failed)
@@ -166,11 +200,6 @@ export class MenuEffects {
         }
       })
     )
-  }
-
-  private updateCheckoutOrders(orders: CheckoutOrder[], total: number, id: string) {
-    const updatedOrders = [...orders, { id, total }]
-    return this.restaurantService.updateDailyOrders(updatedOrders)
   }
 
   private setLoading() {

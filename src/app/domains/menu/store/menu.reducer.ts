@@ -5,11 +5,12 @@ import { prepareExtras } from '../utils/prepare-extras'
 
 export const reducer = createReducer<State>(
   initialState,
-  on(ItemActions.initDailyMenuSuccess, (state, { menu, restaurant, open }) => ({
+  on(ItemActions.initDailyMenuSuccess, (state, { menu, restaurant, open, clients }) => ({
     ...state,
     menu,
     restaurant,
     open,
+    clients,
     extras: prepareExtras(menu),
   })),
   on(ItemActions.setOrderSuccess, (state, { order }) => ({
@@ -23,5 +24,9 @@ export const reducer = createReducer<State>(
   on(ItemActions.eightySixSuccess, (state, { menu }) => ({
     ...state,
     menu
+  })),
+  on(ItemActions.getActiveClientsSuccess, (state, { clients }) => ({
+    ...state,
+    clients
   })),
 )

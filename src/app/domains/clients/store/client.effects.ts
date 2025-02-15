@@ -4,6 +4,7 @@ import {
   catchError,
   combineLatest,
   EMPTY,
+  first,
   map,
   of,
   switchMap,
@@ -62,34 +63,32 @@ export class ClientEffects {
   updateClient = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.updateClient),
-      tap(() => this.handleLoadingRequest()),
-      switchMap(({ id, name, address, phone }) => this.clientService.update(id, name, address, phone).pipe(
-        map(() => ItemActions.updateClientSuccess()))))
+      tap(() => this.signalService.setClientLoadingStatus(LoadingStatus.Loading)),
+      switchMap(({ id, name, address, phone }) =>
+        this.clientService.update(id, name, address, phone).pipe(
+          map(() => ItemActions.updateClientSuccess()),
+          catchError(error => {
+            this.notificationService.error(error)
+            this.signalService.setClientLoadingStatus(LoadingStatus.Failed)
+            return EMPTY
+          }))))
   )
 
   updateClientSuccess = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.updateClientSuccess),
-      tap(() => {
-        const message = this.translateService.instant('CLIENTS.FORM.UPDATE_CLIENT_SUCCESS')
-        this.notificationService.success(message)
-        this.handleLoadedRequest()
-      })),
-    { dispatch: false }
-  )
-
-  getItem = createEffect(() =>
-    this.actions.pipe(
-      ofType(ItemActions.getItem),
-      tap(() => this.handleLoadingRequest()),
-      switchMap(({ id }) =>
-        this.clientService.getById(id).pipe(
-          map(item => {
-            this.handleLoadedRequest()
-            return ItemActions.getItemSuccess({ item })
-          }),
-          catchError(error => of(ItemActions.notifyError({ error, query: 'detail' })))
-        )))
+      tap(() => this.signalService.setClientLoadingStatus(LoadingStatus.Loaded)),
+      map(() => {
+        this.notificationService.success('CLIENTS.FORM.UPDATE_CLIENT_SUCCESS')
+        return ItemActions.getItems({
+          request: {
+            pagination: ClientConstants.defaultPageRequest.pagination,
+            size: ClientConstants.defaultPageRequest.size,
+            status: ClientConstants.statusList[0],
+            sort: ClientConstants.defaultPageRequest.sort
+          }
+        })
+      }))
   )
 
   getItems = createEffect(() =>

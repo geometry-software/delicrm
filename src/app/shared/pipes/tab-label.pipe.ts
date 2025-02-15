@@ -3,7 +3,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { TabLabel } from '../models/shared.model';
 
 @Pipe({
-    name: 'tabLabel'
+    name: 'tabLabel',
+    pure: false
 })
 export class TabLabelPipe implements PipeTransform {
 

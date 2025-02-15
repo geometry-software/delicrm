@@ -23,6 +23,7 @@ import { ConfirmationService } from './services/confirmation.service'
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
 import { TabLabelPipe } from './pipes/tab-label.pipe'
 import { AppSpinboxComponent } from './components/app-spinbox/app-spinbox.component'
+import { RequiredAutocompleteDirective } from './directives/required-autocomplete.directive'
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { AppSpinboxComponent } from './components/app-spinbox/app-spinbox.compon
     AppTitleItemComponent,
     AppFormattedDailyMenuComponent,
     TabLabelPipe,
-    AppSpinboxComponent
+    AppSpinboxComponent,
+    RequiredAutocompleteDirective
   ],
   exports: [
     MaterialModule,
@@ -63,7 +65,8 @@ import { AppSpinboxComponent } from './components/app-spinbox/app-spinbox.compon
     NgxMaterialTimepickerModule,
     AppFormattedDailyMenuComponent,
     TabLabelPipe,
-    AppSpinboxComponent
+    AppSpinboxComponent,
+    RequiredAutocompleteDirective
   ],
   imports: [
     MaterialModule,

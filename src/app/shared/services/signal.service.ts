@@ -22,4 +22,8 @@ export class SignalService {
   setLoadingStatus = (status: LoadingStatus) => this.loadingStatus.set(status)
   getLoadingStatus = computed(() => this.loadingStatus())
 
+  clientLoadingStatus = signal(LoadingStatus.NotLoaded)
+  setClientLoadingStatus = (status: LoadingStatus) => this.clientLoadingStatus.set(status)
+  getClientLoadingStatus = computed(() => this.clientLoadingStatus())
+
 }

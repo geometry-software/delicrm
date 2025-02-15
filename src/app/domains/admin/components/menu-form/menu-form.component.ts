@@ -51,10 +51,9 @@ export class MenuFormComponent implements AfterViewInit {
     this.menuFormService.getRecipes(),
     this.menuFormService.getMainPlates(),
     this.menuFormService.getChosenPlates(),
-    this.menuFormService.getExtrasAmount(),
+    this.menuFormService.getExtrasAmount().pipe(filter(Boolean)),
   ]).pipe(
     map(([recipes, plates, chosenPlates, extrasAmount]) => {
-      this.extrasForm = this.menuFormService.extrasForm
       this.startersAmount = extrasAmount.starters
       this.drinksAmount = extrasAmount.drinks
       this.sideDishesAmount = extrasAmount.sideDishes
@@ -62,8 +61,10 @@ export class MenuFormComponent implements AfterViewInit {
       this.plateList = plates
       this.chosenPlates = chosenPlates
       this.recipes = recipes
+      this.extrasForm = this.menuFormService.extrasForm
       this.initAutocompleteOptions()
       this.signalService.setLoadingStatus(LoadingStatus.Loaded)
+      console.log('return true');
       return true
     }))
   readonly isLoading = this.store.select(loadingStatus).pipe(
@@ -136,9 +137,11 @@ export class MenuFormComponent implements AfterViewInit {
     this.starters.push(new FormControl(null, Validators.required))
     const index = this.starters.length - 1
     this.filteredStarterOptions[index] = this.starters.at(index).valueChanges.pipe(
-      map(value => value?.name),
-      map(name => name
-        ? this.starterList.filter(option => option.name.toLowerCase().includes(name.toLowerCase()))
+      map(search => search
+        ? this.starterList.filter(option => {
+          const name = typeof search === 'string' ? search : search?.name;
+          return option?.name.toLowerCase().includes(name?.toLowerCase())
+        })
         : this.starterList.slice()
       )
     )
@@ -153,9 +156,11 @@ export class MenuFormComponent implements AfterViewInit {
     this.drinks.push(new FormControl(null, Validators.required))
     const index = this.drinks.length - 1
     this.filteredDrinkOptions[index] = this.drinks.at(index).valueChanges.pipe(
-      map(value => value?.name),
-      map(name => name
-        ? this.drinkList.filter(option => option.name.toLowerCase().includes(name.toLowerCase()))
+      map(search => search
+        ? this.starterList.filter(option => {
+          const name = typeof search === 'string' ? search : search?.name;
+          return option?.name.toLowerCase().includes(name?.toLowerCase())
+        })
         : this.drinkList.slice()
       )
     )
@@ -170,9 +175,11 @@ export class MenuFormComponent implements AfterViewInit {
     this.sideDishes.push(new FormControl(null, Validators.required))
     const index = this.sideDishes.length - 1
     this.filteredSideDishOptions[index] = this.sideDishes.at(index).valueChanges.pipe(
-      map(value => value?.name),
-      map(name => name
-        ? this.sideDishList.filter(option => option.name.toLowerCase().includes(name.toLowerCase()))
+      map(search => search
+        ? this.starterList.filter(option => {
+          const name = typeof search === 'string' ? search : search?.name;
+          return option?.name.toLowerCase().includes(name?.toLowerCase())
+        })
         : this.sideDishList.slice()
       )
     )
@@ -187,9 +194,11 @@ export class MenuFormComponent implements AfterViewInit {
     this.desserts.push(new FormControl(null, Validators.required))
     const index = this.desserts.length - 1
     this.filteredDessertOptions[index] = this.desserts.at(index).valueChanges.pipe(
-      map(value => value?.name),
-      map(name => name
-        ? this.dessertList.filter(option => option.name.toLowerCase().includes(name.toLowerCase()))
+      map(search => search
+        ? this.starterList.filter(option => {
+          const name = typeof search === 'string' ? search : search?.name;
+          return option?.name.toLowerCase().includes(name?.toLowerCase())
+        })
         : this.dessertList.slice()
       )
     )
@@ -208,9 +217,11 @@ export class MenuFormComponent implements AfterViewInit {
     for (let i = 0; i < this.startersAmount; i++) {
       this.filteredStarterOptions[i] = this.starters.at(i).valueChanges.pipe(
         startWith(null),
-        map(value => value?.name),
-        map(name => name
-          ? this.starterList.filter(option => option.name.toLowerCase().includes(name.toLowerCase()))
+        map(search => search
+          ? this.starterList.filter(option => {
+            const name = typeof search === 'string' ? search : search?.name;
+            return option?.name.toLowerCase().includes(name?.toLowerCase())
+          })
           : this.starterList.slice()
         )
       )
@@ -218,9 +229,11 @@ export class MenuFormComponent implements AfterViewInit {
     for (let i = 0; i < this.drinksAmount; i++) {
       this.filteredDrinkOptions[i] = this.drinks.at(i).valueChanges.pipe(
         startWith(null),
-        map(value => value?.name),
-        map(name => name
-          ? this.drinkList.filter(option => option.name.toLowerCase().includes(name.toLowerCase()))
+        map(search => search
+          ? this.starterList.filter(option => {
+            const name = typeof search === 'string' ? search : search?.name;
+            return option?.name.toLowerCase().includes(name?.toLowerCase())
+          })
           : this.drinkList.slice()
         )
       )
@@ -228,9 +241,11 @@ export class MenuFormComponent implements AfterViewInit {
     for (let i = 0; i < this.sideDishesAmount; i++) {
       this.filteredSideDishOptions[i] = this.sideDishes.at(i).valueChanges.pipe(
         startWith(null),
-        map(value => value?.name),
-        map(name => name
-          ? this.sideDishList.filter(option => option.name.toLowerCase().includes(name.toLowerCase()))
+        map(search => search
+          ? this.starterList.filter(option => {
+            const name = typeof search === 'string' ? search : search?.name;
+            return option?.name.toLowerCase().includes(name?.toLowerCase())
+          })
           : this.sideDishList.slice()
         )
       )
@@ -238,9 +253,11 @@ export class MenuFormComponent implements AfterViewInit {
     for (let i = 0; i < this.dessertsAmount; i++) {
       this.filteredDessertOptions[i] = this.desserts.at(i).valueChanges.pipe(
         startWith(null),
-        map(value => value?.name),
-        map(name => name
-          ? this.dessertList.filter(option => option.name.toLowerCase().includes(name.toLowerCase()))
+        map(search => search
+          ? this.starterList.filter(option => {
+            const name = typeof search === 'string' ? search : search?.name;
+            return option?.name.toLowerCase().includes(name?.toLowerCase())
+          })
           : this.dessertList.slice()
         )
       )

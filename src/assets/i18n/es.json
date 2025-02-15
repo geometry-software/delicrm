@@ -27,6 +27,7 @@
       "EMAIL": "El formato del correo electrónico no es válido",
       "MINLENGTH": "La longitud mínima de la contraseña debe ser de 6 símbolos",
       "PATTERN": "La contraseña debe contener solo letras y números",
+      "REQUIRED_AUTOCOMPLETE": "Sólo se puede utilizar el valor seleccionado",
       "PASSWORDS_NOT_MATCHED": "Las contraseñas no coinciden",
       "ZERO_TABLE_NUMBER": "La mesa no puede ser 0",
       "DEFAULT": "Error"
@@ -101,6 +102,8 @@
         },
         "DELIVERY": {
           "TITLE": "Entrega",
+          "EXISTED_CLIENT": "Cliente existente",
+          "NEW_CLIENT": "Agregar nuevo cliente",
           "DETAILS": "Detalles de entrega",
           "NAME": "Nombre",
           "ADDRESS": "Dirección",
@@ -316,7 +319,8 @@
       "EXTRA_DISHES": {
         "STARTER": "Entrada",
         "DRINK": "Bebida",
-        "SIDE_DISHES": "Acompañamientos"
+        "SIDE_DISHES": "Acompañamientos",
+        "DESSERTS": "Postres"
       },
       "STATUS": {
         "DINING": "Comer en el sitio",
@@ -467,7 +471,8 @@
       "FOOTER-TITLE": "entregas"
     },
     "FORM": {
-      "TITLE": "Detalles del cliente",
+      "UPDATE_TITLE": "Detalles del cliente",
+      "CREATE_TITLE": "Agregar nuevo cliente",
       "FIELDS": {
         "NAME": "Nombre",
         "ADDRESS": "Dirección",
@@ -475,16 +480,17 @@
         "CREATED_AT": "Creado en",
         "STATUS": "Estado"
       },
-      "UPDATE_CLIENT_SUCCESS": "El cliente ha sido actualizado",
+      "UPDATE_CLIENT_SUCCESS": "El cliente fue actualizado",
+      "CREATE_CLIENT_SUCCESS": "El cliente fue creado",
       "BUTTON": "Actualizar"
     },
     "MODAL": {
-      "TITLE": "Actualizar usuario",
-      "SUBTITLE": "Elige estado y rol",
-      "STATUS_TITLE": "Estado actual",
-      "ROLE_TITLE": "Rol actual",
+      "TITLE": "Estado del cliente",
+      "SUBTITLE": "Actualizar estado del cliente",
       "BUTTON": {
         "UPDATE": "Actualizar",
+        "CREATE": "Agregar",
+        "ACTION": "Actualizando ..",
         "CLOSE": "Cerrar"
       }
     }

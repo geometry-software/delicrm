@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core'
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
-import { Observable, combineLatest } from 'rxjs'
+import { Observable, combineLatest, map, startWith, switchMap, tap } from 'rxjs'
 import { cloneDeep } from 'lodash'
 import {
   zoomOutUpOnLeaveAnimation,
@@ -15,7 +15,7 @@ import { MenuActions } from '../../store/menu.actions'
 import { UserService } from '../../../users/services/user.service'
 import { MenuConstants } from '../../utils/menu.constants'
 import { Store } from '@ngrx/store'
-import { getCurrency, getExtras, getOrder, loadingStatus } from '../../store/menu.selectors'
+import { getClients, getCurrency, getExtras, getOrder, loadingStatus } from '../../store/menu.selectors'
 import { Router } from '@angular/router'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Delivery, DeliveryTime } from '../../../delivery/models/delivery.model'
@@ -29,6 +29,9 @@ import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 import { User } from '../../../users/models/user.model'
 import { SessionService } from '../../../../auth/services/session.service'
 import { MatCheckboxChange } from '@angular/material/checkbox'
+import { MatDialog } from '@angular/material/dialog'
+import { SignalService } from '../../../../shared/services/signal.service'
+import { ClientFormComponent } from '../../../clients/components/client-form/client-form.component'
 
 @Component({
   selector: 'app-order-checkout',
@@ -49,9 +52,11 @@ export class OrderCheckoutComponent implements OnInit {
     private store: Store,
     private userService: UserService,
     private formBuilder: FormBuilder,
+    private signalService: SignalService,
     private sessionService: SessionService,
     private router: Router,
     private cdr: ChangeDetectorRef,
+    private dialog: MatDialog,
     private destroyRef: DestroyRef
   ) { }
 
@@ -62,6 +67,19 @@ export class OrderCheckoutComponent implements OnInit {
   readonly loadingStatus = this.store.select(loadingStatus)
   readonly showFieldErrors = showFieldErrors
   readonly PaymentType = PaymentType
+
+  readonly activeClientsControl = new FormControl<string | Auth>(null)
+  readonly activeClients = this.activeClientsControl.valueChanges.pipe(
+    startWith(''),
+    switchMap(search => this.store.select(getClients).pipe(
+      map(clients => search
+        ? clients.filter(option => {
+          const name = typeof search === 'string' ? search : search?.name;
+          return option?.name.toLowerCase().includes(name?.toLowerCase())
+        })
+        : clients.slice()
+      ))
+    ))
 
   order: Order
   extras: Extras
@@ -76,12 +94,8 @@ export class OrderCheckoutComponent implements OnInit {
   form: FormGroup = this.formBuilder.group({
     table: [null, [Validators.required, tableZeroNumberValidator()]],
     comment: [null],
+    name: [null],
   })
-
-  isOldClient: boolean = false
-  clientFormControl = new FormControl()
-  filteredClients: Observable<any[]>
-  clientList = new Array()
 
   hasSkippedStarter: boolean
   hasSkippedDrink: boolean
@@ -200,14 +214,21 @@ export class OrderCheckoutComponent implements OnInit {
     return item && item.name ? item.name : ''
   }
 
-  filterAutocompleteName(name: string) {
-    const filterValue = name.toLowerCase()
-    return this.clientList.filter((option) => option.name.toLowerCase().indexOf(filterValue) === 0)
+  addClientData(item: Auth) {
+    this.form.get('name').setValue(item.name)
+    this.form.get('address').setValue(item.address)
+    this.form.get('phone').setValue(item.phone)
   }
 
-  addClientData(item) {
-    this.form.reset()
-    this.form.patchValue(item)
+  addNewClient() {
+    this.signalService.setClientLoadingStatus(LoadingStatus.NotLoaded)
+    this.dialog.open(ClientFormComponent, {
+      width: 'auto',
+      height: 'auto',
+      autoFocus: false,
+    }).backdropClick().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => this.signalService.setClientLoadingStatus(LoadingStatus.NotLoaded))
   }
 
   removeAllFormControls() {
@@ -218,18 +239,29 @@ export class OrderCheckoutComponent implements OnInit {
     this.form.removeControl('change')
     this.form.removeControl('comment')
     this.form.removeControl('table')
+    this.activeClientsControl.setValue(null)
   }
 
   chooseOrderType(type: OrderType) {
     switch (type) {
       case 'delivery':
         this.removeAllFormControls()
-        this.form.addControl('name', new FormControl(null, Validators.required))
         this.form.addControl('address', new FormControl(null, Validators.required))
         this.form.addControl('phone', new FormControl(null, Validators.required))
+        if (this.auth) {
+          this.form.addControl('name', new FormControl(null, Validators.required))
+        } else {
+          this.form.get('address').disable()
+          this.form.get('phone').disable()
+        }
         this.form.addControl('payment', new FormControl(this.PaymentType.Card, Validators.required))
         this.form.addControl('change', new FormControl(null))
         this.form.addControl('comment', new FormControl(null))
+        // console.log(this.form);
+        console.log(this.form.get('address'));
+        this.form.get('address').updateValueAndValidity()
+        console.log(this.form.get('address'));
+
         break
       case 'table':
         this.removeAllFormControls()
@@ -243,21 +275,23 @@ export class OrderCheckoutComponent implements OnInit {
         break
     }
     this.order.category.type = type
-    this.form.markAsUntouched()
+    this.form.markAsPristine()
     this.form.updateValueAndValidity()
   }
 
   submitOrderDetails() {
     this.resetValidation()
+    console.log(this.form);
+
     if (!this.hasSkippedStarter && !this.hasSkippedDrink && this.form.valid) {
-      this.formatOrder()
+      this.prepareOrderByType()
       this.store.dispatch(MenuActions.checkoutOrder({ order: this.order }))
     } else {
       this.hightlightValidation()
     }
   }
 
-  private formatOrder() {
+  private prepareOrderByType() {
     this.order.createdAt = getCurrentUnixTime()
     this.order.createdBy = this.appUser ? this.appUser : null
     switch (this.order.category.type) {
@@ -280,8 +314,8 @@ export class OrderCheckoutComponent implements OnInit {
     this.hasPaymentTypeError = false
     this.hasTakeAwayError = false
     this.hasTableNumberError = false
-    this.hasSkippedStarter = Boolean(!this.order.main.find(el => Boolean(el.starter.id) || el.starter.isSkipped))
-    this.hasSkippedDrink = Boolean(!this.order.main.find(el => Boolean(el.drink.id) || el.starter.isSkipped))
+    this.hasSkippedStarter = Boolean(!this.order.main.find(el => Boolean(el.starter?.id) || el.starter?.isSkipped))
+    this.hasSkippedDrink = Boolean(!this.order.main.find(el => Boolean(el.drink?.id) || el.starter?.isSkipped))
   }
 
   private hightlightValidation() {

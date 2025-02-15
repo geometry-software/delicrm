@@ -51,6 +51,8 @@ const getErrorMessage = (control: AbstractControl): string => {
     return 'FORM.FIELD_ERROR_MESSAGE.MINLENGTH'
   } else if (control.hasError('pattern')) {
     return 'FORM.FIELD_ERROR_MESSAGE.PATTERN'
+  } else if (control.hasError('requiredAutocomplete')) {
+    return 'FORM.FIELD_ERROR_MESSAGE.REQUIRED_AUTOCOMPLETE'
   } else if (control.hasError('tableZeroNumber')) {
     return 'FORM.FIELD_ERROR_MESSAGE.ZERO_TABLE_NUMBER'
   } else {

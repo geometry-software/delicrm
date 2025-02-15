@@ -51,7 +51,7 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
    * @param collection name of the collection
    * @returns Observable with all documents from collection
    */
-  getAllDocumentsByStatus = (collection: string, status: string): Observable<T[]> =>
+  getAllDocumentsByStatus = (collection: string, status: S): Observable<T[]> =>
     this.angularFirestore
       .collection<T>(collection, query => query
         .orderBy('name', 'desc')

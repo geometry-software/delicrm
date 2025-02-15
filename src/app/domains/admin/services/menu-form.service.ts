@@ -35,6 +35,8 @@ export class MenuFormService {
       sideDishes: this.initFormArrayItem(menu.extrasAmount.sideDishes),
       desserts: this.initFormArrayItem(menu.extrasAmount.desserts),
     })
+    console.log('initForm');
+
     this.menu = menu
     this.plateList = recipes.filter(value => value.type == 'main')
     this.plateListSub.next(this.plateList)

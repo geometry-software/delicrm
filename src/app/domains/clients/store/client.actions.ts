@@ -14,7 +14,6 @@ export const ClientActions = createActionGroup({
     'Update Client Status Failed': emptyProps(),
     'Update Client Status Success': emptyProps(),
     'Update Client': props<{ id: string, name: string, address: string, phone: string }>(),
-    'Update Client Failed': emptyProps(),
     'Update Client Success': emptyProps(),
     'Get Item': props<{ id: string }>(),
     'Get Item Success': props<{ item: Auth }>(),

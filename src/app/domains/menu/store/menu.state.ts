@@ -1,3 +1,4 @@
+import { Auth } from '../../../auth/models/auth.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { DailyMenu, Extras, Restaurant } from '../../admin/models/restaurant'
 import { Order } from '../../orders/models/order.model'
@@ -10,6 +11,7 @@ export interface State {
   restaurant: Restaurant
   order: Order
   orders: CheckoutOrder[]
+  clients: Auth[]
   loadingStatus: LoadingStatus
 }
 
@@ -20,5 +22,6 @@ export const initialState: State = {
   restaurant: null,
   order: null,
   orders: null,
+  clients: [],
   loadingStatus: LoadingStatus.NotLoaded
 }

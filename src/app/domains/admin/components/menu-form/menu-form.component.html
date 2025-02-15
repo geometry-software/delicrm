@@ -7,8 +7,9 @@
         <div class="section-row" formArrayName="starters" *ngFor="let item of starters.controls; let i = index">
           <mat-form-field [hideRequiredMarker]="true">
             <mat-label> {{ getStartersLabel(i) }} </mat-label>
-            <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoStarter" />
-            <mat-autocomplete requireSelection #autoStarter="matAutocomplete" [displayWith]="displayFn">
+            <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoStarter"
+              [requiredAutocomplete]="autoStarter" />
+            <mat-autocomplete #autoStarter="matAutocomplete" [displayWith]="displayFn">
               <mat-option *ngFor="let option of filteredStarterOptions[i] | async" [value]="option">
                 {{ option.name }}
               </mat-option>
@@ -34,8 +35,9 @@
         <div class="section-row" formArrayName="drinks" *ngFor="let item of drinks.controls; let i = index">
           <mat-form-field [hideRequiredMarker]="true">
             <mat-label> {{ getDrinksLabel(i) }} </mat-label>
-            <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoDrink" />
-            <mat-autocomplete requireSelection #autoDrink="matAutocomplete" [displayWith]="displayFn">
+            <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoDrink"
+              [requiredAutocomplete]="autoDrink" />
+            <mat-autocomplete #autoDrink="matAutocomplete" [displayWith]="displayFn">
               <mat-option *ngFor="let option of filteredDrinkOptions[i] | async" [value]="option">
                 {{ option.name }}
               </mat-option>
@@ -61,8 +63,9 @@
         <div class="section-row" formArrayName="sideDishes" *ngFor="let item of sideDishes.controls; let i = index">
           <mat-form-field [hideRequiredMarker]="true">
             <mat-label> {{ getSideDishesLabel(i) }} </mat-label>
-            <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoSidedish" />
-            <mat-autocomplete requireSelection #autoSidedish="matAutocomplete" [displayWith]="displayFn">
+            <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoSidedish"
+              [requiredAutocomplete]="autoSidedish" />
+            <mat-autocomplete #autoSidedish="matAutocomplete" [displayWith]="displayFn">
               <mat-option *ngFor="let option of filteredSideDishOptions[i] | async" [value]="option">
                 {{ option.name }}
               </mat-option>
@@ -88,8 +91,9 @@
         <div class="section-row" formArrayName="desserts" *ngFor="let item of desserts.controls; let i = index">
           <mat-form-field [hideRequiredMarker]="true">
             <mat-label> {{ getDessertLabel(i) }} </mat-label>
-            <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoDessert" />
-            <mat-autocomplete requireSelection #autoDessert="matAutocomplete" [displayWith]="displayFn">
+            <input type="text" matInput [formControlName]="i" [matAutocomplete]="autoDessert"
+              [requiredAutocomplete]="autoDessert" />
+            <mat-autocomplete #autoDessert="matAutocomplete" [displayWith]="displayFn">
               <mat-option *ngFor="let option of filteredDessertOptions[i] | async" [value]="option">
                 {{ option.name }}
               </mat-option>

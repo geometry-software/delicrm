@@ -11,20 +11,21 @@ import { MenuEffects } from './store/menu.effects'
 import { reducer } from './store/menu.reducer'
 import { StoreModule } from '@ngrx/store'
 import { EffectsModule } from '@ngrx/effects'
+import { ClientService } from '../clients/services/client.service'
 
 @NgModule({
   declarations: [
     MenuLayoutComponent,
     PlateDetailComponent,
     DailyMenuComponent,
-    OrderCheckoutComponent,
-    // ClientOrderComponent
+    OrderCheckoutComponent
   ],
   imports: [
     SharedModule,
     WaiterRoutingModule,
     StoreModule.forFeature(MenuConstants.storeFeatureKey, reducer),
     EffectsModule.forFeature([MenuEffects]),
-  ]
+  ],
+  providers: [ClientService]
 })
 export class WaiterModule { }

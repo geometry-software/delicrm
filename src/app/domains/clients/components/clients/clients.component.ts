@@ -16,18 +16,23 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { SortRequest } from '../../../../shared/repository/repository.models'
 import { combineListControls } from '../../../../shared/utils/combine-list-controls'
 import { clientsTabIndexByStatus } from '../../models/client.model'
+import { Auth } from '../../../../auth/models/auth.model'
+import { ClientFormComponent } from '../client-form/client-form.component'
+import { SignalService } from '../../../../shared/services/signal.service'
 
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ClientFormComponent]
 })
 export class ClientsComponent implements OnInit {
 
   constructor(
     private store: Store,
     private destroyRef: DestroyRef,
+    private signalService: SignalService,
     private dialog: MatDialog
   ) { }
 
@@ -86,6 +91,18 @@ export class ClientsComponent implements OnInit {
       filter(status => status !== data.status),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(status => this.store.dispatch(ClientActions.updateClientStatus({ status, id: data.id })))
+  }
+
+  openForm(data: Auth) {
+    this.signalService.setClientLoadingStatus(LoadingStatus.NotLoaded)
+    this.dialog.open(ClientFormComponent, {
+      width: 'auto',
+      height: 'auto',
+      autoFocus: false,
+      data
+    }).backdropClick().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => this.signalService.setClientLoadingStatus(LoadingStatus.NotLoaded))
   }
 
 }

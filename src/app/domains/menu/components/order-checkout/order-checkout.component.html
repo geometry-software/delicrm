@@ -35,6 +35,13 @@
         [checked]="!item.eightySix" (change)="chooseSideDish($event, item, dishIndex, i)" [disabled]="item.eightySix">
         <span [class.eighty-six]="item.eightySix">{{ item.name }}</span>
       </mat-checkbox>
+
+      <div class="section">{{ 'SHARED.DAILY_MENU.DESSERTS' | translate }}</div>
+      <mat-checkbox class="selection-group" *ngFor="let item of extras.desserts; let dishIndex = index"
+        [checked]="!item.eightySix" (change)="chooseSideDish($event, item, dishIndex, i)" [disabled]="item.eightySix">
+        <span [class.eighty-six]="item.eightySix">{{ item.name }}</span>
+      </mat-checkbox>
+
     </div>
   </ng-container>
 
@@ -42,15 +49,23 @@
     <div class="card mt-[20px] ">
       <app-title title="MENU.CHECKOUT.ORDER_DETAILS.TITLE" subtitle="MENU.CHECKOUT.ORDER_DETAILS.SUBTITLE" />
 
-      <mat-radio-group *ngIf="appUser" class="radio-group" (change)="chooseOrderType($event.value)">
+      <mat-radio-group class="selection-group" *ngIf="appUser" (change)="chooseOrderType($event.value)">
         <mat-radio-button value="table" checked="true">
-          {{ 'MENU.CHECKOUT.ORDER_DETAILS.TABLE.TITLE' | translate }}
+          <span>{{ 'MENU.CHECKOUT.ORDER_DETAILS.TABLE.TITLE' | translate }}</span>
         </mat-radio-button>
         <mat-radio-button value="delivery">
-          {{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.TITLE' | translate }}
+          <span>{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.TITLE' | translate }}</span>
         </mat-radio-button>
+        <ng-container *ngIf="order.category.type === 'delivery'">
+          <!-- <mat-checkbox [(ngModel)]="existedClient" [ngModelOptions]="{ standalone: true }">
+            <span>{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.EXISTED_CLIENT' | translate }}</span>
+          </mat-checkbox> -->
+          <button mat-button type="button" (click)="addNewClient()">
+            {{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.NEW_CLIENT' | translate }}
+          </button>
+        </ng-container>
         <mat-radio-button value="takeaway">
-          {{ 'MENU.CHECKOUT.ORDER_DETAILS.TAKE_AWAY.TITLE' | translate }}
+          <span>{{ 'MENU.CHECKOUT.ORDER_DETAILS.TAKE_AWAY.TITLE' | translate }}</span>
         </mat-radio-button>
       </mat-radio-group>
 
@@ -81,33 +96,34 @@
         <!-- DELIVERY -->
         <ng-container *ngSwitchCase="'delivery'">
 
-          <!-- TODO -->
-          <!-- <mat-checkbox *ngIf="order.category.type === 'delivery'" [(ngModel)]="isOldClient"
-          [ngModelOptions]="{ standalone: true }">
-          Is old client?
-        </mat-checkbox> -->
-
-          <!-- TODO -->
-          <!-- <mat-form-field *ngIf="isOldClient" appearance="outline" style="margin-top: 10px">
-            <mat-label>Find client by name</mat-label>
-            <input type="text" matInput [formControl]="clientFormControl" [matAutocomplete]="auto" />
-            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
-              (optionSelected)="addClientData($event.option.value)" formControlName="name">
-              <mat-option *ngFor="let option of filteredClients | async" [value]="option">
-                {{ option.name }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field> -->
-
           <div class="section">{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.DETAILS' | translate }}</div>
 
-          <mat-form-field [hideRequiredMarker]="true">
-            <mat-label>{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.NAME' | translate }}</mat-label>
-            <input matInput type="text" formControlName="name" />
-            <mat-error *ngIf="showFieldErrors(form, 'name') as error">
-              {{ error | translate }}
-            </mat-error>
-          </mat-form-field>
+          <ng-container *ngIf="appUser; else existedClientField">
+            <mat-form-field [hideRequiredMarker]="true">
+              <mat-label>{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.NAME' | translate }}</mat-label>
+              <input type="text" matInput [formControl]="activeClientsControl" [matAutocomplete]="auto"
+                [requiredAutocomplete]="auto" />
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                (optionSelected)="addClientData($event.option.value)">
+                <mat-option *ngFor="let option of activeClients | async" [value]="option">
+                  {{ option.name }}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="activeClientsControl.hasError('requiredAutocomplete')">
+                {{ 'FORM.FIELD_ERROR_MESSAGE.REQUIRED_AUTOCOMPLETE' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </ng-container>
+
+          <ng-template #existedClientField>
+            <mat-form-field [hideRequiredMarker]="true">
+              <mat-label>{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.NAME' | translate }}</mat-label>
+              <input matInput type="text" formControlName="name" />
+              <mat-error *ngIf="showFieldErrors(form, 'name') as error">
+                {{ error | translate }}
+              </mat-error>
+            </mat-form-field>
+          </ng-template>
 
           <mat-form-field [hideRequiredMarker]="true">
             <mat-label>{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.ADDRESS' | translate }}</mat-label>
@@ -160,7 +176,7 @@
 
       </ng-container>
 
-      <div class="section">{{ 'MENU.CHECKOUT.ORDER_DETAILS.COMMENT' | translate }}</div>
+      <!-- <div class="section">{{ 'MENU.CHECKOUT.ORDER_DETAILS.COMMENT' | translate }}</div> -->
 
       <mat-form-field>
         <mat-label>{{ 'MENU.CHECKOUT.ORDER_DETAILS.COMMENT' | translate }}</mat-label>
