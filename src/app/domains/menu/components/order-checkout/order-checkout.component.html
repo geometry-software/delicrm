@@ -45,6 +45,11 @@
     </div>
   </ng-container>
 
+  <div class="card mt-[20px]" *ngIf="order.alacarte.length">
+    <app-title title="MENU.CHECKOUT.ORDER_DETAILS.SECTION_TITLE.ALACARTE" />
+    <app-alacarte-menu [alacarteMenu]="order.alacarte" [showIndex]="true" />
+  </div>
+
   <form [formGroup]="form" (ngSubmit)="submitOrderDetails()" autocomplete="off">
     <div class="card mt-[20px] ">
       <app-title title="MENU.CHECKOUT.ORDER_DETAILS.TITLE" subtitle="MENU.CHECKOUT.ORDER_DETAILS.SUBTITLE" />
@@ -57,10 +62,7 @@
           <span>{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.TITLE' | translate }}</span>
         </mat-radio-button>
         <ng-container *ngIf="order.category.type === 'delivery'">
-          <!-- <mat-checkbox [(ngModel)]="existedClient" [ngModelOptions]="{ standalone: true }">
-            <span>{{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.EXISTED_CLIENT' | translate }}</span>
-          </mat-checkbox> -->
-          <button mat-button type="button" (click)="addNewClient()">
+          <button class="add-new-client" mat-button type="button" (click)="addNewClient()">
             {{ 'MENU.CHECKOUT.ORDER_DETAILS.DELIVERY.NEW_CLIENT' | translate }}
           </button>
         </ng-container>
@@ -176,21 +178,10 @@
 
       </ng-container>
 
-      <!-- <div class="section">{{ 'MENU.CHECKOUT.ORDER_DETAILS.COMMENT' | translate }}</div> -->
-
       <mat-form-field>
         <mat-label>{{ 'MENU.CHECKOUT.ORDER_DETAILS.COMMENT' | translate }}</mat-label>
         <input matInput type="text" formControlName="comment" />
       </mat-form-field>
-    </div>
-
-    <div class="card mt-[20px]" *ngIf="order.alacarte?.length">
-      <h2> {{ alaCarteLabel }} </h2>
-      <ol>
-        <li *ngFor="let item of order.alacarte">
-          {{ item.name }}
-        </li>
-      </ol>
     </div>
 
     <div class="card mt-[20px] mb-[10px]">

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { fadeInOnEnterAnimation, fadeInUpOnEnterAnimation, rubberBandOnEnterAnimation } from 'angular-animations'
 import { PlateDetailComponent } from '../plate-detail/plate-detail.component'
@@ -8,13 +8,14 @@ import { Recipe } from '../../../recipe/models/recipe.model'
 import { setProteinImage } from '../../../../shared/utils/protein-image'
 import { MenuConstants } from '../../utils/menu.constants'
 import { Store } from '@ngrx/store'
-import { getCurrency, getMenu, getRestaurantInfo, isRestaurantOpen, loadingStatus } from '../../store/menu.selectors'
+import { getAlacarte, getCurrency, getMenu, getRestaurantInfo, isRestaurantOpen, loadingStatus } from '../../store/menu.selectors'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { MenuItem } from '../../../admin/models/restaurant'
 import { TranslateService } from '@ngx-translate/core'
 import { map } from 'rxjs'
 import { UserService } from '../../../users/services/user.service'
 import { SessionService } from '../../../../auth/services/session.service'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
 @Component({
   selector: 'app-daily-menu',
@@ -36,6 +37,7 @@ export class DailyMenuComponent implements OnInit {
     private translateService: TranslateService,
     private userService: UserService,
     private sessionService: SessionService,
+    private destroyRef: DestroyRef
   ) { }
 
   readonly chosenDailyMenuItems = []
@@ -56,6 +58,7 @@ export class DailyMenuComponent implements OnInit {
   readonly restaurantInfo = this.store.select(getRestaurantInfo)
   readonly loadingStatus = this.store.select(loadingStatus)
   readonly currency = this.store.select(getCurrency)
+  readonly alacarteMenu = this.store.select(getAlacarte)
   readonly user = this.sessionService.getUser()
   readonly serviceClosedSubtitle = this.store.select(getRestaurantInfo).pipe(
     map(value => value.closed))
@@ -95,7 +98,7 @@ export class DailyMenuComponent implements OnInit {
   }
 
   save() {
-    if (!this.chosenDailyMenuItems.length) {
+    if (!this.chosenDailyMenuItems.length && !this.chosenAlaCarteItems.length) {
       this.emptyOrderError = true
     } else {
       this.emptyOrderError = false
@@ -103,9 +106,8 @@ export class DailyMenuComponent implements OnInit {
     }
   }
 
-  openDetail(event) {
-    const item = event.item
-    const dialog = this.dialog.open(PlateDetailComponent, {
+  openDetail(item: MenuItem) {
+    this.dialog.open(PlateDetailComponent, {
       width: '90%',
       height: 'auto',
       data: {
@@ -113,52 +115,21 @@ export class DailyMenuComponent implements OnInit {
         currency: this.currency,
         user: this.user,
       },
-    })
-    dialog.afterClosed().subscribe(value => {
+    }).afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(value => {
       if (value == 'add') {
         this.addItem(item)
         this.cdr.markForCheck()
       }
       if (value == 'remove') {
-        this.store.dispatch(ItemActions.setEightySix({ id: item.id }))
+        if (item.type === 'alacarte') {
+          this.store.dispatch(ItemActions.setAlacarteEightySix({ id: item.id }))
+        } else {
+          this.store.dispatch(ItemActions.setDailyMenuEightySix({ id: item.id }))
+        }
       }
     })
   }
 
-  // openStarterDetail(item, index) {
-  //   if (this.hasDeleteAuth) {
-  //     let dialog = this.dialog.open(PlateDetailComponent, {
-  //       width: '90%',
-  //       height: 'auto',
-  //       data: {
-  //         starterDetail: true,
-  //         plate: item,
-  //       },
-  //     })
-  //     dialog.afterClosed().subscribe(value => {
-  //       if (value == 'remove') {
-  //         switch (item.type) {
-  //           case 'Starters (fruit or soup)':
-  //             this.menuEntry.starters.startersArray[index].isRemoved = true
-  //             break
-  //           case 'Drink (juice or lemonade)':
-  //             this.menuEntry.starters.drinksArray[index].isRemoved = true
-  //             break
-  //           case 'Salad':
-  //             this.menuEntry.starters.toppingsList[index].isRemoved = true
-  //             break
-  //           case 'Rice':
-  //             this.menuEntry.starters.toppingsList[index].isRemoved = true
-  //             break
-  //           case 'Garnish':
-  //             this.menuEntry.starters.toppingsList[index].isRemoved = true
-  //             break
-  //           case 'Dessert':
-  //             this.menuEntry.starters.toppingsList[3].isRemoved = true
-  //             break
-  //         }
-  //       }
-  //     })
-  //   }
-  // }
 }

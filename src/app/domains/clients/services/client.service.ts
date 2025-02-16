@@ -62,16 +62,17 @@ export class ClientService {
     return this.repositoryService.getAllDocumentsByIncludesQuery(this.collection, property, value)
   }
 
-  create(name: string, address: string, phone: string) {
+  create(name: string, address: string, phone: string, createdByUserName: string) {
     const client: Auth = {
       authId: uuidv4(),
       address,
       phone,
       name,
+      createdByUserName,
       deliveries: [],
       locale: BootstrapConstants.locale,
       status: 'active',
-      createdAt: getCurrentUnixTime(),
+      createdAt: getCurrentUnixTime()
     }
     return this.repositoryService.setDocument(this.collection, client, client.authId).pipe(
       map(() => client.authId)

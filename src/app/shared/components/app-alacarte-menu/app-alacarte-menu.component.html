@@ -1,0 +1,17 @@
+<div class="section" *ngIf="!showIndex">{{ 'SHARED.DAILY_MENU.ALACARTE' | translate }}</div>
+
+<div class="flex items-center justify-between" *ngFor="let item of alacarteMenu let i = index">
+  <div class="flex items-center">
+    <mat-checkbox *ngIf="showCheck" [checked]="item.isAdded" (change)="add(item)" />
+    <div (click)="open(item)" class="item__title item__main-dish" [class.eighty-six]="item.eightySix">
+      <span *ngIf="showIndex">{{ i + 1 }}. </span>
+      <span>{{ item.name }}</span>
+    </div>
+  </div>
+  <div class="flex items-center" *ngIf="!item.eightySix">
+    <div class="item__price">{{ item.price }} {{ item.currency }}</div>
+    <button mat-icon-button *ngIf="showAdd" (click)="add(item)">
+      <mat-icon class="add-button">add</mat-icon>
+    </button>
+  </div>
+</div>

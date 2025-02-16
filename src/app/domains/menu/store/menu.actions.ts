@@ -14,6 +14,7 @@ export const MenuActions = createActionGroup({
     'Init Daily Menu Success': props<{
       menu: DailyMenu,
       restaurant: Restaurant,
+      alacarte: MenuItem[]
       open: boolean,
       clients: Auth[]
     }>(),
@@ -28,8 +29,9 @@ export const MenuActions = createActionGroup({
     'Get Active Clients': emptyProps(),
     'Get Active Clients Success': props<{ clients: Auth[] }>(),
     'Checkout Order Success': props<{ id: string, checkout: Checkout }>(),
-    'Set Eighty Six': props<{ id: string }>(),
-    'Unset Eighty Six': props<{ id: string }>(),
-    'Eighty Six Success': props<{ menu: DailyMenu }>(),
+    'Set Daily Menu Eighty Six': props<{ id: string }>(),
+    'Set Alacarte Eighty Six': props<{ id: string }>(),
+    'Set Daily Menu Eighty Six Success': props<{ menu: DailyMenu }>(),
+    'Set Alacarte Eighty Six Success': props<{ alacarte: MenuItem[] }>(),
   },
 })

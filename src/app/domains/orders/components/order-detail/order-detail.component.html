@@ -18,9 +18,13 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="card mt-[20px]" *ngIf="order.main.length">
+      <app-title title="MENU.CHECKOUT.ORDER_DETAILS.SECTION_TITLE.DAILY_MENU" margin="0" />
       <ol>
         <li *ngFor="let item of order.main">
-          <h3>{{ item.plate.name }}</h3>
+          <div class="title">{{ item.plate.name }}</div>
           <div class="description">
             <app-title-item title="ORDERS.DETAIL.EXTRA_DISHES.STARTER" [value]="getStarterOrDrinkTitle(item.starter)" />
             <app-title-item title="ORDERS.DETAIL.EXTRA_DISHES.DRINK" [value]="getStarterOrDrinkTitle(item.drink)" />
@@ -28,13 +32,24 @@
             <div [class.eighty-six]="item.isSkipped || item.eightySix" *ngFor="let item of item.sideDishes">
               {{ item.name }}
             </div>
-            <app-title-item title="ORDERS.DETAIL.EXTRA_DISHES.SIDE_DISHES" margin="0" />
-            <div [class.eighty-six]="item.isSkipped || item.eightySix" *ngFor="let item of item.sideDishes">
+            <br>
+            <app-title-item title="ORDERS.DETAIL.EXTRA_DISHES.DESSERTS" margin="0" />
+            <div [class.eighty-six]="item.isSkipped || item.eightySix" *ngFor="let item of item.desserts">
               {{ item.name }}
             </div>
           </div>
         </li>
       </ol>
+    </div>
+
+    <div class="card mt-[20px]" *ngIf="order.alacarte.length">
+      <app-title title="MENU.CHECKOUT.ORDER_DETAILS.SECTION_TITLE.ALACARTE" margin="0" />
+      <ol>
+        <li *ngFor="let item of order.alacarte">
+          {{ item.name }}
+        </li>
+      </ol>
+      <!-- <app-alacarte-menu [alacarteMenu]="order.alacarte" [showIndex]="true" /> -->
     </div>
 
     <div class="card mt-[20px]">

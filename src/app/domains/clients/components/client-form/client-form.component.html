@@ -28,7 +28,8 @@
 
   <ng-container *ngIf="dialogData">
     <app-title-item title="CLIENTS.FORM.FIELDS.STATUS" [value]="dialogData.status" />
-    <app-title-item title="CLIENTS.FORM.FIELDS.CREATED_AT" [value]="getDateFromUnix(client.createdAt)" />
+    <app-title-item title="CLIENTS.FORM.FIELDS.CREATED_AT" [value]="getFullTimeFromUnix(dialogData.createdAt)" />
+    <app-title-item title="CLIENTS.CREATED_BY_CLIENT.TITLE" [value]="getCreatedByTitle(dialogData)" />
   </ng-container>
 
   <div class="form-actions" *ngIf="loadingStatus | async as loading">

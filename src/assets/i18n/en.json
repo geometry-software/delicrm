@@ -100,6 +100,10 @@
           "TITLE": "Table",
           "NUMBER": "Table number"
         },
+        "SECTION_TITLE": {
+          "ALACARTE": "Alacarte plates",
+          "DAILY_MENU": "Daily menu plates"
+        },
         "DELIVERY": {
           "TITLE": "Delivery",
           "EXISTED_CLIENT": "Existed client",
@@ -493,6 +497,10 @@
         "ACTION": "Updating ..",
         "CLOSE": "Close"
       }
+    },
+    "CREATED_BY_CLIENT": {
+      "TITLE": "Created by",
+      "YES": "Client itself"
     }
   },
   "ADMIN": {
@@ -532,6 +540,7 @@
       "ALACARTE": {
         "NOT_PUBLISHED": "No alacarte options were published",
         "NO_RECIPES": "No alacarte options were added to recipes",
+        "CREATED_SUCCESS": "Alacarte menu was updated",
         "BUTTON": {
           "ACTION": "Update alacarte menu",
           "LOADING": "Updating .."

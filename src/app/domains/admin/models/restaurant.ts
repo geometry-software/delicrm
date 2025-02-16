@@ -33,6 +33,7 @@ export type Extras = {
 }
 
 export type MenuItem = Recipe & {
+    currency?: string
     eightySix?: boolean
     isAdded?: boolean
     isSkipped?: boolean

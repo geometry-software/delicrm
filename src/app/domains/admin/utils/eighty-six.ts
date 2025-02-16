@@ -1,16 +1,14 @@
 import { DailyMenu, MenuItem } from "../models/restaurant"
 
-export const calulatedMenuWithEightySix = (menu: DailyMenu, id: string) => {
+export const calulatedDailyMenuWithEightySix = (menu: DailyMenu, id: string): DailyMenu => {
     const updatedMain = menu.main.map(item => updateItemEightySix(item, id))
-    // const updatedAlacarte = (menu.alacarte ?? []).map(item => this.updateItemEightySix(item, id))
     const updatedStarters = menu.extras.starters.map(item => updateItemEightySix(item, id))
     const updatedDrinks = menu.extras.drinks.map(item => updateItemEightySix(item, id))
     const updatedDesserts = menu.extras.desserts.map(item => updateItemEightySix(item, id))
     const updatedSideDishes = menu.extras.sideDishes.map(item => updateItemEightySix(item, id))
-    const updatedMenu: DailyMenu = {
+    return {
         ...menu,
         main: updatedMain,
-        // alacarte: updatedAlacarte,
         extras: {
             drinks: updatedDrinks,
             starters: updatedStarters,
@@ -18,8 +16,10 @@ export const calulatedMenuWithEightySix = (menu: DailyMenu, id: string) => {
             desserts: updatedDesserts
         }
     }
-    return updatedMenu
 }
+
+export const calulatedAlacarteMenuWithEightySix = (alacarte: MenuItem[], id: string): MenuItem[] =>
+    alacarte.map(item => updateItemEightySix(item, id))
 
 const updateItemEightySix = (item: MenuItem, id: string) => {
     if (item.id === id) {

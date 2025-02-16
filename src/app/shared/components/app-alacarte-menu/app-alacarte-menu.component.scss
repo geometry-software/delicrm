@@ -1,0 +1,36 @@
+.add-button {
+  color: #57aaf7;
+}
+
+.item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &__main-dish {
+    padding-left: 10px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  &__main-dish:hover {
+    transition: all 0.2s ease-in-out;
+    color: #57aaf7;
+  }
+
+  &__title {
+    color: #555;
+    font-size: 1.4em;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  &__price {
+    color: #555;
+    font-size: 1.2em;
+    font-weight: 500;
+  }
+
+  &__history {
+    color: #888;
+  }
+}

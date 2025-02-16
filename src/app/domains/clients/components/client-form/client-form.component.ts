@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { ClientActions } from '../../store/client.actions'
 import { highlightInvalidFields, showFieldErrors } from '../../../../shared/utils/form-error-handling'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { getDateFromUnix } from '../../../../shared/utils/format-unix-time'
+import { getDateFromUnix, getFullTimeFromUnix } from '../../../../shared/utils/format-unix-time'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { Auth } from '../../../../auth/models/auth.model'
 import { SharedModule } from '../../../../shared/shared.module'
@@ -15,6 +15,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 import { SessionService } from '../../../../auth/services/session.service'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { MenuActions } from '../../../menu/store/menu.actions'
+import { TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-client-form',
@@ -30,11 +31,11 @@ export class ClientFormComponent implements OnInit {
     private dialogRef: MatDialogRef<ClientFormComponent>,
     private destroyRef: DestroyRef,
     private signalService: SignalService,
+    private translateService: TranslateService,
     @Inject(MAT_DIALOG_DATA) public dialogData: Auth
   ) { }
 
   ngOnInit(): void {
-    this.client = this.dialogData
     this.itemId = this.dialogData?.authId
     if (this.itemId) {
       this.form.patchValue(this.dialogData)
@@ -44,14 +45,13 @@ export class ClientFormComponent implements OnInit {
 
   readonly loadingStatus = toObservable(this.signalService.getClientLoadingStatus)
   readonly showFieldErrors = showFieldErrors
-  readonly getDateFromUnix = getDateFromUnix
+  readonly getFullTimeFromUnix = getFullTimeFromUnix
   readonly form = new FormGroup({
     name: new FormControl(null, Validators.required),
     address: new FormControl(null, Validators.required),
     phone: new FormControl(null, Validators.required),
   })
   readonly LoadingStatus = LoadingStatus
-  client: Auth
   itemId: string
 
   confirm() {
@@ -93,6 +93,12 @@ export class ClientFormComponent implements OnInit {
       : this.dialogData
         ? 'CLIENTS.MODAL.BUTTON.UPDATE'
         : 'CLIENTS.MODAL.BUTTON.CREATE'
+  }
+
+  getCreatedByTitle(client: Auth) {
+    const yes = this.translateService.instant('CLIENTS.CREATED_BY_CLIENT.YES')
+    const no = this.translateService.instant('CLIENTS.CREATED_BY_CLIENT.NO')
+    return client.createdByUserName ?? no
   }
 
 }

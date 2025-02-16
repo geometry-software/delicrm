@@ -1,23 +1,26 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
 import { setProteinImage } from '../../utils/protein-image'
-import { DailyMenu } from '../../../domains/admin/models/restaurant'
+import { DailyMenu, MenuItem } from '../../../domains/admin/models/restaurant'
 
 @Component({
-  selector: 'app-formatted-daily-menu',
-  templateUrl: './app-formatted-daily-menu.component.html',
-  styleUrls: ['./app-formatted-daily-menu.component.scss'],
+  selector: 'app-alacarte-menu',
+  templateUrl: './app-alacarte-menu.component.html',
+  styleUrls: ['./app-alacarte-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppFormattedDailyMenuComponent {
+export class AppAlacarteMenuComponent {
 
   @Input()
-  dailyMenu: DailyMenu
+  showAdd: boolean
 
   @Input()
-  isAddAvailable: boolean
+  showCheck: boolean
 
   @Input()
-  currency: string
+  showIndex: boolean
+
+  @Input()
+  alacarteMenu: MenuItem[]
 
   @Output()
   openDetail = new EventEmitter()

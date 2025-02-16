@@ -6,7 +6,7 @@ import { BoardLayoutComponent } from './components/board-layout/board-layout.com
 import { ImageMenuComponent } from './components/image-menu/image-menu.component'
 import { ShiftReportComponent } from './components/shift-report/shift-report.component'
 import { ToolbarGuard } from '../../shared/guards/toolbar.guard'
-import { AlacarteMenuComponent } from './components/alacarte-menu/alacarte-menu.component'
+import { AlacarteFormComponent } from './components/alacarte-form/alacarte-form.component'
 
 const routes: Routes = [
   {
@@ -27,7 +27,7 @@ const routes: Routes = [
       },
       {
         path: 'alacarte',
-        component: AlacarteMenuComponent,
+        component: AlacarteFormComponent,
         data: { title: 'ADMIN.TOOLBAR.ALACARTE_FORM' },
         canActivate: [ToolbarGuard],
       },

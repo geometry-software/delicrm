@@ -9,6 +9,7 @@ export type Auth = {
   deliveries: string[]
   email?: string
   avatar?: string
+  createdByUserName?: string
 }
 
 export type AuthStatusResponse = {

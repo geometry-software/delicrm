@@ -1,16 +1,9 @@
 <ng-container *ngIf="alacarteList | async as plateList">
 
-    <div class="section">{{ 'SHARED.DAILY_MENU.ALACARTE' | translate }}</div>
+    <app-alacarte-menu [alacarteMenu]="plateList" [showCheck]="true" (addItem)="addPlate($event)" />
 
     <div class="no-extras" *ngIf="!plateList.length">
         {{ 'ADMIN.BOARD.ALACARTE.NO_RECIPES' | translate }}
-    </div>
-
-    <div class="flex items-center justify-between" *ngFor="let item of plateList; let i = index">
-        <mat-checkbox [checked]="item.isAdded" (change)="addPlate(item)">
-            <span class="main-dish">{{ item.name }}</span>
-        </mat-checkbox>
-        <span class="price">{{item.price}} </span>
     </div>
 
     <app-button *ngIf="plateList.length"

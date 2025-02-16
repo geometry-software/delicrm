@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { Router, Scroll } from '@angular/router'
+import { AdminActions as ItemActions } from '../../store/admin-store/admin.actions'
 import { combineLatest, filter, first, map, switchMap, tap } from 'rxjs'
 import { isEqual } from 'lodash'
 import { Store } from '@ngrx/store'
@@ -57,6 +58,7 @@ export class BoardLayoutComponent implements OnInit {
 
   ngOnInit() {
     this.getCurrentRoute()
+    this.store.dispatch(ItemActions.getBoardInfo())
   }
 
   getCurrentRoute() {

@@ -64,7 +64,6 @@ export class MenuFormComponent implements AfterViewInit {
       this.extrasForm = this.menuFormService.extrasForm
       this.initAutocompleteOptions()
       this.signalService.setLoadingStatus(LoadingStatus.Loaded)
-      console.log('return true');
       return true
     }))
   readonly isLoading = this.store.select(loadingStatus).pipe(

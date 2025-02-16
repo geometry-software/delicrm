@@ -24,6 +24,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
 import { TabLabelPipe } from './pipes/tab-label.pipe'
 import { AppSpinboxComponent } from './components/app-spinbox/app-spinbox.component'
 import { RequiredAutocompleteDirective } from './directives/required-autocomplete.directive'
+import { AppAlacarteMenuComponent } from './components/app-alacarte-menu/app-alacarte-menu.component'
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { RequiredAutocompleteDirective } from './directives/required-autocomplet
     AppFormattedDailyMenuComponent,
     TabLabelPipe,
     AppSpinboxComponent,
+    AppAlacarteMenuComponent,
     RequiredAutocompleteDirective
   ],
   exports: [
@@ -66,6 +68,7 @@ import { RequiredAutocompleteDirective } from './directives/required-autocomplet
     AppFormattedDailyMenuComponent,
     TabLabelPipe,
     AppSpinboxComponent,
+    AppAlacarteMenuComponent,
     RequiredAutocompleteDirective
   ],
   imports: [

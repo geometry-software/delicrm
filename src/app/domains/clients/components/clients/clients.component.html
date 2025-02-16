@@ -35,7 +35,7 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let element" class="flex justify-center">
         <button mat-icon-button (click)="updateStatus(element)">
-          <mat-icon>badge</mat-icon>
+          <mat-icon [class.is-created-by-user]="element.isCreatedByUser">badge</mat-icon>
         </button>
       </mat-cell>
     </ng-container>

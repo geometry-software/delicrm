@@ -11,6 +11,7 @@ export type Order = {
   progress: OrderProgress
   status: OrderStatus
   comment: string
+  currency: string
   category: OrderCategory
   isCreatedByUser: boolean
   createdAt?: number
@@ -30,10 +31,7 @@ export type OrderItem = {
   starter: MenuItem
   drink: MenuItem
   sideDishes: Array<MenuItem>
-  // garnish: Recipe
-  // rice: Recipe
-  // salad: Recipe
-  // dessert: Recipe
+  desserts: Array<MenuItem>
   name: string
 }
 

@@ -143,6 +143,8 @@ export class OrderCheckoutComponent implements OnInit {
       if (!order || !currency) {
         this.router.navigate(['/menu'])
       } else {
+
+
         this.order = cloneDeep(order)
         this.extras = extras
         this.currency = currency
@@ -157,6 +159,7 @@ export class OrderCheckoutComponent implements OnInit {
             phone: this.auth.phone
           })
         }
+        console.log(this.order);
         this.cdr.markForCheck()
       }
     })
@@ -199,6 +202,14 @@ export class OrderCheckoutComponent implements OnInit {
       this.order.main[plateIndex].sideDishes[dishIndex] = { ...recipe, isSkipped: false }
     } else {
       this.order.main[plateIndex].sideDishes[dishIndex] = { ...recipe, isSkipped: true }
+    }
+  }
+
+  chooseDessert(event: MatCheckboxChange, recipe: Recipe, dishIndex: number, plateIndex: number) {
+    if (event.checked) {
+      this.order.main[plateIndex].desserts[dishIndex] = { ...recipe, isSkipped: false }
+    } else {
+      this.order.main[plateIndex].desserts[dishIndex] = { ...recipe, isSkipped: true }
     }
   }
 
@@ -257,11 +268,6 @@ export class OrderCheckoutComponent implements OnInit {
         this.form.addControl('payment', new FormControl(this.PaymentType.Card, Validators.required))
         this.form.addControl('change', new FormControl(null))
         this.form.addControl('comment', new FormControl(null))
-        // console.log(this.form);
-        console.log(this.form.get('address'));
-        this.form.get('address').updateValueAndValidity()
-        console.log(this.form.get('address'));
-
         break
       case 'table':
         this.removeAllFormControls()
@@ -281,13 +287,19 @@ export class OrderCheckoutComponent implements OnInit {
 
   submitOrderDetails() {
     this.resetValidation()
-    console.log(this.form);
-
-    if (!this.hasSkippedStarter && !this.hasSkippedDrink && this.form.valid) {
+    if (this.checkValidation()) {
       this.prepareOrderByType()
       this.store.dispatch(MenuActions.checkoutOrder({ order: this.order }))
     } else {
       this.hightlightValidation()
+    }
+  }
+
+  private checkValidation() {
+    if (!this.order.main.length) {
+      return this.form.valid
+    } else {
+      return !this.hasSkippedStarter && !this.hasSkippedDrink && this.form.valid
     }
   }
 

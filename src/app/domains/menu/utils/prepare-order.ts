@@ -12,12 +12,14 @@ export const prepareOrder = (main: MenuItem[], alacarte: MenuItem[], extras: Ext
             name: plate.name,
             starter: null,
             drink: null,
-            sideDishes: extras.sideDishes
+            sideDishes: extras.sideDishes,
+            desserts: extras.desserts
         })),
         alacarte,
         category: {
             type: 'table'
         },
+        currency: restaurant.currency,
         price: {
             delivery: deliveryPrice,
             order: orderPrice,

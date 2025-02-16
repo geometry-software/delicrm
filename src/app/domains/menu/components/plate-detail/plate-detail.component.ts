@@ -30,7 +30,7 @@ export class PlateDetailComponent implements OnInit {
     this.currency = this.data.currency
     this.user = this.data.user
     this.user.pipe(
-
+      // TODO
     ).subscribe(value => this.hasDeleteAuth = Boolean(value))
   }
 

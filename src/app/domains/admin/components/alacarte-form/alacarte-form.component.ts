@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { MatDialog } from '@angular/material/dialog'
 import { fadeInOnEnterAnimation, fadeInUpOnEnterAnimation, rubberBandOnEnterAnimation } from 'angular-animations'
 import { PlateDetailComponent } from '../../../menu/components/plate-detail/plate-detail.component'
-import { MenuActions as ItemActions } from '../../../menu/store/menu.actions'
+import { AdminActions as ItemActions } from '../../store/admin-store/admin.actions'
 import { Order } from '../../../orders/models/order.model'
 import { Recipe } from '../../../recipe/models/recipe.model'
 import { setProteinImage } from '../../../../shared/utils/protein-image'
@@ -12,16 +12,17 @@ import { Store } from '@ngrx/store'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { MenuItem } from '../../models/restaurant'
 import { TranslateService } from '@ngx-translate/core'
-import { filter, map, tap } from 'rxjs'
+import { combineLatest, filter, map, tap } from 'rxjs'
 import { UserService } from '../../../users/services/user.service'
 import { SessionService } from '../../../../auth/services/session.service'
-import { getRecipes, loadingStatus } from '../../store/admin-store/admin.selectors'
+import { getAlacarteMenu, getRecipes, getRestaurantInfo, loadingStatus } from '../../store/admin-store/admin.selectors'
 import { FormBuilder, FormGroup } from '@angular/forms'
+import { cloneDeep } from 'lodash'
 
 @Component({
-  selector: 'app-alacarte-menu',
-  templateUrl: './alacarte-menu.component.html',
-  styleUrls: ['./alacarte-menu.component.scss'],
+  selector: 'app-alacarte-form',
+  templateUrl: './alacarte-form.component.html',
+  styleUrls: ['./alacarte-form.component.scss'],
   animations: [
     fadeInOnEnterAnimation(),
     fadeInUpOnEnterAnimation(),
@@ -29,7 +30,7 @@ import { FormBuilder, FormGroup } from '@angular/forms'
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AlacarteMenuComponent {
+export class AlacarteFormComponent {
 
   constructor(
     private dialog: MatDialog,
@@ -43,15 +44,25 @@ export class AlacarteMenuComponent {
 
   chosenPlates = new Array<MenuItem>
 
-  readonly alacarteList = this.store.select(getRecipes).pipe(
-    filter(Boolean),
-    map(value => value.filter(el => el.type == 'alacarte').map(el => ({ ...el, isAdded: false })) ?? []))
+  readonly alacarteList = combineLatest([
+    this.store.select(getRecipes).pipe(
+      map(value => value.filter(el => el.type == 'alacarte').map(el => ({ ...el, isAdded: false }) as MenuItem) ?? [])),
+    this.store.select(getAlacarteMenu).pipe(
+      map(value => {
+        this.chosenPlates = cloneDeep(value)
+        return value.map(el => el.id)
+      })),
+    this.store.select(getRestaurantInfo).pipe(
+      filter(Boolean),
+      map(value => value.currency))
+  ]).pipe(
+    map(([recipes, menuIds, currency]) => recipes.map(recipe => ({ ...recipe, isAdded: menuIds.includes(recipe.id), currency }))))
+
   readonly isLoading = this.store.select(loadingStatus).pipe(
     map(value => value === LoadingStatus.Loading ? true : false))
 
   updateAlacarteMenu() {
-    console.log(this.chosenPlates);
-
+    this.store.dispatch(ItemActions.createAlacarteMenu({ menu: this.chosenPlates }))
   }
 
   addPlate(item: MenuItem) {

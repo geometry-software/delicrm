@@ -26,8 +26,6 @@ export class MenuFormService {
   private extrasAmountSub = new BehaviorSubject<ExtrasAmount>(null)
   extrasForm: FormGroup
 
-  // this.store.select(getRecipes).pipe(filter(Boolean)),
-
   initForm(menu: DailyMenu, recipes: Recipe[]) {
     this.extrasForm = this.formBuilder.group({
       starters: this.initFormArrayItem(menu.extrasAmount.starters),
@@ -35,8 +33,6 @@ export class MenuFormService {
       sideDishes: this.initFormArrayItem(menu.extrasAmount.sideDishes),
       desserts: this.initFormArrayItem(menu.extrasAmount.desserts),
     })
-    console.log('initForm');
-
     this.menu = menu
     this.plateList = recipes.filter(value => value.type == 'main')
     this.plateListSub.next(this.plateList)

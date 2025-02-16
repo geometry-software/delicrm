@@ -16,7 +16,7 @@ import { shiftReducer } from './store/shift-store/shift.reducer'
 import { ShiftService } from './services/shift.service'
 import { ShiftReportComponent } from './components/shift-report/shift-report.component'
 import { MenuFormService } from './services/menu-form.service'
-import { AlacarteMenuComponent } from './components/alacarte-menu/alacarte-menu.component'
+import { AlacarteFormComponent } from './components/alacarte-form/alacarte-form.component'
 import { RequiredAutocompleteDirective } from '../../shared/directives/required-autocomplete.directive'
 
 @NgModule({
@@ -26,7 +26,7 @@ import { RequiredAutocompleteDirective } from '../../shared/directives/required-
     ImageMenuComponent,
     ReportsComponent,
     ShiftReportComponent,
-    AlacarteMenuComponent,
+    AlacarteFormComponent,
     // RequiredAutocompleteDirective,
   ],
   imports: [

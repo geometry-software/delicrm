@@ -1,11 +1,12 @@
-<div *ngIf="userData | async as user" class="p-[3px]">
-  <div class="card">
+<div class="card m-[3px]">
+  <ng-container *ngIf="userData | async as user; else nameTemplate">
     <app-title title="PROFILE.INFO.EMAIL" [subtitle]="user.email" [disableTranslateSubtitle]="true" />
     <app-title title="PROFILE.INFO.AUTH_METHOD.TITLE" subtitle="PROFILE.INFO.AUTH_METHOD.SUBTITLE" margin="0" />
-  </div>
-</div>
+  </ng-container>
+  <ng-template #nameTemplate>
 
-<br>
+  </ng-template>
+</div>
 
 <button class="exit-button" mat-stroked-button (click)="logout()">
   {{ 'PROFILE.INFO.EXIT' | translate}}

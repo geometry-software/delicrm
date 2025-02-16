@@ -13,9 +13,10 @@ import { AdminConstants } from '../../models/admin.constants'
 import { ShiftService } from '../../services/shift.service'
 import { MenuFormService } from '../../services/menu-form.service'
 import { RecipeService } from '../../../recipe/services/recipe.service'
+import { NotificationService } from '../../../../shared/services/notification.service'
 
 @Injectable()
-export class AdminEffects implements OnInitEffects {
+export class AdminEffects {
 
   constructor(
     private router: Router,
@@ -24,6 +25,7 @@ export class AdminEffects implements OnInitEffects {
     private restaurantService: RestaurantService,
     private recipeService: RecipeService,
     private menuFormService: MenuFormService,
+    private notificationService: NotificationService,
     private shiftService: ShiftService,
     private signalService: SignalService
   ) { }
@@ -31,10 +33,6 @@ export class AdminEffects implements OnInitEffects {
   readonly moduleUrl = AdminConstants.moduleUrl
   readonly deleteTitle = AdminConstants.deleteTitle
   readonly defaultCreateStatus = AdminConstants.defaultCreateStatus
-
-  ngrxOnInitEffects(): Action {
-    return ItemActions.getBoardInfo()
-  }
 
   getBoardInfo = createEffect(() =>
     this.actions.pipe(
@@ -48,10 +46,16 @@ export class AdminEffects implements OnInitEffects {
       ]).pipe(
         map(([restaurant, menu, alacarte, recipes]) => {
           this.menuFormService.initForm(menu, recipes)
-          return ItemActions.setBoardInfo({ restaurant: restaurant.restaurant, recipes, open: restaurant.open })
+          return ItemActions.setBoardInfo({
+            restaurant: restaurant.restaurant,
+            recipes,
+            alacarte,
+            open: restaurant.open
+          })
         }),
         tap(() => this.setLoaded()),
-        catchError(error => this.handleError(error, 'create'))))))
+        catchError(error => this.handleError(error, 'create')))))
+  )
 
   setBoardInfo = createEffect(() =>
     this.actions.pipe(
@@ -88,6 +92,18 @@ export class AdminEffects implements OnInitEffects {
         catchError(error => this.handleError(error, 'create')))))
   )
 
+  createAlacarteMenu = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.createAlacarteMenu),
+      tap(() => this.setLoading()),
+      switchMap(({ menu }) => this.restaurantService.updateAlacarteMenu(menu).pipe(
+        map(() => {
+          this.setLoaded()
+          this.notificationService.success('ADMIN.BOARD.ALACARTE.CREATED_SUCCESS')
+          return ItemActions.getBoardInfo()
+        }))))
+  )
+
   rebuildDailyMenu = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.rebuildDailyMenu),
@@ -122,7 +138,7 @@ export class AdminEffects implements OnInitEffects {
             switchMap(() => this.shiftService.create(shift).pipe(
               map(id => {
                 this.setLoaded()
-                this.router.navigate(['/shifts/report', id])
+                this.router.navigate(['/shifts/reports', id])
                 return ItemActions.closeShiftSuccess()
               })
             ))

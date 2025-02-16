@@ -50,7 +50,7 @@ export class RestaurantService {
     ]).pipe(
       map(value => {
         const restaurant: Restaurant = value[0]
-        const open: boolean = value[1]
+        const open: boolean = value[1].open
         return { restaurant, open }
       })
     )
@@ -69,7 +69,9 @@ export class RestaurantService {
   }
 
   getAlacarteMenu(): Observable<MenuItem[]> {
-    return this.repositoryService.getDocumentById(this.collection, this.alacarteDocument)
+    return this.repositoryService.getDocumentById(this.collection, this.alacarteDocument).pipe(
+      map(value => value.alacarte)
+    )
   }
 
   updateDailyOrders(orders: CheckoutOrder[]) {
@@ -77,11 +79,9 @@ export class RestaurantService {
   }
 
   getDailyOrders(): Observable<CheckoutOrder[]> {
-    return this.repositoryService.getDocumentById(this.collection, this.ordersDocument)
-  }
-
-  updateMenuWithEightySix(menu: DailyMenu) {
-    return this.repositoryService.updateDocument(this.collection, menu, this.menuDocument)
+    return this.repositoryService.getDocumentById(this.collection, this.ordersDocument).pipe(
+      map(value => value.orders)
+    )
   }
 
 }
