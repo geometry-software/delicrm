@@ -13,6 +13,7 @@ import { combineListControls } from '../../../../shared/utils/combine-list-contr
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { getDateFromUnix } from '../../../../shared/utils/format-unix-time'
 import { getCurrency } from '../../store/admin-store/admin.selectors'
+import { tap } from 'rxjs'
 
 @Component({
   selector: 'app-reports',
@@ -66,7 +67,8 @@ export class ReportsComponent implements OnInit {
 
   loadData() {
     combineListControls(this.paginationControl, this.sizeControl, this.sortControl, this.itemStatus)
-      .pipe(takeUntilDestroyed(this.destroyRef)
+      .pipe(takeUntilDestroyed(this.destroyRef),
+        tap(v => console.log(v)),
       ).subscribe(([pagination, size, sort, status]) =>
         this.store.dispatch(ItemActions.getItems({ request: { pagination, size, sort, status } })))
   }

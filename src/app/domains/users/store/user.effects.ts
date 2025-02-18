@@ -127,7 +127,7 @@ export class UserEffects {
             switchMap(([amount, items, total]) =>
               [
                 ItemActions.getItemsSuccess({
-                  items: formatResponseList(query, items as any, total, current, compareItemsRequestStateSize(size, stateSize)),
+                  items: formatResponseList(query, items as any, total, current),
                   size
                 }),
                 ItemActions.setItemsAmountByStatus({ status, amount })
@@ -145,7 +145,7 @@ export class UserEffects {
             switchMap(([amount, items, total]) =>
               [
                 ItemActions.getItemsSuccess({
-                  items: formatResponseList(query, items, total, current, compareItemsRequestStateSize(size, stateSize)),
+                  items: formatResponseList(query, items, total, current),
                   size
                 }),
                 ItemActions.setItemsAmountByStatus({ status, amount })

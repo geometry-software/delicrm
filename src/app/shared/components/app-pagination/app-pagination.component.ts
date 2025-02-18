@@ -11,6 +11,7 @@ import { LoadingStatus } from '../../models/loading-status'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppPaginationComponent implements OnInit {
+
   @Input()
   paginationControl: FormControl<PaginationRequest<any>>
   @Input()
@@ -19,6 +20,7 @@ export class AppPaginationComponent implements OnInit {
   paginationPayload: PaginationResponse<any>
   @Input()
   loadingStatus: LoadingStatus
+
   size: number
 
   ngOnInit(): void {
@@ -30,11 +32,8 @@ export class AppPaginationComponent implements OnInit {
   }
 
   changePage(query: RepositoryRequestListQuery) {
-    let item
+    let item = null
     switch (query) {
-      case 'first':
-        item = null
-        break
       case 'next':
         item = this.paginationPayload.item.last
         break

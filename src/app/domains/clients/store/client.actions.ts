@@ -3,6 +3,7 @@ import { ClientConstants } from '../models/client.constants'
 import { RepositoryRequestQuery, RepositoryRequest, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { Auth, AuthStatus, AuthStatusResponse } from '../../../auth/models/auth.model'
+import { Delivery } from '../../delivery/models/delivery.model'
 
 export const ClientActions = createActionGroup({
   source: ClientConstants.storeFeatureKey,
@@ -15,8 +16,9 @@ export const ClientActions = createActionGroup({
     'Update Client Status Success': emptyProps(),
     'Update Client': props<{ id: string, name: string, address: string, phone: string }>(),
     'Update Client Success': emptyProps(),
-    'Get Item': props<{ id: string }>(),
-    'Get Item Success': props<{ item: Auth }>(),
+    'Get Deliveries': props<{ id: string }>(),
+    'Get Deliveries Success': props<{ deliveries: Delivery[] }>(),
+    'Reset Client Form': emptyProps(),
     'Get Items Success': props<{ items: RepositoryResponseList<Auth>, size?: number }>(),
     'Set Items Amount By Status': props<{ status: AuthStatus, amount: AuthStatusResponse }>(),
     'Notify Error': props<{ error: Error; query: RepositoryRequestQuery }>(),

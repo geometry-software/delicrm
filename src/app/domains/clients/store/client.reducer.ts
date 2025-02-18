@@ -24,10 +24,12 @@ export const reducer = createReducer<State>(
     itemsAmountByStatus: amount,
     status
   })),
-  on(ItemActions.getItemSuccess, (state, { item }) => ({
+  on(ItemActions.getDeliveriesSuccess, (state, { deliveries }) => ({
     ...state,
-    item: {
-      data: item,
-    },
-  }))
+    deliveries
+  })),
+  on(ItemActions.resetClientForm, (state) => ({
+    ...state,
+    deliveries: null
+  })),
 )

@@ -1,12 +1,13 @@
 import { RepositoryRequesEntity, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { Auth, AuthStatus, AuthStatusResponse } from '../../../auth/models/auth.model'
+import { Delivery } from '../../delivery/models/delivery.model'
 
 export interface State {
   query: RepositoryRequestListQuery,
   items: RepositoryResponseList<Auth>
   loadingStatus: LoadingStatus
-  item: RepositoryRequesEntity<Auth>
+  deliveries: Delivery[]
   itemId: string
   status: AuthStatus
   itemsAmountByStatus: AuthStatusResponse
@@ -22,9 +23,7 @@ export const initialState: State = {
     current: 0
   },
   loadingStatus: LoadingStatus.NotLoaded,
-  item: {
-    data: null,
-  },
+  deliveries: null,
   status: 'active',
   itemsAmountByStatus: {
     auth: 0,

@@ -29,9 +29,12 @@ export class DeliveryService {
   }
 
   getDeliveriesById(id: string) {
-    console.log(id);
-
     return this.repositoryService.getAllDocumentsById(this.collection, id)
+  }
+
+  getDeliveriesByClient(id: string) {
+    const sort: SortRequest = { active: 'createdAt', direction: 'desc' }
+    return this.repositoryService.getAllDocumentsByStrictQuery(this.collection, sort, 'clientId', id)
   }
 
   getTotalByStatus(status: DeliveryStatus) {

@@ -13,7 +13,8 @@ export const mapAuth = (authId: string, locale: string): Auth => ({
     avatar: null,
     address: null,
     phone: null,
-    deliveries: []
+    deliveries: [],
+    createdByUserName: false
 })
 
 export const mapRequested = (authId: string, email: string, name: string, avatar: string, locale: string): Auth => ({

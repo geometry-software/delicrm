@@ -27,7 +27,7 @@ export const responseTransform = <T>(notificationService: NotificationService):
     retry({ count: 2 })
   )
 
-export const formatResponseList = <T>(query: RepositoryRequestListQuery, data: T[], total: number, current: number, size?: boolean):
+export const formatResponseList = <T>(query: RepositoryRequestListQuery, data: T[], total: number, current: number):
   RepositoryResponseList<T> => {
   switch (query) {
     case 'first':
@@ -35,6 +35,8 @@ export const formatResponseList = <T>(query: RepositoryRequestListQuery, data: T
       break
     case 'next':
       current = data.length + current
+      console.log('C', current);
+
       break
     case 'previous':
       current = !(total % current) ? current - data.length : total % current

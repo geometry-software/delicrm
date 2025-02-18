@@ -11,7 +11,7 @@ export abstract class ShiftConstants {
   static readonly labelRequested = 'Requested'
   static readonly labelConfirmed = 'Confirmed'
   static readonly labelCanceled = 'Canceled'
-  static readonly paginationSize = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20]
+  static readonly paginationSize = [5, 10, 20, 50]
   static readonly moduleUrl = '/orders'
   static readonly tableColumns = ['date', 'plates', 'total']
   static readonly statusList: ShiftStatus[] = ['active']
@@ -25,7 +25,7 @@ export abstract class ShiftConstants {
       item: null,
     },
     sort: { active: 'createdAt', direction: 'desc' },
-    size: 10,
+    size: 5,
     status: 'active',
   }
 }

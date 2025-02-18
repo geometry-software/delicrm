@@ -1,6 +1,7 @@
 import { RepositoryRequesEntity, RepositoryRequestListQuery, RepositoryResponseList } from '../../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { ShiftStatus, Shift } from '../../models/shift'
+import { ShiftConstants } from '../../models/shift.constants'
 
 export interface State {
   query: RepositoryRequestListQuery,
@@ -25,5 +26,5 @@ export const initialState: State = {
     data: null,
   },
   status: 'active',
-  size: null,
+  size: ShiftConstants.defaultPageRequest.size,
 }

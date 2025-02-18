@@ -307,7 +307,8 @@
       "CLIENT": "Name",
       "WAITER": "Description",
       "PRICE": "Type",
-      "FOOTER-TITLE": "orders"
+      "FOOTER-TITLE": "orders",
+      "NO_ORDERS_FOUND": "So far, there are no orders in this shift"
     },
     "DETAIL": {
       "TAB": {
@@ -493,9 +494,16 @@
       "SUBTITLE": "Update client status",
       "BUTTON": {
         "UPDATE": "Update",
+        "GET_DELIVERIES": "Show deliveries",
         "CREATE": "Add",
         "ACTION": "Updating ..",
         "CLOSE": "Close"
+      },
+      "TABLE": {
+        "NO_DELIVERIES_FOUND": "No deliveries found",
+        "DATE": "Date",
+        "ADDRESS": "Address",
+        "PRICE": "Price"
       }
     },
     "CREATED_BY_CLIENT": {

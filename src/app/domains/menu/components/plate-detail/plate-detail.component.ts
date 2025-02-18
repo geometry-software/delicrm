@@ -47,7 +47,7 @@ export class PlateDetailComponent implements OnInit {
   }
 
   getPlateWithImage(item: Recipe) {
-    return item.type === 'alacarte' || item.type === 'main'
+    return item.type === 'main'
   }
 
 }

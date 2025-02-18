@@ -1,7 +1,7 @@
 import { Component, DestroyRef, Inject, NgZone, OnInit } from '@angular/core'
 import { distinctUntilChanged, filter, first, map, switchMap, tap } from 'rxjs'
 import { Store } from '@ngrx/store'
-import { getItemId, getLoadingStatus } from '../../store/client.selectors'
+import { getDeliveries, getItemId, getLoadingStatus } from '../../store/client.selectors'
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ClientActions } from '../../store/client.actions'
@@ -31,6 +31,7 @@ export class ClientFormComponent implements OnInit {
     private dialogRef: MatDialogRef<ClientFormComponent>,
     private destroyRef: DestroyRef,
     private signalService: SignalService,
+    private router: Router,
     private translateService: TranslateService,
     @Inject(MAT_DIALOG_DATA) public dialogData: Auth
   ) { }
@@ -44,6 +45,7 @@ export class ClientFormComponent implements OnInit {
   }
 
   readonly loadingStatus = toObservable(this.signalService.getClientLoadingStatus)
+  readonly deliveriesLoadingStatus = toObservable(this.signalService.loadingStatus)
   readonly showFieldErrors = showFieldErrors
   readonly getFullTimeFromUnix = getFullTimeFromUnix
   readonly form = new FormGroup({
@@ -53,6 +55,8 @@ export class ClientFormComponent implements OnInit {
   })
   readonly LoadingStatus = LoadingStatus
   itemId: string
+  readonly deliveries = this.store.select(getDeliveries)
+  // readonly deliveriesLoadingStatus = this.store.select(getLoadingStatus)
 
   confirm() {
     if (this.form.valid) {
@@ -83,8 +87,19 @@ export class ClientFormComponent implements OnInit {
   }
 
   close() {
-    this.signalService.setClientLoadingStatus(LoadingStatus.NotLoaded)
+    this.store.dispatch(ClientActions.resetClientForm())
     this.dialogRef.close()
+  }
+
+  showDeliveries() {
+    this.store.dispatch(ClientActions.getDeliveries({ id: this.itemId }))
+  }
+
+  redirectToDelivery(id: string) {
+    this.router.navigate(['/delivery', id]).then(() => {
+      this.store.dispatch(ClientActions.resetClientForm())
+      this.dialogRef.close()
+    })
   }
 
   getButtonTitle(status: LoadingStatus) {
@@ -96,9 +111,9 @@ export class ClientFormComponent implements OnInit {
   }
 
   getCreatedByTitle(client: Auth) {
-    const yes = this.translateService.instant('CLIENTS.CREATED_BY_CLIENT.YES')
-    const no = this.translateService.instant('CLIENTS.CREATED_BY_CLIENT.NO')
-    return client.createdByUserName ?? no
+    return client.createdByUserName
+      ? client.createdByUserName
+      : this.translateService.instant('CLIENTS.CREATED_BY_CLIENT.YES')
   }
 
 }

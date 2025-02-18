@@ -3,7 +3,7 @@ import { RepositoryRequest } from "../repository/repository.models";
 export const formatRequest = <T, S>(request: RepositoryRequest<T, S>, size: number) => ({
   size: request.size,
   item: request.pagination.item,
-  query: compareItemsRequestStateSize(request.size, size) ? request.pagination.query : 'first',
+  query: request.pagination.query,
   sort: request.sort,
   status: request.status,
 })

@@ -7,9 +7,9 @@ export type Auth = {
   phone: string
   address: string
   deliveries: string[]
+  createdByUserName: string | false
   email?: string
   avatar?: string
-  createdByUserName?: string
 }
 
 export type AuthStatusResponse = {

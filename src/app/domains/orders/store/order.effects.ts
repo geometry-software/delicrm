@@ -97,7 +97,10 @@ export class OrderEffects implements OnInitEffects {
               tap(() => this.handleLoadedRequest()),
               switchMap(([amount, items, total]) =>
                 [
-                  ItemActions.getItemsSuccess({ items: formatResponseList(query, items, total, current, compareItemsRequestStateSize(size, stateSize)), size }),
+                  ItemActions.getItemsSuccess({
+                    items: formatResponseList(query, items, total, current),
+                    size
+                  }),
                   ItemActions.setItemsAmountByStatus({ status, amount })
                 ]
               ),

@@ -24,7 +24,7 @@ export class DeliveryStatusComponent implements OnInit {
   readonly statusColor = DELIVERY_STATUS_COLOR
 
   ngOnInit(): void {
-    this.currentStatus = this.dialogData.status
+    this.currentStatus = this.dialogData?.status
   }
 
   confirm(status: DeliveryStatus) {

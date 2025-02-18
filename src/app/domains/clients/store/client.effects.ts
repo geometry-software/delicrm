@@ -22,6 +22,7 @@ import { formatResponseList } from '../../../shared/repository/repository.utils'
 import { ClientService } from '../services/client.service'
 import { TranslateService } from '@ngx-translate/core'
 import { NotificationService } from '../../../shared/services/notification.service'
+import { DeliveryService } from '../../delivery/services/delivery.service'
 
 @Injectable()
 export class ClientEffects {
@@ -30,6 +31,7 @@ export class ClientEffects {
     private actions: Actions,
     private store: Store,
     private clientService: ClientService,
+    private deliveryService: DeliveryService,
     private translateService: TranslateService,
     private notificationService: NotificationService,
     private signalService: SignalService
@@ -115,7 +117,7 @@ export class ClientEffects {
               switchMap(([amount, items, total]) =>
                 [
                   ItemActions.getItemsSuccess({
-                    items: formatResponseList(query, items, total, current, compareItemsRequestStateSize(size, stateSize)),
+                    items: formatResponseList(query, items, total, current),
                     size
                   }),
                   ItemActions.setItemsAmountByStatus({ status, amount })
@@ -142,6 +144,30 @@ export class ClientEffects {
           default: return EMPTY
         }
       }))
+  )
+
+  getDeliveries = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.getDeliveries),
+      tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loading)),
+      switchMap(({ id }) =>
+        this.deliveryService.getDeliveriesByClient(id).pipe(
+          map(deliveries => {
+            this.signalService.setLoadingStatus(LoadingStatus.Loaded)
+            return ItemActions.getDeliveriesSuccess({ deliveries })
+          }),
+          catchError(error => {
+            this.notificationService.error(error)
+            this.signalService.setLoadingStatus(LoadingStatus.Failed)
+            return EMPTY
+          }))))
+  )
+
+  resetClientForm = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.resetClientForm),
+      tap(() => this.signalService.setClientLoadingStatus(LoadingStatus.NotLoaded)))
+    , { dispatch: false }
   )
 
   notifyError = createEffect(() =>

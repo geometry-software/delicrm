@@ -116,7 +116,7 @@ export class RecipeEffects implements OnInitEffects {
               switchMap(([items, amount]) =>
                 [
                   ItemActions.getItemsSuccess({
-                    items: formatResponseList(query, items, total, current, compareItemsRequestStateSize(size, stateSize)),
+                    items: formatResponseList(query, items, total, current),
                     size
                   }),
                   ItemActions.setItemsAmount({ amount })

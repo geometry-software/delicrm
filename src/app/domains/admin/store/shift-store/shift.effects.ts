@@ -55,6 +55,11 @@ export class ShiftEffects {
         this.store.select(getSize)
       ),
       switchMap(([{ request }, current, total, stateSize]) => {
+        console.log(formatRequest(request, stateSize));
+        console.log('current:', current);
+        console.log('total:', total);
+        console.log('stateSize:', stateSize);
+
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
         switch (query) {
           case 'first':
@@ -63,13 +68,10 @@ export class ShiftEffects {
               this.shiftService.getTotalByStatus(status),
             ]).pipe(
               tap(() => this.handleLoadedRequest()),
-              switchMap(([items, total]) =>
-                [
-                  ItemActions.getItemsSuccess({
-                    items: formatResponseList(query, items, total, current, compareItemsRequestStateSize(size, stateSize)),
-                    size
-                  })
-                ]
+              map(([items, total]) => ItemActions.getItemsSuccess({
+                items: formatResponseList(query, items, total, current),
+                size
+              })
               ),
               catchError(error => of(ItemActions.notifyError({ error })))
             )

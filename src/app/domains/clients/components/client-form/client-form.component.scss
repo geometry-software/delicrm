@@ -1,0 +1,46 @@
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.table {
+    color: #444;
+    padding: 10px 10px 5px 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+
+    .list {
+        display: flex;
+
+        div {
+            margin-bottom: 5px;
+        }
+    }
+
+    .header {
+        color: #888;
+        display: flex;
+        text-transform: uppercase;
+        font-size: 0.7em;
+        letter-spacing: 1px;
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+
+    .date-col {
+        flex-basis: 30%;
+    }
+
+    .address-col {
+        flex-basis: 50%;
+    }
+
+    .price-col {
+        flex-basis: 20%;
+    }
+}

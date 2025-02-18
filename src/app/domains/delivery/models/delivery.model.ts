@@ -6,19 +6,17 @@ export type Delivery = {
   id?: string
   orderId?: string
   order?: Order
-  authId?: string
   deliveryInfo?: DeliveryInfo
   status?: DeliveryStatus
   progress?: DeliveryProgress
   createdAt: number
-  createdByClient: Auth | null
-  createdByUser: User | null
+  client: Auth | null
+  clientId: string | null
+  createdBy: User | null
   confirmed?: DeliveryStatusStamp
   accepted?: DeliveryStatusStamp
   ontheway?: DeliveryStatusStamp
   received?: DeliveryStatusStamp
-  closedAt?: number
-  closedBy?: User
 }
 
 export type DeliveryInfo = {
@@ -72,7 +70,6 @@ export type DeliveryStatusBar = {
 }
 
 export type DeliveryStatusStamp = {
-  status: DeliveryStatus,
   createdBy: User,
   createdAt: number
 }

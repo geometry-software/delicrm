@@ -50,7 +50,7 @@
       "PAGE": "Página no encontrada",
       "ANOTHER": "Prueba otra dirección"
     },
-    "INDEX_DELIVERY_BUTTON": "Entrega"
+    "INDEX_DELIVERY_BUTTON": "Domicilio"
   },
   "MISC": {
     "PLATE_TYPE": {
@@ -105,16 +105,16 @@
           "DAILY_MENU": "Platos del dia"
         },
         "DELIVERY": {
-          "TITLE": "Entrega",
+          "TITLE": "Domicilio",
           "EXISTED_CLIENT": "Cliente existente",
           "NEW_CLIENT": "Agregar nuevo cliente",
-          "DETAILS": "Detalles de entrega",
+          "DETAILS": "Detalles de domicilio",
           "NAME": "Nombre",
           "ADDRESS": "Dirección",
           "PHONE": "Teléfono",
           "PAYMENT": "Tipo de pago",
           "BILL_TYPE": "Tipo de factura",
-          "DELIVERY_TIME": "Hora de entrega",
+          "DELIVERY_TIME": "Hora de domicilio",
           "NOW": "Ahora",
           "CHOOSE_TIME": "Elegir hora"
         },
@@ -127,7 +127,7 @@
       "TOTAL": {
         "TITLE": "Total",
         "MENU_PRICE": "Precio del menú del día",
-        "DELIVERY_PRICE": "Precio de entrega",
+        "DELIVERY_PRICE": "Precio de domicilio",
         "ALACARTE_PRICE": "Precio a la carta"
       },
       "VALIDATION": {
@@ -296,7 +296,7 @@
     "LIST": {
       "TAB": {
         "DINING": "En la sala",
-        "DELIVERY": "Entrega",
+        "DELIVERY": "Domicilio",
         "CLOSED": "Cerrado"
       },
       "TABLE": {
@@ -307,12 +307,13 @@
       "CLIENT": "Nombre",
       "WAITER": "Descripción",
       "PRICE": "Tipo",
-      "FOOTER-TITLE": "órdenes"
+      "FOOTER-TITLE": "órdenes",
+      "NO_ORDERS_FOUND": "Hasta el momento no hay pedidos en este turno"
     },
     "DETAIL": {
       "TAB": {
         "DINING": "Comer en el sitio",
-        "DELIVERY": "Entrega",
+        "DELIVERY": "Domicilio",
         "CLOSED": "Cerrado"
       },
       "BUTTON": {
@@ -328,12 +329,12 @@
       },
       "STATUS": {
         "DINING": "Comer en el sitio",
-        "DELIVERY": "Entrega",
+        "DELIVERY": "Domicilio",
         "CLOSED": "Cerrado"
       },
       "ORDER_TYPE": {
         "TABLE": "Mesa",
-        "DELIVERY": "Entrega",
+        "DELIVERY": "Domicilio",
         "TAKEAWAY": "Para llevar"
       },
       "TABLE_NUMBER": "número",
@@ -355,8 +356,8 @@
   "DELIVERY": {
     "NAVBAR": "Domicilios",
     "TOOLBAR": {
-      "LIST": "Entregas",
-      "DETAIL": "Detalles de la entrega"
+      "LIST": "Domicilios",
+      "DETAIL": "Detalles de la domicilio"
     },
     "LIST": {
       "TAB": {
@@ -371,7 +372,7 @@
       "CLIENT": "Nombre",
       "WAITER": "Descripción",
       "PRICE": "Tipo",
-      "FOOTER-TITLE": "entregas"
+      "FOOTER-TITLE": "domicilios"
     },
     "DETAIL": {
       "THANKS": "Gracias por tu pedido,",
@@ -379,7 +380,7 @@
       "PHONE": "Teléfono",
       "PAYMENT": "Pago",
       "CHANGE": "Cambio",
-      "DELIVERY_TIME": "Tiempo de entrega",
+      "DELIVERY_TIME": "Tiempo de domicilio",
       "BUTTON": {
         "BACK": "Atrás",
         "UPDATE": "Actualizar"
@@ -394,8 +395,8 @@
       "CLOSED": "Cerrado"
     },
     "DIALOG_STATUS": {
-      "TITLE": "Estado de la entrega",
-      "SUBTITLE": "Actualizar estado de la entrega",
+      "TITLE": "Estado de la domicilio",
+      "SUBTITLE": "Actualizar estado de la domicilio",
       "CLOSE_BUTTON": "Cerrar"
     }
   },
@@ -431,7 +432,7 @@
       "CLIENT": "Nombre",
       "WAITER": "Descripción",
       "PRICE": "Tipo",
-      "FOOTER-TITLE": "entregas"
+      "FOOTER-TITLE": "domicilios"
     },
     "FORM": {
       "TITLE": "Detalles del usuario",
@@ -472,7 +473,7 @@
       "CLIENT": "Nombre",
       "WAITER": "Descripción",
       "PRICE": "Tipo",
-      "FOOTER-TITLE": "entregas"
+      "FOOTER-TITLE": "domicilios"
     },
     "FORM": {
       "UPDATE_TITLE": "Detalles del cliente",
@@ -493,9 +494,16 @@
       "SUBTITLE": "Actualizar estado del cliente",
       "BUTTON": {
         "UPDATE": "Actualizar",
+        "GET_DELIVERIES": "Mostrar domicilios",
         "CREATE": "Agregar",
         "ACTION": "Actualizando ..",
         "CLOSE": "Cerrar"
+      },
+      "TABLE": {
+        "NO_DELIVERIES_FOUND": "No se encontraron domicilios",
+        "DATE": "Fecha",
+        "ADDRESS": "Dirección",
+        "PRICE": "Precio"
       }
     },
     "CREATED_BY_CLIENT": {
@@ -596,7 +604,7 @@
       "WEB": "Web",
       "LANG": "Idioma de usuario predeterminado",
       "CURRENCY": "Moneda",
-      "DELIVERY": "Costo de entrega",
+      "DELIVERY": "Costo de domicilio",
       "BUTTON": {
         "CANCEL": "Cancelar",
         "CREATE": "Registrar",
@@ -606,7 +614,7 @@
   },
   "STATS": {
     "TITLE": "Estadísticas",
-    "NEW_DELIVERY": "Nuevas entregas",
+    "NEW_DELIVERY": "Nuevas domicilios",
     "PLATES_TODAY": "Platos de hoy"
   },
   "EXPENSES": {

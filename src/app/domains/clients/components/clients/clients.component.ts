@@ -97,12 +97,12 @@ export class ClientsComponent implements OnInit {
     this.signalService.setClientLoadingStatus(LoadingStatus.NotLoaded)
     this.dialog.open(ClientFormComponent, {
       width: 'auto',
-      height: 'auto',
+      height: '90%',
       autoFocus: false,
       data
     }).backdropClick().pipe(
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(() => this.signalService.setClientLoadingStatus(LoadingStatus.NotLoaded))
+    ).subscribe(() => this.store.dispatch(ClientActions.resetClientForm()))
   }
 
 }

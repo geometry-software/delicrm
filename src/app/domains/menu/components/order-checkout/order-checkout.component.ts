@@ -84,7 +84,6 @@ export class OrderCheckoutComponent implements OnInit {
   order: Order
   extras: Extras
 
-  hasDelivery: boolean
   deliveryTime: DeliveryTime = 'now'
   delayedTime: string = ''
   paymentType = PaymentType.Card
@@ -94,7 +93,6 @@ export class OrderCheckoutComponent implements OnInit {
   form: FormGroup = this.formBuilder.group({
     table: [null, [Validators.required, tableZeroNumberValidator()]],
     comment: [null],
-    name: [null],
   })
 
   hasSkippedStarter: boolean
@@ -109,6 +107,7 @@ export class OrderCheckoutComponent implements OnInit {
 
   appUser: User
   auth: Auth
+  autocompleteClient: Auth
 
   get total() {
     return this.order.price.total + ' ' + this.currency
@@ -229,6 +228,7 @@ export class OrderCheckoutComponent implements OnInit {
     this.form.get('name').setValue(item.name)
     this.form.get('address').setValue(item.address)
     this.form.get('phone').setValue(item.phone)
+    this.autocompleteClient = item
   }
 
   addNewClient() {
@@ -257,11 +257,10 @@ export class OrderCheckoutComponent implements OnInit {
     switch (type) {
       case 'delivery':
         this.removeAllFormControls()
-        this.form.addControl('address', new FormControl(null, Validators.required))
+        this.form.addControl('name', new FormControl(null, Validators.required))
         this.form.addControl('phone', new FormControl(null, Validators.required))
-        if (this.auth) {
-          this.form.addControl('name', new FormControl(null, Validators.required))
-        } else {
+        this.form.addControl('address', new FormControl(null, Validators.required))
+        if (!this.auth) {
           this.form.get('address').disable()
           this.form.get('phone').disable()
         }
@@ -289,6 +288,8 @@ export class OrderCheckoutComponent implements OnInit {
     this.resetValidation()
     if (this.checkValidation()) {
       this.prepareOrderByType()
+      console.log(this.order);
+
       this.store.dispatch(MenuActions.checkoutOrder({ order: this.order }))
     } else {
       this.hightlightValidation()
@@ -366,40 +367,53 @@ export class OrderCheckoutComponent implements OnInit {
 
   private formatTableOrder() {
     this.order.category = {
-      table: null
+      table: null,
+      clientName: null,
+      delivery: null
     }
     this.order.category.type = 'table'
     this.order.category.table = this.form.value.table
   }
 
   private formatTakeawayOrder() {
-    this.order.category = {}
+    this.order.category = {
+      table: null,
+      clientName: null,
+      delivery: null
+    }
     this.order.category.type = 'takeaway'
     this.order.category.clientName = this.form.value.name
   }
 
   private formatDeliveryOrder() {
     this.order.category = {
+      table: null,
       clientName: null,
-      table: null
+      delivery: null
     }
     this.order.status = 'delivery'
     this.order.category.type = 'delivery'
     this.order.category.delivery = {
-      authId: this.auth.authId,
       createdAt: getCurrentUnixTime(),
-      createdByUser: this.appUser ? this.appUser : null,
-      createdByClient: !this.appUser ? this.auth : null,
+      createdBy: this.appUser ? this.appUser : null,
+      client: this.auth ?? this.autocompleteClient,
+      clientId: this.auth?.authId ?? this.autocompleteClient.authId,
       order: cloneDeep(this.order),
       status: this.appUser ? 'confirmed' : 'requested',
       deliveryInfo: {
-        name: this.form.value.name,
-        phone: this.form.value.phone,
-        address: this.form.value.address,
+        name: this.form.value.name ?? this.autocompleteClient.name,
+        phone: this.form.value.phone ?? this.autocompleteClient.phone,
+        address: this.form.value.address ?? this.autocompleteClient.address,
         time: this.deliveryTime,
         delayedTime: this.delayedTime,
         payment: this.paymentType,
         change: this.form.value.change,
+      }
+    }
+    if (this.appUser) {
+      this.order.category.delivery.confirmed = {
+        createdAt: getCurrentUnixTime(),
+        createdBy: this.appUser
       }
     }
   }

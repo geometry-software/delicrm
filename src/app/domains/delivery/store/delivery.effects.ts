@@ -78,7 +78,7 @@ export class DeliveryEffects {
               switchMap(([amount, items, total]) =>
                 [
                   ItemActions.getItemsSuccess({
-                    items: formatResponseList(query, items, total, current, compareItemsRequestStateSize(size, stateSize)),
+                    items: formatResponseList(query, items, total, current),
                     size
                   }),
                   ItemActions.setItemsAmountByStatus({ status, amount })

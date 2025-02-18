@@ -73,11 +73,10 @@ export class MenuEffects {
       ofType(ItemActions.setOrder),
       withLatestFrom(
         this.store.select(getExtras),
-        this.store.select(getRestaurantInfo),
-        this.sessionService.getUser().pipe(map(user => user ? true : false))
+        this.store.select(getRestaurantInfo)
       ),
       tap(() => this.router.navigate([this.checkOutUrl])),
-      map(([{ main, alacarte }, extras, restaurant, isCreatedByUser]) => prepareOrder(main, alacarte, extras, restaurant, isCreatedByUser)),
+      map(([{ main, alacarte }, extras, restaurant]) => prepareOrder(main, alacarte, extras, restaurant)),
       map(order => ItemActions.setOrderSuccess({ order })))
   )
 
@@ -112,12 +111,26 @@ export class MenuEffects {
     this.actions.pipe(
       ofType(ItemActions.checkoutOrder),
       tap(() => this.setLoading()),
-      map(({ order }) => !order.isCreatedByUser
-        ? ItemActions.createClientDeliveryOrder({ delivery: order.category.delivery })
-        : ItemActions.createUserOrder({ order })))
+      map(({ order }) => order.category.type !== 'delivery'
+        ? ItemActions.createUserOrder({ order })
+        : order.category.delivery.createdBy
+          ? ItemActions.createUserDeliveryOrder({ order })
+          : ItemActions.createClientDeliveryOrder({ delivery: order.category.delivery })))
+
   )
 
-  createDeliveryOrder = createEffect(() =>
+  createUserDeliveryOrder = createEffect(() =>
+    this.actions.pipe(
+      ofType(ItemActions.createUserDeliveryOrder),
+      switchMap(({ order }) => this.orderService.create(order).pipe(
+        switchMap(id => this.deliveryService.create(order.category.delivery).pipe(
+          map(() => ItemActions.checkoutOrderSuccess({ id, checkout: 'order' })),
+          catchError(error => this.handleError(error)))),
+        catchError(error => this.handleError(error)),
+      )))
+  )
+
+  createClientDeliveryOrder = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.createClientDeliveryOrder),
       switchMap(({ delivery }) => this.updateAuth(delivery.deliveryInfo).pipe(
@@ -134,18 +147,8 @@ export class MenuEffects {
       switchMap(({ order }) => this.restaurantService.getDailyOrders().pipe(
         switchMap(orders => this.orderService.create(order).pipe(
           switchMap(id => this.restaurantService.updateDailyOrders([...orders, { id, total: order.price.total }]).pipe(
-            map(() => order.category.type === 'delivery'
-              ? ItemActions.createUserDelivery({ delivery: cloneDeep({ ...order.category.delivery, orderId: id }) })
-              : ItemActions.checkoutOrderSuccess({ id, checkout: 'order' })))),
+            map(() => ItemActions.checkoutOrderSuccess({ id, checkout: 'order' })))),
           catchError(error => this.handleError(error)))),
-        catchError(error => this.handleError(error)))))
-  )
-
-  createUserDelivery = createEffect(() =>
-    this.actions.pipe(
-      ofType(ItemActions.createUserDelivery),
-      switchMap(({ delivery }) => this.deliveryService.create(delivery).pipe(
-        map(() => ItemActions.checkoutOrderSuccess({ id: delivery.orderId, checkout: 'order' })),
         catchError(error => this.handleError(error)))))
   )
 

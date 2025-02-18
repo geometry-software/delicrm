@@ -11,9 +11,7 @@ export type Order = {
   progress: OrderProgress
   status: OrderStatus
   comment: string
-  currency: string
   category: OrderCategory
-  isCreatedByUser: boolean
   createdAt?: number
   createdBy?: User
   closedAt?: number
