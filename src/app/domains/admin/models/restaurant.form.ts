@@ -10,13 +10,13 @@ export enum RestaurantFormProps {
     phone = 'phone',
     web = 'web',
     locale = 'locale',
-    // startersAmount = 'startersAmount',
+    titleFontSize = 'titleFontSize',
     // drinksAmount = 'drinksAmount',
     // sideDishesAmount = 'sideDishesAmount',
     // openTime = 'openTime',
     currency = 'currency',
     delivery = 'delivery',
-    closed = 'closed',
+    closedTitle = 'closed',
     // discount = 'discount'
 }
 
@@ -28,7 +28,8 @@ export const restaurantFormGroup = new FormGroup({
     [RestaurantFormProps.phone]: new FormControl(null, Validators.required),
     [RestaurantFormProps.web]: new FormControl(null, Validators.required),
     [RestaurantFormProps.locale]: new FormControl(null, Validators.required),
-    [RestaurantFormProps.closed]: new FormControl(null, Validators.required),
+    [RestaurantFormProps.closedTitle]: new FormControl(null, Validators.required),
+    [RestaurantFormProps.titleFontSize]: new FormControl(BootstrapConstants.titleFontSize, Validators.required),
     // [RestaurantFormProps.startersAmount]: new FormControl(null, Validators.required),
     // [RestaurantFormProps.drinksAmount]: new FormControl(null, Validators.required),
     // [RestaurantFormProps.sideDishesAmount]: new FormControl(null, Validators.required),

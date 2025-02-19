@@ -158,7 +158,6 @@ export class OrderCheckoutComponent implements OnInit {
             phone: this.auth.phone
           })
         }
-        console.log(this.order);
         this.cdr.markForCheck()
       }
     })
@@ -288,8 +287,6 @@ export class OrderCheckoutComponent implements OnInit {
     this.resetValidation()
     if (this.checkValidation()) {
       this.prepareOrderByType()
-      console.log(this.order);
-
       this.store.dispatch(MenuActions.checkoutOrder({ order: this.order }))
     } else {
       this.hightlightValidation()

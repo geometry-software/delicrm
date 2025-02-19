@@ -104,8 +104,6 @@ export class ClientEffects {
       ),
       switchMap(([{ request }, current, total, stateSize]) => {
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
-        console.log(status);
-
         switch (query) {
           case 'first':
             return combineLatest([

@@ -66,11 +66,10 @@ export class ReportsComponent implements OnInit {
   }
 
   loadData() {
-    combineListControls(this.paginationControl, this.sizeControl, this.sortControl, this.itemStatus)
-      .pipe(takeUntilDestroyed(this.destroyRef),
-        tap(v => console.log(v)),
-      ).subscribe(([pagination, size, sort, status]) =>
-        this.store.dispatch(ItemActions.getItems({ request: { pagination, size, sort, status } })))
+    combineListControls(this.paginationControl, this.sizeControl, this.sortControl, this.itemStatus).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(([pagination, size, sort, status]) =>
+      this.store.dispatch(ItemActions.getItems({ request: { pagination, size, sort, status } })))
   }
 
 }

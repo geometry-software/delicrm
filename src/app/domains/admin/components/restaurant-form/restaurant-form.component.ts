@@ -24,6 +24,16 @@ export class RestaurantFormComponent implements OnInit {
   readonly form = restaurantFormGroup
   readonly showFieldErrors = showFieldErrors
   readonly languageOptions = BootstrapConstants.languageOptions
+  readonly fontOptions = [
+    { value: '30px', title: 30 },
+    { value: '40px', title: 40 },
+    { value: '50px', title: 50 },
+    { value: '60px', title: 60 },
+    { value: '70px', title: 70 },
+    { value: '80px', title: 80 },
+    { value: '90px', title: 90 },
+    { value: '100px', title: 100 }
+  ]
 
   ngOnInit(): void {
     this.form.controls[RestaurantFormProps.web].setValue(BootstrapConstants.web)

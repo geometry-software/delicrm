@@ -548,6 +548,7 @@
       "ALACARTE": {
         "NOT_PUBLISHED": "No alacarte options were published",
         "NO_RECIPES": "No alacarte options were added to recipes",
+        "ADD_RECIPE": "Add new alacarte option",
         "CREATED_SUCCESS": "Alacarte menu was updated",
         "BUTTON": {
           "ACTION": "Update alacarte menu",
@@ -596,6 +597,7 @@
         "EDIT": "Change restaurant info"
       },
       "NAME": "Restaurant name",
+      "FONT": "Title font size",
       "DESCRIPTION": "Restaurant description",
       "CONTACT": "Contact name",
       "ADDRESS": "Restaurant address",
@@ -615,7 +617,8 @@
   "STATS": {
     "TITLE": "Stats",
     "NEW_DELIVERY": "New deliveries",
-    "PLATES_TODAY": "Plates today"
+    "PLATES_TODAY": "Plates today",
+    "ORDERS_TODAY": "Orders today"
   },
   "EXPENSES": {
     "NAVBAR": "Expenses",

@@ -2,12 +2,14 @@
 
     <app-alacarte-menu [alacarteMenu]="plateList" [showCheck]="true" (addItem)="addPlate($event)" />
 
-    <div class="no-extras" *ngIf="!plateList.length">
+    <div class="emplty-list-found pt-[20px]" *ngIf="!plateList.length">
         {{ 'ADMIN.BOARD.ALACARTE.NO_RECIPES' | translate }}
+        <div class="flex justify-center mt-[10px]">
+            <app-button title="ADMIN.BOARD.ALACARTE.ADD_RECIPE" routerLink="/recipes/create" />
+        </div>
     </div>
 
     <app-button *ngIf="plateList.length"
         [title]="!(isLoading | async) ? 'ADMIN.BOARD.ALACARTE.BUTTON.ACTION'  : 'ADMIN.BOARD.ALACARTE.BUTTON.LOADING'"
         [disabled]="(isLoading | async)" action="save" width="full" (click)="updateAlacarteMenu()" />
-
 </ng-container>

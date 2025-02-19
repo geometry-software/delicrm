@@ -49,6 +49,7 @@ export class AppPaginationComponent implements OnInit {
 
   disablePrevious() {
     return this.paginationControl.value.query === 'custom' ||
+      this.paginationControl.value.query === 'first' ||
       this.sizeControl.value === this.paginationPayload.options.current ||
       this.loadingStatus === LoadingStatus.Loading
   }

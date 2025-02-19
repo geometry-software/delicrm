@@ -72,6 +72,10 @@ export class DeliveryService {
     return this.repositoryService.getAllDocumentsByIncludesQuery(this.collection, property, value)
   }
 
+  getRequestedDelivery() {
+    return this.repositoryService.getAllDocumentsByStrictQuerySnapshotChanges(this.collection, { active: 'createdAt', direction: 'asc' }, 'status', 'requested')
+  }
+
   set(item: Delivery, id: string) {
     return this.repositoryService.setDocument(this.collection, item, id)
   }

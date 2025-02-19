@@ -14,6 +14,7 @@ import { RestaurantService } from '../../../domains/admin/services/restaurant.se
 import { fadeInOnEnterAnimation } from 'angular-animations'
 import { SessionService } from '../../../auth/services/session.service'
 import { BootstrapConstants } from '../../models/bootstrap.constants'
+import { DeliveryService } from '../../../domains/delivery/services/delivery.service'
 
 @Component({
   selector: 'app-navbar',
@@ -26,6 +27,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
 
   constructor(
     private restaurantService: RestaurantService,
+    private deliveryService: DeliveryService,
     private signalService: SignalService,
     private sessionService: SessionService,
     private translateService: TranslateService,
@@ -54,30 +56,33 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     map(([signal, auth]) => signal || auth),
     shareReplay(1)
   )
+  readonly deliveriesAmount = this.deliveryService.getRequestedDelivery().pipe(
+    map(value => value.length))
+  readonly ordersAmount = this.restaurantService.getDailyOrders().pipe(
+    map(value => value.length))
 
   ngOnInit(): void {
-    this.checkDelivery()
-    this.checkClient()
     this.updateScreenSize()
     this.setTranslate()
   }
 
   ngAfterViewInit(): void {
     this.initCharts()
+    // setTimeout(() => {
+    //   this.initCharts(20)
+    // }, 3000)
   }
+
+  chart: Chart
 
   initCharts() {
     const data = [
       { year: 2010, count: 10 },
       { year: 2011, count: 20 },
-      { year: 2012, count: 15 },
-      { year: 2013, count: 25 },
-      { year: 2014, count: 22 },
-      { year: 2015, count: 30 },
-      { year: 2016, count: 28 },
+      // { year: 2012, count: 15 },
     ];
 
-    new Chart(
+    this.chart = new Chart(
       document.getElementById('pie-chart') as ChartItem,
       {
         type: 'pie',
@@ -91,7 +96,8 @@ export class NavbarComponent implements OnInit, AfterViewInit {
           ]
         }
       }
-    );
+    )
+    // q.update();
   }
 
   setTranslate() {
@@ -106,10 +112,6 @@ export class NavbarComponent implements OnInit, AfterViewInit {
       this.translateService.use(locale)
     })
   }
-
-  checkDelivery() { }
-
-  checkClient() { }
 
   toggleDrawer() {
     if (!this.responsiveLayout.isDesktop) {

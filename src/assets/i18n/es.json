@@ -548,6 +548,7 @@
       "ALACARTE": {
         "NOT_PUBLISHED": "No se publicaron opciones de alacarte",
         "NO_RECIPES": "No se agregaron opciones de alacarte a las recetas",
+        "ADD_RECIPE": "Agregar nueva receta alacarta",
         "CREATED_SUCCESS": "A la carte menú fue actualizado",
         "BUTTON": {
           "ACTION": "Actualizar alacarte menú",
@@ -596,6 +597,7 @@
         "EDIT": "Cambiar información del restaurante"
       },
       "NAME": "Nombre del restaurante",
+      "FONT": "Tamaño de fuente del título",
       "DESCRIPTION": "Descripción del restaurante",
       "CONTACT": "Nombre del contacto",
       "ADDRESS": "Dirección del restaurante",
@@ -615,7 +617,8 @@
   "STATS": {
     "TITLE": "Estadísticas",
     "NEW_DELIVERY": "Nuevas domicilios",
-    "PLATES_TODAY": "Platos de hoy"
+    "PLATES_TODAY": "Platos de hoy",
+    "ORDERS_TODAY": "Ordenes de hoy"
   },
   "EXPENSES": {
     "NAVBAR": "Gastos",

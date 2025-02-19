@@ -171,8 +171,6 @@ export class OrderDetailComponent implements OnInit {
       } else {
         this.order = await this.requestOrder(id)
       }
-      console.log(this.order);
-
       this.orderId = id
       this.currency = currency
       this.orderStatusBar = {

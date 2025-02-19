@@ -35,8 +35,6 @@ export const formatResponseList = <T>(query: RepositoryRequestListQuery, data: T
       break
     case 'next':
       current = data.length + current
-      console.log('C', current);
-
       break
     case 'previous':
       current = !(total % current) ? current - data.length : total % current

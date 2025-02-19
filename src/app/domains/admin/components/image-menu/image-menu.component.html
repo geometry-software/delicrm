@@ -9,7 +9,9 @@
       <div class="flex justify-center">
         <div id="print" class="image-width">
           <div class="menu__title-border">
-            <div class="menu__title">{{ data.restaurant.name }}</div>
+            <div class="menu__title" [style.font-size]="data.restaurant.titleFontSize">
+              {{ data.restaurant.name }}
+            </div>
             <div class="menu__subtitle">{{ 'ADMIN.BOARD.IMAGE_MENU.TITLE' | translate }}</div>
             <div class="menu__day">{{ today }}</div>
           </div>

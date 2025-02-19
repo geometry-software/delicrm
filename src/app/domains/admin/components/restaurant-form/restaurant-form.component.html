@@ -3,13 +3,24 @@
 
 <form [formGroup]="form">
 
-  <mat-form-field [hideRequiredMarker]="true">
-    <mat-label> {{ 'ADMIN.RESTAURANT_FORM.NAME' | translate }} </mat-label>
-    <input matInput [formControlName]="formProps.name" />
-    <mat-error *ngIf="showFieldErrors(form, formProps.name) as error">
-      {{ error | translate }}
-    </mat-error>
-  </mat-form-field>
+  <div class="flex-gap">
+    <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> {{ 'ADMIN.RESTAURANT_FORM.NAME' | translate }} </mat-label>
+      <input matInput [formControlName]="formProps.name" />
+      <mat-error *ngIf="showFieldErrors(form, formProps.name) as error">
+        {{ error | translate }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field [hideRequiredMarker]="true">
+      <mat-label> {{ 'ADMIN.RESTAURANT_FORM.FONT' | translate }} </mat-label>
+      <mat-select [formControlName]="formProps.titleFontSize">
+        <mat-option *ngFor="let item of fontOptions" [value]="item.value">{{ item.title }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="showFieldErrors(form, formProps.locale) as error">
+        {{ error | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
 
   <mat-form-field [hideRequiredMarker]="true">
     <mat-label> {{ 'ADMIN.RESTAURANT_FORM.DESCRIPTION' | translate }} </mat-label>
@@ -45,8 +56,8 @@
 
   <mat-form-field [hideRequiredMarker]="true">
     <mat-label> {{ 'ADMIN.RESTAURANT_FORM.CLOSED' | translate }} </mat-label>
-    <input matInput [formControlName]="formProps.closed" />
-    <mat-error *ngIf="showFieldErrors(form, formProps.closed) as error">
+    <input matInput [formControlName]="formProps.closedTitle" />
+    <mat-error *ngIf="showFieldErrors(form, formProps.closedTitle) as error">
       {{ error | translate }}
     </mat-error>
   </mat-form-field>

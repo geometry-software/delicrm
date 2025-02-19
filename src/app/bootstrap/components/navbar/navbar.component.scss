@@ -1,7 +1,11 @@
+@use '@angular/material' as mat;
+
 :host {
   button:focus {
     outline: none !important;
   }
+
+  @include mat.badge-overrides((background-color: #f7a156, text-color: white))
 }
 
 .progress-bar {
@@ -192,7 +196,7 @@ mat-drawer-container {
 .stats {
   background-color: #badffb;
   border-radius: 50px;
-  height: 200px;
+  height: 100px;
   margin-bottom: 20px;
   padding: 20px;
   overflow: auto

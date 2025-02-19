@@ -55,11 +55,6 @@ export class ShiftEffects {
         this.store.select(getSize)
       ),
       switchMap(([{ request }, current, total, stateSize]) => {
-        console.log(formatRequest(request, stateSize));
-        console.log('current:', current);
-        console.log('total:', total);
-        console.log('stateSize:', stateSize);
-
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
         switch (query) {
           case 'first':

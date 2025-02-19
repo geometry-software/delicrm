@@ -44,9 +44,6 @@ export class RecipeService {
   }
 
   getAllByQuery(property: string, value: string) {
-    console.log(property);
-    console.log(value);
-
     return this.repositoryService.getAllDocumentsByIncludesQuery(this.collection, property, value)
   }
 

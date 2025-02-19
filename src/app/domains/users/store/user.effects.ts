@@ -115,8 +115,6 @@ export class UserEffects {
       ),
       switchMap(([{ request }, current, stateSize]) => {
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
-        console.log(status);
-
         if (status === 'requested') {
           return combineLatest([
             this.userService.getTotalLabels(),

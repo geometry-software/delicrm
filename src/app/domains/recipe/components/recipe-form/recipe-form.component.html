@@ -58,10 +58,10 @@
       {{ 'RECIPES.FORM.UPDATE_SUCCESS' | translate }}
     </div>
 
-    <span class="file-wrapper" *ngIf="!isUploadingImg">
+    <!-- <span class="file-wrapper" *ngIf="!isUploadingImg">
       <input type="file" name="photo" id="photo" (change)="updateImg($event)" />
       <span class="button">{{ 'RECIPES.FORM.CHANGE_IMAGE' | translate }}</span>
-    </span>
+    </span> -->
 
     <div *ngIf="showUploadButton && !isUploadingImg">
       <br />

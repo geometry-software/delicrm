@@ -17,8 +17,6 @@ export class OrderService {
   private readonly collection = OrderConstants.collectionName
 
   create(order: Order) {
-    console.log(order);
-
     return this.repositoryService.createDocument(this.collection, order)
   }
 

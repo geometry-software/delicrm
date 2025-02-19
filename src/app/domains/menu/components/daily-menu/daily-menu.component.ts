@@ -61,7 +61,7 @@ export class DailyMenuComponent implements OnInit {
   readonly alacarteMenu = this.store.select(getAlacarte)
   readonly user = this.sessionService.getUser()
   readonly serviceClosedSubtitle = this.store.select(getRestaurantInfo).pipe(
-    map(value => value.closed))
+    map(value => value.closedTitle))
 
   ngOnInit(): void {
     this.store.dispatch(ItemActions.initDailyMenu())

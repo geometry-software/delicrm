@@ -46,7 +46,6 @@ export class ClientOrdersEffects {
       switchMap(() => this.sessionService.getAuth().pipe(
         filter(Boolean),
         switchMap(auth => this.deliveryService.getDeliveriesById(auth.authId).pipe(
-          tap(auth => console.log('array', auth)),
           tap(() => this.handleLoadedRequest()),
           map(deliveries => ItemActions.getItemsSuccess({ items: { data: deliveries, current: 0, total: deliveries.length } }))))))
     ))

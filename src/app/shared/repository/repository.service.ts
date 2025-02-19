@@ -225,6 +225,28 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
   /**
    * Queries a Firestore collection
    * @param collection name of the collection
+   * @param sort sorted by the specified field, and in descending or ascending order
+   * @param property name of the property is used to compare
+   * @param value value of the property to compare
+   * @returns Observable with list of documents that matches a query
+   */
+  getAllDocumentsByStrictQuerySnapshotChanges = (
+    collection: string,
+    sort: SortRequest,
+    property: string,
+    value: string
+  ): Observable<T[]> =>
+    this.angularFirestore
+      .collection<T>(collection, query => query
+        .orderBy(sort.active, sort.direction)
+        .where(property, '==', value))
+      .snapshotChanges()
+      .pipe(
+        map(appendId<T[]>))
+
+  /**
+   * Queries a Firestore collection
+   * @param collection name of the collection
    * @param property name of the property is used to compare
    * @param value value of the property to compare
    * @returns Observable with list of documents that matches a query

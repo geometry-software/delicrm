@@ -9,7 +9,8 @@ export type Restaurant = {
     web: string
     // locale: string
     delivery: number
-    closed: string
+    closedTitle: string
+    titleFontSize: string
     currency: string
 }
 
