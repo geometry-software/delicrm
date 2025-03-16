@@ -50,7 +50,7 @@ export class MenuEffects {
       ofType(ItemActions.initDailyMenu),
       tap(() => this.setLoading()),
       switchMap(() => combineLatest([
-        this.restaurantService.getDailyMenu(),
+        this.restaurantService.getActiveDailyMenu(),
         this.restaurantService.getRestaurantInfo(),
         this.restaurantService.getAlacarteMenu(),
         this.clientService.getAllByActiveStatus(),
@@ -84,9 +84,9 @@ export class MenuEffects {
     this.actions.pipe(
       ofType(ItemActions.setDailyMenuEightySix),
       tap(() => this.setLoading()),
-      switchMap(({ id }) => this.restaurantService.getDailyMenu().pipe(
+      switchMap(({ id }) => this.restaurantService.getActiveDailyMenu().pipe(
         map(menu => calulatedDailyMenuWithEightySix(menu, id)),
-        switchMap(updatedMenu => this.restaurantService.updateDailyMenu(updatedMenu).pipe(
+        switchMap(updatedMenu => this.restaurantService.updateEightySixDailyMenu(updatedMenu).pipe(
           map(() => {
             this.setLoaded()
             return ItemActions.setDailyMenuEightySixSuccess({ menu: updatedMenu })

@@ -15,64 +15,58 @@
 </div>
 
 <ng-template #table let-data="data">
-  <ng-container *ngIf="data.length; else empty">
-    <mat-table mat-table [dataSource]="data" matSort matSortDisableClear
-      [matSortDirection]="defaultSortControlValue.direction" [matSortActive]="defaultSortControlValue.active"
-      (matSortChange)="changeSort($event)">
-      <ng-container matColumnDef="client">
-        <mat-header-cell mat-sort-header="createdAt" *matHeaderCellDef>
-          {{ 'ORDERS.LIST.TABLE.CLIENT' | translate }}
-        </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-          <ng-container [ngSwitch]="element.category.type">
-            <ng-container *ngSwitchCase="'table'">
-              <div class="table-link flex items-center" [routerLink]="['/orders', element.id]">
-                <mat-icon class="table-icon ">deck</mat-icon>
-                <div class="table-item">{{ element.category.table }}</div>
-              </div>
-            </ng-container>
-            <ng-container *ngSwitchCase="'delivery'">
-              <div class="table-link flex items-center" [routerLink]="['/orders', element.id]">
-                <mat-icon class="table-icon ">directions_bike</mat-icon>
-                <div class="table-item">{{ element.category?.delivery?.deliveryInfo?.name }}</div>
-              </div>
-            </ng-container>
-            <ng-container *ngSwitchCase="'takeaway'">
-              <div class="table-link flex items-center" [routerLink]="['/orders', element.id]">
-                <mat-icon class="table-icon ">shopping_basket</mat-icon>
-                <div class="table-item">{{ element.category.clientName }}</div>
-              </div>
-            </ng-container>
+  <mat-table mat-table [dataSource]="data" matSort matSortDisableClear
+    [matSortDirection]="defaultSortControlValue.direction" [matSortActive]="defaultSortControlValue.active"
+    (matSortChange)="changeSort($event)">
+    <ng-container matColumnDef="client">
+      <mat-header-cell mat-sort-header="createdAt" *matHeaderCellDef>
+        {{ 'ORDERS.LIST.TABLE.CLIENT' | translate }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <ng-container [ngSwitch]="element.category.type">
+          <ng-container *ngSwitchCase="'table'">
+            <div class="table-link flex items-center" [routerLink]="['/orders', element.id]">
+              <mat-icon class="table-icon ">deck</mat-icon>
+              <div class="table-item">{{ element.category.table }}</div>
+            </div>
           </ng-container>
-        </mat-cell>
-      </ng-container>
+          <ng-container *ngSwitchCase="'delivery'">
+            <div class="table-link flex items-center" [routerLink]="['/orders', element.id]">
+              <mat-icon class="table-icon ">directions_bike</mat-icon>
+              <div class="table-item">{{ element.category?.delivery?.deliveryInfo?.name }}</div>
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'takeaway'">
+            <div class="table-link flex items-center" [routerLink]="['/orders', element.id]">
+              <mat-icon class="table-icon ">shopping_basket</mat-icon>
+              <div class="table-item">{{ element.category.clientName }}</div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="waiter">
-        <mat-header-cell *matHeaderCellDef>
-          {{ 'ORDERS.LIST.TABLE.WAITER' | translate }}
-        </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-          {{ element.createdBy?.name }}
-        </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="waiter">
+      <mat-header-cell *matHeaderCellDef>
+        {{ 'ORDERS.LIST.TABLE.WAITER' | translate }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.createdBy?.name }}
+      </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="price">
-        <mat-header-cell *matHeaderCellDef>
-          {{ 'ORDERS.LIST.TABLE.PRICE' | translate }}
-        </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-          {{ element.price.total }} {{ element.price.currency }}
-        </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="price">
+      <mat-header-cell *matHeaderCellDef>
+        {{ 'ORDERS.LIST.TABLE.PRICE' | translate }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.price.total }} {{ element.price.currency }}
+      </mat-cell>
+    </ng-container>
 
-      <mat-header-row *matHeaderRowDef="tableColumns; sticky: true"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
-    </mat-table>
-  </ng-container>
-
-  <ng-template #empty>
-    <div class="emplty-list-found">{{ 'ORDERS.LIST.NO_ORDERS_FOUND' | translate }}</div>
-  </ng-template>
+    <mat-header-row *matHeaderRowDef="tableColumns; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
+  </mat-table>
 </ng-template>
 
 <app-pagination [paginationControl]="paginationControl" [sizeControl]="sizeControl"

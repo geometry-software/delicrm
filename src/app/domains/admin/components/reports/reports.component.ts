@@ -12,7 +12,7 @@ import { SortRequest } from '../../../../shared/repository/repository.models'
 import { combineListControls } from '../../../../shared/utils/combine-list-controls'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { getDateFromUnix } from '../../../../shared/utils/format-unix-time'
-import { getCurrency } from '../../store/admin-store/admin.selectors'
+import { getCurrency } from '../../store/board-store/board.selectors'
 import { tap } from 'rxjs'
 
 @Component({

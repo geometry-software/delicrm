@@ -13,28 +13,28 @@
     </button>
   </div>
 </div>
-<ng-container *ngIf="dailyMenu.extras.starters.length">
+<ng-container *ngIf="dailyMenu.extras?.starters.length">
   <div class="section">{{ 'SHARED.DAILY_MENU.STARTERS' | translate }}</div>
   <div *ngFor="let item of dailyMenu.extras.starters">
     <ng-container *ngTemplateOutlet="extraItem; context: { item }"></ng-container>
   </div>
 </ng-container>
 
-<ng-container *ngIf="dailyMenu.extras.drinks.length">
+<ng-container *ngIf="dailyMenu.extras?.drinks.length">
   <div class="section">{{ 'SHARED.DAILY_MENU.DRINKS' | translate }}</div>
   <div *ngFor="let item of dailyMenu.extras.drinks">
     <ng-container *ngTemplateOutlet="extraItem; context: { item }"></ng-container>
   </div>
 </ng-container>
 
-<ng-container *ngIf="dailyMenu.extras.sideDishes.length">
+<ng-container *ngIf="dailyMenu.extras?.sideDishes.length">
   <div class="section">{{ 'SHARED.DAILY_MENU.SIDE_DISHES' | translate }}</div>
   <div *ngFor="let item of dailyMenu.extras.sideDishes">
     <ng-container *ngTemplateOutlet="extraItem; context: { item }"></ng-container>
   </div>
 </ng-container>
 
-<ng-container *ngIf="dailyMenu.extras.desserts.length">
+<ng-container *ngIf="dailyMenu.extras?.desserts.length">
   <div class="section">{{ 'SHARED.DAILY_MENU.DESSERTS' | translate }}</div>
   <div *ngFor="let item of dailyMenu.extras.desserts">
     <ng-container *ngTemplateOutlet="extraItem; context: { item }"></ng-container>

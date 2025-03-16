@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects'
 import { catchError, combineLatest, delay, map, of, switchMap, tap } from 'rxjs'
-import { AdminActions as ItemActions } from './admin.actions'
+import { BoardActions as ItemActions } from './board.actions'
 import { Router } from '@angular/router'
 import { Action, Store } from '@ngrx/store'
 import { RestaurantService } from '../../services/restaurant.service'
@@ -16,7 +16,7 @@ import { RecipeService } from '../../../recipe/services/recipe.service'
 import { NotificationService } from '../../../../shared/services/notification.service'
 
 @Injectable()
-export class AdminEffects {
+export class BoardEffects {
 
   constructor(
     private router: Router,
@@ -40,54 +40,56 @@ export class AdminEffects {
       tap(() => this.setLoading()),
       switchMap(() => combineLatest([
         this.restaurantService.getRestaurantInfo(),
-        this.restaurantService.getDailyMenu(),
+        this.restaurantService.getActiveDailyMenu(),
+        this.restaurantService.getFormDailyMenu(),
         this.restaurantService.getAlacarteMenu(),
         this.recipeService.getAll(),
       ]).pipe(
-        map(([restaurant, menu, alacarte, recipes]) => {
-          this.menuFormService.initForm(menu, recipes)
+        map(([restaurant, menu, formMenu, alacarte, recipes]) => {
+          this.menuFormService.initForm(formMenu, recipes)
+          this.setLoaded()
           return ItemActions.setBoardInfo({
+            menu,
             restaurant: restaurant.restaurant,
             recipes,
             alacarte,
             open: restaurant.open
           })
         }),
-        tap(() => this.setLoaded()),
         catchError(error => this.handleError(error, 'create')))))
   )
 
-  setBoardInfo = createEffect(() =>
-    this.actions.pipe(
-      ofType(ItemActions.setBoardInfo),
-      tap(() => this.setLoading()),
-      map(() => ItemActions.getDailyMenu()))
-  )
+  // setBoardInfo = createEffect(() =>
+  //   this.actions.pipe(
+  //     ofType(ItemActions.setBoardInfo),
+  //     tap(() => this.setLoading()),
+  //     map(() => ItemActions.getDailyMenu()))
+  // )
 
-  getDailyMenu = createEffect(() =>
-    this.actions.pipe(
-      ofType(ItemActions.getDailyMenu),
-      tap(() => this.setLoading()),
-      switchMap(() => this.restaurantService.getDailyMenu().pipe(
-        map(menu => {
-          this.setLoaded()
-          return ItemActions.setDailyMenu({ menu })
-        }),
-        catchError(error => this.handleError(error, 'create')))))
-  )
+  // getDailyMenu = createEffect(() =>
+  //   this.actions.pipe(
+  //     ofType(ItemActions.getDailyMenu),
+  //     tap(() => this.setLoading()),
+  //     switchMap(() => this.restaurantService.getActiveDailyMenu().pipe(
+  //       map(menu => {
+  //         this.setLoaded()
+  //         return ItemActions.setDailyMenu({ menu })
+  //       }),
+  //       catchError(error => this.handleError(error, 'create')))))
+  // )
 
   createDailyMenu = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.createDailyMenu),
       tap(() => this.setLoading()),
       switchMap(({ menu }) => combineLatest([
-        this.restaurantService.updateDailyMenu(menu),
+        this.restaurantService.createDailyMenu(menu),
         this.restaurantService.openRestaurant(true)
       ]).pipe(
         map(() => {
           this.setLoaded()
-          this.router.navigate(['admin'])
-          return ItemActions.getDailyMenu()
+          this.router.navigate(['board'])
+          return ItemActions.getBoardInfo()
         }),
         catchError(error => this.handleError(error, 'create')))))
   )
@@ -109,7 +111,7 @@ export class AdminEffects {
       ofType(ItemActions.rebuildDailyMenu),
       map(() => {
         this.menuFormService.resetChosenPlates()
-        this.router.navigate(['/admin/daily'])
+        this.router.navigate(['/board/daily'])
         return ItemActions.rebuildDailyMenuSuccess()
       })
     )
@@ -127,7 +129,7 @@ export class AdminEffects {
       ofType(ItemActions.closeShift),
       tap(() => this.setLoading()),
       switchMap(() => combineLatest([
-        this.restaurantService.getDailyMenu().pipe(
+        this.restaurantService.getActiveDailyMenu().pipe(
           map(value => value.createdAt)
         ),
         this.restaurantService.getDailyOrders()

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { MatDialog } from '@angular/material/dialog'
 import { fadeInOnEnterAnimation, fadeInUpOnEnterAnimation, rubberBandOnEnterAnimation } from 'angular-animations'
 import { PlateDetailComponent } from '../../../menu/components/plate-detail/plate-detail.component'
-import { AdminActions as ItemActions } from '../../store/admin-store/admin.actions'
+import { BoardActions as ItemActions } from '../../store/board-store/board.actions'
 import { Order } from '../../../orders/models/order.model'
 import { Recipe } from '../../../recipe/models/recipe.model'
 import { setProteinImage } from '../../../../shared/utils/protein-image'
@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { combineLatest, filter, map, tap } from 'rxjs'
 import { UserService } from '../../../users/services/user.service'
 import { SessionService } from '../../../../auth/services/session.service'
-import { getAlacarteMenu, getRecipes, getRestaurantInfo, loadingStatus } from '../../store/admin-store/admin.selectors'
+import { getAlacarteMenu, getRecipes, getRestaurantInfo, loadingStatus } from '../../store/board-store/board.selectors'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { cloneDeep } from 'lodash'
 
@@ -73,6 +73,5 @@ export class AlacarteFormComponent {
       this.chosenPlates.push({ ...item, isAdded: true })
     }
   }
-
 
 }

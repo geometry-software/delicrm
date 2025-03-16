@@ -1,40 +1,38 @@
-<ng-container *ngIf="isLoaded | async">
-  <ng-container *ngIf="imageData | async as data">
+<ng-container *ngIf="imageData | async as data">
 
-    <ng-container *ngIf="!data.open; else menuTemplate">
-      <div class="no-menu">{{ 'ADMIN.BOARD.IMAGE_MENU.NOT_PUBLISHED' | translate }}</div>
-    </ng-container>
+  <ng-container *ngIf="!data.open; else menuTemplate">
+    <div class="no-menu">{{ 'ADMIN.BOARD.IMAGE_MENU.NOT_PUBLISHED' | translate }}</div>
+  </ng-container>
 
-    <ng-template #menuTemplate>
-      <div class="flex justify-center">
-        <div id="print" class="image-width">
-          <div class="menu__title-border">
-            <div class="menu__title" [style.font-size]="data.restaurant.titleFontSize">
-              {{ data.restaurant.name }}
-            </div>
-            <div class="menu__subtitle">{{ 'ADMIN.BOARD.IMAGE_MENU.TITLE' | translate }}</div>
-            <div class="menu__day">{{ today }}</div>
+  <ng-template #menuTemplate>
+    <div class="menu">
+      <div #print class="menu__layout">
+        <div class="menu__title-border">
+          <div class="menu__title" [style.font-size]="data.restaurant.titleFontSize">
+            {{ data.restaurant.name }}
           </div>
+          <div class="menu__subtitle">{{ 'ADMIN.BOARD.IMAGE_MENU.TITLE' | translate }}</div>
+          <div class="menu__day">{{ today }}</div>
+        </div>
 
-          <app-formatted-daily-menu [dailyMenu]="data.menu" [currency]="data.currency" />
+        <app-formatted-daily-menu [dailyMenu]="data.menu" [currency]="data.currency" />
 
-          <div class="contact__border">
-            <div class="contact__title">
-              {{ 'ADMIN.BOARD.IMAGE_MENU.DELIVERY' | translate }}:
-              <span class="contact__subtitle contact__link">{{ web }}</span>
-            </div>
-            <div class="contact__title">
-              {{ 'ADMIN.BOARD.IMAGE_MENU.ADDRESS' | translate }}:
-              <span class="contact__subtitle">{{ data.restaurant.address }}</span>
-            </div>
-            <div class="contact__title">
-              {{ 'ADMIN.BOARD.IMAGE_MENU.PHONE' | translate }}:
-              <span class="contact__subtitle">{{ data.restaurant.phone }}</span>
-            </div>
-            <!-- <div class="contact__footer">We accept all cards, QR and cash</div> -->
+        <div class="contact__border">
+          <div class="contact__title">
+            {{ 'ADMIN.BOARD.IMAGE_MENU.DELIVERY' | translate }}:
+            <span class="contact__subtitle contact__link">{{ web }}</span>
           </div>
+          <div class="contact__title">
+            {{ 'ADMIN.BOARD.IMAGE_MENU.ADDRESS' | translate }}:
+            <span class="contact__subtitle">{{ data.restaurant.address }}</span>
+          </div>
+          <div class="contact__title">
+            {{ 'ADMIN.BOARD.IMAGE_MENU.PHONE' | translate }}:
+            <span class="contact__subtitle">{{ data.restaurant.phone }}</span>
+          </div>
+          <!-- <div class="contact__footer">We accept all cards, QR and cash</div> -->
         </div>
       </div>
-    </ng-template>
-  </ng-container>
+    </div>
+  </ng-template>
 </ng-container>

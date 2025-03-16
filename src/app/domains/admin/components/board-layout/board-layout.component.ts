@@ -1,13 +1,13 @@
 import { ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { Router, Scroll } from '@angular/router'
-import { AdminActions as ItemActions } from '../../store/admin-store/admin.actions'
+import { BoardActions as ItemActions } from '../../store/board-store/board.actions'
 import { combineLatest, filter, first, map, switchMap, tap } from 'rxjs'
 import { isEqual } from 'lodash'
 import { Store } from '@ngrx/store'
-import { AdminActions } from '../../store/admin-store/admin.actions'
+import { BoardActions } from '../../store/board-store/board.actions'
 import { AppConfirmationDialogComponent } from '../../../../shared/components/app-confirmation-dialog/app-confirmation-dialog.component'
-import { getRestaurantInfo, isRestaurantOpen, loadingStatus } from '../../store/admin-store/admin.selectors'
+import { getRestaurantInfo, isRestaurantOpen, loadingStatus } from '../../store/board-store/board.selectors'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { RestaurantFormComponent } from '../restaurant-form/restaurant-form.component'
 import { SharedConstants } from '../../../../shared/utils/shared.constants'
@@ -42,9 +42,9 @@ export class BoardLayoutComponent implements OnInit {
   readonly buttonTitleAdditional = 'Additional'
   readonly buttonTitleMenu = 'Daily menu'
 
-  readonly imageRoute = '/admin'
-  readonly formRoute = '/admin/daily'
-  readonly alacarteRoute = '/admin/alacarte'
+  readonly imageRoute = '/board'
+  readonly formRoute = '/board/daily'
+  readonly alacarteRoute = '/board/alacarte'
   readonly LoadingStatus = LoadingStatus
   readonly formComponentConfig = SharedConstants.formComponentConfig
   readonly loadingStatus = this.store.select(loadingStatus)
@@ -72,7 +72,7 @@ export class BoardLayoutComponent implements OnInit {
   }
 
   printMenu() {
-    this.store.dispatch(AdminActions.printMenu())
+    this.store.dispatch(BoardActions.printMenu())
   }
 
   clearMenu() {
@@ -84,7 +84,7 @@ export class BoardLayoutComponent implements OnInit {
       }
     }).afterClosed().pipe(
       filter(Boolean),
-      tap(() => this.store.dispatch(AdminActions.closeShift())),
+      tap(() => this.store.dispatch(BoardActions.closeShift())),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe()
   }
@@ -99,17 +99,17 @@ export class BoardLayoutComponent implements OnInit {
       ).afterClosed().pipe(
         filter(Boolean),
         filter(restaurant => !isEqual(info, restaurant)),
-        tap(restaurant => this.store.dispatch(AdminActions.updateRestaurant({ restaurant }))))),
+        tap(restaurant => this.store.dispatch(BoardActions.updateRestaurant({ restaurant }))))),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe()
   }
 
   rebuild() {
-    this.store.dispatch(AdminActions.rebuildDailyMenu())
+    this.store.dispatch(BoardActions.rebuildDailyMenu())
   }
 
   copy() {
-    this.store.dispatch(AdminActions.copyDailyMenu())
+    this.store.dispatch(BoardActions.copyDailyMenu())
   }
 
 }

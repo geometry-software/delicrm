@@ -7,6 +7,8 @@ import { Shift } from '../models/shift'
 import { CheckoutOrder } from '../../menu/models/checkout'
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Recipe } from '../../recipe/models/recipe.model'
+import { requiredAutocompleteValidator } from '../../../shared/utils/required-autocomplete-validator.validator'
+import { cloneDeep } from 'lodash'
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,7 @@ export class MenuFormService {
     private formBuilder: FormBuilder
   ) { }
 
+  private extrasForm: FormGroup
   private plateList: Array<MenuItem> = []
   private chosenPlates: Array<MenuItem> = []
   private menu: DailyMenu
@@ -24,7 +27,6 @@ export class MenuFormService {
   private chosenPlatesSub = new BehaviorSubject<Array<MenuItem>>([])
   private recipesSub = new BehaviorSubject<Array<MenuItem>>([])
   private extrasAmountSub = new BehaviorSubject<ExtrasAmount>(null)
-  extrasForm: FormGroup
 
   initForm(menu: DailyMenu, recipes: Recipe[]) {
     this.extrasForm = this.formBuilder.group({
@@ -34,10 +36,15 @@ export class MenuFormService {
       desserts: this.initFormArrayItem(menu.extrasAmount.desserts),
     })
     this.menu = menu
+    this.chosenPlates = []
     this.plateList = recipes.filter(value => value.type == 'main')
     this.plateListSub.next(this.plateList)
     this.recipesSub.next(recipes)
     this.extrasAmountSub.next(menu.extrasAmount)
+  }
+
+  getForm() {
+    return this.extrasForm
   }
 
   getStarters() {
@@ -82,7 +89,7 @@ export class MenuFormService {
 
   patchForms() {
     for (let index = 0; index < this.menu.main.length; index++) {
-      const item = this.menu.main[index]
+      const item = cloneDeep(this.menu.main[index])
       this.chosenPlates.push({ ...item, isAdded: true })
     }
     this.chosenPlates.forEach(el => {
@@ -99,11 +106,14 @@ export class MenuFormService {
   }
 
   private initFormArrayItem(amount: number) {
-    const array: FormArray = this.formBuilder.array([])
+    const formArray = this.formBuilder.array([])
     for (let i = 0; i < amount; i++) {
-      array.push(new FormControl(null, Validators.required))
+      formArray.push(new FormControl(null, Validators.required))
+      console.log(formArray);
+
+      formArray.controls.at(i).setValidators(requiredAutocompleteValidator)
     }
-    return array
+    return formArray
   }
 
 }

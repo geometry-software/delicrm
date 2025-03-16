@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { saveAs } from 'file-saver'
 import * as moment from 'moment'
 import { combineLatest, filter, map, tap } from 'rxjs'
 import domtoimage from 'dom-to-image'
 import { Store } from '@ngrx/store'
-import { getCurrency, getMenu, getRestaurantInfo, isRestaurantOpen, loadingStatus, printMenu } from '../../store/admin-store/admin.selectors'
-import { AdminActions as ItemActions } from '../../store/admin-store/admin.actions'
+import { getCurrency, getMenu, getRestaurantInfo, isRestaurantOpen, loadingStatus, printMenu } from '../../store/board-store/board.selectors'
+import { BoardActions as ItemActions } from '../../store/board-store/board.actions'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { fadeInOnEnterAnimation } from 'angular-animations'
@@ -24,14 +24,17 @@ export class ImageMenuComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private destroyRef: DestroyRef
+    private destroyRef: DestroyRef,
+    private cdr: ChangeDetectorRef,
   ) { }
+
+  @ViewChild('print') print: ElementRef;
 
   readonly today = moment(new Date()).locale(BootstrapConstants.locale).format('dddd DD MMMM')
   readonly imageData = combineLatest([
     this.store.select(getMenu),
     this.store.select(getCurrency),
-    this.store.select(getRestaurantInfo),
+    this.store.select(getRestaurantInfo).pipe(filter(Boolean)),
     this.store.select(isRestaurantOpen),
   ]).pipe(
     map(value => ({
@@ -39,12 +42,9 @@ export class ImageMenuComponent implements OnInit {
       currency: value[1],
       restaurant: value[2],
       open: value[3],
-    }))
-  )
+    })))
   readonly commonImg = 'assets/dish.png'
   readonly web = BootstrapConstants.web
-  readonly isLoaded = this.store.select(loadingStatus).pipe(
-    map(loading => loading === LoadingStatus.Loaded))
 
   ngOnInit() {
     this.onPrintDailyMenu()
@@ -53,13 +53,11 @@ export class ImageMenuComponent implements OnInit {
   onPrintDailyMenu() {
     this.store.select(printMenu).pipe(
       filter(Boolean),
-      tap(() => {
-        domtoimage.toBlob(document.getElementById('print')).then(blob => {
-          const name = 'Menu ' + this.today
-          saveAs(blob, name)
-          this.store.dispatch(ItemActions.printMenuSuccess())
-        })
-      }),
+      tap(() => domtoimage.toBlob(this.print.nativeElement).then(blob => {
+        const name = 'Menu ' + this.today
+        saveAs(blob, name)
+        this.store.dispatch(ItemActions.printMenuSuccess())
+      })),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe()
   }

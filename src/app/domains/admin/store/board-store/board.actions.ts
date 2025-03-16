@@ -5,7 +5,7 @@ import { RepositoryRequestQuery } from '../../../../shared/repository/repository
 import { LoadingStatus } from '../../../../shared/models/loading-status';
 import { Recipe } from '../../../recipe/models/recipe.model';
 
-export const AdminActions = createActionGroup({
+export const BoardActions = createActionGroup({
   source: AdminConstants.storeFeatureKey,
   events: {
     'Set Items Loading Status': props<{ status: LoadingStatus }>(),
@@ -14,10 +14,11 @@ export const AdminActions = createActionGroup({
     'Rebuild Daily Menu': emptyProps(),
     'Rebuild Daily Menu Success': emptyProps(),
     'Copy Daily Menu': emptyProps(),
-    'Get Daily Menu': emptyProps(),
-    'Set Daily Menu': props<{ menu: DailyMenu }>(),
+    // 'Get Daily Menu': emptyProps(),
+    // 'Set Daily Menu': props<{ }>(),
     'Get Board Info': emptyProps(),
     'Set Board Info': props<{
+      menu: DailyMenu,
       restaurant: Restaurant,
       recipes: Recipe[],
       alacarte: MenuItem[],

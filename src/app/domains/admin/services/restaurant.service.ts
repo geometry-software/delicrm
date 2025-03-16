@@ -18,7 +18,8 @@ export class RestaurantService {
 
   private readonly collection = RestaurantConstants.collectionName
   private readonly infoDocument = RestaurantConstants.infoDocument
-  private readonly menuDocument = RestaurantConstants.menuDocument
+  private readonly menuActiveDocument = RestaurantConstants.menuActiveDocument
+  private readonly menuFormDocument = RestaurantConstants.menuFormDocument
   private readonly alacarteDocument = RestaurantConstants.alacarteDocument
   private readonly ordersDocument = RestaurantConstants.ordersDocument
   private readonly openDocument = RestaurantConstants.openDocument
@@ -27,7 +28,8 @@ export class RestaurantService {
   createRestaurant(item: Restaurant) {
     return combineLatest([
       this.repositoryService.setDocument(this.collection, item, this.infoDocument),
-      this.repositoryService.setDocument(this.collection, this.initialMenu, this.menuDocument),
+      this.repositoryService.setDocument(this.collection, this.initialMenu, this.menuActiveDocument),
+      this.repositoryService.setDocument(this.collection, this.initialMenu, this.menuFormDocument),
       this.repositoryService.setDocument(this.collection, { alacarte: [] }, this.alacarteDocument),
       this.repositoryService.setDocument(this.collection, { orders: [] }, this.ordersDocument),
       this.repositoryService.setDocument(this.collection, { open: false }, this.openDocument),
@@ -37,7 +39,6 @@ export class RestaurantService {
   openRestaurant(open: boolean) {
     return this.repositoryService.updateDocument(this.collection, { open }, this.openDocument)
   }
-
 
   updateRestaurantInfo(item: Restaurant) {
     return this.repositoryService.updateDocument(this.collection, item, this.infoDocument)
@@ -50,18 +51,29 @@ export class RestaurantService {
     ]).pipe(
       map(value => {
         const restaurant: Restaurant = value[0]
-        const open: boolean = value[1].open
+        const open: boolean = value[1]?.open
         return { restaurant, open }
       })
     )
   }
 
-  updateDailyMenu(menu: DailyMenu) {
-    return this.repositoryService.updateDocument(this.collection, menu, this.menuDocument)
+  createDailyMenu(menu: DailyMenu) {
+    return combineLatest([
+      this.repositoryService.updateDocument(this.collection, menu, this.menuActiveDocument),
+      this.repositoryService.updateDocument(this.collection, menu, this.menuFormDocument),
+    ])
   }
 
-  getDailyMenu(): Observable<DailyMenu> {
-    return this.repositoryService.getDocumentById(this.collection, this.menuDocument)
+  updateEightySixDailyMenu(menu: DailyMenu) {
+    return this.repositoryService.updateDocument(this.collection, menu, this.menuActiveDocument)
+  }
+
+  getActiveDailyMenu(): Observable<DailyMenu> {
+    return this.repositoryService.getDocumentById(this.collection, this.menuActiveDocument)
+  }
+
+  getFormDailyMenu(): Observable<DailyMenu> {
+    return this.repositoryService.getDocumentById(this.collection, this.menuFormDocument)
   }
 
   updateAlacarteMenu(alacarte: MenuItem[]) {
@@ -70,7 +82,7 @@ export class RestaurantService {
 
   getAlacarteMenu(): Observable<MenuItem[]> {
     return this.repositoryService.getDocumentById(this.collection, this.alacarteDocument).pipe(
-      map(value => value.alacarte)
+      map(value => value?.alacarte)
     )
   }
 
@@ -80,7 +92,7 @@ export class RestaurantService {
 
   getDailyOrders(): Observable<CheckoutOrder[]> {
     return this.repositoryService.getDocumentById(this.collection, this.ordersDocument).pipe(
-      map(value => value.orders)
+      map(value => value?.orders)
     )
   }
 

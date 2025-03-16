@@ -16,7 +16,7 @@ export enum RestaurantFormProps {
     // openTime = 'openTime',
     currency = 'currency',
     delivery = 'delivery',
-    closedTitle = 'closed',
+    closedTitle = 'closedTitle',
     // discount = 'discount'
 }
 

@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store'
-import { AdminActions as ItemActions } from './admin.actions'
-import { initialState, State } from './admin.state'
+import { BoardActions as ItemActions } from './board.actions'
+import { initialState, State } from './board.state'
 
 export const reducer = createReducer<State>(
   initialState,
@@ -16,16 +16,13 @@ export const reducer = createReducer<State>(
     ...state,
     print: false,
   })),
-  on(ItemActions.setBoardInfo, (state, { restaurant, recipes, open, alacarte }) => ({
+  on(ItemActions.setBoardInfo, (state, { menu, restaurant, recipes, open, alacarte }) => ({
     ...state,
+    menu,
     restaurant,
     recipes,
     alacarte,
     open
-  })),
-  on(ItemActions.setDailyMenu, (state, { menu }) => ({
-    ...state,
-    menu,
   })),
   on(ItemActions.closeShiftSuccess, (state) => ({
     ...state,

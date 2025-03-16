@@ -22,7 +22,7 @@ export const userMenuOptions: Array<MenuOption> = [
   {
     title: 'ADMIN.NAVBAR',
     icon: 'content_paste',
-    link: 'admin',
+    link: 'board',
     roles: ['admin'],
   },
   {

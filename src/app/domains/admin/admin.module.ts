@@ -7,8 +7,8 @@ import { BoardLayoutComponent } from './components/board-layout/board-layout.com
 import { StoreModule } from '@ngrx/store'
 import { EffectsModule } from '@ngrx/effects'
 import { AdminConstants } from './models/admin.constants'
-import { AdminEffects } from './store/admin-store/admin.effects'
-import { reducer } from './store/admin-store/admin.reducer'
+import { BoardEffects } from './store/board-store/board.effects'
+import { reducer } from './store/board-store/board.reducer'
 import { ImageMenuComponent } from './components/image-menu/image-menu.component'
 import { ShiftEffects } from './store/shift-store/shift.effects'
 import { ShiftConstants } from './models/shift.constants'
@@ -17,7 +17,6 @@ import { ShiftService } from './services/shift.service'
 import { ShiftReportComponent } from './components/shift-report/shift-report.component'
 import { MenuFormService } from './services/menu-form.service'
 import { AlacarteFormComponent } from './components/alacarte-form/alacarte-form.component'
-import { RequiredAutocompleteDirective } from '../../shared/directives/required-autocomplete.directive'
 
 @NgModule({
   declarations: [
@@ -26,15 +25,14 @@ import { RequiredAutocompleteDirective } from '../../shared/directives/required-
     ImageMenuComponent,
     ReportsComponent,
     ShiftReportComponent,
-    AlacarteFormComponent,
-    // RequiredAutocompleteDirective,
+    AlacarteFormComponent
   ],
   imports: [
     SharedModule,
     AdminRoutingModule,
     StoreModule.forFeature(AdminConstants.storeFeatureKey, reducer),
     StoreModule.forFeature(ShiftConstants.storeFeatureKey, shiftReducer),
-    EffectsModule.forFeature([AdminEffects, ShiftEffects]),
+    EffectsModule.forFeature([BoardEffects, ShiftEffects]),
   ],
   providers: [
     MenuFormService,

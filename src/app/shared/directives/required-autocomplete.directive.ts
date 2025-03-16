@@ -9,12 +9,13 @@ export class RequiredAutocompleteDirective {
 
     @Input('requiredAutocomplete') matAutoComplete!: MatAutocomplete
 
-    constructor(@Optional() @Self() private ngControl: NgControl) { }
+    constructor(private ngControl: NgControl) { }
 
     @HostListener('blur')
     onBlur() {
         const value = this.ngControl.control?.value;
         const matchingOptions = this.matAutoComplete.options.find(option => option.value === value)
+
         if (!matchingOptions) {
             this.ngControl.control?.setValue(null)
             this.ngControl.control?.setErrors({ requiredAutocomplete: true })

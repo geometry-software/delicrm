@@ -23,7 +23,7 @@
 
   <mat-form-field [hideRequiredMarker]="true">
     <mat-label> {{ 'AUTH.ADMIN.FORM.REPEAT_PASSWORD' | translate }} </mat-label>
-    <input matInput [formControlName]="formProps.repeatPassword" />
+    <input matInput type="password" [formControlName]="formProps.repeatPassword" />
     <mat-error *ngIf="showFieldErrors(form, formProps.repeatPassword) as error">
       {{ error | translate }}
     </mat-error>

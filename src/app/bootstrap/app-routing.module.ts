@@ -30,7 +30,7 @@ export const routes: Routes = [
         canActivate: [],
       },
       {
-        path: 'admin',
+        path: 'board',
         loadChildren: () => import('../domains/admin/admin.module').then((m) => m.AdminModule),
         canActivate: [],
       },

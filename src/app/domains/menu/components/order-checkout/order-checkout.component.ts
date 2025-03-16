@@ -294,10 +294,11 @@ export class OrderCheckoutComponent implements OnInit {
   }
 
   private checkValidation() {
+    const validClient = this.form.valid && this.activeClientsControl.valid
     if (!this.order.main.length) {
-      return this.form.valid
+      return validClient
     } else {
-      return !this.hasSkippedStarter && !this.hasSkippedDrink && this.form.valid
+      return !this.hasSkippedStarter && !this.hasSkippedDrink && validClient
     }
   }
 
@@ -325,12 +326,14 @@ export class OrderCheckoutComponent implements OnInit {
     this.hasTakeAwayError = false
     this.hasTableNumberError = false
     this.hasSkippedStarter = Boolean(!this.order.main.find(el => Boolean(el.starter?.id) || el.starter?.isSkipped))
-    this.hasSkippedDrink = Boolean(!this.order.main.find(el => Boolean(el.drink?.id) || el.starter?.isSkipped))
+    this.hasSkippedDrink = Boolean(!this.order.main.find(el => Boolean(el.drink?.id) || el.drink?.isSkipped))
   }
 
   private hightlightValidation() {
-    this.hasSkippedStarter ? (this.hasStarterError = true) : (this.hasStarterError = false)
-    this.hasSkippedDrink ? (this.hasDrinkError = true) : (this.hasDrinkError = false)
+    if (this.order.main.length) {
+      this.hasSkippedStarter ? (this.hasStarterError = true) : (this.hasStarterError = false)
+      this.hasSkippedDrink ? (this.hasDrinkError = true) : (this.hasDrinkError = false)
+    }
     if (this.form.invalid) {
       switch (this.order.category.type) {
         case 'delivery':
@@ -394,7 +397,7 @@ export class OrderCheckoutComponent implements OnInit {
       createdAt: getCurrentUnixTime(),
       createdBy: this.appUser ? this.appUser : null,
       client: this.auth ?? this.autocompleteClient,
-      clientId: this.auth?.authId ?? this.autocompleteClient.authId,
+      clientId: this.auth?.authId ?? this.autocompleteClient?.authId,
       order: cloneDeep(this.order),
       status: this.appUser ? 'confirmed' : 'requested',
       deliveryInfo: {

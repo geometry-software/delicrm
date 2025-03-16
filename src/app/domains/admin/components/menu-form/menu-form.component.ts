@@ -9,14 +9,15 @@ import { RecipeService } from '../../../recipe/services/recipe.service'
 import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { Store } from '@ngrx/store'
-import { AdminActions as ItemActions } from '../../store/admin-store/admin.actions'
-import { getCurrency, getMenu, getRecipes, getRestaurantInfo, loadingStatus, rebuildMenu } from '../../store/admin-store/admin.selectors'
+import { BoardActions as ItemActions } from '../../store/board-store/board.actions'
+import { getCurrency, getMenu, getRecipes, getRestaurantInfo, loadingStatus, rebuildMenu } from '../../store/board-store/board.selectors'
 import { DailyMenu, MenuItem } from '../../models/restaurant'
 import { highlightInvalidFields, showFieldErrors } from '../../../../shared/utils/form-error-handling'
 import { TranslateService } from '@ngx-translate/core'
 import { RestaurantService } from '../../services/restaurant.service'
 import { MenuFormService } from '../../services/menu-form.service'
 import { Recipe } from '../../../recipe/models/recipe.model'
+import { requiredAutocompleteValidator } from '../../../../shared/utils/required-autocomplete-validator.validator'
 
 @Component({
   selector: 'app-menu-form',
@@ -61,7 +62,7 @@ export class MenuFormComponent implements AfterViewInit {
       this.plateList = plates
       this.chosenPlates = chosenPlates
       this.recipes = recipes
-      this.extrasForm = this.menuFormService.extrasForm
+      this.extrasForm = this.menuFormService.getForm()
       this.initAutocompleteOptions()
       this.signalService.setLoadingStatus(LoadingStatus.Loaded)
       return true
@@ -103,13 +104,7 @@ export class MenuFormComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.store.select(rebuildMenu).pipe(
-      filter(Boolean),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(() => {
-      this.initAutocompleteOptions()
-      this.stepper.reset()
-    })
+    this.rebuildMenu()
   }
 
   getStartersLabel(index: number) {
@@ -135,6 +130,7 @@ export class MenuFormComponent implements AfterViewInit {
   addStarter() {
     this.starters.push(new FormControl(null, Validators.required))
     const index = this.starters.length - 1
+    this.starters.at(index).setValidators(requiredAutocompleteValidator)
     this.filteredStarterOptions[index] = this.starters.at(index).valueChanges.pipe(
       map(search => search
         ? this.starterList.filter(option => {
@@ -154,6 +150,7 @@ export class MenuFormComponent implements AfterViewInit {
   addDrink() {
     this.drinks.push(new FormControl(null, Validators.required))
     const index = this.drinks.length - 1
+    this.drinks.at(index).setValidators(requiredAutocompleteValidator)
     this.filteredDrinkOptions[index] = this.drinks.at(index).valueChanges.pipe(
       map(search => search
         ? this.starterList.filter(option => {
@@ -173,6 +170,7 @@ export class MenuFormComponent implements AfterViewInit {
   addSidedish() {
     this.sideDishes.push(new FormControl(null, Validators.required))
     const index = this.sideDishes.length - 1
+    this.sideDishes.at(index).setValidators(requiredAutocompleteValidator)
     this.filteredSideDishOptions[index] = this.sideDishes.at(index).valueChanges.pipe(
       map(search => search
         ? this.starterList.filter(option => {
@@ -192,6 +190,7 @@ export class MenuFormComponent implements AfterViewInit {
   addDessert() {
     this.desserts.push(new FormControl(null, Validators.required))
     const index = this.desserts.length - 1
+    this.desserts.at(index).setValidators(requiredAutocompleteValidator)
     this.filteredDessertOptions[index] = this.desserts.at(index).valueChanges.pipe(
       map(search => search
         ? this.starterList.filter(option => {
@@ -206,6 +205,60 @@ export class MenuFormComponent implements AfterViewInit {
   removeDessert(index: number) {
     this.desserts.removeAt(index)
     this.hasStartersValidationError = false
+  }
+
+  displayFn(item: MenuItem): string {
+    return item && item.name ? item.name : ''
+  }
+
+  addExtras(form: FormGroup, stepper: MatStepper) {
+    this.hasStartersValidationError = false
+    if (form.valid) {
+      stepper.next()
+    } else {
+      highlightInvalidFields(form)
+      this.hasStartersValidationError = true
+    }
+  }
+
+  choosePlates(stepper: MatStepper) {
+    if (this.chosenPlates.length) {
+      stepper.next()
+      this.dailyMenu = {
+        createdAt: getCurrentUnixTime(),
+        extrasAmount: {
+          starters: this.starters.length,
+          drinks: this.drinks.length,
+          sideDishes: this.sideDishes.length,
+          desserts: this.desserts.length
+        },
+        extras: this.extrasForm.value,
+        main: this.chosenPlates
+      }
+    }
+  }
+
+  addPlate(item: MenuItem) {
+    const isPlateAdded = this.chosenPlates.map(el => el.id).includes(item.id)
+    if (isPlateAdded) {
+      this.chosenPlates = this.chosenPlates.filter(el => el.id !== item.id)
+    } else {
+      this.chosenPlates.push({ ...item, isAdded: true })
+    }
+  }
+
+  createDailyMenu() {
+    this.store.dispatch(ItemActions.createDailyMenu({ menu: this.dailyMenu }))
+  }
+
+  private rebuildMenu() {
+    this.store.select(rebuildMenu).pipe(
+      filter(Boolean),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => {
+      this.initAutocompleteOptions()
+      this.stepper.reset()
+    })
   }
 
   private initAutocompleteOptions() {
@@ -261,50 +314,6 @@ export class MenuFormComponent implements AfterViewInit {
         )
       )
     }
-  }
-
-  displayFn(item: MenuItem): string {
-    return item && item.name ? item.name : ''
-  }
-
-  addExtras(form: FormGroup, stepper: MatStepper) {
-    this.hasStartersValidationError = false
-    if (form.valid) {
-      stepper.next()
-    } else {
-      highlightInvalidFields(form)
-      this.hasStartersValidationError = true
-    }
-  }
-
-  choosePlates(stepper: MatStepper) {
-    if (this.chosenPlates.length) {
-      stepper.next()
-      this.dailyMenu = {
-        createdAt: getCurrentUnixTime(),
-        extrasAmount: {
-          starters: this.starters.length,
-          drinks: this.drinks.length,
-          sideDishes: this.sideDishes.length,
-          desserts: this.desserts.length
-        },
-        extras: this.extrasForm.value,
-        main: this.chosenPlates
-      }
-    }
-  }
-
-  addPlate(item: MenuItem) {
-    const isPlateAdded = this.chosenPlates.map(el => el.id).includes(item.id)
-    if (isPlateAdded) {
-      this.chosenPlates = this.chosenPlates.filter(el => el.id !== item.id)
-    } else {
-      this.chosenPlates.push({ ...item, isAdded: true })
-    }
-  }
-
-  createDailyMenu() {
-    this.store.dispatch(ItemActions.createDailyMenu({ menu: this.dailyMenu }))
   }
 
 }

@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store'
-import { State } from './admin.state'
+import { State } from './board.state'
 import { AdminConstants } from '../../models/admin.constants'
 
 export const getState = createFeatureSelector<State>(AdminConstants.storeFeatureKey)
