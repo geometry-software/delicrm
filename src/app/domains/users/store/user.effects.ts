@@ -3,7 +3,6 @@ import { Actions, createEffect, ofType } from '@ngrx/effects'
 import {
   catchError,
   combineLatest,
-  EMPTY,
   map,
   of,
   switchMap,
@@ -16,8 +15,8 @@ import { UserService } from '../services/user.service'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { UserConstants } from '../models/user.constants'
 import { SignalService } from '../../../shared/services/signal.service'
-import { getCurrent, getSize, getTotal } from './user.selectors'
-import { compareItemsRequestStateSize, formatRequest } from '../../../shared/utils/format-request'
+import { getCurrent, getSize } from './user.selectors'
+import { formatRequest } from '../../../shared/utils/format-request'
 import { formatResponseList } from '../../../shared/repository/repository.utils'
 import { NotificationService } from '../../../shared/services/notification.service'
 import { TranslateService } from '@ngx-translate/core'

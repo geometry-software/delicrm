@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { map, switchMap, tap, catchError, of, withLatestFrom, combineLatest, first, EMPTY } from 'rxjs'
+import { map, switchMap, tap, catchError, withLatestFrom, combineLatest, first, EMPTY } from 'rxjs'
 import { MenuActions as ItemActions } from './menu.actions'
 import { Router } from '@angular/router'
 import { Store } from '@ngrx/store'
@@ -13,12 +13,9 @@ import { DeliveryService } from '../../delivery/services/delivery.service'
 import { prepareOrder } from '../utils/prepare-order'
 import { AuthService } from '../../../auth/services/auth.service'
 import { Auth } from '../../../auth/models/auth.model'
-import { UserService } from '../../users/services/user.service'
 import { DeliveryInfo } from '../../delivery/models/delivery.model'
 import { getExtras, getRestaurantInfo } from './menu.selectors'
-import { CheckoutOrder } from '../models/checkout'
 import { NotificationService } from '../../../shared/services/notification.service'
-import { cloneDeep } from 'lodash'
 import { SessionService } from '../../../auth/services/session.service'
 import { calulatedAlacarteMenuWithEightySix, calulatedDailyMenuWithEightySix } from '../../admin/utils/eighty-six'
 import { ClientService } from '../../clients/services/client.service'
@@ -32,7 +29,6 @@ export class MenuEffects {
     private store: Store,
     private deliveryService: DeliveryService,
     private authService: AuthService,
-    private userService: UserService,
     private clientService: ClientService,
     private orderService: OrderService,
     private restaurantService: RestaurantService,

@@ -1,7 +1,7 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
-import { RepositoryRequest, RepositoryResponseList } from '../../../shared/repository/repository.models'
+import { RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { ClientOrdersConstants } from '../models/client-orders.constants'
-import { Delivery, DeliveryStatus } from '../../delivery/models/delivery.model'
+import { Delivery } from '../../delivery/models/delivery.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 
 export const ClientOrdersActions = createActionGroup({

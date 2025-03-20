@@ -1,6 +1,4 @@
-// import { UserStatus } from '../../../auth/models/auth.model'
-import { PaginationRequest } from '../../../shared/models/pagination.model'
-import { RepositoryRequest, SortRequest } from '../../../shared/repository/repository.models'
+import { RepositoryRequest } from '../../../shared/repository/repository.models'
 import { User, UserRole, UserStatus } from './user.model'
 
 export abstract class UserConstants {

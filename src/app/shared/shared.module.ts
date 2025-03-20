@@ -25,6 +25,7 @@ import { TabLabelPipe } from './pipes/tab-label.pipe'
 import { AppSpinboxComponent } from './components/app-spinbox/app-spinbox.component'
 import { RequiredAutocompleteDirective } from './directives/required-autocomplete.directive'
 import { AppAlacarteMenuComponent } from './components/app-alacarte-menu/app-alacarte-menu.component'
+import { AppOrderStatusComponent } from './components/app-order-status/app-order-status.component'
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { AppAlacarteMenuComponent } from './components/app-alacarte-menu/app-ala
     AppPaginationComponent,
     AppTableLinkComponent,
     AppInfoComponent,
+    AppOrderStatusComponent,
     AppTitleComponent,
     AppTitleItemComponent,
     AppFormattedDailyMenuComponent,
@@ -58,6 +60,7 @@ import { AppAlacarteMenuComponent } from './components/app-alacarte-menu/app-ala
     AppTableSearchComponent,
     AppConfirmationDialogComponent,
     AppInfoComponent,
+    AppOrderStatusComponent,
     AppTitleComponent,
     AppTitleItemComponent,
     AppNotFoundComponent,

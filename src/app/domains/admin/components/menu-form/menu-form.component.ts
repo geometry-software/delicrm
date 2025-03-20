@@ -1,20 +1,18 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, ViewChild } from '@angular/core'
+import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, ViewChild } from '@angular/core'
 import { fadeInUpOnEnterAnimation, fadeInDownOnEnterAnimation, fadeOutDownOnLeaveAnimation } from 'angular-animations'
-import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms'
+import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { MatStepper } from '@angular/material/stepper'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { Observable, combineLatest, filter, map, of, startWith, switchMap, tap } from 'rxjs'
+import { Observable, combineLatest, filter, map, startWith } from 'rxjs'
 import { SignalService } from '../../../../shared/services/signal.service'
-import { RecipeService } from '../../../recipe/services/recipe.service'
 import { getCurrentUnixTime } from '../../../../shared/utils/format-unix-time'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { Store } from '@ngrx/store'
 import { BoardActions as ItemActions } from '../../store/board-store/board.actions'
-import { getCurrency, getMenu, getRecipes, getRestaurantInfo, loadingStatus, rebuildMenu } from '../../store/board-store/board.selectors'
+import { getCurrency, loadingStatus, rebuildMenu } from '../../store/board-store/board.selectors'
 import { DailyMenu, MenuItem } from '../../models/restaurant'
 import { highlightInvalidFields, showFieldErrors } from '../../../../shared/utils/form-error-handling'
 import { TranslateService } from '@ngx-translate/core'
-import { RestaurantService } from '../../services/restaurant.service'
 import { MenuFormService } from '../../services/menu-form.service'
 import { Recipe } from '../../../recipe/models/recipe.model'
 import { requiredAutocompleteValidator } from '../../../../shared/utils/required-autocomplete-validator.validator'
@@ -153,7 +151,7 @@ export class MenuFormComponent implements AfterViewInit {
     this.drinks.at(index).setValidators(requiredAutocompleteValidator)
     this.filteredDrinkOptions[index] = this.drinks.at(index).valueChanges.pipe(
       map(search => search
-        ? this.starterList.filter(option => {
+        ? this.drinkList.filter(option => {
           const name = typeof search === 'string' ? search : search?.name;
           return option?.name.toLowerCase().includes(name?.toLowerCase())
         })
@@ -173,7 +171,7 @@ export class MenuFormComponent implements AfterViewInit {
     this.sideDishes.at(index).setValidators(requiredAutocompleteValidator)
     this.filteredSideDishOptions[index] = this.sideDishes.at(index).valueChanges.pipe(
       map(search => search
-        ? this.starterList.filter(option => {
+        ? this.drinkList.filter(option => {
           const name = typeof search === 'string' ? search : search?.name;
           return option?.name.toLowerCase().includes(name?.toLowerCase())
         })
@@ -193,7 +191,7 @@ export class MenuFormComponent implements AfterViewInit {
     this.desserts.at(index).setValidators(requiredAutocompleteValidator)
     this.filteredDessertOptions[index] = this.desserts.at(index).valueChanges.pipe(
       map(search => search
-        ? this.starterList.filter(option => {
+        ? this.drinkList.filter(option => {
           const name = typeof search === 'string' ? search : search?.name;
           return option?.name.toLowerCase().includes(name?.toLowerCase())
         })
@@ -282,7 +280,7 @@ export class MenuFormComponent implements AfterViewInit {
       this.filteredDrinkOptions[i] = this.drinks.at(i).valueChanges.pipe(
         startWith(null),
         map(search => search
-          ? this.starterList.filter(option => {
+          ? this.drinkList.filter(option => {
             const name = typeof search === 'string' ? search : search?.name;
             return option?.name.toLowerCase().includes(name?.toLowerCase())
           })
@@ -294,7 +292,7 @@ export class MenuFormComponent implements AfterViewInit {
       this.filteredSideDishOptions[i] = this.sideDishes.at(i).valueChanges.pipe(
         startWith(null),
         map(search => search
-          ? this.starterList.filter(option => {
+          ? this.sideDishList.filter(option => {
             const name = typeof search === 'string' ? search : search?.name;
             return option?.name.toLowerCase().includes(name?.toLowerCase())
           })
@@ -306,7 +304,7 @@ export class MenuFormComponent implements AfterViewInit {
       this.filteredDessertOptions[i] = this.desserts.at(i).valueChanges.pipe(
         startWith(null),
         map(search => search
-          ? this.starterList.filter(option => {
+          ? this.dessertList.filter(option => {
             const name = typeof search === 'string' ? search : search?.name;
             return option?.name.toLowerCase().includes(name?.toLowerCase())
           })

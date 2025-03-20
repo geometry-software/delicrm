@@ -1,4 +1,3 @@
-import { CheckoutOrder } from "../../menu/models/checkout"
 import { Recipe } from "../../recipe/models/recipe.model"
 
 export type Restaurant = {
@@ -7,7 +6,6 @@ export type Restaurant = {
     description: string
     phone: string
     web: string
-    // locale: string
     delivery: number
     closedTitle: string
     titleFontSize: string

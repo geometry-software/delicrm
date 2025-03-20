@@ -8,7 +8,6 @@ import { getItems, getListLabels, getLoadingStatus, getPaginationResponse, getSt
 import { MatTabChangeEvent } from '@angular/material/tabs'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormControl } from '@angular/forms'
-// import { getStatusByLabel } from '../../../../shared/utils/get-status-by-label'
 import { combineListControls } from '../../../../shared/utils/combine-list-controls'
 import { Sort } from '@angular/material/sort'
 import { SortRequest } from '../../../../shared/repository/repository.models'

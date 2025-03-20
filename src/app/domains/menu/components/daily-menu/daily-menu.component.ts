@@ -3,17 +3,12 @@ import { MatDialog } from '@angular/material/dialog'
 import { fadeInOnEnterAnimation, fadeInUpOnEnterAnimation, rubberBandOnEnterAnimation } from 'angular-animations'
 import { PlateDetailComponent } from '../plate-detail/plate-detail.component'
 import { MenuActions as ItemActions } from '../../store/menu.actions'
-import { Order } from '../../../orders/models/order.model'
-import { Recipe } from '../../../recipe/models/recipe.model'
 import { setProteinImage } from '../../../../shared/utils/protein-image'
-import { MenuConstants } from '../../utils/menu.constants'
 import { Store } from '@ngrx/store'
 import { getAlacarte, getCurrency, getMenu, getRestaurantInfo, isRestaurantOpen, loadingStatus } from '../../store/menu.selectors'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { MenuItem } from '../../../admin/models/restaurant'
-import { TranslateService } from '@ngx-translate/core'
 import { map } from 'rxjs'
-import { UserService } from '../../../users/services/user.service'
 import { SessionService } from '../../../../auth/services/session.service'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
@@ -34,8 +29,6 @@ export class DailyMenuComponent implements OnInit {
     private dialog: MatDialog,
     private store: Store,
     private cdr: ChangeDetectorRef,
-    private translateService: TranslateService,
-    private userService: UserService,
     private sessionService: SessionService,
     private destroyRef: DestroyRef
   ) { }

@@ -1,18 +1,17 @@
-import { Component, DestroyRef, Inject, NgZone, OnInit } from '@angular/core'
-import { distinctUntilChanged, filter, first, map, switchMap, tap } from 'rxjs'
+import { Component, DestroyRef, Inject, OnInit } from '@angular/core'
+import { filter } from 'rxjs'
 import { Store } from '@ngrx/store'
-import { getDeliveries, getItemId, getLoadingStatus } from '../../store/client.selectors'
+import { getDeliveries } from '../../store/client.selectors'
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop'
-import { ActivatedRoute, Router } from '@angular/router'
+import { Router } from '@angular/router'
 import { ClientActions } from '../../store/client.actions'
 import { highlightInvalidFields, showFieldErrors } from '../../../../shared/utils/form-error-handling'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { getDateFromUnix, getFullTimeFromUnix } from '../../../../shared/utils/format-unix-time'
+import { getFullTimeFromUnix } from '../../../../shared/utils/format-unix-time'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { Auth } from '../../../../auth/models/auth.model'
 import { SharedModule } from '../../../../shared/shared.module'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
-import { SessionService } from '../../../../auth/services/session.service'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { MenuActions } from '../../../menu/store/menu.actions'
 import { TranslateService } from '@ngx-translate/core'
@@ -54,9 +53,8 @@ export class ClientFormComponent implements OnInit {
     phone: new FormControl(null, Validators.required),
   })
   readonly LoadingStatus = LoadingStatus
-  itemId: string
   readonly deliveries = this.store.select(getDeliveries)
-  // readonly deliveriesLoadingStatus = this.store.select(getLoadingStatus)
+  itemId: string
 
   confirm() {
     if (this.form.valid) {

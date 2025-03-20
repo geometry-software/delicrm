@@ -1,8 +1,5 @@
-import { createReducer, on } from '@ngrx/store'
-import { UserActions as ItemActions } from './user.actions'
 import { UserStatusResponse, User, UserStatus } from '../models/user.model'
 import { RepositoryRequesEntity, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
-import { AuthStatus } from '../../../auth/models/auth.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 
 export interface State {

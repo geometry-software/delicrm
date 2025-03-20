@@ -65,8 +65,3 @@ import { AppMissingTranslationHandler } from '../shared/utils/missing-translatio
   bootstrap: [AppComponent],
 })
 export class AppModule { }
-
-TranslateModule.forRoot({
-
-  useDefaultLang: false
-})

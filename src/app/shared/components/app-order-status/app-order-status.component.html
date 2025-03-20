@@ -1,7 +1,7 @@
 <app-title title="ORDERS.DIALOG_STATUS.TITLE" subtitle="ORDERS.DIALOG_STATUS.SUBTITLE" />
 
 <div class="container">
-  @for (status of statusList; track status) {
+  @for (status of currentStatusList; track status) {
   <button class="action" mat-stroked-button [style.background]="statusColor[status]" (click)="confirm(status)">
     {{ orderTranslate[status] | translate }}
   </button>

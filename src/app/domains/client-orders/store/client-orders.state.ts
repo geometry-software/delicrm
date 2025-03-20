@@ -1,7 +1,6 @@
 import { RepositoryRequesEntity, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { Delivery, DeliveryStatusResponse } from '../../delivery/models/delivery.model'
-// import { Delivery, DeliveryStatus, DeliveryStatusResponse } from '../models/client_orders.model'
+import { Delivery } from '../../delivery/models/delivery.model'
 
 export interface State {
   query: RepositoryRequestListQuery,

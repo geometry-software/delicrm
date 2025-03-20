@@ -1,9 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
-import { FormGroup, Validators, FormBuilder } from '@angular/forms'
-import { MatTableDataSource } from '@angular/material/table'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
 import { AuthService } from '../../services/auth.service'
 import { UserService } from '../../../domains/users/services/user.service'
-import { filter, switchMap, tap } from 'rxjs'
+import { filter, switchMap } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 import { SessionService } from '../../services/session.service'
 

@@ -1,12 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core'
-import { MatTableDataSource } from '@angular/material/table'
 import { MatDialog } from '@angular/material/dialog'
-import { ActivatedRoute, Router } from '@angular/router'
 import { ExpensesFormComponent } from '../expenses-form/expenses-form.component'
 import { Observable, filter, tap } from 'rxjs'
 import { CdkTableDataSourceInput } from '@angular/cdk/table'
 import { ExpensesService } from '../services/expenses.service'
-import { SignalService } from '../../../shared/services/signal.service'
 
 @Component({
   selector: 'app-expenses-list',
@@ -22,9 +19,7 @@ export class ExpensesListComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private expensesService: ExpensesService,
-    private route: ActivatedRoute,
-    private signalService: SignalService
+    private expensesService: ExpensesService
   ) { }
 
   ngOnInit() {

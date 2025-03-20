@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core'
-import { RepositoryService } from '../../../shared/repository/repository.service'
-import { DailyMenu, Extras, ExtrasAmount, MenuItem, Restaurant } from '../models/restaurant'
-import { RestaurantConstants } from '../models/restaurant.constants'
-import { BehaviorSubject, EMPTY, Observable, map, switchMap } from 'rxjs'
-import { Shift } from '../models/shift'
-import { CheckoutOrder } from '../../menu/models/checkout'
+import { DailyMenu, ExtrasAmount, MenuItem } from '../models/restaurant'
+import { BehaviorSubject } from 'rxjs'
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Recipe } from '../../recipe/models/recipe.model'
 import { requiredAutocompleteValidator } from '../../../shared/utils/required-autocomplete-validator.validator'
@@ -109,8 +105,6 @@ export class MenuFormService {
     const formArray = this.formBuilder.array([])
     for (let i = 0; i < amount; i++) {
       formArray.push(new FormControl(null, Validators.required))
-      console.log(formArray);
-
       formArray.controls.at(i).setValidators(requiredAutocompleteValidator)
     }
     return formArray

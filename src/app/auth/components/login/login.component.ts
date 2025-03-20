@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef } from '@angular/core'
-import { catchError, filter, map, switchMap, tap } from 'rxjs/operators'
+import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core'
+import { catchError, filter, switchMap, tap } from 'rxjs/operators'
 import { AuthService } from '../../services/auth.service'
 import { adminFormGroup, AdminFormProps, adminLoginFormGroup } from '../../models/admin.form'
 import { showFieldErrors } from '../../../shared/utils/form-error-handling'
@@ -7,7 +7,7 @@ import { AuthConstants } from '../../models/auth.constants'
 import { RestaurantFormComponent } from '../../../domains/admin/components/restaurant-form/restaurant-form.component'
 import { MatDialog } from '@angular/material/dialog'
 import { RestaurantService } from '../../../domains/admin/services/restaurant.service'
-import { BehaviorSubject, EMPTY, Observable, of } from 'rxjs'
+import { BehaviorSubject, EMPTY, of } from 'rxjs'
 import { RestaurantLoadingStatus } from '../../models/loading-status'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { UserService } from '../../../domains/users/services/user.service'
@@ -35,7 +35,6 @@ export class LoginComponent {
     private userService: UserService,
     private sessionService: SessionService,
     private matDialog: MatDialog,
-    private cdr: ChangeDetectorRef,
     private router: Router,
     private destroyRef: DestroyRef
   ) { }

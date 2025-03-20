@@ -6,7 +6,9 @@ import { RepositoryService } from '../../../shared/repository/repository.service
 })
 export class ExpensesService {
 
-  constructor(private repositoryService: RepositoryService<any, any>) { }
+  constructor(
+    private repositoryService: RepositoryService<any, any>
+  ) { }
 
   private readonly collection = 'Expenses'
 

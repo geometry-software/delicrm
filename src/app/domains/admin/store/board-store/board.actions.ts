@@ -14,8 +14,6 @@ export const BoardActions = createActionGroup({
     'Rebuild Daily Menu': emptyProps(),
     'Rebuild Daily Menu Success': emptyProps(),
     'Copy Daily Menu': emptyProps(),
-    // 'Get Daily Menu': emptyProps(),
-    // 'Set Daily Menu': props<{ }>(),
     'Get Board Info': emptyProps(),
     'Set Board Info': props<{
       menu: DailyMenu,

@@ -1,7 +1,7 @@
 import { UserLanguageItem } from "./navbar.model"
 
 export abstract class BootstrapConstants {
-  static readonly locale = 'es'
+  static readonly locale = 'en'
   static readonly web = 'delicrm.web.app'
   static readonly currency = '$'
   static readonly titleFontSize = '30px'

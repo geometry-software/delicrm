@@ -2,24 +2,23 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnIn
 import { ActivatedRoute } from '@angular/router'
 import { MatDialog } from '@angular/material/dialog'
 import { fadeInOnEnterAnimation } from 'angular-animations'
-import { ORDER_STATUS_COLOR, ORDER_STATUS_ICON, ORDER_STATUS_TRANSLATE } from '../../models/order.model'
+import { ORDER_STATUS_COLOR, ORDER_STATUS_ICON, ORDER_STATUS_TRANSLATE, orderStatusRecord } from '../../models/order.model'
 import { PrintService } from '../../../../shared/services/print.service'
-import { catchError, combineLatest, debounceTime, delay, distinctUntilChanged, filter, firstValueFrom, map, shareReplay, switchMap, tap } from 'rxjs'
-import { Order, OrderStatus, OrderProgress, OrderStatusHistory, OrderStatusBar, orderStatusProgress } from '../../models/order.model'
-import { UserService } from '../../../users/services/user.service'
-import { getCurrentUnixTime, getFullTimeFromUnix } from '../../../../shared/utils/format-unix-time'
+import { catchError, combineLatest, debounceTime, distinctUntilChanged, filter, firstValueFrom, map, shareReplay, switchMap, tap } from 'rxjs'
+import { Order, OrderStatus, OrderStatusBar, orderStatusProgress } from '../../models/order.model'
+import { getFullTimeFromUnix } from '../../../../shared/utils/format-unix-time'
 import { Store } from '@ngrx/store'
 import { getCurrency, getItem, getItemById, getItemLoadingStatus, getItemsLoadingStatus, statusBar } from '../../store/order.selectors'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { User } from '../../../users/models/user.model'
 import { OrderActions as ItemActions } from '../../store/order.actions'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
-import { OrderStatusComponent } from '../order-status/order-status.component'
 import { defaultErrorHandler } from '../../../../shared/utils/default-error-handler'
-import { isNaN, isNil } from 'lodash'
+import { isNil } from 'lodash'
 import { TranslateService } from '@ngx-translate/core'
 import { SessionService } from '../../../../auth/services/session.service'
 import { MenuItem } from '../../../admin/models/restaurant'
+import { AppOrderStatusComponent } from '../../../../shared/components/app-order-status/app-order-status.component'
 
 @Component({
   selector: 'app-order-detail',
@@ -32,7 +31,6 @@ export class OrderDetailComponent implements OnInit {
 
   constructor(
     private printService: PrintService,
-    private userService: UserService,
     private route: ActivatedRoute,
     private store: Store,
     private dialog: MatDialog,
@@ -117,11 +115,14 @@ export class OrderDetailComponent implements OnInit {
   }
 
   update() {
-    this.dialog.open(OrderStatusComponent, {
+    this.dialog.open(AppOrderStatusComponent, {
       width: '300px',
       height: 'auto',
       autoFocus: false,
-      data: this.order
+      data: {
+        list: Object.entries(orderStatusRecord).map(([k]) => k),
+        status: this.order.status
+      }
     }).afterClosed().pipe(
       filter(Boolean),
       takeUntilDestroyed(this.destroyRef)
@@ -143,15 +144,6 @@ export class OrderDetailComponent implements OnInit {
   getStarterOrDrinkTitle(item: MenuItem) {
     return item.name ?? this.translateService.instant(item.skippedTitle)
   }
-
-  // TODO make order history by status changes
-  // const history: OrderStatusHistory = {
-  //   status,
-  //   createdAt: getCurrentUnixTime(),
-  //   createdBy: this.user,
-  // }
-  // const statusHistory = [...this.order.statusHistory]
-  // statusHistory.push(history)
 
   private async initData() {
     combineLatest([

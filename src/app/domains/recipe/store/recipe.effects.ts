@@ -10,7 +10,7 @@ import { ConfirmationService } from '../../../shared/services/confirmation.servi
 import { SignalService } from '../../../shared/services/signal.service'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { getCurrent, getSize, getTotal } from './recipe.selectors'
-import { compareItemsRequestStateSize, formatRequest } from '../../../shared/utils/format-request'
+import { formatRequest } from '../../../shared/utils/format-request'
 import { formatResponseList } from '../../../shared/repository/repository.utils'
 import { NotificationService } from '../../../shared/services/notification.service'
 

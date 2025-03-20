@@ -2,10 +2,8 @@ import { Injectable } from '@angular/core'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { DailyMenu, MenuItem, Restaurant, RestaurantInfo } from '../models/restaurant'
 import { RestaurantConstants } from '../models/restaurant.constants'
-import { EMPTY, Observable, combineLatest, map, switchMap } from 'rxjs'
-import { Shift } from '../models/shift'
+import { Observable, combineLatest, map } from 'rxjs'
 import { CheckoutOrder } from '../../menu/models/checkout'
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 @Injectable({
   providedIn: 'root'

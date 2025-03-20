@@ -77,6 +77,12 @@ export type OrderStatusResponse = {
 
 export type OrderType = 'table' | 'delivery' | 'takeaway'
 
+export const orderStatusRecord: Record<OrderStatus, OrderStatus> = {
+  dining: 'dining',
+  delivery: 'delivery',
+  closed: 'closed',
+}
+
 export enum ORDER_STATUS_COLOR {
   dining = '#fdb16f',
   delivery = '#fcb1fe',

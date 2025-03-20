@@ -1,4 +1,4 @@
-import { Directive, HostListener, Input, Optional, Self } from "@angular/core";
+import { Directive, HostListener, Input } from "@angular/core";
 import { NgControl } from "@angular/forms";
 import { MatAutocomplete } from "@angular/material/autocomplete";
 
@@ -7,9 +7,9 @@ import { MatAutocomplete } from "@angular/material/autocomplete";
 })
 export class RequiredAutocompleteDirective {
 
-    @Input('requiredAutocomplete') matAutoComplete!: MatAutocomplete
-
     constructor(private ngControl: NgControl) { }
+
+    @Input('requiredAutocomplete') matAutoComplete!: MatAutocomplete
 
     @HostListener('blur')
     onBlur() {

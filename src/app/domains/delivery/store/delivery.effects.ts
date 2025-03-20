@@ -4,7 +4,7 @@ import { catchError, combineLatest, EMPTY, map, of, switchMap, tap, withLatestFr
 import { DeliveryActions as ItemActions } from './delivery.actions'
 import { Store } from '@ngrx/store'
 import { getCurrent, getSize, getTotal } from './delivery.selectors'
-import { compareItemsRequestStateSize, formatRequest } from '../../../shared/utils/format-request'
+import { formatRequest } from '../../../shared/utils/format-request'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { DeliveryConstants } from '../models/delivery.constants'
 import { SignalService } from '../../../shared/services/signal.service'

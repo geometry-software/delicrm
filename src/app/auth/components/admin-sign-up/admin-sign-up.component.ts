@@ -1,13 +1,11 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, ViewChild } from '@angular/core'
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AuthService } from '../../services/auth.service'
 import { adminFormGroup, AdminFormProps } from '../../models/admin.form'
 import { highlightInvalidFields, showFieldErrors } from '../../../shared/utils/form-error-handling'
-import { catchError, combineLatest, EMPTY, filter, first, map, tap } from 'rxjs'
-import { UserService } from '../../../domains/users/services/user.service'
+import { catchError, EMPTY, map } from 'rxjs'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { SignalService } from '../../../shared/services/signal.service'
-// import { BootstarpConstants } from '../../../bootstrap/models/bootstrap.constants'
 
 @Component({
   selector: 'app-admin-sign-up',

@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
 import { RestaurantService } from '../../../domains/admin/services/restaurant.service'
-import { map } from 'rxjs'
 
 @Component({
   selector: 'app-index',

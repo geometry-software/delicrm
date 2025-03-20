@@ -2,26 +2,28 @@ import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { fadeInOnEnterAnimation, pulseOnEnterAnimation } from 'angular-animations'
 import { setProteinImage } from '../../../../shared/utils/protein-image'
-// import { DeliveryService } from '../../services/delivery.service'
 import { SharedModule } from '../../../../shared/shared.module'
-import { UserService } from '../../../users/services/user.service'
 import { catchError, EMPTY, filter, map, switchMap, tap } from 'rxjs'
-import { Order } from '../../../orders/models/order.model'
 import { MatDialog } from '@angular/material/dialog'
-// import { DeliveryStatusComponent } from '../delivery-status/delivery-status.component'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Store } from '@ngrx/store'
-import { ClientOrdersActions as ItemActions } from '../../store/client-orders.actions'
 import { DeliveryActions } from '../../../delivery/store/delivery.actions'
 import { getLoadingStatus } from '../../store/client-orders.selectors'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
-import { Delivery, DELIVERY_STATUS_COLOR, DELIVERY_STATUS_ICON, DELIVERY_STATUS_TRANSLATE, DeliveryStatusBar } from '../../../delivery/models/delivery.model'
+import {
+  Delivery,
+  DELIVERY_STATUS_COLOR,
+  DELIVERY_STATUS_ICON,
+  DELIVERY_STATUS_TRANSLATE,
+  DeliveryStatusBar,
+  deliveryStatusRecord
+} from '../../../delivery/models/delivery.model'
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { DeliveryService } from '../../../delivery/services/delivery.service'
-import { DeliveryStatusComponent } from '../../../delivery/components/delivery-status/delivery-status.component'
 import { SessionService } from '../../../../auth/services/session.service'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { TranslateService } from '@ngx-translate/core'
+import { AppOrderStatusComponent } from '../../../../shared/components/app-order-status/app-order-status.component'
 
 @Component({
   selector: 'app-client-order',
@@ -40,7 +42,6 @@ export class ClientOrderComponent {
   constructor(
     private route: ActivatedRoute,
     private deliveryService: DeliveryService,
-    private userService: UserService,
     private dialog: MatDialog,
     private destroyRef: DestroyRef,
     private snackBar: MatSnackBar,
@@ -121,12 +122,13 @@ export class ClientOrderComponent {
   }
 
   update() {
-    this.dialog.open(DeliveryStatusComponent, {
+    this.dialog.open(AppOrderStatusComponent, {
       width: '300px',
-      // TODO
-      // maxWidth: '300px',
       height: 'auto',
-      autoFocus: false
+      autoFocus: false,
+      data: {
+        list: Object.entries(deliveryStatusRecord).map(([k]) => k)
+      }
     }).afterClosed().pipe(
       filter(Boolean),
       takeUntilDestroyed(this.destroyRef)

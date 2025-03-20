@@ -9,14 +9,12 @@ import { OrderEffects } from './store/order.effects'
 import { OrderConstants } from './models/order.constants'
 import { EffectsModule } from '@ngrx/effects'
 import { reducer } from './store/order.reducer'
-import { OrderStatusComponent } from './components/order-status/order-status.component'
 
 @NgModule({
   declarations: [
     OrdersLayoutComponent,
     OrderListComponent,
-    OrderDetailComponent,
-    OrderStatusComponent
+    OrderDetailComponent
   ],
   imports: [
     SharedModule,

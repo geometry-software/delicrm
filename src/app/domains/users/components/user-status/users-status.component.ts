@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
-import { AuthStatus } from '../../../../auth/models/auth.model'
 import { UserConstants } from '../../models/user.constants'
 import { FormControl } from '@angular/forms'
 import { UserRole, UserStatus } from '../../models/user.model'
@@ -15,7 +14,8 @@ export class UserStatusComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<UserStatusComponent>,
-    @Inject(MAT_DIALOG_DATA) private dialogData: any) { }
+    @Inject(MAT_DIALOG_DATA) private dialogData: any
+  ) { }
 
   readonly currentStatus = new FormControl<UserStatus>(null)
   readonly currentRole = new FormControl<UserRole>(null)

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { NavbarComponent } from './components/navbar/navbar.component'
 import { IndexComponent } from './components/index/index.component'
-import { UserGuard } from '../domains/users/services/user.guard'
 import { AppNotFoundComponent } from '../shared/components/app-not-found/app-not-found.component'
 
 export const routes: Routes = [

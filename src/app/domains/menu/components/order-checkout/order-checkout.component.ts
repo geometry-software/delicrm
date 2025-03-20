@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core'
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
-import { Observable, combineLatest, map, startWith, switchMap, tap } from 'rxjs'
+import { combineLatest, map, startWith, switchMap } from 'rxjs'
 import { cloneDeep } from 'lodash'
 import {
   zoomOutUpOnLeaveAnimation,
@@ -12,13 +12,12 @@ import {
 import { Order, OrderType } from '../../../orders/models/order.model'
 import { Recipe } from '../../../recipe/models/recipe.model'
 import { MenuActions } from '../../store/menu.actions'
-import { UserService } from '../../../users/services/user.service'
 import { MenuConstants } from '../../utils/menu.constants'
 import { Store } from '@ngrx/store'
 import { getClients, getCurrency, getExtras, getOrder, loadingStatus } from '../../store/menu.selectors'
 import { Router } from '@angular/router'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { Delivery, DeliveryTime } from '../../../delivery/models/delivery.model'
+import { DeliveryTime } from '../../../delivery/models/delivery.model'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { showFieldErrors } from '../../../../shared/utils/form-error-handling'
 import { tableZeroNumberValidator } from '../../utils/table-zero-number-validator'
@@ -50,7 +49,6 @@ export class OrderCheckoutComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private userService: UserService,
     private formBuilder: FormBuilder,
     private signalService: SignalService,
     private sessionService: SessionService,
@@ -142,8 +140,6 @@ export class OrderCheckoutComponent implements OnInit {
       if (!order || !currency) {
         this.router.navigate(['/menu'])
       } else {
-
-
         this.order = cloneDeep(order)
         this.extras = extras
         this.currency = currency

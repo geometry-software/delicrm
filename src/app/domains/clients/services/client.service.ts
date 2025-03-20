@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { combineLatest, map, tap } from 'rxjs'
+import { combineLatest, map } from 'rxjs'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { SortRequest } from '../../../shared/repository/repository.models'
 import { Auth, AuthStatus } from '../../../auth/models/auth.model'

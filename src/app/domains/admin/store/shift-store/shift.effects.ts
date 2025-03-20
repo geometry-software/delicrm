@@ -13,7 +13,7 @@ import {
 import { ShiftActions as ItemActions } from './shift.actions'
 import { Store } from '@ngrx/store'
 import { getCurrent, getSize, getTotal } from './shift.selectors'
-import { compareItemsRequestStateSize, formatRequest } from '../../../../shared/utils/format-request'
+import { formatRequest } from '../../../../shared/utils/format-request'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { SignalService } from '../../../../shared/services/signal.service'
 import { formatResponseList } from '../../../../shared/repository/repository.utils'

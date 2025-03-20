@@ -64,6 +64,15 @@ export const deliveryStatusProgress: Record<DeliveryStatus, keyof typeof Deliver
   closed: '100%'
 }
 
+export const deliveryStatusRecord: Record<DeliveryStatus, DeliveryStatus> = {
+  requested: 'requested',
+  confirmed: 'confirmed',
+  accepted: 'accepted',
+  ontheway: 'ontheway',
+  received: 'received',
+  closed: 'closed',
+}
+
 export type DeliveryStatusBar = {
   status: DeliveryStatus,
   progress: DeliveryProgress

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { DeliveryListComponent } from './components/delivery-list/delivery-list.component'
 import { DeliveryLayoutComponent } from './components/delivery-layout/delivery-layout.component'
-// import { ClientOrderComponent } from './components/client-order/client-order.component'
 import { ToolbarGuard } from '../../shared/guards/toolbar.guard'
 import { ClientOrderComponent } from '../client-orders/components/client-order/client-order.component'
 

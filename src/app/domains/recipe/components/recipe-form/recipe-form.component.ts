@@ -12,7 +12,7 @@ import { FileStorageService } from '../../../../shared/services/file-storage.ser
 import { SignalService } from '../../../../shared/services/signal.service'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { highlightInvalidFields, showFieldErrors } from '../../../../shared/utils/form-error-handling'
-import { recipeFormGroup, RecipeFormProps } from '../../models/recipe.form'
+import { RecipeFormProps } from '../../models/recipe.form'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { fadeInOnEnterAnimation } from 'angular-animations'
 import { RecipeService } from '../../services/recipe.service'
@@ -66,21 +66,23 @@ export class RecipeFormComponent implements OnInit {
       this.hasPrice = true
       this.hasProtein = true
       this.form.controls[RecipeFormProps.protein].setValue(null)
-      this.form.get('protein').setValidators([Validators.required])
+      this.form.controls[RecipeFormProps.protein].setValidators([Validators.required])
       this.form.controls[RecipeFormProps.price].setValue(null)
-      this.form.get('price').setValidators([Validators.required])
+      this.form.controls[RecipeFormProps.price].setValidators([Validators.required])
     } else if (event === 'alacarte') {
       this.hasPrice = true
       this.hasProtein = false
+      this.form.controls[RecipeFormProps.protein].setValue(null)
+      this.form.controls[RecipeFormProps.protein].setValidators([])
       this.form.controls[RecipeFormProps.price].setValue(null)
-      this.form.get('price').setValidators([Validators.required])
+      this.form.controls[RecipeFormProps.price].setValidators([Validators.required])
     } else {
       this.hasPrice = false
       this.hasProtein = false
       this.form.controls[RecipeFormProps.protein].setValue(null)
-      this.form.get('protein').setValidators([])
+      this.form.controls[RecipeFormProps.protein].setValidators([])
       this.form.controls[RecipeFormProps.price].setValue(null)
-      this.form.get('price').setValidators([])
+      this.form.controls[RecipeFormProps.price].setValidators([])
     }
     this.form.updateValueAndValidity()
   }

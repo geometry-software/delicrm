@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { filter, map, switchMap, tap } from 'rxjs'
+import { map, switchMap, tap } from 'rxjs'
 import { Store } from '@ngrx/store'
 import { getItemById, getLoadingStatus } from '../../store/user.selectors'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -19,7 +19,7 @@ export class UserFormComponent {
   constructor(
     private store: Store,
     private route: ActivatedRoute,
-    private router: Router,
+    private router: Router
   ) { }
 
   readonly showFieldErrors = showFieldErrors

@@ -1,4 +1,4 @@
-import { Auth, AuthStatus } from '../../../auth/models/auth.model'
+import { Auth } from '../../../auth/models/auth.model'
 import { RepositoryRequest } from '../../../shared/repository/repository.models'
 import { ClientStatus } from './client.model'
 

@@ -1,17 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { saveAs } from 'file-saver'
 import * as moment from 'moment'
 import { combineLatest, filter, map, tap } from 'rxjs'
 import domtoimage from 'dom-to-image'
 import { Store } from '@ngrx/store'
-import { getCurrency, getMenu, getRestaurantInfo, isRestaurantOpen, loadingStatus, printMenu } from '../../store/board-store/board.selectors'
+import { getCurrency, getMenu, getRestaurantInfo, isRestaurantOpen, printMenu } from '../../store/board-store/board.selectors'
 import { BoardActions as ItemActions } from '../../store/board-store/board.actions'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { fadeInOnEnterAnimation } from 'angular-animations'
-import { RestaurantService } from '../../services/restaurant.service'
 import { BootstrapConstants } from '../../../../bootstrap/models/bootstrap.constants'
-import { isNil } from 'lodash'
 
 @Component({
   selector: 'app-image-menu',
@@ -24,8 +21,7 @@ export class ImageMenuComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private destroyRef: DestroyRef,
-    private cdr: ChangeDetectorRef,
+    private destroyRef: DestroyRef
   ) { }
 
   @ViewChild('print') print: ElementRef;

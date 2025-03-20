@@ -8,5 +8,4 @@ export enum UserFormProps {
 export const userformGroup = new FormGroup({
     [UserFormProps.email]: new FormControl(null, Validators.required),
     [UserFormProps.name]: new FormControl(null, Validators.required),
-    // [UserFormProps.repeatPassword]: new FormControl(null),
 })

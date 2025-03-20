@@ -1,9 +1,8 @@
-import { Component, ViewChild, OnInit, Signal, ChangeDetectorRef, ChangeDetectionStrategy, AfterViewInit } from '@angular/core'
+import { Component, ViewChild, OnInit, Signal, ChangeDetectionStrategy, AfterViewInit } from '@angular/core'
 import { MatDrawer } from '@angular/material/sidenav'
 import { userMenuOptions, authMenuOptions } from '../../models/menu-options'
 import { TranslateService } from '@ngx-translate/core'
-import { ResponsiveLayout, UserLanguageItem } from '../../models/navbar.model'
-import { UserService } from '../../../domains/users/services/user.service'
+import { ResponsiveLayout } from '../../models/navbar.model'
 import { SignalService } from '../../../shared/services/signal.service'
 import { UserLanguage } from '../../../domains/users/models/user.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
@@ -31,7 +30,6 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     private signalService: SignalService,
     private sessionService: SessionService,
     private translateService: TranslateService,
-    private cdr: ChangeDetectorRef
   ) { }
 
   readonly authMenuOptions = authMenuOptions
@@ -67,7 +65,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.initCharts()
+    // this.initCharts()
     // setTimeout(() => {
     //   this.initCharts(20)
     // }, 3000)
@@ -78,8 +76,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   initCharts() {
     const data = [
       { year: 2010, count: 10 },
-      { year: 2011, count: 20 },
-      // { year: 2012, count: 15 },
+      { year: 2011, count: 20 }
     ];
 
     this.chart = new Chart(

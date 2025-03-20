@@ -5,7 +5,7 @@ import { debounceTime, tap } from 'rxjs'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Store } from '@ngrx/store'
 import { RecipeActions as ItemActions } from '../../store/recipe.actions'
-import { getItem, getItemId } from '../../store/recipe.selectors'
+import { getItem } from '../../store/recipe.selectors'
 
 @Component({
   selector: 'app-recipe-layout',

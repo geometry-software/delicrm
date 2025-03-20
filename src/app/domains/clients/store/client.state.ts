@@ -1,4 +1,4 @@
-import { RepositoryRequesEntity, RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
+import { RepositoryRequestListQuery, RepositoryResponseList } from '../../../shared/repository/repository.models'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { Auth, AuthStatus, AuthStatusResponse } from '../../../auth/models/auth.model'
 import { Delivery } from '../../delivery/models/delivery.model'

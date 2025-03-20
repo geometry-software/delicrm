@@ -25,7 +25,6 @@ export const MenuActions = createActionGroup({
     'Create Client Delivery Order': props<{ delivery: Delivery }>(),
     'Create User Delivery Order': props<{ order: Order }>(),
     'Create User Order': props<{ order: Order }>(),
-    // 'Create User Delivery': props<{ delivery: Delivery }>(),
     'Create Client': props<{ name: string, address: string, phone: string }>(),
     'Get Active Clients': emptyProps(),
     'Get Active Clients Success': props<{ clients: Auth[] }>(),

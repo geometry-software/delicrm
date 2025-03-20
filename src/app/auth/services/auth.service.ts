@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { GoogleAuthProvider } from 'firebase/auth'
-import { BehaviorSubject, concat, from, map, of, shareReplay, switchMap, catchError, tap, EMPTY } from 'rxjs'
+import { BehaviorSubject, concat, from, map, of, shareReplay, switchMap } from 'rxjs'
 import { AdminSignUpLoadingStatus } from '../models/loading-status'
 import { AuthConstants } from '../models/auth.constants'
 import { RepositoryService } from '../../shared/repository/repository.service'
@@ -9,7 +9,6 @@ import { Router } from '@angular/router'
 import { AuthStatus, Auth } from '../models/auth.model'
 import { mapAuth, mapRequested } from '../models/auth.mapper'
 import { SortRequest } from '../../shared/repository/repository.models'
-import { RestaurantService } from '../../domains/admin/services/restaurant.service'
 import { BootstrapConstants } from '../../bootstrap/models/bootstrap.constants'
 
 @Injectable({
@@ -20,7 +19,6 @@ export class AuthService {
   constructor(
     private repositoryService: RepositoryService<Auth, AuthStatus>,
     private angularFireAuth: AngularFireAuth,
-    private restaurantService: RestaurantService,
     private router: Router
   ) { }
 

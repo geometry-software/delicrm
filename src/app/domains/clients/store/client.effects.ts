@@ -4,7 +4,6 @@ import {
   catchError,
   combineLatest,
   EMPTY,
-  first,
   map,
   of,
   switchMap,
@@ -14,13 +13,12 @@ import {
 import { ClientActions as ItemActions } from './client.actions'
 import { Store } from '@ngrx/store'
 import { getCurrent, getSize, getTotal } from './client.selectors'
-import { compareItemsRequestStateSize, formatRequest } from '../../../shared/utils/format-request'
+import { formatRequest } from '../../../shared/utils/format-request'
 import { LoadingStatus } from '../../../shared/models/loading-status'
 import { ClientConstants } from '../models/client.constants'
 import { SignalService } from '../../../shared/services/signal.service'
 import { formatResponseList } from '../../../shared/repository/repository.utils'
 import { ClientService } from '../services/client.service'
-import { TranslateService } from '@ngx-translate/core'
 import { NotificationService } from '../../../shared/services/notification.service'
 import { DeliveryService } from '../../delivery/services/delivery.service'
 
@@ -32,7 +30,6 @@ export class ClientEffects {
     private store: Store,
     private clientService: ClientService,
     private deliveryService: DeliveryService,
-    private translateService: TranslateService,
     private notificationService: NotificationService,
     private signalService: SignalService
   ) { }

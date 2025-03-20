@@ -13,7 +13,8 @@ export class ClientStatusComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<ClientStatusComponent>,
-    @Inject(MAT_DIALOG_DATA) private dialogData: any) { }
+    @Inject(MAT_DIALOG_DATA) private dialogData: any
+  ) { }
 
   currentStatus: AuthStatus
   statusList = ClientConstants.statusList.filter(el => el !== 'auth')

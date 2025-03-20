@@ -13,7 +13,6 @@ import { RestaurantFormComponent } from '../restaurant-form/restaurant-form.comp
 import { SharedConstants } from '../../../../shared/utils/shared.constants'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { SignalService } from '../../../../shared/services/signal.service'
-import { TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-board-layout',
@@ -28,7 +27,6 @@ export class BoardLayoutComponent implements OnInit {
     private store: Store,
     private cdr: ChangeDetectorRef,
     private signalService: SignalService,
-    private translateService: TranslateService,
     private destroyRef: DestroyRef
   ) { }
 

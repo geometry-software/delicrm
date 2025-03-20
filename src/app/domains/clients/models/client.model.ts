@@ -1,5 +1,3 @@
-import { AuthStatus } from "../../../auth/models/auth.model"
-
 export const clientsTabIndexByStatus: Record<ClientStatus, number> = {
   active: 0,
   auth: 1,

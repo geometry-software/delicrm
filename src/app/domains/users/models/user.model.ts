@@ -1,5 +1,3 @@
-import { AuthStatus, Auth } from '../../../auth/models/auth.model'
-
 export type User = {
   userId: string
   status: UserStatus

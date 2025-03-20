@@ -1,22 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
-import { MatDialog } from '@angular/material/dialog'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
 import { fadeInOnEnterAnimation, fadeInUpOnEnterAnimation, rubberBandOnEnterAnimation } from 'angular-animations'
-import { PlateDetailComponent } from '../../../menu/components/plate-detail/plate-detail.component'
 import { BoardActions as ItemActions } from '../../store/board-store/board.actions'
-import { Order } from '../../../orders/models/order.model'
-import { Recipe } from '../../../recipe/models/recipe.model'
-import { setProteinImage } from '../../../../shared/utils/protein-image'
-import { MenuConstants } from '../../../menu/utils/menu.constants'
 import { Store } from '@ngrx/store'
-// import { getCurrency, getMenu, getRestaurantInfo, isRestaurantOpen, loadingStatus } from '../../../menu/store/menu.selectors'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 import { MenuItem } from '../../models/restaurant'
-import { TranslateService } from '@ngx-translate/core'
-import { combineLatest, filter, map, tap } from 'rxjs'
-import { UserService } from '../../../users/services/user.service'
-import { SessionService } from '../../../../auth/services/session.service'
+import { combineLatest, filter, map } from 'rxjs'
 import { getAlacarteMenu, getRecipes, getRestaurantInfo, loadingStatus } from '../../store/board-store/board.selectors'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { cloneDeep } from 'lodash'
 
 @Component({
@@ -33,13 +22,7 @@ import { cloneDeep } from 'lodash'
 export class AlacarteFormComponent {
 
   constructor(
-    private dialog: MatDialog,
-    private store: Store,
-    private cdr: ChangeDetectorRef,
-    private translateService: TranslateService,
-    private userService: UserService,
-    private sessionService: SessionService,
-    private formBuilder: FormBuilder
+    private store: Store
   ) { }
 
   chosenPlates = new Array<MenuItem>
