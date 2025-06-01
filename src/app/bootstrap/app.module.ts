@@ -1,13 +1,13 @@
 import { LOCALE_ID, NgModule, isDevMode } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
-import { AngularFireModule } from '@angular/fire/compat'
-import { AngularFireAuthModule } from '@angular/fire/compat/auth'
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore'
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideAuth, getAuth } from '@angular/fire/auth';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideStorage, getStorage } from '@angular/fire/storage';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { firebaseConfig } from './utils/firebase.config'
-import { AngularFireStorageModule } from '@angular/fire/compat/storage'
 import { NavbarComponent } from './components/navbar/navbar.component'
 import { IndexComponent } from './components/index/index.component'
 import { ServiceWorkerModule } from '@angular/service-worker'
@@ -29,11 +29,6 @@ import { AppMissingTranslationHandler } from '../shared/utils/missing-translatio
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireAuthModule,
-    AngularFirestoreModule,
-    AngularFirestoreModule,
-    AngularFireStorageModule,
     AppRoutingModule,
     TranslateModule.forRoot({
       loader: {
@@ -61,6 +56,10 @@ import { AppMissingTranslationHandler } from '../shared/utils/missing-translatio
       useValue: 'en',
     },
     provideHttpClient(withInterceptorsFromDi()),
+    provideFirebaseApp(() => initializeApp(firebaseConfig)),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
+    provideStorage(() => getStorage()),
   ],
   bootstrap: [AppComponent],
 })

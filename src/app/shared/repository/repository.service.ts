@@ -1,9 +1,28 @@
 import { Injectable } from '@angular/core'
-import { AngularFirestore } from '@angular/fire/compat/firestore'
-import { map } from 'rxjs/operators'
-import { Observable, from } from 'rxjs'
-import { getCountFromServer, collection, query, where } from 'firebase/firestore'
-import { appendId, responseTransform } from './repository.utils'
+import {
+  DocumentData,
+  Firestore,
+  addDoc,
+  collectionData,
+  docData,
+  collection,
+  doc,
+  endAt,
+  endBefore,
+  getCountFromServer,
+  limit,
+  limitToLast,
+  orderBy,
+  query,
+  startAfter,
+  startAt,
+  where,
+  updateDoc,
+  setDoc,
+  deleteDoc
+} from '@angular/fire/firestore'; 
+import { Observable, from, map } from 'rxjs'
+import { responseConverter, responseTransform } from './repository.utils'
 import {
   defaultStatusPropertyName,
   RepositoryEntityStatus,
@@ -15,88 +34,108 @@ import { NotificationService } from '../services/notification.service'
 @Injectable({
   providedIn: 'root',
 })
-export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> {
+export class RepositoryService<T extends DocumentData = any, S = RepositoryEntityStatus, V = number> {
 
   constructor(
-    private angularFirestore: AngularFirestore,
+    private firestore: Firestore,
     private notificationService: NotificationService,
   ) { }
 
   /**
    * Queries a Firestore collection
-   * @param collection name of the collection
+   * @param collectionName name of the collection
    * @returns Observable with all documents from collection
    */
-  getAllDocuments = (collection: string): Observable<T[]> =>
-    this.angularFirestore
-      .collection<T>(collection)
-      .snapshotChanges()
-      .pipe(map(appendId<T[]>), responseTransform(this.notificationService))
+  getAllDocuments(collectionName: string): Observable<T[]> {
+    const collectionReference = collection(this.firestore, collectionName).withConverter(responseConverter<T>())
+    return collectionData<T>(collectionReference, { idField: 'id' }).pipe(
+      responseTransform(this.notificationService)
+    )
+  }
 
   /**
    * Queries a Firestore collection
-   * @param collection name of the collection
+   * @param collectionName name of the collection
+   * @param id id of the document
    * @returns Observable with all documents from collection
    */
-  getAllDocumentsById = (collection: string, id: string): Observable<T[]> =>
-    this.angularFirestore
-      .collection<T>(collection, query => query
-        .orderBy('createdAt', 'desc')
-        .where('authId', '==', id))
-      .snapshotChanges()
-      .pipe(map(appendId<T[]>), responseTransform(this.notificationService))
+  getAllDocumentsById(collectionName: string, id: string): Observable<T[]> {
+    const collectionReference = collection(this.firestore, collectionName).withConverter(responseConverter<T>())
+    const collectionQuery = query(
+      collectionReference,
+      where('authId', '==', id),
+      orderBy('createdAt', 'desc')
+    )
+    return collectionData<T>(collectionQuery, { idField: 'id' }).pipe(
+      responseTransform(this.notificationService)
+    )
+  }
 
   /**
    * Queries a Firestore collection
-   * @param collection name of the collection
+   * @param collectionName name of the collection
+   * @param status entity status
    * @returns Observable with all documents from collection
    */
-  getAllDocumentsByStatus = (collection: string, status: S): Observable<T[]> =>
-    this.angularFirestore
-      .collection<T>(collection, query => query
-        .orderBy('name', 'desc')
-        .where(defaultStatusPropertyName, '==', status))
-      .snapshotChanges()
-      .pipe(map(appendId<T[]>), responseTransform(this.notificationService))
+  getAllDocumentsByStatus(collectionName: string, status: S): Observable<T[]> {
+    const collectionReference = collection(this.firestore, collectionName).withConverter(responseConverter<T>())
+    const collectionQuery = query(
+      collectionReference,
+      orderBy('name', 'desc'),
+      where(defaultStatusPropertyName, '==', status)
+    )
+    return collectionData<T>(collectionQuery, { idField: 'id' }).pipe(
+      responseTransform(this.notificationService)
+    )
+  }
 
   /**
    * Queries a Firestore collection
-   * @param collection name of the collection
+   * @param collectionName name of the collection
    * @param id id of the document
    * @returns Observable with a single document by id
    */
-  getDocumentById = (collection: string, id: string): Observable<T> =>
-    this.angularFirestore.collection(collection).doc<T>(id).valueChanges().pipe(
-      responseTransform(this.notificationService))
-
-  /**
-   * Queries a Firestore collection with subscription
-   * @param collection name of the collection
-   * @param id id of the document
-   * @returns Observable with a single document by id
-   */
-  getDocumentValueChanges = (collection: string, id: string): Observable<T> =>
-    this.angularFirestore.collection(collection).doc<T>(id).valueChanges()
+  getDocumentById(collectionName: string, id: string): Observable<T> {
+    const documentReference = doc(this.firestore, collectionName, id).withConverter(responseConverter<T>())
+    return docData<T>(documentReference, { idField: 'id' }).pipe(
+      responseTransform(this.notificationService),
+      map(data => {
+        if (!data) {
+          throw new Error(`Document with id ${id} not found in ${collectionName}`)
+        }
+        return data
+      })
+    )
+  }
 
   /**
    * Queries a Firestore collection
    * @param collectionName name of the collection
    * @param status filter a query by entity status
-   * @returns Observable with an amount of documents matches a query
+   * @returns Observable with an amount of documents matches a status in a collection
    */
-  getCollectionSizeByStatus = (collectionName: string, status: S): Observable<number> => from(
-    getCountFromServer(query(collection(this.angularFirestore.firestore, collectionName),
-      where(defaultStatusPropertyName, '==', status)))).pipe(
-        map(value => value.data().count))
+  getCollectionSizeByStatus(collectionName: string, status: S): Observable<number> {
+    const collectionReference = collection(this.firestore, collectionName)
+    const collectionQuery = query(
+      collectionReference,
+      where(defaultStatusPropertyName, '==', status)
+    )
+    return from(getCountFromServer(collectionQuery)).pipe(
+      map(value => value.data().count)
+    )
+  } 
 
   /**
    * Queries a Firestore collection
    * @param collectionName name of the collection
-   * @returns Observable with an amount of documents matches a query
+   * @returns Observable with an amount of documents in collection
    */
-  getCollectionSize = (collectionName: string): Observable<number> =>
-    from(getCountFromServer(query(collection(this.angularFirestore.firestore, collectionName))))
-      .pipe(map(value => value.data().count))
+  getCollectionSize(collectionName: string): Observable<number> {
+    const collectionReference = collection(this.firestore, collectionName)
+    return from(getCountFromServer(collectionReference)).pipe(
+      map(value => value.data().count)
+    )
+  }
 
   /**
    * Queries a Firestore collection
@@ -105,206 +144,201 @@ export class RepositoryService<T = any, S = RepositoryEntityStatus, V = number> 
    * @param value value of the property
    * @returns Observable with an amount of documents matches a query
    */
-  getCollectionSizeByItem = <V>(collectionName: string, item: string, value: V): Observable<number> =>
-    from(getCountFromServer(query(collection(this.angularFirestore.firestore, collectionName),
-      where(item, '==', value)))).pipe(
-        map(value => value.data().count))
+  getCollectionSizeByItem<V>(collectionName: string, item: string, value: V): Observable<number> {
+    const collectionReference = collection(this.firestore, collectionName)
+    const collectionQuery = query(
+      collectionReference,
+      where(item, '==', value)
+    )
+    return from(getCountFromServer(collectionQuery)).pipe(
+      map(value => value.data().count)
+    )
+  } 
 
   /**
    * Queries a Firestore collection
-   * @param collection name of the collection
+   * @param collectionName name of the collection
    * @param sort sorted by the specified field, and in descending or ascending order
    * @param size limit an amount of documents to return
-   * @param field name of the field that is related for status property
    * @param status value of the status field
+   * @param field name of the field that is related for status property
    * @returns Observable with list of documents that matches a query
    */
-  getFirstPage = <S>(
-    collection: string,
+  getFirstPage<S>(
+    collectionName: string,
     sort: SortRequest,
     size: number,
     status: S,
     field: string = defaultStatusPropertyName
-  ): Observable<T[]> =>
-    this.angularFirestore
-      .collection<T>(collection, query => query
-        .orderBy(sort.active, sort.direction)
-        .where(field, '==', status)
-        .limit(size))
-      .snapshotChanges()
-      .pipe(
-        map(appendId<T[]>),
-        responseTransform(this.notificationService)
-      )
+  ): Observable<T[]> {
+    const collectionReference = collection(this.firestore, collectionName).withConverter(responseConverter<T>())
+    const collectionQuery = query(
+      collectionReference,
+      orderBy(sort.active, sort.direction),
+      where(field, '==', status),
+      limit(size)
+    )
+    return collectionData<T>(collectionQuery, { idField: 'id' }).pipe(
+      responseTransform(this.notificationService)
+    )
+  }
 
   /**
    * Queries a Firestore collection
-   * @param collection name of the collection
+   * @param collectionName name of the collection
    * @param sort sorted by the specified field, and in descending or ascending order
    * @param size limit an amount of documents to return
-   * @param field name of the field that is related for status property
-   * @param status value of the status field
    * @param value value of the property which query will be ordered by, that equals to last element in the previously requested list
+   * @param status value of the status field
+   * @param field name of the field that is related for status property
    * @returns Observable with list of documents that matches a query
    */
-  getNextPage = (
-    collection: string,
+  getNextPage(
+    collectionName: string,
     sort: SortRequest,
     size: number,
     value: V,
     status: S,
     field: string = defaultStatusPropertyName,
-  ): Observable<T[]> =>
-    this.angularFirestore
-      .collection<T>(collection, query => query
-        .orderBy(sort.active, sort.direction)
-        .where(field, '==', status)
-        .startAfter(value)
-        .limit(size))
-      .snapshotChanges()
-      .pipe(
-        map(appendId<T[]>),
-        responseTransform(this.notificationService)
-      )
+  ): Observable<T[]> {
+    const collectionReference = collection(this.firestore, collectionName).withConverter(responseConverter<T>())
+    const collectionQuery = query(
+      collectionReference,
+      orderBy(sort.active, sort.direction),
+      where(field, '==', status),
+      startAfter(value),
+      limit(size)
+    )
+    return collectionData<T>(collectionQuery, { idField: 'id' }).pipe(
+      responseTransform(this.notificationService)
+    )
+  }
 
   /**
    * Queries a Firestore collection
-   * @param collection name of the collection
+   * @param collectionName name of the collection
    * @param sort sorted by the specified field, and in descending or ascending order
    * @param size limit an amount of documents to return
-   * @param field name of the field that is related for status property
+   * @param value value of the property which item was the last element in the previously requested list
    * @param status value of the status field
-   * @param value value of the property which item was the last element in the previously requested list.
+   * @param field name of the field that is related for status property
    * @returns Observable with list of documents that matches a query
    */
-  getPreviousPage = (
-    collection: string,
+  getPreviousPage(
+    collectionName: string,
     sort: SortRequest,
     size: number,
     value: V,
     status: S,
     field: string = defaultStatusPropertyName,
-  ): Observable<T[]> =>
-    this.angularFirestore
-      .collection<T>(collection, query => query
-        .orderBy(sort.active, sort.direction)
-        .where(field, '==', status)
-        .endBefore(value)
-        .limitToLast(size)
-      )
-      .snapshotChanges()
-      .pipe(
-        map(appendId<T[]>),
-        responseTransform(this.notificationService)
-      )
+  ): Observable<T[]> {
+    const collectionReference = collection(this.firestore, collectionName).withConverter(responseConverter<T>())
+    const collectionQuery = query(
+      collectionReference,
+      orderBy(sort.active, sort.direction),
+      where(field, '==', status),
+      endBefore(value),
+      limitToLast(size)
+    )
+    return collectionData<T>(collectionQuery, { idField: 'id' }).pipe(
+      responseTransform(this.notificationService)
+    )
+  }
 
   /**
    * Queries a Firestore collection
-   * @param collection name of the collection
+   * @param collectionName name of the collection
    * @param sort sorted by the specified field, and in descending or ascending order
    * @param property name of the property is used to compare
    * @param value value of the property to compare
    * @returns Observable with list of documents that matches a query
    */
-  getAllDocumentsByStrictQuery = (
-    collection: string,
+  getAllDocumentsByStrictQuery(
+    collectionName: string,
     sort: SortRequest,
     property: string,
     value: string
-  ): Observable<T[]> =>
-    this.angularFirestore
-      .collection<T>(collection, query => query
-        .orderBy(sort.active, sort.direction)
-        .where(property, '==', value))
-      .snapshotChanges()
-      .pipe(
-        map(appendId<T[]>),
-        responseTransform(this.notificationService)
-      )
+  ): Observable<T[]> {
+    const collectionReference = collection(this.firestore, collectionName).withConverter(responseConverter<T>())
+    const collectionQuery = query(
+      collectionReference,
+      orderBy(sort.active, sort.direction),
+      where(property, '==', value)
+    )
+    return collectionData<T>(collectionQuery, { idField: 'id' }).pipe(
+      responseTransform(this.notificationService)
+    )
+  }
 
   /**
    * Queries a Firestore collection
-   * @param collection name of the collection
-   * @param sort sorted by the specified field, and in descending or ascending order
+   * @param collectionName name of the collection
    * @param property name of the property is used to compare
    * @param value value of the property to compare
    * @returns Observable with list of documents that matches a query
    */
-  getAllDocumentsByStrictQuerySnapshotChanges = (
-    collection: string,
-    sort: SortRequest,
-    property: string,
-    value: string
-  ): Observable<T[]> =>
-    this.angularFirestore
-      .collection<T>(collection, query => query
-        .orderBy(sort.active, sort.direction)
-        .where(property, '==', value))
-      .snapshotChanges()
-      .pipe(
-        map(appendId<T[]>))
-
-  /**
-   * Queries a Firestore collection
-   * @param collection name of the collection
-   * @param property name of the property is used to compare
-   * @param value value of the property to compare
-   * @returns Observable with list of documents that matches a query
-   */
-  getAllDocumentsByIncludesQuery = (collection: string, property: string, value: string): Observable<T[]> =>
-    this.angularFirestore
-      .collection<T>(collection, query => query
-        .orderBy(property)
-        .startAt(value.toLowerCase())
-        .endAt(value.toLowerCase() + '~'))
-      .snapshotChanges()
-      .pipe(
-        map(appendId<T[]>),
-        responseTransform(this.notificationService)
-      )
+  getAllDocumentsByIncludesQuery(collectionName: string, property: string, value: string): Observable<T[]> {
+    const collectionReference = collection(this.firestore, collectionName).withConverter(responseConverter<T>())
+    const collectionQuery = query(
+      collectionReference,
+      orderBy(property),
+      startAt(value.toLowerCase()),
+      endAt(value.toLowerCase() + '~')
+    )
+    return collectionData<T>(collectionQuery, { idField: 'id' }).pipe(
+      responseTransform(this.notificationService)
+    )
+  }
 
   /**
    * Creates a record in a Firestore collection
-   * @param collection name of the collection
+   * @param collectionName name of the collection
    * @param item object that will be added
    * @returns Observable with document id refers to a document location
    */
-  createDocument = (collection: string, item: T): Observable<string> =>
-    from(this.angularFirestore.collection(collection).add(item)).pipe(
-      responseTransform(this.notificationService),
-      map(doc => doc.id))
+  createDocument(collectionName: string, item: T): Observable<string> {
+    const collectionReference = collection(this.firestore, collectionName)
+    return from(addDoc(collectionReference, item)).pipe(
+      map(doc => doc.id)
+    )
+  }
 
   /**
    * Updates a document in a Firestore collection
-   * @param collection name of the collection
+   * @param collectionName name of the collection
    * @param item whole object or selected properies which will update an existing document
    * @param id id of the requested document
    * @returns void Observable
    */
-  updateDocument = (collection: string, item: Partial<T>, id: string): Observable<void> =>
-    from(this.angularFirestore.collection(collection).doc(id).update(item)).pipe(
-      responseTransform(this.notificationService))
+  updateDocument(collectionName: string, item: Partial<T>, id: string): Observable<void> {
+    const documentReference = doc(this.firestore, collectionName, id)
+    return from(updateDoc(documentReference, item as T))
+  }
 
   /**
    * Sets a document in a Firestore collection
-   * @param collection name of the collection
-   * @param item whole object or selected properies which will update an existing document
+   * @param collectionName name of the collection
+   * @param item set an object or selected properies to an existing document or create a new one
    * @param id id of the requested document
-   * @returns void Observable
+   * @returns Observable of object that was set
    */
-  setDocument = <T>(collection: string, item: T, id: string): Observable<RepositoryResponseEntity<T>> =>
-    from(this.angularFirestore.collection(collection).doc(id).set(item, { merge: true })).pipe(
+  setDocument<T>(collectionName: string, item: T, id: string): Observable<RepositoryResponseEntity<T>> {
+    const documentReference = doc(this.firestore, collectionName, id)
+    return from(setDoc(documentReference, item as T)).pipe(
       responseTransform(this.notificationService),
-      map(() => ({ id, item })))
+      map(() => ({ id, item }))
+    )
+  }
 
   /**
    * Deletes a document in a Firestore collection
-   * @param collection name of the collection
-   * @param item whole object or selected properies which will update an existing document
+   * @param collectionName name of the collection
    * @param id id of the requested document
    * @returns void Observable
    */
-  deleteDocument = (collection: string, id: string): Observable<void> =>
-    from(this.angularFirestore.collection(collection).doc(id).delete()).pipe(
-      responseTransform(this.notificationService))
+  deleteDocument(collectionName: string, id: string): Observable<void> {
+    const documentReference = doc(this.firestore, collectionName, id)
+    return from(deleteDoc(documentReference))
+  }
+
 }

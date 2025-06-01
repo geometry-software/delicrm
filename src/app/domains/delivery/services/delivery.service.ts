@@ -73,7 +73,7 @@ export class DeliveryService {
   }
 
   getRequestedDelivery() {
-    return this.repositoryService.getAllDocumentsByStrictQuerySnapshotChanges(this.collection, { active: 'createdAt', direction: 'asc' }, 'status', 'requested')
+    return this.repositoryService.getAllDocumentsByStrictQuery(this.collection, { active: 'createdAt', direction: 'asc' }, 'status', 'requested')
   }
 
   set(item: Delivery, id: string) {

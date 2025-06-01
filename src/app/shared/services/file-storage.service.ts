@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core'
-import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/compat/storage'
+import { getStorage, ref, uploadBytes} from '@angular/fire/storage';
+import type { StorageReference, UploadResult } from 'firebase/storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileStorageService {
-  constructor(private angularFireStorage: AngularFireStorage) { }
 
-  public saveFile(name: string, file: any): AngularFireUploadTask {
-    return this.angularFireStorage.upload(name, file)
+  saveFile(name: string, file: any): Promise<UploadResult> {
+    const storage = getStorage()
+    const storageRef = ref(storage, name)
+    return uploadBytes(storageRef, file)
   }
 
-  public getFileLink(name: string): AngularFireStorageReference {
-    return this.angularFireStorage.ref(name)
+  getFileLink(name: string): StorageReference {
+    const storage = getStorage()
+    return ref(storage, name)
   }
+
 }

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, } from '@angular/core'
 import { Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
-import { AngularFireStorageReference } from '@angular/fire/compat/storage'
 import { PLATE_PROTEIN_TRANSLATE, PLATE_TYPE_TRANSLATE, } from '../../models/recipe.constants'
 import { Recipe, RecipeType } from '../../models/recipe.model'
 import { Store } from '@ngrx/store'
@@ -16,6 +15,7 @@ import { RecipeFormProps } from '../../models/recipe.form'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { fadeInOnEnterAnimation } from 'angular-animations'
 import { RecipeService } from '../../services/recipe.service'
+import { StorageReference } from '@angular/fire/storage'
 
 @Component({
     selector: 'app-recipe-form',
@@ -49,7 +49,7 @@ export class RecipeFormComponent implements OnInit {
   hasProtein: boolean | undefined
   imgURL: string | undefined
   fileName: string | undefined
-  fileImg: AngularFireStorageReference | undefined
+  fileImg: StorageReference | undefined
   uploadProgress: number | undefined
   showUploadButton: boolean | undefined
   isUploadingImg: boolean | undefined
@@ -113,17 +113,17 @@ export class RecipeFormComponent implements OnInit {
   uploadFile() {
     this.isUploadingImg = true
     const uploadLink = this.fileStorageService.getFileLink(this.fileName)
-    this.fileStorageService.saveFile(this.fileName, this.fileImg).percentageChanges().pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(percentage => {
-      this.uploadProgress = Math.round(percentage)
-      if (this.uploadProgress == 100) {
-        this.showUploadButton = false
-        this.isUploadingImg = false
-        this.isUploadedImg = true
-      }
-    })
-    uploadLink.getDownloadURL().subscribe(url => this.form.controls[RecipeFormProps.imgURL].setValue(url))
+    // this.fileStorageService.saveFile(this.fileName, this.fileImg).percentageChanges().pipe(
+    //   takeUntilDestroyed(this.destroyRef)
+    // ).subscribe(percentage => {
+    //   this.uploadProgress = Math.round(percentage)
+    //   if (this.uploadProgress == 100) {
+    //     this.showUploadButton = false
+    //     this.isUploadingImg = false
+    //     this.isUploadedImg = true
+    //   }
+    // })
+    // uploadLink.getDownloadURL().subscribe(url => this.form.controls[RecipeFormProps.imgURL].setValue(url))
   }
 
   private initForm() {

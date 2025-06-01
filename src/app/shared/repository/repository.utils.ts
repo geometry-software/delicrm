@@ -1,3 +1,4 @@
+import { DocumentData, QueryDocumentSnapshot, SnapshotOptions } from '@angular/fire/firestore'
 import { Observable, UnaryFunction, first, pipe, retry, throwError, timeout } from 'rxjs'
 import { NotificationService } from '../services/notification.service'
 import { RepositoryRequestListQuery, RepositoryResponseList } from './repository.models'
@@ -6,11 +7,19 @@ import moment from 'moment'
 const REQUEST_TIME_LIMIT_VALUE = 10000
 const REQUEST_TIME_LIMIT_ERROR_CODE = 'REQUEST_TIME_LIMIT_ERROR'
 
-export const appendId = <T>(documents): T =>
-  documents.map(value => ({
-    ...value.payload.doc.data(),
-    id: value.payload.doc.id,
-  }))
+export const responseConverter = <T extends DocumentData>() => ({
+  toFirestore(data: T): DocumentData {
+    return data
+  },
+  fromFirestore(
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions
+  ): T {
+    return {
+      id: snapshot.id,
+      ...snapshot.data(options),
+    } as unknown as T
+  }})
 
 export const responseTransform = <T>(notificationService: NotificationService):
   UnaryFunction<Observable<T>, Observable<T>> =>

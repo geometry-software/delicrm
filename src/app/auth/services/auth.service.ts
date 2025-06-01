@@ -1,5 +1,14 @@
 import { Injectable } from '@angular/core'
-import { AngularFireAuth } from '@angular/fire/compat/auth'
+import {
+  Auth as AngularFireAuth,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  signInAnonymously,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  sendEmailVerification
+} from '@angular/fire/auth'
+import { authState } from 'rxfire/auth';
 import { GoogleAuthProvider } from 'firebase/auth'
 import { BehaviorSubject, concat, from, map, of, shareReplay, switchMap } from 'rxjs'
 import { AdminSignUpLoadingStatus } from '../models/loading-status'
@@ -29,7 +38,7 @@ export class AuthService {
     firebaseUser?.providerId === this.firebaseProviderId && !firebaseUser?.isAnonymous
 
   readonly checkAdminRegistration = new BehaviorSubject<void>(null)
-  readonly firebaseUser = this.angularFireAuth.user.pipe(
+  readonly firebaseUser = authState(this.angularFireAuth).pipe(
     // TODO. check why invoked multiple times
     shareReplay(1)
   )
@@ -59,7 +68,7 @@ export class AuthService {
 
   linkWithGoogle() {
     return from(this.angularFireAuth.signOut()).pipe(
-      switchMap(() => from(this.angularFireAuth.signInWithPopup(new GoogleAuthProvider())).pipe(
+      switchMap(() => from(signInWithPopup(this.angularFireAuth, new GoogleAuthProvider())).pipe(
         map(auth => mapUser(
           auth.user.uid,
           auth.user.email,
@@ -70,7 +79,7 @@ export class AuthService {
   }
 
   signUpAnonymously() {
-    return from(this.angularFireAuth.signInAnonymously()).pipe(
+    return from(signInAnonymously(this.angularFireAuth)).pipe(
       map(auth => mapAuth(auth.user.uid, BootstrapConstants.locale)),
       switchMap(auth => this.repositoryService.setDocument(this.collection, auth, auth.authId).pipe(
         map(() => auth))))
@@ -82,7 +91,7 @@ export class AuthService {
 
   loginAdmin(email: string, password: string) {
     return from(this.angularFireAuth.signOut()).pipe(
-      switchMap(() => from(this.angularFireAuth.signInWithEmailAndPassword(email, password))))
+      switchMap(() => from(signInWithEmailAndPassword(this.angularFireAuth, email, password))))
   }
 
   hasAdminUser() {
@@ -91,8 +100,8 @@ export class AuthService {
 
   signUpAdmin(email, password) {
     return from(this.angularFireAuth.signOut()).pipe(
-      switchMap(() => from(this.angularFireAuth.createUserWithEmailAndPassword(email, password)).pipe(
-        switchMap(response => from(response.user.sendEmailVerification()).pipe(
+      switchMap(() => from(createUserWithEmailAndPassword(this.angularFireAuth, email, password)).pipe(
+        switchMap(response => from(sendEmailVerification(response.user)).pipe(
           switchMap(() => this.repositoryService.setDocument(this.collection, mapAuth(response.user.uid, BootstrapConstants.locale), this.adminCollectionId)))))))
   }
 
@@ -122,12 +131,12 @@ export class AuthService {
 
   sendEmailVerification() {
     return this.firebaseUser.pipe(
-      switchMap(user => user.sendEmailVerification())
+      switchMap(user => sendEmailVerification(user))
     )
   }
 
   recoverAdminPassword(email: string) {
-    return from(this.angularFireAuth.sendPasswordResetEmail(email))
+    return from(sendPasswordResetEmail(this.angularFireAuth, email))
   }
 
   logout() {
