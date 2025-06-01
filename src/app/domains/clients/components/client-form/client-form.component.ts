@@ -17,11 +17,10 @@ import { MenuActions } from '../../../menu/store/menu.actions'
 import { TranslateService } from '@ngx-translate/core'
 
 @Component({
-  selector: 'app-client-form',
-  templateUrl: './client-form.component.html',
-  styleUrls: ['./client-form.component.scss'],
-  standalone: true,
-  imports: [SharedModule]
+    selector: 'app-client-form',
+    templateUrl: './client-form.component.html',
+    styleUrls: ['./client-form.component.scss'],
+    imports: [SharedModule]
 })
 export class ClientFormComponent implements OnInit {
 

@@ -20,11 +20,12 @@ import { ClientFormComponent } from '../client-form/client-form.component'
 import { SignalService } from '../../../../shared/services/signal.service'
 
 @Component({
-  selector: 'app-clients',
-  templateUrl: './clients.component.html',
-  styleUrls: ['./clients.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ClientFormComponent]
+    selector: 'app-clients',
+    templateUrl: './clients.component.html',
+    styleUrls: ['./clients.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [ClientFormComponent],
+    standalone: false
 })
 export class ClientsComponent implements OnInit {
 

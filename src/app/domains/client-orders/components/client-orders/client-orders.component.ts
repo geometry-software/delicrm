@@ -9,10 +9,11 @@ import { of } from 'rxjs'
 import { DELIVERY_STATUS_TRANSLATE, DeliveryStatus } from '../../../delivery/models/delivery.model'
 
 @Component({
-  selector: 'app-client-ordersk',
-  templateUrl: './client-orders.component.html',
-  styleUrls: ['./client-orders.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-client-ordersk',
+    templateUrl: './client-orders.component.html',
+    styleUrls: ['./client-orders.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientOrdersComponent implements OnInit {
 

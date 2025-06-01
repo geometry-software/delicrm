@@ -33,17 +33,18 @@ import { SignalService } from '../../../../shared/services/signal.service'
 import { ClientFormComponent } from '../../../clients/components/client-form/client-form.component'
 
 @Component({
-  selector: 'app-order-checkout',
-  templateUrl: './order-checkout.component.html',
-  styleUrls: ['./order-checkout.component.scss'],
-  animations: [
-    zoomOutUpOnLeaveAnimation(),
-    expandOnEnterAnimation(),
-    collapseOnLeaveAnimation(),
-    fadeInUpOnEnterAnimation(),
-    fadeInOnEnterAnimation(),
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-order-checkout',
+    templateUrl: './order-checkout.component.html',
+    styleUrls: ['./order-checkout.component.scss'],
+    animations: [
+        zoomOutUpOnLeaveAnimation(),
+        expandOnEnterAnimation(),
+        collapseOnLeaveAnimation(),
+        fadeInUpOnEnterAnimation(),
+        fadeInOnEnterAnimation(),
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class OrderCheckoutComponent implements OnInit {
 

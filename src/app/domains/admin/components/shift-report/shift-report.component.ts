@@ -5,10 +5,11 @@ import { map, switchMap } from 'rxjs'
 import { getDateFromUnix, getTimeFromUnix } from '../../../../shared/utils/format-unix-time'
 
 @Component({
-  selector: 'app-shift-report',
-  templateUrl: './shift-report.component.html',
-  styleUrls: ['./shift-report.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-shift-report',
+    templateUrl: './shift-report.component.html',
+    styleUrls: ['./shift-report.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ShiftReportComponent {
 

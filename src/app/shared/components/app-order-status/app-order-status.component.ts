@@ -3,10 +3,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 import { ORDER_STATUS_COLOR, ORDER_STATUS_TRANSLATE, OrderStatus, OrderStatusInput, orderStatusRecord } from '../../models/order-status'
 
 @Component({
-  selector: 'app-order-status',
-  templateUrl: './app-order-status.component.html',
-  styleUrls: ['./app-order-status.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-order-status',
+    templateUrl: './app-order-status.component.html',
+    styleUrls: ['./app-order-status.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class AppOrderStatusComponent<OrderStatus> {

@@ -5,10 +5,11 @@ import { FormControl } from '@angular/forms'
 import { UserRole, UserStatus } from '../../models/user.model'
 
 @Component({
-  selector: 'app-user-status',
-  templateUrl: './user-status.component.html',
-  styleUrls: ['./user-status.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-user-status',
+    templateUrl: './user-status.component.html',
+    styleUrls: ['./user-status.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class UserStatusComponent implements OnInit {
 

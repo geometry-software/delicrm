@@ -10,9 +10,10 @@ import { getDateFromUnix } from '../../../../shared/utils/format-unix-time'
 import { LoadingStatus } from '../../../../shared/models/loading-status'
 
 @Component({
-  selector: 'app-user-form',
-  templateUrl: './user-form.component.html',
-  styleUrls: ['./user-form.component.scss'],
+    selector: 'app-user-form',
+    templateUrl: './user-form.component.html',
+    styleUrls: ['./user-form.component.scss'],
+    standalone: false
 })
 export class UserFormComponent {
 

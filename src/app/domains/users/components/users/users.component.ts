@@ -18,10 +18,11 @@ import { User, UserRole, usersTabIndexByStatus, UserStatus } from '../../models/
 import { Auth } from '../../../../auth/models/auth.model'
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-users',
+    templateUrl: './users.component.html',
+    styleUrls: ['./users.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class UsersComponent implements OnInit {
 

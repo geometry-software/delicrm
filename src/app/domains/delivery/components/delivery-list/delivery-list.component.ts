@@ -14,10 +14,11 @@ import { SortRequest } from '../../../../shared/repository/repository.models'
 import { deliveryTabIndexByStatus } from '../../models/delivery.model'
 
 @Component({
-  selector: 'app-delivery-list',
-  templateUrl: './delivery-list.component.html',
-  styleUrls: ['./delivery-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-delivery-list',
+    templateUrl: './delivery-list.component.html',
+    styleUrls: ['./delivery-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DeliveryListComponent {
 

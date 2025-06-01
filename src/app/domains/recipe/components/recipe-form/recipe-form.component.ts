@@ -18,11 +18,12 @@ import { fadeInOnEnterAnimation } from 'angular-animations'
 import { RecipeService } from '../../services/recipe.service'
 
 @Component({
-  selector: 'app-recipe-form',
-  templateUrl: './recipe-form.component.html',
-  styleUrls: ['./recipe-form.component.scss'],
-  animations: [fadeInOnEnterAnimation()],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-recipe-form',
+    templateUrl: './recipe-form.component.html',
+    styleUrls: ['./recipe-form.component.scss'],
+    animations: [fadeInOnEnterAnimation()],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class RecipeFormComponent implements OnInit {
 

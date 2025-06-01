@@ -4,7 +4,8 @@ import { TabLabel } from '../models/shared.model';
 
 @Pipe({
     name: 'tabLabel',
-    pure: false
+    pure: false,
+    standalone: false
 })
 export class TabLabelPipe implements PipeTransform {
 

@@ -13,15 +13,16 @@ import { SessionService } from '../../../../auth/services/session.service'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
 @Component({
-  selector: 'app-daily-menu',
-  templateUrl: './daily-menu.component.html',
-  styleUrls: ['./daily-menu.component.scss'],
-  animations: [
-    fadeInOnEnterAnimation(),
-    fadeInUpOnEnterAnimation(),
-    rubberBandOnEnterAnimation()
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-daily-menu',
+    templateUrl: './daily-menu.component.html',
+    styleUrls: ['./daily-menu.component.scss'],
+    animations: [
+        fadeInOnEnterAnimation(),
+        fadeInUpOnEnterAnimation(),
+        rubberBandOnEnterAnimation()
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DailyMenuComponent implements OnInit {
 

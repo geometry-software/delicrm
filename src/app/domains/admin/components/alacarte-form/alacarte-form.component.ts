@@ -9,15 +9,16 @@ import { getAlacarteMenu, getRecipes, getRestaurantInfo, loadingStatus } from '.
 import { cloneDeep } from 'lodash'
 
 @Component({
-  selector: 'app-alacarte-form',
-  templateUrl: './alacarte-form.component.html',
-  styleUrls: ['./alacarte-form.component.scss'],
-  animations: [
-    fadeInOnEnterAnimation(),
-    fadeInUpOnEnterAnimation(),
-    rubberBandOnEnterAnimation()
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-alacarte-form',
+    templateUrl: './alacarte-form.component.html',
+    styleUrls: ['./alacarte-form.component.scss'],
+    animations: [
+        fadeInOnEnterAnimation(),
+        fadeInUpOnEnterAnimation(),
+        rubberBandOnEnterAnimation()
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AlacarteFormComponent {
 

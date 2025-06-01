@@ -18,15 +18,16 @@ import { Recipe } from '../../../recipe/models/recipe.model'
 import { requiredAutocompleteValidator } from '../../../../shared/utils/required-autocomplete-validator.validator'
 
 @Component({
-  selector: 'app-menu-form',
-  templateUrl: './menu-form.component.html',
-  styleUrls: ['./menu-form.component.scss'],
-  animations: [
-    fadeOutDownOnLeaveAnimation(),
-    fadeInDownOnEnterAnimation(),
-    fadeInUpOnEnterAnimation()
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-menu-form',
+    templateUrl: './menu-form.component.html',
+    styleUrls: ['./menu-form.component.scss'],
+    animations: [
+        fadeOutDownOnLeaveAnimation(),
+        fadeInDownOnEnterAnimation(),
+        fadeInUpOnEnterAnimation()
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class MenuFormComponent implements AfterViewInit {
 

@@ -8,10 +8,11 @@ import { RecipeActions as ItemActions } from '../../store/recipe.actions'
 import { getItem } from '../../store/recipe.selectors'
 
 @Component({
-  selector: 'app-recipe-layout',
-  templateUrl: './recipe-layout.component.html',
-  styleUrls: ['./recipe-layout.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-recipe-layout',
+    templateUrl: './recipe-layout.component.html',
+    styleUrls: ['./recipe-layout.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class RecipeLayoutComponent implements OnInit {
 

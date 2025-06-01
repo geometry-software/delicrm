@@ -3,10 +3,11 @@ import { setProteinImage } from '../../utils/protein-image'
 import { DailyMenu } from '../../../domains/admin/models/restaurant'
 
 @Component({
-  selector: 'app-formatted-daily-menu',
-  templateUrl: './app-formatted-daily-menu.component.html',
-  styleUrls: ['./app-formatted-daily-menu.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-formatted-daily-menu',
+    templateUrl: './app-formatted-daily-menu.component.html',
+    styleUrls: ['./app-formatted-daily-menu.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AppFormattedDailyMenuComponent {
 

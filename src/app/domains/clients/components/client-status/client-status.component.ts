@@ -4,10 +4,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 import { AuthStatus } from '../../../../auth/models/auth.model'
 
 @Component({
-  selector: 'app-client-status',
-  templateUrl: './client-status.component.html',
-  styleUrls: ['./client-status.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-client-status',
+    templateUrl: './client-status.component.html',
+    styleUrls: ['./client-status.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ClientStatusComponent implements OnInit {
 

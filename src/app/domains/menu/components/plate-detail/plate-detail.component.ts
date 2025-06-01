@@ -8,9 +8,10 @@ import { User } from '../../../users/models/user.model'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
 @Component({
-  selector: 'app-plate-detail',
-  templateUrl: './plate-detail.component.html',
-  styleUrls: ['./plate-detail.component.scss'],
+    selector: 'app-plate-detail',
+    templateUrl: './plate-detail.component.html',
+    styleUrls: ['./plate-detail.component.scss'],
+    standalone: false
 })
 export class PlateDetailComponent implements OnInit {
 

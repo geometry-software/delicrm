@@ -5,10 +5,11 @@ import { SignalService } from '../../../shared/services/signal.service'
 import { getCurrentUnixTime } from '../../../shared/utils/format-unix-time'
 
 @Component({
-  selector: 'app-expenses-form',
-  templateUrl: './expenses-form.component.html',
-  styleUrls: ['./expenses-form.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-expenses-form',
+    templateUrl: './expenses-form.component.html',
+    styleUrls: ['./expenses-form.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ExpensesFormComponent implements OnInit {
   form: FormGroup

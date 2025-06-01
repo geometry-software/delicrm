@@ -15,9 +15,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { SignalService } from '../../../../shared/services/signal.service'
 
 @Component({
-  selector: 'app-board-layout',
-  templateUrl: './board-layout.component.html',
-  styleUrls: ['./board-layout.component.scss'],
+    selector: 'app-board-layout',
+    templateUrl: './board-layout.component.html',
+    styleUrls: ['./board-layout.component.scss'],
+    standalone: false
 })
 export class BoardLayoutComponent implements OnInit {
 

@@ -3,10 +3,11 @@ import { setProteinImage } from '../../utils/protein-image'
 import { MenuItem } from '../../../domains/admin/models/restaurant'
 
 @Component({
-  selector: 'app-alacarte-menu',
-  templateUrl: './app-alacarte-menu.component.html',
-  styleUrls: ['./app-alacarte-menu.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-alacarte-menu',
+    templateUrl: './app-alacarte-menu.component.html',
+    styleUrls: ['./app-alacarte-menu.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AppAlacarteMenuComponent {
 

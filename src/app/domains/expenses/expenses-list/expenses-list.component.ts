@@ -6,10 +6,11 @@ import { CdkTableDataSourceInput } from '@angular/cdk/table'
 import { ExpensesService } from '../services/expenses.service'
 
 @Component({
-  selector: 'app-expenses-list',
-  templateUrl: './expenses-list.component.html',
-  styleUrls: ['./expenses-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-expenses-list',
+    templateUrl: './expenses-list.component.html',
+    styleUrls: ['./expenses-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ExpensesListComponent implements OnInit {
   dataSource: Observable<CdkTableDataSourceInput<any>>

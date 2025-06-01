@@ -5,10 +5,11 @@ import { RepositoryRequestListQuery } from '../../repository/repository.models'
 import { LoadingStatus } from '../../models/loading-status'
 
 @Component({
-  selector: 'app-pagination',
-  templateUrl: './app-pagination.component.html',
-  styleUrls: ['./app-pagination.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-pagination',
+    templateUrl: './app-pagination.component.html',
+    styleUrls: ['./app-pagination.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AppPaginationComponent implements OnInit {
 

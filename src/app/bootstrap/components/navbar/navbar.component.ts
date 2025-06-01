@@ -16,11 +16,12 @@ import { BootstrapConstants } from '../../models/bootstrap.constants'
 import { DeliveryService } from '../../../domains/delivery/services/delivery.service'
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss'],
-  animations: [fadeInOnEnterAnimation()],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: ['./navbar.component.scss'],
+    animations: [fadeInOnEnterAnimation()],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NavbarComponent implements OnInit, AfterViewInit {
 

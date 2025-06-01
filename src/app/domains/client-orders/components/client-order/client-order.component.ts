@@ -26,16 +26,15 @@ import { TranslateService } from '@ngx-translate/core'
 import { AppOrderStatusComponent } from '../../../../shared/components/app-order-status/app-order-status.component'
 
 @Component({
-  selector: 'app-client-order',
-  templateUrl: './client-order.component.html',
-  styleUrls: ['./client-order.component.scss'],
-  animations: [
-    fadeInOnEnterAnimation(),
-    pulseOnEnterAnimation()
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [SharedModule]
+    selector: 'app-client-order',
+    templateUrl: './client-order.component.html',
+    styleUrls: ['./client-order.component.scss'],
+    animations: [
+        fadeInOnEnterAnimation(),
+        pulseOnEnterAnimation()
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule]
 })
 export class ClientOrderComponent {
 

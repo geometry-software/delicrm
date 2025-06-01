@@ -7,9 +7,10 @@ type ConfirmationDialog = {
 }
 
 @Component({
-  selector: 'app-confirmation-dialog',
-  templateUrl: './app-confirmation-dialog.component.html',
-  styleUrls: ['./app-confirmation-dialog.component.scss'],
+    selector: 'app-confirmation-dialog',
+    templateUrl: './app-confirmation-dialog.component.html',
+    styleUrls: ['./app-confirmation-dialog.component.scss'],
+    standalone: false
 })
 export class AppConfirmationDialogComponent {
 

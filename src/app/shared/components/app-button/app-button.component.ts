@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { FormControl } from '@angular/forms'
 
 @Component({
-  selector: 'app-button',
-  templateUrl: './app-button.component.html',
-  styleUrls: ['./app-button.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-button',
+    templateUrl: './app-button.component.html',
+    styleUrls: ['./app-button.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AppButtonComponent {
   @Input()

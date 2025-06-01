@@ -16,10 +16,11 @@ import { OrderConstants } from '../../../orders/models/order.constants'
 import { RepositoryEntityStatus, SortRequest } from '../../../../shared/repository/repository.models'
 
 @Component({
-  selector: 'app-recipe-list',
-  templateUrl: './recipe-list.component.html',
-  styleUrls: ['./recipe-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-recipe-list',
+    templateUrl: './recipe-list.component.html',
+    styleUrls: ['./recipe-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class RecipeListComponent implements OnInit {
 

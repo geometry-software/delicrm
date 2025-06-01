@@ -4,6 +4,7 @@ import { MatAutocomplete } from "@angular/material/autocomplete";
 
 @Directive({
     selector: '[requiredAutocomplete]',
+    standalone: false
 })
 export class RequiredAutocompleteDirective {
 

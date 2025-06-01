@@ -1,7 +1,8 @@
 import { Directive, ElementRef, Renderer2, HostListener, Input } from '@angular/core'
 
 @Directive({
-  selector: '[mouseOnHover]',
+    selector: '[mouseOnHover]',
+    standalone: false
 })
 export class MouseOnHoverDirective {
   constructor(private elementRef: ElementRef, private renderer: Renderer2) {}

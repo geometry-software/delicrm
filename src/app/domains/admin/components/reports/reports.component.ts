@@ -14,10 +14,11 @@ import { getDateFromUnix } from '../../../../shared/utils/format-unix-time'
 import { getCurrency } from '../../store/board-store/board.selectors'
 
 @Component({
-  selector: 'app-reports',
-  templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-reports',
+    templateUrl: './reports.component.html',
+    styleUrls: ['./reports.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ReportsComponent implements OnInit {
 

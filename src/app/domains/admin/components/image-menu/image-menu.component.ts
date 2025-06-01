@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { saveAs } from 'file-saver'
-import * as moment from 'moment'
+import moment from 'moment'
 import { combineLatest, filter, map, tap } from 'rxjs'
 import domtoimage from 'dom-to-image'
 import { Store } from '@ngrx/store'
@@ -11,11 +11,12 @@ import { fadeInOnEnterAnimation } from 'angular-animations'
 import { BootstrapConstants } from '../../../../bootstrap/models/bootstrap.constants'
 
 @Component({
-  selector: 'app-image-menu',
-  templateUrl: './image-menu.component.html',
-  styleUrls: ['./image-menu.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [fadeInOnEnterAnimation()]
+    selector: 'app-image-menu',
+    templateUrl: './image-menu.component.html',
+    styleUrls: ['./image-menu.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [fadeInOnEnterAnimation()],
+    standalone: false
 })
 export class ImageMenuComponent implements OnInit {
 

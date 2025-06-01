@@ -1,8 +1,9 @@
 import { Component } from '@angular/core'
 
 @Component({
-  selector: 'app-menu-layout',
-  templateUrl: './menu-layout.component.html',
-  styleUrls: ['./menu-layout.component.scss'],
+    selector: 'app-menu-layout',
+    templateUrl: './menu-layout.component.html',
+    styleUrls: ['./menu-layout.component.scss'],
+    standalone: false
 })
 export class MenuLayoutComponent {}

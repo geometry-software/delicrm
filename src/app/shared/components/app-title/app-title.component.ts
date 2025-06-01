@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core'
 
 @Component({
-  selector: 'app-title',
-  templateUrl: './app-title.component.html',
-  styleUrls: ['./app-title.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-title',
+    templateUrl: './app-title.component.html',
+    styleUrls: ['./app-title.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AppTitleComponent {
 

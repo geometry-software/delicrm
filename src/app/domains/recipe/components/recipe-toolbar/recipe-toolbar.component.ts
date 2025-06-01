@@ -7,9 +7,10 @@ import { Recipe } from '../../models/recipe.model'
 import { RecipeConstants } from '../../models/recipe.constants'
 
 @Component({
-  selector: 'app-recipe-toolbar',
-  templateUrl: './recipe-toolbar.component.html',
-  styleUrls: ['./recipe-toolbar.component.scss'],
+    selector: 'app-recipe-toolbar',
+    templateUrl: './recipe-toolbar.component.html',
+    styleUrls: ['./recipe-toolbar.component.scss'],
+    standalone: false
 })
 export class RecipeToolbarComponent {
 

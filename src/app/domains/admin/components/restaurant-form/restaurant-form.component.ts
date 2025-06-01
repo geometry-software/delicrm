@@ -7,12 +7,11 @@ import { BootstrapConstants } from '../../../../bootstrap/models/bootstrap.const
 import { RestaurantConstants } from '../../models/restaurant.constants'
 
 @Component({
-  selector: 'restaurant-form',
-  templateUrl: './restaurant-form.component.html',
-  styleUrls: ['./restaurant-form.component.scss'],
-  standalone: true,
-  imports: [SharedModule],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'restaurant-form',
+    templateUrl: './restaurant-form.component.html',
+    styleUrls: ['./restaurant-form.component.scss'],
+    imports: [SharedModule],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RestaurantFormComponent implements OnInit {
 

@@ -8,10 +8,11 @@ import { LoadingStatus } from '../../../shared/models/loading-status'
 import { SignalService } from '../../../shared/services/signal.service'
 
 @Component({
-  selector: 'app-admin-sign-up',
-  templateUrl: './admin-sign-up.component.html',
-  styleUrls: ['./admin-sign-up.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-admin-sign-up',
+    templateUrl: './admin-sign-up.component.html',
+    styleUrls: ['./admin-sign-up.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AdminSignUpComponent {
 

@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { FormControl } from '@angular/forms'
 
 @Component({
-  selector: 'app-table-search',
-  templateUrl: './app-table-search.component.html',
-  styleUrls: ['./app-table-search.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-table-search',
+    templateUrl: './app-table-search.component.html',
+    styleUrls: ['./app-table-search.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AppTableSearchComponent {
   @Input()

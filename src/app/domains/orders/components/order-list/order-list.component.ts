@@ -14,10 +14,11 @@ import { SortRequest } from '../../../../shared/repository/repository.models'
 import { ordersTabIndexByStatus } from '../../models/order.model'
 
 @Component({
-  selector: 'app-order-list',
-  templateUrl: './order-list.component.html',
-  styleUrls: ['./order-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-order-list',
+    templateUrl: './order-list.component.html',
+    styleUrls: ['./order-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class OrderListComponent implements OnInit {
 
