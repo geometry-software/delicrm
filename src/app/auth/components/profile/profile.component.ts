@@ -22,7 +22,7 @@ export class ProfileComponent {
 
   readonly userData = this.sessionService.getUser().pipe(
     filter(Boolean),
-    switchMap(user => this.userService.getById(user.userId)))
+    switchMap(user => this.userService.getUser(user.userId)))
   readonly versionBuildDate: string = '10th of February 2025'
 
   logout() {

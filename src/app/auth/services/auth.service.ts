@@ -7,7 +7,7 @@ import { AuthConstants } from '../models/auth.constants'
 import { RepositoryService } from '../../shared/repository/repository.service'
 import { Router } from '@angular/router'
 import { AuthStatus, Auth } from '../models/auth.model'
-import { mapAuth, mapRequested } from '../models/auth.mapper'
+import { mapAuth, mapUser } from '../models/auth.mapper'
 import { SortRequest } from '../../shared/repository/repository.models'
 import { BootstrapConstants } from '../../bootstrap/models/bootstrap.constants'
 
@@ -60,7 +60,7 @@ export class AuthService {
   linkWithGoogle() {
     return from(this.angularFireAuth.signOut()).pipe(
       switchMap(() => from(this.angularFireAuth.signInWithPopup(new GoogleAuthProvider())).pipe(
-        map(auth => mapRequested(
+        map(auth => mapUser(
           auth.user.uid,
           auth.user.email,
           auth.user.displayName,
@@ -74,6 +74,10 @@ export class AuthService {
       map(auth => mapAuth(auth.user.uid, BootstrapConstants.locale)),
       switchMap(auth => this.repositoryService.setDocument(this.collection, auth, auth.authId).pipe(
         map(() => auth))))
+  }
+
+  getAuth(id: string) {
+    return this.repositoryService.getDocumentById(this.collection, id)
   }
 
   loginAdmin(email: string, password: string) {
@@ -98,10 +102,6 @@ export class AuthService {
 
   getTotalByStatus(status: AuthStatus) {
     return this.repositoryService.getCollectionSizeByStatus(this.collection, status)
-  }
-
-  getAuth(id: string) {
-    return this.repositoryService.getDocumentById(this.collection, id)
   }
 
   deleteAdminAuth() {

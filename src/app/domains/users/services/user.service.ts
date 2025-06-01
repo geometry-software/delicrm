@@ -41,7 +41,7 @@ export class UserService {
       map(() => ({ id: auth.authId, auth })))
   }
 
-  getById(id: string) {
+  getUser(id: string) {
     return this.repositoryService.getDocumentById(this.collection, id)
   }
 

@@ -3,8 +3,8 @@ import { Auth } from "./auth.model"
 
 export const mapAuth = (authId: string, locale: string): Auth => ({
     authId,
-    createdAt: getCurrentUnixTime(),
     locale,
+    createdAt: getCurrentUnixTime(),
     status: 'auth',
     name: null,
     email: null,
@@ -15,10 +15,10 @@ export const mapAuth = (authId: string, locale: string): Auth => ({
     createdByUserName: false
 })
 
-export const mapRequested = (authId: string, email: string, name: string, avatar: string, locale: string): Auth => ({
+export const mapUser = (authId: string, email: string, name: string, avatar: string, locale: string): Auth => ({
     ...mapAuth(authId, locale),
-    status: 'requested',
     name,
     email,
-    avatar
+    avatar,
+    status: 'requested'
 })

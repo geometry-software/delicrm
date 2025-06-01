@@ -95,7 +95,7 @@ export class UserEffects {
       ofType(ItemActions.getItem),
       tap(() => this.handleLoadingRequest()),
       switchMap(({ id }) =>
-        this.userService.getById(id).pipe(
+        this.userService.getUser(id).pipe(
           map(item => {
             this.handleLoadedRequest()
             return ItemActions.getItemSuccess({ item })

@@ -17,7 +17,7 @@ export class SessionService {
     private authService: AuthService,
     private userService: UserService,
     private signalService: SignalService,
-    private notificationService: NotificationService,
+    private notificationService: NotificationService
   ) {
     this.initAuthSession()
   }
@@ -25,10 +25,10 @@ export class SessionService {
   private readonly appUserSubject = new BehaviorSubject<User>(null)
   private readonly appAuthSubject = new BehaviorSubject<Auth>(null)
 
-  readonly isSessionLoading = concat(
-    of(true),
-    merge(this.getUser(), this.getAuth()).pipe(map(() => false))
-  )
+  readonly isSessionLoading = merge(
+    this.getUser(),
+    this.getAuth()
+  ).pipe(map(value => value ? false : true))
 
   setUser(user: User) {
     this.appUserSubject.next(user)
@@ -65,7 +65,7 @@ export class SessionService {
       first(),
       tap(() => this.signalService.setLoadingStatus(LoadingStatus.Loading)),
       switchMap(firebaseUser => firebaseUser?.uid
-        ? this.userService.getById(firebaseUser.uid).pipe(
+        ? this.userService.getUser(firebaseUser.uid).pipe(
           switchMap(user => user
             ? of(this.setUser(user))
             : this.authService.getAuth(firebaseUser.uid).pipe(
