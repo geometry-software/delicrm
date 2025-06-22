@@ -98,13 +98,7 @@ export class RepositoryService<T extends DocumentData = any, S = RepositoryEntit
   getDocumentById(collectionName: string, id: string): Observable<T> {
     const documentReference = doc(this.firestore, collectionName, id).withConverter(responseConverter<T>())
     return docData<T>(documentReference, { idField: 'id' }).pipe(
-      responseTransform(this.notificationService),
-      map(data => {
-        if (!data) {
-          throw new Error(`Document with id ${id} not found in ${collectionName}`)
-        }
-        return data
-      })
+      responseTransform(this.notificationService)
     )
   }
 

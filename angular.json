@@ -21,7 +21,8 @@
               "dom-to-image",
               "file-saver",
               "moment",
-              "lodash"
+              "lodash",
+              "@manhnd/esc-pos-encoder"
             ],
             "outputPath": {
               "base": "dist/public"
@@ -38,6 +39,7 @@
             ],
             "styles": [
               "src/styles.scss",
+              "src/assets/root-loader.css",
               "src/assets/theme.scss",
               "node_modules/ngx-toastr/toastr.css"
             ],
@@ -66,7 +68,7 @@
               "sourceMap": true,
               "namedChunks": true,
               "progress": true,
-              "serviceWorker": true,
+              "serviceWorker": "ngsw-config.json",
               "statsJson": true
             },
             "development": {

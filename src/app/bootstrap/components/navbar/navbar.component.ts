@@ -1,14 +1,14 @@
 import { Component, ViewChild, OnInit, Signal, ChangeDetectionStrategy, AfterViewInit } from '@angular/core'
 import { MatDrawer } from '@angular/material/sidenav'
-import { userMenuOptions, authMenuOptions } from '../../models/menu-options'
+import { catchError, combineLatest, EMPTY, first, map, shareReplay } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
+import { Chart, ChartItem } from 'chart.js/auto';
+import { userMenuOptions, authMenuOptions } from '../../models/menu-options'
 import { ResponsiveLayout } from '../../models/navbar.model'
 import { SignalService } from '../../../shared/services/signal.service'
 import { UserLanguage } from '../../../domains/users/models/user.model'
 import { LoadingStatus } from '../../../shared/models/loading-status'
-import { catchError, combineLatest, EMPTY, first, map, shareReplay } from 'rxjs'
 import { toObservable } from '@angular/core/rxjs-interop'
-import { Chart, ChartItem } from 'chart.js/auto';
 import { RestaurantService } from '../../../domains/admin/services/restaurant.service'
 import { fadeInOnEnterAnimation } from 'angular-animations'
 import { SessionService } from '../../../auth/services/session.service'
@@ -56,9 +56,9 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     shareReplay(1)
   )
   readonly deliveriesAmount = this.deliveryService.getRequestedDelivery().pipe(
-    map(value => value.length))
+    map(value => value?.length))
   readonly ordersAmount = this.restaurantService.getDailyOrders().pipe(
-    map(value => value.length))
+    map(value => value?.length))
 
   ngOnInit(): void {
     this.updateScreenSize()
