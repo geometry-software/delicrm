@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects'
-import { catchError, combineLatest, EMPTY, map, of, switchMap, tap, withLatestFrom } from 'rxjs'
+import { catchError, map, of, switchMap, tap, withLatestFrom } from 'rxjs'
 import { RecipeActions as ItemActions } from './recipe.actions'
 import { RecipeService } from '../services/recipe.service'
 import { Router } from '@angular/router'
@@ -108,20 +108,19 @@ export class RecipeEffects implements OnInitEffects {
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
         switch (query) {
           case 'first':
-            return combineLatest([
-              this.entityService.getFirstPage(sort, size, status),
-              this.entityService.getTotalByStatus(status),
-            ]).pipe(
-              tap(() => this.handleLoadedRequest()),
-              switchMap(([items, amount]) =>
-                [
-                  ItemActions.getItemsSuccess({
-                    items: formatResponseList(query, items, total, current),
-                    size
-                  }),
-                  ItemActions.setItemsAmount({ amount })
-                ]),
-              catchError(error => this.handleError(error, 'all')))
+            return this.entityService.getFirstPage(sort, size, status).pipe(
+              switchMap(items => this.entityService.getTotalByStatus(status).pipe(
+                tap(() => this.handleLoadedRequest()),
+                switchMap((amount) =>
+                  [
+                    ItemActions.getItemsSuccess({
+                      items: formatResponseList(query, items, total, current),
+                      size
+                    }),
+                    ItemActions.setItemsAmount({ amount })
+                  ]),
+                catchError(error => this.handleError(error, 'all'))
+            )))
           case 'next':
             return this.entityService
               .getNextPage(sort, size, status, item[sort.active])
@@ -136,7 +135,7 @@ export class RecipeEffects implements OnInitEffects {
                 tap(() => this.handleLoadedRequest()),
                 map(items => ItemActions.getItemsSuccess({ items: formatResponseList(query, items, total, current) })),
                 catchError(error => this.handleError(error, 'all')))
-          default: return EMPTY
+          default: return of(null)
         }
       }))
   )

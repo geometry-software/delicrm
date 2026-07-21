@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import {
   catchError,
-  combineLatest,
-  EMPTY,
   map,
   of,
   switchMap,
@@ -69,7 +67,7 @@ export class ClientEffects {
           catchError(error => {
             this.notificationService.error(error)
             this.signalService.setClientLoadingStatus(LoadingStatus.Failed)
-            return EMPTY
+            return of(null)
           }))))
   )
 
@@ -103,23 +101,20 @@ export class ClientEffects {
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
         switch (query) {
           case 'first':
-            return combineLatest([
-              this.clientService.getTotalLabels(),
-              this.clientService.getFirstPage(sort, size, status),
-              this.clientService.getTotalByStatus(status),
-            ]).pipe(
-              tap(() => this.handleLoadedRequest()),
-              switchMap(([amount, items, total]) =>
-                [
-                  ItemActions.getItemsSuccess({
-                    items: formatResponseList(query, items, total, current),
-                    size
-                  }),
-                  ItemActions.setItemsAmountByStatus({ status, amount })
-                ]
-              ),
-              catchError(error => of(ItemActions.notifyError({ error, query })))
-            )
+            return this.clientService.getFirstPage(sort, size, status).pipe(
+              switchMap(items => this.clientService.getTotalLabels().pipe(
+                tap(() => this.handleLoadedRequest()),
+                switchMap(amount =>
+                  [
+                    ItemActions.getItemsSuccess({
+                      items: formatResponseList(query, items, amount[status], current),
+                      size
+                    }),
+                    ItemActions.setItemsAmountByStatus({ status, amount })
+                  ]
+                ),
+                catchError(error => of(ItemActions.notifyError({ error, query })))
+            )))
           case 'next':
             return this.clientService
               .getNextPage(sort, size, status, item[sort.active])
@@ -136,7 +131,7 @@ export class ClientEffects {
                 map(items => ItemActions.getItemsSuccess({ items: formatResponseList(query, items, total, current) })),
                 catchError(error => of(ItemActions.notifyError({ error, query })))
               )
-          default: return EMPTY
+          default: return of(null)
         }
       }))
   )
@@ -154,7 +149,7 @@ export class ClientEffects {
           catchError(error => {
             this.notificationService.error(error)
             this.signalService.setLoadingStatus(LoadingStatus.Failed)
-            return EMPTY
+            return of(null)
           }))))
   )
 

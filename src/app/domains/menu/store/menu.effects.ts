@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { map, switchMap, tap, catchError, withLatestFrom, combineLatest, first, EMPTY } from 'rxjs'
+import { map, switchMap, tap, catchError, withLatestFrom, combineLatest, first, of } from 'rxjs'
 import { MenuActions as ItemActions } from './menu.actions'
 import { Router } from '@angular/router'
 import { Store } from '@ngrx/store'
@@ -168,7 +168,7 @@ export class MenuEffects {
           catchError(error => {
             this.notificationService.error(error)
             this.signalService.setClientLoadingStatus(LoadingStatus.Failed)
-            return EMPTY
+            return of(null)
           }))))))
   )
 
@@ -184,7 +184,7 @@ export class MenuEffects {
         catchError(error => {
           this.notificationService.error(error)
           this.signalService.setClientLoadingStatus(LoadingStatus.Failed)
-          return EMPTY
+          return of(null)
         }))))
   )
 
@@ -192,7 +192,7 @@ export class MenuEffects {
     this.notificationService.error(error)
     this.signalService.setLoadingStatus(LoadingStatus.Failed)
     this.store.dispatch(ItemActions.setItemsLoadingStatus({ status: LoadingStatus.Failed }))
-    return EMPTY
+    return of(null)
   }
 
   private updateAuth(info: DeliveryInfo) {
@@ -214,7 +214,7 @@ export class MenuEffects {
           this.sessionService.setAuth({ ...auth, ...updatedAuth })
           return this.authService.updateAuth(auth.authId, updatedAuth)
         } else {
-          return EMPTY
+          return of(null)
         }
       })
     )

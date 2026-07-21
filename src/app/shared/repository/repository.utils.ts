@@ -1,11 +1,6 @@
 import { DocumentData, QueryDocumentSnapshot, SnapshotOptions } from '@angular/fire/firestore'
-import { Observable, UnaryFunction, first, pipe, retry, throwError, timeout } from 'rxjs'
-import { NotificationService } from '../services/notification.service'
 import { RepositoryRequestListQuery, RepositoryResponseList } from './repository.models'
 import moment from 'moment'
-
-const REQUEST_TIME_LIMIT_VALUE = 10000
-const REQUEST_TIME_LIMIT_ERROR_CODE = 'REQUEST_TIME_LIMIT_ERROR'
 
 export const responseConverter = <T extends DocumentData>() => ({
   toFirestore(data: T): DocumentData {
@@ -21,23 +16,7 @@ export const responseConverter = <T extends DocumentData>() => ({
     } as unknown as T
   }})
 
-export const responseTransform = <T>(notificationService: NotificationService):
-  UnaryFunction<Observable<T>, Observable<T>> =>
-  pipe(
-    first(),
-    timeout({
-      each: REQUEST_TIME_LIMIT_VALUE,
-      with: () => {
-        const error = new Error('Request time too long')
-        notificationService.error(error)
-        return throwError(() => REQUEST_TIME_LIMIT_ERROR_CODE)
-      },
-    }),
-    retry({ count: 2 })
-  )
-
-export const formatResponseList = <T>(query: RepositoryRequestListQuery, data: T[], total: number, current: number):
-  RepositoryResponseList<T> => {
+export const formatResponseList = <T>(query: RepositoryRequestListQuery, data: T[], total: number, current: number): RepositoryResponseList<T> => {
   switch (query) {
     case 'first':
       current = data.length

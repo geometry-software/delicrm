@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { inject, Injectable } from '@angular/core'
 import {
   DocumentData,
   Firestore,
@@ -22,24 +22,20 @@ import {
   deleteDoc
 } from '@angular/fire/firestore'; 
 import { Observable, from, map } from 'rxjs'
-import { responseConverter, responseTransform } from './repository.utils'
+import { responseConverter } from './repository.utils'
 import {
   defaultStatusPropertyName,
   RepositoryEntityStatus,
   RepositoryResponseEntity,
   SortRequest
 } from './repository.models'
-import { NotificationService } from '../services/notification.service'
 
 @Injectable({
   providedIn: 'root',
 })
 export class RepositoryService<T extends DocumentData = any, S = RepositoryEntityStatus, V = number> {
 
-  constructor(
-    private firestore: Firestore,
-    private notificationService: NotificationService,
-  ) { }
+  private readonly firestore = inject(Firestore)
 
   /**
    * Queries a Firestore collection
@@ -48,9 +44,7 @@ export class RepositoryService<T extends DocumentData = any, S = RepositoryEntit
    */
   getAllDocuments(collectionName: string): Observable<T[]> {
     const collectionReference = collection(this.firestore, collectionName).withConverter(responseConverter<T>())
-    return collectionData<T>(collectionReference, { idField: 'id' }).pipe(
-      responseTransform(this.notificationService)
-    )
+    return collectionData<T>(collectionReference, { idField: 'id' })
   }
 
   /**
@@ -66,9 +60,7 @@ export class RepositoryService<T extends DocumentData = any, S = RepositoryEntit
       where('authId', '==', id),
       orderBy('createdAt', 'desc')
     )
-    return collectionData<T>(collectionQuery, { idField: 'id' }).pipe(
-      responseTransform(this.notificationService)
-    )
+    return collectionData<T>(collectionQuery, { idField: 'id' })
   }
 
   /**
@@ -84,9 +76,7 @@ export class RepositoryService<T extends DocumentData = any, S = RepositoryEntit
       orderBy('name', 'desc'),
       where(defaultStatusPropertyName, '==', status)
     )
-    return collectionData<T>(collectionQuery, { idField: 'id' }).pipe(
-      responseTransform(this.notificationService)
-    )
+    return collectionData<T>(collectionQuery, { idField: 'id' })
   }
 
   /**
@@ -97,9 +87,7 @@ export class RepositoryService<T extends DocumentData = any, S = RepositoryEntit
    */
   getDocumentById(collectionName: string, id: string): Observable<T> {
     const documentReference = doc(this.firestore, collectionName, id).withConverter(responseConverter<T>())
-    return docData<T>(documentReference, { idField: 'id' }).pipe(
-      responseTransform(this.notificationService)
-    )
+    return docData<T>(documentReference, { idField: 'id' })
   }
 
   /**
@@ -172,9 +160,7 @@ export class RepositoryService<T extends DocumentData = any, S = RepositoryEntit
       where(field, '==', status),
       limit(size)
     )
-    return collectionData<T>(collectionQuery, { idField: 'id' }).pipe(
-      responseTransform(this.notificationService)
-    )
+    return collectionData<T>(collectionQuery, { idField: 'id' })
   }
 
   /**
@@ -203,9 +189,7 @@ export class RepositoryService<T extends DocumentData = any, S = RepositoryEntit
       startAfter(value),
       limit(size)
     )
-    return collectionData<T>(collectionQuery, { idField: 'id' }).pipe(
-      responseTransform(this.notificationService)
-    )
+    return collectionData<T>(collectionQuery, { idField: 'id' })
   }
 
   /**
@@ -234,9 +218,7 @@ export class RepositoryService<T extends DocumentData = any, S = RepositoryEntit
       endBefore(value),
       limitToLast(size)
     )
-    return collectionData<T>(collectionQuery, { idField: 'id' }).pipe(
-      responseTransform(this.notificationService)
-    )
+    return collectionData<T>(collectionQuery, { idField: 'id' })
   }
 
   /**
@@ -259,9 +241,7 @@ export class RepositoryService<T extends DocumentData = any, S = RepositoryEntit
       orderBy(sort.active, sort.direction),
       where(property, '==', value)
     )
-    return collectionData<T>(collectionQuery, { idField: 'id' }).pipe(
-      responseTransform(this.notificationService)
-    )
+    return collectionData<T>(collectionQuery, { idField: 'id' })
   }
 
   /**
@@ -279,9 +259,7 @@ export class RepositoryService<T extends DocumentData = any, S = RepositoryEntit
       startAt(value.toLowerCase()),
       endAt(value.toLowerCase() + '~')
     )
-    return collectionData<T>(collectionQuery, { idField: 'id' }).pipe(
-      responseTransform(this.notificationService)
-    )
+    return collectionData<T>(collectionQuery, { idField: 'id' })
   }
 
   /**
@@ -319,7 +297,6 @@ export class RepositoryService<T extends DocumentData = any, S = RepositoryEntit
   setDocument<T>(collectionName: string, item: T, id: string): Observable<RepositoryResponseEntity<T>> {
     const documentReference = doc(this.firestore, collectionName, id)
     return from(setDoc(documentReference, item as T)).pipe(
-      responseTransform(this.notificationService),
       map(() => ({ id, item }))
     )
   }

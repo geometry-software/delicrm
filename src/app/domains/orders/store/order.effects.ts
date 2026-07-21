@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects'
 import {
   catchError,
-  combineLatest,
-  EMPTY,
   map,
   of,
   switchMap,
@@ -89,23 +87,20 @@ export class OrderEffects implements OnInitEffects {
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
         switch (query) {
           case 'first':
-            return combineLatest([
-              this.orderService.getTotalLabels(),
-              this.orderService.getFirstPage(sort, size, status),
-              this.orderService.getTotalByStatus(status),
-            ]).pipe(
-              tap(() => this.handleLoadedRequest()),
-              switchMap(([amount, items, total]) =>
-                [
-                  ItemActions.getItemsSuccess({
-                    items: formatResponseList(query, items, total, current),
-                    size
-                  }),
-                  ItemActions.setItemsAmountByStatus({ status, amount })
-                ]
-              ),
-              catchError(error => this.handleError(error, 'all'))
-            )
+            return this.orderService.getFirstPage(sort, size, status).pipe(
+              switchMap(items => this.orderService.getTotalLabels().pipe(
+                tap(() => this.handleLoadedRequest()),
+                switchMap((amount) =>
+                  [
+                    ItemActions.getItemsSuccess({
+                      items: formatResponseList(query, items, amount[status], current),
+                      size
+                    }),
+                    ItemActions.setItemsAmountByStatus({ status, amount })
+                  ]
+                ),
+                catchError(error => this.handleError(error, 'all'))
+            )))
           case 'next':
             return this.orderService
               .getNextPage(sort, size, status, item[sort.active])
@@ -122,7 +117,7 @@ export class OrderEffects implements OnInitEffects {
                 map(items => ItemActions.getItemsSuccess({ items: formatResponseList(query, items, total, current) })),
                 catchError(error => this.handleError(error, 'all'))
               )
-          default: return EMPTY
+          default: return of(null)
         }
       }))
   )

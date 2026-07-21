@@ -59,25 +59,6 @@ export class BoardEffects {
         catchError(error => this.handleError(error, 'create')))))
   )
 
-  // setBoardInfo = createEffect(() =>
-  //   this.actions.pipe(
-  //     ofType(ItemActions.setBoardInfo),
-  //     tap(() => this.setLoading()),
-  //     map(() => ItemActions.getDailyMenu()))
-  // )
-
-  // getDailyMenu = createEffect(() =>
-  //   this.actions.pipe(
-  //     ofType(ItemActions.getDailyMenu),
-  //     tap(() => this.setLoading()),
-  //     switchMap(() => this.restaurantService.getActiveDailyMenu().pipe(
-  //       map(menu => {
-  //         this.setLoaded()
-  //         return ItemActions.setDailyMenu({ menu })
-  //       }),
-  //       catchError(error => this.handleError(error, 'create')))))
-  // )
-
   createDailyMenu = createEffect(() =>
     this.actions.pipe(
       ofType(ItemActions.createDailyMenu),

@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Signal, ChangeDetectionStrategy, AfterViewInit } from '@angular/core'
+import { Component, ViewChild, OnInit, Signal, ChangeDetectionStrategy, AfterViewInit, ChangeDetectorRef } from '@angular/core'
 import { MatDrawer } from '@angular/material/sidenav'
 import { catchError, combineLatest, EMPTY, first, map, shareReplay } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
@@ -31,6 +31,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     private signalService: SignalService,
     private sessionService: SessionService,
     private translateService: TranslateService,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   readonly authMenuOptions = authMenuOptions
@@ -122,19 +123,27 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   }
 
   updateScreenSize() {
+    console.log(window.screen.width);
+    
     const widthCheck = window.screen.width < 760
     const isMobile = !!typeof screen.orientation
+    console.log(widthCheck);
+    
     if (!widthCheck) {
       this.responsiveLayout.isDesktop = true
       this.responsiveLayout.matDrawerMode = 'side'
       this.responsiveLayout.matToolbarRowButtonMargin = '15px'
       this.responsiveLayout.menuListContainerMargin = '0'
     } else {
+      console.log(1);
+      
       this.responsiveLayout.isDesktop = false
       this.responsiveLayout.matDrawerMode = 'over'
       this.responsiveLayout.matToolbarRowButtonMargin = '0px'
       this.responsiveLayout.menuListContainerMargin = '10px'
     }
+    this.cdr.detectChanges()
+    
   }
 
   changeLanguage(lang: UserLanguage) {

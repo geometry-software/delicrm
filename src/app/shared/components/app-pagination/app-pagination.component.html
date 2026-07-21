@@ -3,7 +3,7 @@
     <mat-select [disabled]="disableOnLoading()" [(ngModel)]="size" (ngModelChange)="changeSize($event)">
       <mat-option *ngFor="let option of paginationPayload.options.sizeList" [value]="option">{{ option }}</mat-option>
     </mat-select>
-    <div> {{ paginationPayload.options.current }} / {{ paginationPayload.options.total }}
+    <div class="pl-[5px]"> {{ paginationPayload.options.current }} / {{ paginationPayload.options.total }}
       {{ paginationPayload.options.title | translate }}
     </div>
   </div>

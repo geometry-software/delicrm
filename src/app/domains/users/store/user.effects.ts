@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import {
   catchError,
-  combineLatest,
   map,
   of,
   switchMap,
@@ -115,41 +114,35 @@ export class UserEffects {
       switchMap(([{ request }, current, stateSize]) => {
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
         if (status === 'requested') {
-          return combineLatest([
-            this.userService.getTotalLabels(),
-            this.authService.getRequested(sort, size, status),
-            this.userService.getTotalByStatus(status),
-          ]).pipe(
-            tap(() => this.handleLoadedRequest()),
-            switchMap(([amount, items, total]) =>
-              [
-                ItemActions.getItemsSuccess({
-                  items: formatResponseList(query, items as any, total, current),
-                  size
-                }),
-                ItemActions.setItemsAmountByStatus({ status, amount })
-              ]
-            ),
-            catchError(error => of(ItemActions.notifyError({ error, query })))
-          )
+          return this.authService.getRequested(sort, size, status).pipe(
+            switchMap(items => this.userService.getTotalLabels().pipe(
+              tap(() => this.handleLoadedRequest()),
+              switchMap((amount) =>
+                [
+                  ItemActions.getItemsSuccess({
+                    items: formatResponseList(query, items as any, amount[status], current),
+                    size
+                  }),
+                  ItemActions.setItemsAmountByStatus({ status, amount })
+                ]
+              ),
+              catchError(error => of(ItemActions.notifyError({ error, query })))
+          )))
         } else {
-          return combineLatest([
-            this.userService.getTotalLabels(),
-            this.userService.getFirstPage(sort, size, status),
-            this.userService.getTotalByStatus(status),
-          ]).pipe(
+          return this.userService.getFirstPage(sort, size, status).pipe(
+            switchMap(items => this.userService.getTotalLabels().pipe(
             tap(() => this.handleLoadedRequest()),
-            switchMap(([amount, items, total]) =>
+            switchMap((amount) =>
               [
                 ItemActions.getItemsSuccess({
-                  items: formatResponseList(query, items, total, current),
+                  items: formatResponseList(query, items, amount[status], current),
                   size
                 }),
                 ItemActions.setItemsAmountByStatus({ status, amount })
               ]
             ),
             catchError(error => of(ItemActions.notifyError({ error, query })))
-          )
+          )))
         }
       }))
   )

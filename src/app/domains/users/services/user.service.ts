@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { combineLatest, filter, map, switchMap } from 'rxjs'
+import { combineLatest, filter, map, switchMap, tap } from 'rxjs'
 import { RepositoryService } from '../../../shared/repository/repository.service'
 import { Auth } from '../../../auth/models/auth.model'
 import { mapAdminUser, mapRequestedUser, UserInfo } from '../utils/app-user.mapper'
@@ -26,7 +26,8 @@ export class UserService {
     return this.authService.firebaseUser.pipe(
       filter(firebaseUser => firebaseUser?.emailVerified),
       switchMap(firebaseUser => this.authService.getAuth(id).pipe(
-        map(auth => mapAdminUser(auth.authId, {
+        tap(value => console.log('auth', value)),
+        map(auth => mapAdminUser(auth?.authId, {
           avatar: AuthConstants.adminAvatarPath,
           email: firebaseUser.email,
           locale: BootstrapConstants.locale,

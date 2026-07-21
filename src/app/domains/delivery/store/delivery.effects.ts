@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { catchError, combineLatest, EMPTY, map, of, switchMap, tap, withLatestFrom } from 'rxjs'
+import { catchError, map, of, switchMap, tap, withLatestFrom } from 'rxjs'
 import { DeliveryActions as ItemActions } from './delivery.actions'
 import { Store } from '@ngrx/store'
 import { getCurrent, getSize, getTotal } from './delivery.selectors'
@@ -69,23 +69,20 @@ export class DeliveryEffects {
         const { query, size, item, sort, status } = formatRequest(request, stateSize)
         switch (query) {
           case 'first':
-            return combineLatest([
-              this.deliveryService.getTotalLabels(),
-              this.deliveryService.getFirstPage(sort, size, status),
-              this.deliveryService.getTotalByStatus(status),
-            ]).pipe(
-              tap(() => this.handleLoadedRequest()),
-              switchMap(([amount, items, total]) =>
-                [
-                  ItemActions.getItemsSuccess({
-                    items: formatResponseList(query, items, total, current),
-                    size
-                  }),
-                  ItemActions.setItemsAmountByStatus({ status, amount })
-                ]
-              ),
-              catchError(error => of(ItemActions.notifyError({ error })))
-            )
+            return this.deliveryService.getFirstPage(sort, size, status).pipe(
+              switchMap(items => this.deliveryService.getTotalLabels().pipe(
+                tap(() => this.handleLoadedRequest()),
+                switchMap(amount =>
+                  [
+                    ItemActions.getItemsSuccess({
+                      items: formatResponseList(query, items, amount[status], current),
+                      size
+                    }),
+                    ItemActions.setItemsAmountByStatus({ status, amount })
+                  ]
+                ),
+                catchError(error => of(ItemActions.notifyError({ error })))
+            )))
           case 'next':
             return this.deliveryService
               .getNextPage(sort, size, status, item[sort.active])
@@ -102,7 +99,7 @@ export class DeliveryEffects {
                 map(items => ItemActions.getItemsSuccess({ items: formatResponseList(query, items, total, current) })),
                 catchError(error => of(ItemActions.notifyError({ error })))
               )
-          default: return EMPTY
+          default: return of(null)
         }
       }))
   )
